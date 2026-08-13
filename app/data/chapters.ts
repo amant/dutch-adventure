@@ -2322,7 +2322,82 @@ export const understatementChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, b2Capstone]
+export const logicalFlowChapter: Chapter = {
+  slug: 'the-art-of-logical-flow',
+  level: 'B2',
+  title: 'The Art of Logical Flow',
+  capability: 'Structure complex arguments and ensure cohesive flow in Dutch.',
+  description: 'Master the organizational patterns and connectors that make Dutch arguments clear and persuasive.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'discover', title: 'Discover', kind: 'discover',
+      intro: 'A good B2-level argument follows a clear structure: Introduction -> Supporting Evidence -> Conclusion.',
+      exercises: [
+        {
+          id: 'flow-1', kind: 'info', prompt: 'Organizational Patterns',
+          context: 'In Dutch, starting with a general statement and then providing specific examples with connectors like "bovendien" or "daarnaast" is very effective.',
+          skills: ['recognition', 'coherence']
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Transform', kind: 'transform',
+      intro: 'Practice reordering scrambled ideas into a logical sequence.',
+      exercises: [
+        {
+          id: 'flow-2', kind: 'cohesion-drill',
+          prompt: 'Reorder this argument about working from home.',
+          scrambledSentences: [
+            'Bovendien bespaart het werknemers veel tijd omdat ze niet hoeven te reizen.',
+            'Kortom, thuiswerken heeft zowel persoonlijke als ecologische voordelen.',
+            'Daarnaast is het beter voor het milieu door de afname van het verkeer.',
+            'In de eerste plaats zorgt thuiswerken voor een betere balans tussen werk en privé.'
+          ],
+          target: 'In de eerste plaats zorgt thuiswerken voor een betere balans tussen werk en privé. Bovendien bespaart het werknemers veel tijd omdat ze niet hoeven te reizen. Daarnaast is het beter voor het milieu door de afname van het verkeer. Kortom, thuiswerken heeft zowel persoonlijke als ecologische voordelen.',
+          explanation: 'Start with the main point (In de eerste plaats), add supporting points (Bovendien, Daarnaast), and finish with a summary (Kortom).',
+          skills: ['coherence', 'meaning']
+        }
+      ]
+    },
+    {
+      id: 'retrieve', title: 'Retrieve', kind: 'retrieve',
+      intro: 'Apply logical connectors to bridge these thoughts.',
+      exercises: [
+        {
+          id: 'flow-3', kind: 'connector-drill',
+          prompt: 'De overheid wil meer windmolens bouwen. ___ is er veel weerstand van lokale bewoners.',
+          context: 'Expressing contrast.',
+          connectorOptions: [
+            { text: 'Daarentegen', isCorrect: true },
+            { text: 'Bovendien', isCorrect: false },
+            { text: 'Kortom', isCorrect: false }
+          ],
+          target: 'Daarentegen',
+          explanation: '"Daarentegen" (On the other hand) is perfect for introducing a contrasting viewpoint.',
+          skills: ['coherence', 'production']
+        }
+      ]
+    },
+    {
+      id: 'conversation', title: 'Conversation', kind: 'conversation',
+      intro: 'Discuss a complex topic and maintain logical flow.',
+      exercises: [
+        {
+          id: 'flow-4', kind: 'conversation',
+          prompt: 'Vind je dat we meer moeten investeren in kernenergie? Gebruik connectors om je argument op te bouwen.',
+          simulatorResponse: 'Dat is een interessant punt. Maar hoe zit het met het afvalprobleem?',
+          skills: ['speaking', 'coherence', 'pragmatic'],
+          missionGoals: [
+            { id: 'flow-goal-1', label: 'Use at least two logical connectors', keywords: ['daarnaast', 'bovendien', 'echter', 'kortom', 'daarom'] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

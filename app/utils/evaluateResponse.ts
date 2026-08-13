@@ -649,6 +649,26 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Cohesion Drill Evaluation
+    if (exercise.kind === 'cohesion-drill') {
+      const targetText = normalizeAnswer(exercise.target || '')
+      if (normalized === targetText) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent! You reordered the sentences into a logical, coherent paragraph.',
+          changeModifier: (base.changeModifier || 0) + 4
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'The logic isn\'t quite right yet. Look at the transitions between sentences.',
+          explanation: exercise.explanation || 'Try to identify the introduction, the supporting points, and the conclusion.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

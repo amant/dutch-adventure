@@ -87,6 +87,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Pragmatic Inference**: Training learners to "read between the lines" and understand indirect requests or subtle disagreements.
     - **Collocation Precision**: Training the brain to use standard native word pairings (e.g., *besluit nemen*) to avoid literal translations (Anglicisms).
     - **Dutch Understatement**: B2 learners are trained in the cultural nuance of "nuchterheid" (soberness), replacing extreme praise with appropriate understatements like "niet verkeerd" or "het valt wel mee".
+    - **Logical Flow & Cohesion**: Advanced learners practice reordering scrambled thoughts to master organizational patterns and the use of logical connectors for clear argumentation.
 
 ## 5. Information Architecture
 
@@ -129,6 +130,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `CollocationDrill.vue`: Precision-based tool for practicing native word pairings.
     - `PrecisionDrill.vue`: Component for replacing "lazy" words with more precise synonyms in a sentence.
     - `UnderstatementDrill.vue`: Pragmatic tool for transforming direct praise into culturally appropriate Dutch understatements.
+    - `CohesionDrill.vue`: Tool for reordering scrambled sentences to practice logical flow and cohesion.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
     - `PragmaticDrill.vue`: Context-based choice for social nuances.

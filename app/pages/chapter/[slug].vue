@@ -108,6 +108,15 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'cohesion-drill'" class="renderer">
+        <CohesionDrill
+          :exercise="session.exercise.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'correction-challenge'" class="renderer">
         <CorrectionChallenge
           :exercise="session.exercise.value"
