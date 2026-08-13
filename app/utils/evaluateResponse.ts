@@ -23,6 +23,7 @@ export interface EvaluationContext {
   isShadowing?: boolean
   overrideRegister?: 'formal' | 'informal'
   morphingStepIndex?: number
+  clozeAnswers?: string[]
 }
 
 function calculateSimilarity(s1: string, s2: string): number {
@@ -418,6 +419,35 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'That change doesn\'t look quite right.',
           explanation: step.hint || `Try to focus on: ${step.instruction}`
+        }
+      }
+    }
+
+    // Listening Cloze Evaluation
+    if (exercise.kind === 'listening-cloze' && exercise.clozeData) {
+      const userAnswers = context?.clozeAnswers || []
+      const correctAnswers = exercise.clozeData.answers
+      
+      const mistakes: number[] = []
+      userAnswers.forEach((ans, idx) => {
+        if (normalizeAnswer(ans) !== normalizeAnswer(correctAnswers[idx])) {
+          mistakes.push(idx)
+        }
+      })
+      
+      if (mistakes.length === 0) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent transcription! You caught every word.',
+          changeModifier: (base.changeModifier || 0) + 2
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: `You missed ${mistakes.length} word${mistakes.length > 1 ? 's' : ''}. Listen again carefully!`,
+          explanation: 'Focus on the words marked by the gaps.'
         }
       }
     }

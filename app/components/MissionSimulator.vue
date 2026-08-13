@@ -19,6 +19,25 @@ const achievedGoalIds = ref<Set<string>>(new Set())
 const conversationHistory = ref<{ role: 'ai' | 'user', text: string }[]>([{ role: 'ai', text: props.exercise.prompt }])
 const currentRegister = ref(props.exercise.requiredRegister)
 
+// Debate logic
+const currentPhaseIndex = ref(0)
+const usedConnectors = ref<Set<string>>(new Set())
+
+const currentPhase = computed(() => {
+  if (props.exercise.kind !== 'debate' || !props.exercise.debateData) return null
+  return props.exercise.debateData.phases[currentPhaseIndex.value]
+})
+
+function checkConnectors(text: string) {
+  if (!props.exercise.debateData) return
+  const connectors = props.exercise.debateData.requiredConnectors
+  connectors.forEach(c => {
+    if (text.toLowerCase().includes(c.toLowerCase())) {
+      usedConnectors.value.add(c)
+    }
+  })
+}
+
 function handleVoiceResult(text: string) {
   response.value = text
   isSpeaking.value = true
@@ -27,7 +46,12 @@ function handleVoiceResult(text: string) {
 
 function handleSubmit() {
   if (!response.value) return
-  emit('submit', { isSpeaking: isSpeaking.value, overrideRegister: currentRegister.value })
+  checkConnectors(response.value)
+  emit('submit', { 
+    isSpeaking: isSpeaking.value, 
+    overrideRegister: currentRegister.value,
+    debatePhaseIndex: currentPhaseIndex.value 
+  })
 }
 
 watch(() => props.feedback, (f) => {
@@ -70,6 +94,14 @@ watch(() => props.feedback, (f) => {
     conversationHistory.value.push({ role: 'ai', text: aiText })
     response.value = '' 
     isSpeaking.value = false
+
+    if (props.exercise.kind === 'debate' && props.exercise.debateData) {
+      if (currentPhaseIndex.value < props.exercise.debateData.phases.length - 1) {
+        currentPhaseIndex.value++
+        const nextPhase = props.exercise.debateData.phases[currentPhaseIndex.value]
+        conversationHistory.value.push({ role: 'ai', text: nextPhase.prompt })
+      }
+    }
   }
 })
 
@@ -97,6 +129,32 @@ const allGoalsMet = computed(() => {
       </div>
       <div v-if="currentRegister" class="register-indicator" :class="currentRegister">
         {{ currentRegister === 'formal' ? 'U (Formal)' : 'Je (Informal)' }}
+      </div>
+    </div>
+
+    <div v-if="exercise.kind === 'debate' && exercise.debateData" class="debate-meta card">
+      <div class="debate-phases">
+        <div 
+          v-for="(p, idx) in exercise.debateData.phases" 
+          :key="p.id" 
+          class="phase-pill"
+          :class="{ active: idx === currentPhaseIndex, completed: idx < currentPhaseIndex }"
+        >
+          {{ p.label }}
+        </div>
+      </div>
+      <div class="connector-tracking">
+        <div class="label">Logical Connectors</div>
+        <div class="connector-tags">
+          <span 
+            v-for="c in exercise.debateData.requiredConnectors" 
+            :key="c" 
+            class="connector-tag"
+            :class="{ used: usedConnectors.has(c) }"
+          >
+            {{ c }}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -223,6 +281,74 @@ const allGoalsMet = computed(() => {
   background: #fef3c7;
   color: #92400e;
   border: 1px solid #fcd34d;
+}
+
+.debate-meta {
+  background: #f8faf9;
+  border: 1px solid #cad6ce;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.debate-phases {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.phase-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #e1e5de;
+  color: #64748b;
+  transition: all 0.3s;
+}
+
+.phase-pill.active {
+  background: #d06b3c;
+  color: white;
+}
+
+.phase-pill.completed {
+  background: #176b5b;
+  color: white;
+}
+
+.connector-tracking .label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8a9a94;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.connector-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.connector-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.connector-tag.used {
+  background: #e8f3ec;
+  color: #176b5b;
+  border-color: #176b5b;
 }
 
 .stress-meter .label {

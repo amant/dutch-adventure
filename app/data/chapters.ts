@@ -2184,7 +2184,71 @@ export const morphingChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
+export const persuasionChapter: Chapter = {
+  slug: 'the-art-of-persuasion',
+  level: 'B2',
+  title: 'The Art of Persuasion',
+  capability: 'Arguing a position and persuading others.',
+  description: 'Learn to structure complex arguments, use logical connectors, and defend your position in a professional Dutch context.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'persuasion-1',
+      title: 'Selective Listening',
+      kind: 'understand',
+      intro: 'Listen to a professional debate and catch the exact logical connectors used to bridge ideas.',
+      exercises: [
+        {
+          id: 'persuasion-cloze-1',
+          kind: 'listening-cloze',
+          prompt: 'Listen and fill in the connectors.',
+          skills: ['listening', 'coherence'],
+          clozeData: {
+            textWithGaps: 'Het plan is ambitieus, [..] zijn er risico\'s. We moeten [..] voorzichtig zijn.',
+            answers: ['daarentegen', 'derhalve']
+          },
+          transcript: 'Het plan is ambitieus, daarentegen zijn er risico\'s. We moeten derhalve voorzichtig zijn.',
+          translation: 'The plan is ambitious, on the other hand there are risks. We must therefore be careful.'
+        }
+      ]
+    },
+    {
+      id: 'persuasion-2',
+      title: 'The Great Debate',
+      kind: 'personalise',
+      intro: 'It\'s time to argue your case. Use the logical connectors you\'ve learned to build a coherent and persuasive argument.',
+      exercises: [
+        {
+          id: 'debate-1',
+          kind: 'debate',
+          prompt: 'Should companies implement a four-day work week?',
+          skills: ['speaking', 'coherence', 'persuasion' as any],
+          debateData: {
+            phases: [
+              { id: 'opening', label: 'Opening Statement', prompt: 'Wat is uw standpunt over de vierdaagse werkweek? Waarom is dit een goed of slecht idee?' },
+              { id: 'counter', label: 'Rebuttal', prompt: 'Maar hoe zit het met de bereikbaarheid van het bedrijf voor klanten op de vijfde dag?' },
+              { id: 'defense', label: 'Defense', prompt: 'Sommige critici zeggen dat de werkdruk op de andere vier dagen te hoog wordt. Wat denkt u?' },
+              { id: 'summary', label: 'Conclusion', prompt: 'Kunt u uw belangrijkste argumenten nog eens kort samenvatten?' }
+            ],
+            requiredConnectors: ['bovendien', 'daarentegen', 'immers', 'derhalve', 'enerzijds', 'anderzijds']
+          },
+          aiPersonality: {
+            style: 'helpful',
+            isDifficult: true,
+            pushbackProbability: 0.8
+          },
+          missionGoals: [
+            { id: 'goal-1', label: 'State position clearly', keywords: ['ik vind', 'naar mijn mening', 'volgens mij'] },
+            { id: 'goal-2', label: 'Use at least 3 connectors', keywords: ['bovendien', 'daarentegen', 'immers', 'derhalve'] },
+            { id: 'goal-3', label: 'Summarize arguments', keywords: ['kortom', 'samenvattend', 'concluderend'] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

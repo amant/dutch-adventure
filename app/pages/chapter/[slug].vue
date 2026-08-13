@@ -155,7 +155,7 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
-      <div v-else-if="session.exercise.value.kind === 'listening'" class="renderer">
+      <div v-else-if="session.exercise.value.kind === 'listening' || session.exercise.value.kind === 'listening-cloze'" class="renderer">
         <ListeningLadder 
           :exercise="session.exercise.value" 
           v-model="session.response.value"
@@ -173,7 +173,7 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
-      <div v-else-if="session.exercise.value.kind === 'conversation'" class="renderer">
+      <div v-else-if="session.exercise.value.kind === 'conversation' || session.exercise.value.kind === 'debate'" class="renderer">
         <CapstoneMission 
           v-if="chapter.isCapstone"
           :exercise="session.exercise.value" 

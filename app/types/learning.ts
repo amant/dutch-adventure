@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate'
 
 export interface Exercise {
   id: string
@@ -50,6 +50,16 @@ export interface Exercise {
   context?: string
   target?: string
   acceptedAnswers?: string[]
+  // For cloze
+  clozeData?: {
+    textWithGaps: string // e.g. "Ik [..] naar huis [..] het regent."
+    answers: string[]
+  }
+  // For debate
+  debateData?: {
+    phases: { id: string, label: string, prompt: string }[]
+    requiredConnectors: string[]
+  }
   explanation?: string
   correction?: string
   skills: SkillDimension[]

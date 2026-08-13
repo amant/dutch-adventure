@@ -18,6 +18,34 @@ const hasAttempted = ref(false)
 const isShadowing = ref(false)
 const shadowingResult = ref('')
 
+// Cloze state
+const clozeAnswers = ref<string[]>([])
+const initCloze = () => {
+  if (props.exercise.kind === 'listening-cloze' && props.exercise.clozeData) {
+    clozeAnswers.value = new Array(props.exercise.clozeData.answers.length).fill('')
+  }
+}
+
+onMounted(() => {
+  loadVoices()
+  initCloze()
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = loadVoices
+  }
+})
+
+const clozeParts = computed(() => {
+  if (props.exercise.kind !== 'listening-cloze' || !props.exercise.clozeData) return []
+  const parts = props.exercise.clozeData.textWithGaps.split(/(\[..\])/)
+  let gapIndex = 0
+  return parts.map(part => {
+    if (part === '[..]') {
+      return { type: 'gap', index: gapIndex++ }
+    }
+    return { type: 'text', text: part }
+  })
+})
+
 const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
 
 const tokens = computed(() => {
@@ -190,6 +218,33 @@ const toggleTranscript = () => {
             Check Answer
           </button>
         </div>
+      </div>
+    </div>
+
+    <div v-else-if="exercise.kind === 'listening-cloze'" class="cloze-area card">
+      <div class="eyebrow">Gap Fill</div>
+      <p class="instruction">Listen and fill in the missing words.</p>
+      
+      <div class="cloze-text">
+        <template v-for="(part, idx) in clozeParts" :key="idx">
+          <span v-if="part.type === 'text'">{{ part.text }}</span>
+          <input 
+            v-else 
+            v-model="clozeAnswers[part.index]" 
+            class="cloze-input" 
+            :placeholder="`...`"
+            :disabled="feedback?.outcome === 'correct'"
+          />
+        </template>
+      </div>
+
+      <div v-if="!feedback || feedback.outcome === 'retry'" class="actions">
+        <button 
+          class="button" 
+          @click="emit('submit', { clozeAnswers })"
+        >
+          Check Transcription
+        </button>
       </div>
     </div>
 
@@ -458,6 +513,38 @@ input[type=range] {
   border: 1px solid #f9e8b9;
   padding: 12px;
   margin-bottom: 16px;
+}
+
+.cloze-area {
+  margin-bottom: 24px;
+}
+
+.cloze-text {
+  font-size: 20px;
+  line-height: 2;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.cloze-input {
+  border: 0;
+  border-bottom: 2px solid #176b5b;
+  width: 100px;
+  text-align: center;
+  font-size: 18px;
+  color: #176b5b;
+  background: transparent;
+  padding: 0 4px;
+}
+
+.cloze-input:focus {
+  outline: none;
+  border-color: #d06b3c;
+}
+
+.cloze-input:disabled {
+  border-bottom-color: #cbd5e1;
+  color: #64748b;
 }
 
 .shadowing-promo {
