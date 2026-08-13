@@ -290,6 +290,16 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'morphing-drill'" class="renderer">
+        <MorphingDrill 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next-step="feedback = undefined"
+        />
+      </div>
+
       <div v-else class="default-renderer">
         <h2>{{ session.exercise.value.prompt }}</h2>
         <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>

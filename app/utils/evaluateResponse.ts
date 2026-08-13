@@ -22,6 +22,7 @@ export interface EvaluationContext {
   isSpeaking?: boolean
   isShadowing?: boolean
   overrideRegister?: 'formal' | 'informal'
+  morphingStepIndex?: number
 }
 
 function calculateSimilarity(s1: string, s2: string): number {
@@ -395,6 +396,30 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         }
       })
       base.achievedGoalIds = achievedGoalIds
+    }
+
+    // Morphing Drill Evaluation
+    if (exercise.kind === 'morphing-drill' && exercise.morphingData) {
+      const stepIndex = context?.morphingStepIndex ?? 0
+      const step = exercise.morphingData.steps[stepIndex]
+      const stepTarget = normalizeAnswer(step.target)
+      
+      if (normalized === stepTarget) {
+        const isFinalStep = stepIndex === exercise.morphingData.steps.length - 1
+        return {
+          ...base,
+          outcome: 'correct',
+          message: isFinalStep ? 'Final morph complete! You successfully evolved the sentence.' : 'Step correct! Now for the next change.',
+          changeModifier: (base.changeModifier || 0) + 2
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'That change doesn\'t look quite right.',
+          explanation: step.hint || `Try to focus on: ${step.instruction}`
+        }
+      }
     }
 
     // Shadowing check

@@ -2098,7 +2098,93 @@ export const inferenceChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
+export const morphingChapter: Chapter = {
+  slug: 'sentence-morphing-agility',
+  level: 'B2',
+  title: 'Sentence Morphing & Agility',
+  capability: 'Building complex arguments step-by-step.',
+  description: 'Master the art of evolving simple thoughts into complex, layered Dutch sentences while maintaining grammatical precision.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'morphing-1',
+      title: 'The Morphing Chain',
+      kind: 'transform',
+      intro: 'Watch how a simple idea grows. Focus on maintaining word order and verb forms as the sentence evolves.',
+      exercises: [
+        {
+          id: 'morph-drill-1',
+          kind: 'morphing-drill',
+          prompt: 'Morph the sentence step-by-step.',
+          skills: ['production', 'automaticity'],
+          morphingData: {
+            baseSentence: 'Ik blijf thuis.',
+            steps: [
+              { 
+                instruction: 'Add the reason: "because it is raining" (omdat het regent)', 
+                target: 'Ik blijf thuis omdat het regent.',
+                hint: 'Remember: "omdat" sends the verb to the end!'
+              },
+              {
+                instruction: 'Change the reason to: "because I am tired" (omdat ik moe ben)',
+                target: 'Ik blijf thuis omdat ik moe ben.'
+              },
+              {
+                instruction: 'Change the subject to "Jan" (and adapt the verbs!)',
+                target: 'Jan blijft thuis omdat hij moe is.'
+              },
+              {
+                instruction: 'Change the time to "yesterday" (gisteren) and use the past tense.',
+                target: 'Gisteren bleef Jan thuis omdat hij moe was.',
+                hint: 'Careful with inversion: Gisteren bleef Jan...'
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'morphing-2',
+      title: 'Complex Recombination',
+      kind: 'transform',
+      intro: 'Now try a more professional sequence involving subordinate clauses and modals.',
+      exercises: [
+        {
+          id: 'morph-drill-2',
+          kind: 'morphing-drill',
+          prompt: 'Build a professional argument.',
+          skills: ['production', 'automaticity', 'coherence'],
+          morphingData: {
+            baseSentence: 'Het plan is goed.',
+            steps: [
+              {
+                instruction: 'Add a condition: "if we have more time" (als we meer tijd hebben)',
+                target: 'Het plan is goed als we meer tijd hebben.'
+              },
+              {
+                instruction: 'Change it to: "although we have little time" (hoewel we weinig tijd hebben)',
+                target: 'Het plan is goed hoewel we weinig tijd hebben.',
+                hint: 'Hoewel is a subordinate conjunction - verb at the end!'
+              },
+              {
+                instruction: 'Add a professional softener: "I think that..." (Ik denk dat...)',
+                target: 'Ik denk dat het plan goed is hoewel we weinig tijd hebben.',
+                hint: 'Now both clauses have "verb-at-end" order!'
+              },
+              {
+                instruction: 'Switch to a more formal "In my opinion" (Naar mijn mening...)',
+                target: 'Naar mijn mening is het plan goed hoewel we weinig tijd hebben.',
+                hint: 'Inversion after "Naar mijn mening"!'
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

@@ -64,6 +64,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - Expressing disagreement or confusion.
     - Using colloquial expressions.
     - **Dynamic Register Switching**: Missions can trigger a change in the required formality level mid-conversation (e.g., "Zeg maar je hoor!"). The system tracks this `requiredRegister` override and evaluates subsequent responses against it.
+- **Stage 3 — Transformation (Sentence Morphing)**: Focuses on grammatical flexibility and automaticity.
+    - **Morphing Drill**: A multi-step exercise where a base sentence is evolved into a complex, layered Dutch sentence (e.g., adding reasons, changing subjects, switching tenses). This trains the learner to maintain structural integrity (word order, conjugations) under changing conditions.
 - **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Detects word-order inversion, perfect tense auxiliaries, separable verbs, subordinate clauses, article (de/het) errors, adjective endings, reflexive verbs, and fixed prepositions.
 - **Monitoring & Self-Correction**: At higher levels (B2), learners are trained to act as their own "Teacher".
     - **Correction Challenge**: Exercises where learners must identify and fix errors in provided Dutch texts, building linguistic awareness.
