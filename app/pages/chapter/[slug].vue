@@ -113,6 +113,17 @@ function next() { feedback.value = undefined; session.advance() }
         <p>{{ feedback.message }}</p>
         <p v-if="feedback.target"><b>Useful answer:</b> {{ feedback.target }}</p>
         <p v-if="feedback.explanation" class="muted">{{ feedback.explanation }}</p>
+        
+        <div v-if="feedback.miniLesson" class="mini-lesson card">
+          <div class="tag">60-second Lesson</div>
+          <h3>{{ feedback.miniLesson.title }}</h3>
+          <p>{{ feedback.miniLesson.content }}</p>
+          <div class="comparison">
+            <div class="wrong">❌ {{ feedback.miniLesson.example.wrong }}</div>
+            <div class="right">✅ {{ feedback.miniLesson.example.right }}</div>
+          </div>
+        </div>
+
         <div class="actions">
           <button v-if="feedback.outcome !== 'retry'" class="button" @click="next">Continue</button>
           <button v-else class="button secondary" @click="feedback = undefined">Retry</button>
@@ -142,6 +153,12 @@ function next() { feedback.value = undefined; session.advance() }
 .feedback strong { font-size:22px; display: block; margin-bottom: 8px; }
 .feedback p { margin: 8px 0; font-size: 16px; line-height: 1.5; }
 .feedback .actions { margin-top: 20px; }
+.mini-lesson { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #cad6ce; text-align: left; }
+.mini-lesson h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
+.mini-lesson .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
+.comparison { margin-top: 12px; background: #f8faf9; padding: 12px; border-radius: 8px; font-family: monospace; }
+.wrong { color: #e53e3e; margin-bottom: 4px; }
+.right { color: #176b5b; }
 
 .completion { max-width:700px; margin:50px auto; text-align: center; }
 .completion h1 { margin: 20px 0; }

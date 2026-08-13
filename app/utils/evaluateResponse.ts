@@ -30,8 +30,67 @@ function checkInversionError(normalized: string) {
      return {
        found: true,
        message: `In Dutch, if you start with '${words[0]}', the verb must come next!`,
-       explanation: `Try: ${words[0]} [verb] ${words[1]}...`
+       explanation: `Try: ${words[0]} [verb] ${words[1]}...`,
+       miniLesson: {
+         title: 'Inversion (Word Order)',
+         content: 'When a sentence starts with something other than the subject (like an adverb of time), the verb and subject must swap places.',
+         example: {
+           wrong: `${words[0]} ${words[1]} werk...`,
+           right: `${words[0]} werk ${words[1]}...`
+         }
+       }
      }
+  }
+  return { found: false }
+}
+
+function checkPerfectTenseError(normalized: string) {
+  const motionVerbs = ['gegaan', 'gekomen', 'gebleven', 'gebeurd', 'vertrokken']
+  const words = normalized.split(' ')
+  
+  if (words.includes('heb') || words.includes('heeft') || words.includes('hebben')) {
+    const verb = motionVerbs.find(v => words.includes(v))
+    if (verb) {
+      return {
+        found: true,
+        message: `Almost! Dutch uses 'zijn' with '${verb}'.`,
+        miniLesson: {
+          title: 'Zijn vs Hebben',
+          content: 'Most verbs use "hebben" in the perfect tense, but verbs of motion or change of state often use "zijn".',
+          example: {
+            wrong: `Ik heb ${verb}`,
+            right: `Ik ben ${verb}`
+          }
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
+function checkSeparableVerbError(normalized: string, target: string) {
+  const separableVerbs = [
+    { full: 'schoonmaken', stem: 'maak', prefix: 'schoon' },
+    { full: 'opbellen', stem: 'bel', prefix: 'op' },
+    { full: 'uitnodigen', stem: 'nodig', prefix: 'uit' },
+    { full: 'voorbereiden', stem: 'bereid', prefix: 'voor' }
+  ]
+  
+  for (const v of separableVerbs) {
+    if (normalized.includes(v.full) && target.includes(v.stem) && target.includes(v.prefix)) {
+      return {
+        found: true,
+        message: `In a main clause, '${v.full}' splits!`,
+        miniLesson: {
+          title: 'Separable Verbs',
+          content: 'Some Dutch verbs split in simple sentences. The prefix goes to the very end of the clause.',
+          example: {
+            wrong: `Ik ${v.full} de kamer.`,
+            right: `Ik ${v.stem} de kamer ${v.prefix}.`
+          }
+        }
+      }
+    }
   }
   return { found: false }
 }
@@ -82,8 +141,21 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       ...base, 
       outcome: 'retry', 
       message: inversionError.message, 
-      explanation: inversionError.explanation 
+      explanation: inversionError.explanation,
+      miniLesson: inversionError.miniLesson
     }
+  }
+
+  // Grammar Assistant: Perfect Tense
+  const perfectError = checkPerfectTenseError(normalized)
+  if (perfectError.found) {
+    return { ...base, outcome: 'retry', message: perfectError.message, miniLesson: perfectError.miniLesson }
+  }
+
+  // Grammar Assistant: Separable Verbs
+  const separableError = checkSeparableVerbError(normalized, target || '')
+  if (separableError.found) {
+    return { ...base, outcome: 'retry', message: separableError.message, miniLesson: separableError.miniLesson }
   }
 
   // Spelling check

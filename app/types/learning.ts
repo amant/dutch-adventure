@@ -78,6 +78,14 @@ export interface Feedback {
   vocabulary?: string[]
   grammar?: string[]
   changeModifier?: number
+  miniLesson?: {
+    title: string
+    content: string
+    example: {
+      wrong: string
+      right: string
+    }
+  }
 }
 
 export interface Attempt {

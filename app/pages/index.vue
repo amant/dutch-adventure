@@ -6,23 +6,30 @@ const { memory, hydrate } = useLearnerMemory()
 onMounted(hydrate)
 
 const weakAreas = computed(() => {
-  const items: { label: string, type: 'vocabulary' | 'grammar', score: number }[] = []
+  const items: { label: string, type: 'vocabulary' | 'grammar', score: number, priority: number }[] = []
   
-  Object.entries(memory.value.vocabulary).forEach(([word, state]) => {
-    const avg = (state.production + state.automaticity) / 2
-    if (avg > 0 && avg < 60) {
-      items.push({ label: word, type: 'vocabulary', score: Math.round(avg) })
-    }
-  })
+  const process = (dict: Record<string, any>, type: 'vocabulary' | 'grammar') => {
+    Object.entries(dict).forEach(([label, state]) => {
+      const avg = (state.production + state.automaticity + state.speaking) / 3
+      // Success rate: if they fail often relative to encounters, priority increases
+      const successRate = state.encounters > 0 ? state.successes / state.encounters : 1
+      const priority = (100 - avg) * (2 - successRate)
+      
+      if (state.encounters > 0 && avg < 80) {
+        items.push({ 
+          label: type === 'grammar' ? label.replace(/-/g, ' ') : label, 
+          type, 
+          score: Math.round(avg),
+          priority
+        })
+      }
+    })
+  }
   
-  Object.entries(memory.value.grammar).forEach(([point, state]) => {
-    const avg = (state.production + state.automaticity) / 2
-    if (avg > 0 && avg < 60) {
-      items.push({ label: point.replace(/-/g, ' '), type: 'grammar', score: Math.round(avg) })
-    }
-  })
+  process(memory.value.vocabulary, 'vocabulary')
+  process(memory.value.grammar, 'grammar')
   
-  return items.sort((a, b) => a.score - b.score).slice(0, 3)
+  return items.sort((a, b) => b.priority - a.priority).slice(0, 3)
 })
 </script>
 <template>

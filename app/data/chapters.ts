@@ -382,7 +382,63 @@ export const hotelMission: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, opinionChapter, workDiscussionMission, newsChapter, hotelMission]
+export const talkingAboutDayChapter: Chapter = {
+  slug: 'praten-over-je-dag',
+  level: 'A2',
+  title: 'Talking about your day',
+  capability: 'Describe daily routines and past events using separable verbs and the perfect tense.',
+  description: 'Learn how to describe your day accurately using "zijn" and "hebben" correctly.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'discover', title: 'Daily Actions', kind: 'discover',
+      intro: 'In Dutch, many daily verbs like "opstaan" (to get up) and "schoonmaken" (to clean) are separable.',
+      exercises: [{ 
+        id: 'day-1', kind: 'info', prompt: 'Separable verbs in action', 
+        context: 'Ik sta om 7 uur op. Ik maak de keuken schoon.', 
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['opstaan', 'schoonmaken']
+      }],
+    },
+    {
+      id: 'drill-separable', title: 'Splitting verbs', kind: 'transform',
+      intro: 'Try to use the correct word order for these separable verbs.',
+      exercises: [{ 
+        id: 'day-2', kind: 'typed', prompt: 'Translate: I am cleaning the kitchen.', 
+        target: 'Ik maak de keuken schoon.', 
+        explanation: 'The verb "schoonmaken" splits: "maak" ... "schoon".', 
+        skills: ['production', 'automaticity'],
+        vocabulary: ['schoonmaken'],
+        grammar: ['separable-verbs']
+      }],
+    },
+    {
+      id: 'drill-perfect', title: 'The Perfect Tense', kind: 'retrieve',
+      intro: 'Remember: most verbs use "hebben", but movement verbs like "gaan" use "zijn".',
+      exercises: [{ 
+        id: 'day-3', kind: 'typed', prompt: 'Translate: I went to the supermarket.', 
+        target: 'Ik ben naar de supermarkt gegaan.', 
+        explanation: 'Movement verbs use "zijn" (ben/is) in the perfect tense.', 
+        skills: ['production', 'meaning'],
+        vocabulary: ['supermarkt', 'gegaan'],
+        grammar: ['perfect-tense']
+      }],
+    },
+    {
+      id: 'mission', title: 'Your morning', kind: 'personalise',
+      intro: 'Tell me about what you did this morning.',
+      exercises: [{ 
+        id: 'day-4', kind: 'conversation', prompt: 'Wat heb je vanochtend gedaan?', 
+        simulatorResponse: 'Interessant! Ben je ook nog ergens anders naartoe gegaan?',
+        explanation: 'Use the perfect tense to describe your morning.', 
+        skills: ['speaking', 'production', 'automaticity'],
+        grammar: ['perfect-tense', 'separable-verbs']
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, talkingAboutDayChapter, opinionChapter, hotelMission, workDiscussionMission, newsChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
