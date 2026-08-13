@@ -164,6 +164,47 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     return { ...base, outcome: 'acceptable', message: 'Almost! Watch out for that small spelling mistake.', correction: exercise.correction || target }
   }
 
+  // Flexibility Drill Evaluation
+  if (exercise.kind === 'flexibility') {
+    const hasForbidden = exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))
+    const hasRequired = exercise.requiredWords?.every(w => normalized.includes(w.toLowerCase()))
+
+    if (hasForbidden) {
+      const forbidden = exercise.forbiddenWords?.find(w => normalized.includes(w.toLowerCase()))
+      return { ...base, outcome: 'retry', message: `Nice try, but you need to avoid using '${forbidden}' for this challenge!` }
+    }
+    if (!hasRequired) {
+      const missing = exercise.requiredWords?.find(w => !normalized.includes(w.toLowerCase()))
+      return { ...base, outcome: 'retry', message: `Don't forget to use '${missing}' in your answer.` }
+    }
+
+    if (normalized.length > 5) {
+      return { ...base, outcome: 'correct', message: 'Great job! You successfully used a different structure.' }
+    }
+  }
+
+  // Final Challenge Evaluation
+  if (exercise.kind === 'challenge') {
+    const words = normalized.split(' ').filter(Boolean)
+    const minLength = exercise.minimumLength || 0
+    
+    if (words.length < minLength) {
+      return { ...base, outcome: 'retry', message: `Keep going! Try to write at least ${minLength} words.` }
+    }
+
+    // Check for a few forbidden patterns in challenges (e.g., repeating the prompt)
+    if (exercise.prompt && normalized.includes(normalizeAnswer(exercise.prompt))) {
+      return { ...base, outcome: 'retry', message: "Try to use your own words instead of just repeating the prompt." }
+    }
+
+    return { 
+      ...base, 
+      outcome: 'correct', 
+      message: 'Excellent! You demonstrated real-world usage of these concepts.',
+      changeModifier: (base.changeModifier || 0) + 10 // Challenge gives big boost
+    }
+  }
+
   // Heuristic for personalised answers / conversations
   if (exercise.id.includes('personalise') || exercise.kind === 'conversation') {
     const hasGrammar = exercise.grammar?.every(g => normalized.includes(g.toLowerCase())) ?? true

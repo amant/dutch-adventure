@@ -52,6 +52,19 @@ const overallLevel = computed(() => {
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length
   return levelForScore(avg)
 })
+
+const canDoItems = computed(() => {
+  const items = []
+  if (memory.value.overall.recognition > 20) items.push('Understand basic introductions and signs.')
+  if (memory.value.overall.production > 30) items.push('Introduce yourself and state where you live.')
+  if (memory.value.overall.listening > 40) items.push('Follow slow, clear speech in everyday contexts.')
+  if (grammarScore.value > 50) items.push('Use "omdat" and "want" to explain reasons correctly.')
+  if (memory.value.overall.automaticity > 60) items.push('Participate in simple conversations without too much hesitation.')
+  if (memory.value.overall.production > 70) items.push('Argue a position and disagree politely in work discussions.')
+  if (vocabularyScore.value > 80) items.push('Read authentic news articles with minimal dictionary help.')
+  
+  return items.slice(-4) // Show the 4 most recent achievements
+})
 </script>
 
 <template>
@@ -59,6 +72,14 @@ const overallLevel = computed(() => {
     <div class="eyebrow">Your Dutch level</div>
     <h1>{{ overallLevel }} candidate</h1>
     <p class="muted">Based on your practice across all capabilities.</p>
+
+    <div class="card can-do-card" v-if="canDoItems.length > 0">
+      <div class="eyebrow">Capabilities</div>
+      <h3>What you can do:</h3>
+      <ul class="can-do-list">
+        <li v-for="item in canDoItems" :key="item">{{ item }}</li>
+      </ul>
+    </div>
 
     <div class="card skill-table">
       <div v-for="row in skillRows" :key="row.label" class="skill-row">
@@ -93,6 +114,12 @@ const overallLevel = computed(() => {
 
 <style scoped>
 .skill-table { margin: 32px 0; padding: 12px 28px; }
+
+.can-do-card { background: #f0f7ff; border: 1px solid #cce3ff; margin: 24px 0; padding: 24px; }
+.can-do-card h3 { margin: 8px 0 16px; color: #1e40af; }
+.can-do-list { margin: 0; padding-left: 20px; color: #1e40af; }
+.can-do-list li { margin-bottom: 8px; font-weight: 500; }
+
 .skill-row { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid #f0f2ef; }
 .skill-row:last-child { border-bottom: 0; }
 .skill-info { flex: 1; display: flex; flex-direction: column; }

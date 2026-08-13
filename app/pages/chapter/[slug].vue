@@ -96,6 +96,26 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'flexibility'" class="renderer">
+        <FlexibilityDrill 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :disabled="!!feedback"
+          @submit="submit"
+        />
+        <button v-if="!feedback" class="button" @click="submit">Check flexibility</button>
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'challenge'" class="renderer">
+        <FinalChallenge 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :disabled="!!feedback"
+          @submit="submit"
+        />
+        <button v-if="!feedback" class="button" @click="submit">Submit Final Mission</button>
+      </div>
+
       <div v-else class="default-renderer">
         <h2>{{ session.exercise.value.prompt }}</h2>
         <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>

@@ -21,7 +21,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge'
 
 export interface Exercise {
   id: string
@@ -47,6 +47,11 @@ export interface Exercise {
   wordHints?: Record<string, { meaning: string, category?: string }>
   // For timed drills
   automaticitySeconds?: number
+  // For flexibility
+  forbiddenWords?: string[]
+  requiredWords?: string[]
+  // For challenge
+  minimumLength?: number
 }
 
 export interface ChapterStage {

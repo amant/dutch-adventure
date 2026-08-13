@@ -438,7 +438,65 @@ export const talkingAboutDayChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, talkingAboutDayChapter, opinionChapter, hotelMission, workDiscussionMission, newsChapter]
+export const debatingWorkChapter: Chapter = {
+  slug: 'debat-thuiswerken',
+  level: 'B2',
+  title: 'Debating work policies',
+  capability: 'Present a structured argument, handle pushback, and rephrase points for clarity.',
+  description: 'This is a high-level B2 challenge. You will build an argument and then be forced to defend it using different grammatical structures.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Connectors', kind: 'discover',
+      intro: 'At B2, you should be able to switch between "omdat" (subordinating) and "want" (coordinating) to keep your speech varied.',
+      exercises: [{ 
+        id: 'debate-1', kind: 'info', prompt: 'Varied reasoning', 
+        context: 'Ik werk graag thuis omdat het rustig is. (Word order: Verb at end)\nIk werk graag thuis, want het is rustig. (Word order: Normal)', 
+        skills: ['recognition', 'meaning'],
+        grammar: ['omdat-clause', 'want-clause']
+      }],
+    },
+    {
+      id: 'flexibility', title: 'The Flexibility Test', kind: 'transform',
+      intro: 'A good speaker can express the same idea in multiple ways.',
+      exercises: [{ 
+        id: 'debate-2', kind: 'flexibility', prompt: 'Rewrite using "want" instead of "omdat".', 
+        context: 'Ik vind kantoorwerk minder fijn omdat er te veel afleiding is.',
+        requiredWords: ['want'],
+        forbiddenWords: ['omdat'],
+        target: 'Ik vind kantoorwerk minder fijn, want er is te veel afleiding.',
+        skills: ['production', 'automaticity'],
+        grammar: ['want-clause']
+      }],
+    },
+    {
+      id: 'mission', title: 'The Argument', kind: 'personalise',
+      intro: 'Your colleague says: "Ik denk dat we meer samenwerken als we op kantoor zijn."',
+      exercises: [{ 
+        id: 'debate-3', kind: 'conversation', prompt: 'Reageer op je collega. Waarom ben je het er niet mee eens?', 
+        simulatorResponse: 'Daar heb je een punt, maar hoe zit het met de spontane gesprekken bij het koffiezetapparaat?',
+        explanation: 'Acknowledge their point and present your counter-argument.', 
+        skills: ['speaking', 'production', 'automaticity'],
+        grammar: ['word-order'],
+        vocabulary: ['tegenargument']
+      }],
+    },
+    {
+      id: 'final-challenge', title: 'Final Mission', kind: 'review',
+      intro: 'Now, write a short summary of your position for the management.',
+      exercises: [{ 
+        id: 'debate-4', kind: 'challenge', prompt: 'Write a proposal (min 20 words) explaining why flexible work should stay.', 
+        context: 'The management wants to know your final thoughts.',
+        minimumLength: 20,
+        skills: ['production', 'writing', 'automaticity'],
+        grammar: ['omdat-clause', 'want-clause', 'hoewel'],
+        placeholder: 'Geachte directie, volgens mij...'
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, talkingAboutDayChapter, opinionChapter, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
