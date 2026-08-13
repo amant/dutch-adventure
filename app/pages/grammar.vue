@@ -10,7 +10,8 @@ const dimensions: { id: SkillDimension, label: string }[] = [
   { id: 'meaning', label: 'Meaning' },
   { id: 'listening', label: 'Listening' },
   { id: 'production', label: 'Production' },
-  { id: 'automaticity', label: 'Fluency' }
+  { id: 'automaticity', label: 'Fluency' },
+  { id: 'coherence', label: 'Coherence' }
 ]
 
 const grammarPoints = computed(() => {

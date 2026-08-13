@@ -37,6 +37,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 - **Speaking**: Can they use it in a conversation?
 - **Automaticity**: Can they use it without thinking (fast retrieval)?
 - **Pragmatic**: Can they use the correct level of formality and social nuance (e.g., softeners, particles)?
+- **Coherence**: Can they connect ideas logically using transition words (e.g., *bovendien*, *daarentegen*, *derhalve*)?
 - **Usage History**: The system tracks the exact snippets of successful usage for every concept, building a "personal corpus" of what the learner *can actually use*. Accessible via **Personal Sentence Corpus** search in the Vocabulary Library.
 
 **Rule**: If a word is "learned" but cannot be produced spontaneously, the system marks it as a **bottleneck** and injects it into future activities.
@@ -75,6 +76,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `MissionSimulator.vue`: AI personality-driven chat with Speech-to-Text (Voice) support.
     - `VoiceInput.vue`: Global component for capturing Dutch speech via Web Speech API.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
+    - `ConnectorDrill.vue`: Choose the correct logical connector to complete a passage.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.

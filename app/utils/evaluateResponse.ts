@@ -222,6 +222,31 @@ function checkAdjectiveEndingError(normalized: string) {
   return { found: false }
 }
 
+function checkCoherenceConnectors(normalized: string): { score: number, found: string[] } {
+  const connectors = {
+    addition: ['bovendien', 'daarnaast', 'ook', 'verder'],
+    contrast: ['daarentegen', 'echter', 'toch', 'hoewel', 'aan de andere kant'],
+    cause: ['daarom', 'immers', 'omdat', 'want', 'doordat'],
+    conclusion: ['kortom', 'concluderend', 'dus', 'derhalve']
+  }
+  
+  const found: string[] = []
+  const words = normalized.split(/\s+/)
+  
+  Object.values(connectors).flat().forEach(c => {
+    if (c.includes(' ')) {
+      if (normalized.includes(c)) found.push(c)
+    } else {
+      if (words.includes(c)) found.push(c)
+    }
+  })
+  
+  return {
+    score: Math.min(100, found.length * 25),
+    found
+  }
+}
+
 function calculatePragmaticScore(normalized: string, exercise: Exercise): { score: number, feedback?: string } {
   let score = 70 // Base score for correct but neutral Dutch
   let feedback = ""
@@ -531,6 +556,15 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     feedback.pragmaticFeedback = pragmatics.feedback
     if (pragmatics.score > 70 && !feedback.skills.includes('pragmatic')) {
       feedback.skills.push('pragmatic')
+    }
+
+    // Coherence Analysis
+    const coherence = checkCoherenceConnectors(normalized)
+    if (coherence.found.length > 0) {
+      if (!feedback.skills.includes('coherence')) feedback.skills.push('coherence')
+      feedback.changeModifier = (feedback.changeModifier || 0) + (coherence.found.length * 2)
+      if (!feedback.pragmaticFeedback) feedback.pragmaticFeedback = `Excellent logical flow! You used these connectors: ${coherence.found.join(', ')}.`
+      else feedback.pragmaticFeedback += ` Also, great use of logical connectors like '${coherence.found[0]}'.`
     }
   }
 

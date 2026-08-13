@@ -1249,7 +1249,83 @@ export const mediationChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter]
+export const argumentationChapter: Chapter = {
+  id: 'b2-argumentation',
+  slug: 'logical-flow',
+  title: 'Logical Flow & Persuasion',
+  level: 'B2',
+  capability: 'Construct a coherent argument and persuade others in Dutch.',
+  description: 'Learn to use logical connectors to build complex and convincing arguments.',
+  estimatedMinutes: 18,
+  stages: [
+    {
+      id: 'discovery', title: 'Connecting Ideas', kind: 'discover',
+      intro: 'To argue effectively at B2, you need more than "en" and "maar". Look at these advanced connectors.',
+      exercises: [
+        {
+          id: 'arg-1',
+          kind: 'info',
+          prompt: 'Advanced Logical Connectors',
+          context: 'Bovendien (Furthermore), Daarentegen (On the other hand), Derhalve (Therefore), Immers (After all).',
+          skills: ['recognition', 'meaning']
+        }
+      ]
+    },
+    {
+      id: 'drill', title: 'Connector Drill', kind: 'transform',
+      intro: 'Choose the best connector to complete the logical flow of these sentences.',
+      exercises: [
+        {
+          id: 'arg-2',
+          kind: 'connector-drill',
+          prompt: 'Thuiswerken bespaart veel reistijd. ___ is het soms lastig om de grens tussen werk en privé te bewaken.',
+          context: 'Working from home saves travel time. [On the other hand] it is sometimes hard to guard the boundary between work and private life.',
+          target: 'Daarentegen',
+          connectorOptions: [
+            { text: 'Daarentegen', isCorrect: true },
+            { text: 'Bovendien', isCorrect: false },
+            { text: 'Kortom', isCorrect: false },
+            { text: 'Immers', isCorrect: false }
+          ],
+          skills: ['production', 'coherence'],
+          explanation: '"Daarentegen" introduces a contrasting point, which fits perfectly here.'
+        },
+        {
+          id: 'arg-3',
+          kind: 'connector-drill',
+          prompt: 'Het nieuwe project heeft veel potentie. ___ hebben we meer budget nodig om het succesvol af te ronden.',
+          context: 'The new project has a lot of potential. [Therefore] we need more budget to finish it successfully.',
+          target: 'Derhalve',
+          connectorOptions: [
+            { text: 'Derhalve', isCorrect: true },
+            { text: 'Hoewel', isCorrect: false },
+            { text: 'Daarnaast', isCorrect: false },
+            { text: 'Toch', isCorrect: false }
+          ],
+          skills: ['production', 'coherence'],
+          explanation: '"Derhalve" is a formal way to say "therefore" or "consequently".'
+        }
+      ]
+    },
+    {
+      id: 'persuasion', title: 'The Persuasion Challenge', kind: 'personalise',
+      intro: 'Try to persuade someone that a four-day work week is a good idea. Use at least two advanced connectors.',
+      exercises: [
+        {
+          id: 'arg-4',
+          kind: 'challenge',
+          prompt: 'Argue for a four-day work week. Use connectors like "bovendien", "daarentegen", or "derhalve".',
+          minimumLength: 20,
+          skills: ['production', 'coherence', 'pragmatic'],
+          grammar: ['subordinate-clauses'],
+          vocabulary: ['productiviteit', 'balans', 'besparen']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

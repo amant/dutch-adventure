@@ -1,4 +1,4 @@
-export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic'
+export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic' | 'coherence'
 
 export interface ConceptState {
   recognition: number
@@ -9,6 +9,7 @@ export interface ConceptState {
   speaking: number
   spelling: number
   pragmatic: number
+  coherence: number
   encounters: number
   successes: number
   lastEncountered?: string
@@ -23,7 +24,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'mediation'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'mediation' | 'connector-drill'
 
 export interface Exercise {
   id: string
@@ -69,6 +70,8 @@ export interface Exercise {
   // For mediation
   mediationSource?: { title: string, content: string, language: 'en' | 'nl' }
   mediationPoints?: { id: string, label: string, keywords: string[] }[]
+  // For connectors
+  connectorOptions?: { text: string, isCorrect: boolean }[]
 }
 
 export interface ChapterStage {
