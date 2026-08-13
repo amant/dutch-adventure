@@ -127,6 +127,7 @@ export interface Chapter {
   estimatedMinutes: number
   stages: ChapterStage[]
   relatedArticleSlug?: string
+  isCapstone?: boolean
 }
 
 export type FeedbackOutcome = 'correct' | 'acceptable' | 'retry'

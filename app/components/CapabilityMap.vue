@@ -60,10 +60,11 @@ const chaptersByLevel = computed(() => {
             :key="chapter.slug"
             :to="`/chapter/${chapter.slug}`"
             class="capability-item"
-            :class="getCapabilityStatus(chapter)"
+            :class="[getCapabilityStatus(chapter), { 'is-capstone': chapter.isCapstone }]"
           >
             <div class="dot"></div>
             <span class="title">{{ chapter.title }}</span>
+            <span v-if="chapter.isCapstone" class="capstone-icon">🏆</span>
           </NuxtLink>
         </div>
       </div>
@@ -153,6 +154,28 @@ h2 { margin: 12px 0 8px; }
 
 .capability-item.in-progress .dot {
   background: #d06b3c;
+}
+
+.capability-item.is-capstone {
+  margin-top: 8px;
+  background: #fdf2f8;
+  border: 1px dashed #ec4899;
+}
+
+.capability-item.is-capstone:hover {
+  background: #fce7f3;
+  border-style: solid;
+}
+
+.capability-item.is-capstone.mastered {
+  background: #fbcfe8;
+  border-style: solid;
+  color: #9d174d;
+}
+
+.capstone-icon {
+  margin-left: auto;
+  font-size: 14px;
 }
 
 .dot {

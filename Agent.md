@@ -77,6 +77,7 @@ The AI in this app is not just a chatbot; it's a coach.
 
 - **Capabilities**: Group chapters by CEFR level (A1 Survival, A2 Everyday Independence, B1 Independent Communication, B2 Complex Communication).
 - **Missions**: High-level challenges that combine multiple skills (e.g., "Complain about a hotel").
+- **Capstone Missions**: High-stakes, multi-stage simulations that act as the final "Can-do" test for each CEFR level (e.g., "Survival in Amsterdam" for A1 or "Professional Integration" for B2). Provides a "Teacher's Report Card" at the end, summarizing fluency, naturalness, and goal achievement.
 - **Mediation**: Challenges that require summarizing or explaining formal/complex information in natural Dutch (e.g., explaining a formal letter to a neighbor).
 - **Ladders**: 
     - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues, **comprehension checks**, and **Shadowing** (repeating native audio to build automaticity).
@@ -95,6 +96,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
 - **Components**:
     - `MissionSimulator.vue`: AI personality-driven chat with Speech-to-Text (Voice) support.
+    - `CapstoneMission.vue`: A high-fidelity wrapper for Capstone missions that adds progress tracking, a celebratory completion state, and a detailed performance report.
     - `VoiceInput.vue`: Global component for capturing Dutch speech via Web Speech API.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers. `ListeningLadder` supports interactive, clickable words for individual repetition.
     - `ConnectorDrill.vue`: Choose the correct logical connector to complete a passage.

@@ -145,7 +145,16 @@ function next() { feedback.value = undefined; session.advance() }
       </div>
 
       <div v-else-if="session.exercise.value.kind === 'conversation'" class="renderer">
+        <CapstoneMission 
+          v-if="chapter.isCapstone"
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+        />
         <MissionSimulator 
+          v-else
           :exercise="session.exercise.value" 
           v-model="session.response.value"
           :feedback="feedback"

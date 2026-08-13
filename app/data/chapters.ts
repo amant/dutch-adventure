@@ -1821,7 +1821,66 @@ export const collocationChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter]
+export const a1Capstone: Chapter = {
+  slug: 'a1-survival-mission',
+  level: 'A1',
+  title: 'Survival in Amsterdam',
+  capability: 'Navigate a typical day in a Dutch-speaking city by combining survival skills.',
+  description: 'Apply everything you have learned in A1. Introduce yourself to a neighbor, ask for directions, and buy items at a shop.',
+  estimatedMinutes: 20,
+  isCapstone: true,
+  stages: [
+    {
+      id: 'mission', title: 'The Survival Challenge', kind: 'personalise',
+      intro: 'You just arrived in Amsterdam. Your goal is to settle in by interacting with the locals.',
+      exercises: [
+        {
+          id: 'a1-cap-1', kind: 'conversation', 
+          prompt: 'Your neighbor greets you: "Hoi! Ben je hier nieuw?"',
+          skills: ['speaking', 'production', 'pragmatic'],
+          missionGoals: [
+            { id: 'intro', label: 'Introduce yourself', keywords: ['ik ben', 'naam', 'uit'] },
+            { id: 'directions', label: 'Ask for the supermarket', keywords: ['supermarkt', 'waar', 'is'] },
+            { id: 'bakery', label: 'Order two croissants', keywords: ['twee', 'croissants', 'alstublieft', 'graag'] }
+          ],
+          aiPersonality: { style: 'helpful' }
+        }
+      ]
+    }
+  ]
+}
+
+export const b2Capstone: Chapter = {
+  slug: 'b2-professional-integration',
+  level: 'B2',
+  title: 'Professional Integration',
+  capability: 'Engage in complex professional interactions, including presentation, negotiation, and persuasion.',
+  description: 'The ultimate test of your B2 Dutch. Navigate a job interview, negotiate your terms, and defend your professional opinions.',
+  estimatedMinutes: 30,
+  isCapstone: true,
+  stages: [
+    {
+      id: 'mission', title: 'The Career Challenge', kind: 'personalise',
+      intro: 'You are at a job interview for a Dutch company. You need to prove not just your skills, but your ability to function in a Dutch professional environment.',
+      exercises: [
+        {
+          id: 'b2-cap-1', kind: 'conversation', 
+          prompt: 'The interviewer starts: "Welkom. Waarom denkt u dat u de juiste persoon bent voor deze functie?"',
+          skills: ['speaking', 'production', 'pragmatic', 'coherence'],
+          missionGoals: [
+            { id: 'background', label: 'Present your background', keywords: ['ervaring', 'verantwoordelijk', 'gewerkt'] },
+            { id: 'salary', label: 'Negotiate salary/benefits', keywords: ['salaris', 'arbeidsvoorwaarden', 'onderhandelen'] },
+            { id: 'remote', label: 'Argue for remote work flexibility', keywords: ['thuiswerken', 'productiviteit', 'balans', 'hoewel'] },
+            { id: 'difficult', label: 'Handle a pushback on your experience', keywords: ['toch', 'daarentegen', 'namelijk', 'mening'] }
+          ],
+          aiPersonality: { isDifficult: true, style: 'colloquial', pushbackProbability: 0.8 }
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
