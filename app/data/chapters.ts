@@ -34,7 +34,7 @@ export const introductionChapter: Chapter = {
       id: 'personalise', title: 'Personalise', kind: 'personalise',
       intro: 'Now introduce yourself for real.',
       exercises: [{ 
-        id: 'intro-3', kind: 'typed', prompt: 'Wie ben je en waar woon je?', 
+        id: 'intro-3', kind: 'personalise', prompt: 'Wie ben je en waar woon je?', 
         target: 'Ik ben ..., ik woon in ...', 
         explanation: 'State your name with "Ik ben" and city with "Ik woon in".', 
         skills: ['production', 'automaticity'],
@@ -108,7 +108,7 @@ export const opinionChapter: Chapter = {
       id: 'personalise', title: 'Personalise', kind: 'personalise',
       intro: 'Use the pattern to say something true for you.',
       exercises: [{ 
-        id: 'personalise-1', kind: 'typed', prompt: 'Wat vind je van thuiswerken? Geef ook een reden.', 
+        id: 'personalise-1', kind: 'personalise', prompt: 'Wat vind je van thuiswerken? Geef ook een reden.', 
         target: 'Ik denk dat thuiswerken ... is, omdat ...', 
         explanation: 'A reasonable answer needs an opinion opening and a reason with omdat.', 
         skills: ['production', 'automaticity'], 
@@ -587,7 +587,98 @@ export const landlordMission: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter]
+export const coffeeChapter: Chapter = {
+  slug: 'koffie-bestellen',
+  level: 'A1',
+  title: 'Ordering Coffee',
+  capability: 'Order a drink, ask for the price, and pay in a café.',
+  description: 'Survival Dutch for your daily caffeine fix.',
+  estimatedMinutes: 5,
+  stages: [
+    {
+      id: 'discover', title: 'Café Vocabulary', kind: 'discover',
+      intro: 'Basic drinks and polite requests.',
+      exercises: [{ 
+        id: 'coffee-1', kind: 'info', prompt: 'Common drinks', 
+        context: 'een koffie (coffee)\neen thee (tea)\neen cappuccino\nmet melk en suiker (with milk and sugar)', 
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['koffie', 'thee', 'melk', 'suiker']
+      }],
+    },
+    {
+      id: 'retrieve', title: 'Polite Requests', kind: 'retrieve',
+      intro: 'Use "Graag" for politeness.',
+      exercises: [{ 
+        id: 'coffee-2', kind: 'typed', prompt: 'A coffee with milk, please.', 
+        target: 'Een koffie met melk, graag.',
+        skills: ['production', 'meaning'],
+        vocabulary: ['koffie', 'melk'],
+        placeholder: 'Een koffie...'
+      }],
+    },
+    {
+      id: 'personalise', title: 'Your Order', kind: 'personalise',
+      intro: 'What do you usually drink?',
+      exercises: [{ 
+        id: 'coffee-3', kind: 'personalise', prompt: 'Wat wilt u drinken?', 
+        vocabulary: ['koffie', 'thee', 'melk', 'suiker'],
+        placeholder: 'Ik wil graag...'
+      }],
+    }
+  ]
+}
+
+export const salaryNegotiationMission: Chapter = {
+  slug: 'salarisverhandeling',
+  level: 'B2',
+  title: 'Salary Negotiation',
+  capability: 'Argue for a pay rise, handle objections, and speculate about future value.',
+  description: 'A high-pressure professional scenario where you must persuade your manager.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'understand', title: 'Arguments & Persuasion', kind: 'understand',
+      intro: 'Notice the use of conditional language (zou, kunnen).',
+      exercises: [{ 
+        id: 'salary-1', kind: 'reading', prompt: 'Professional arguments',
+        readingContent: 'Ik denk dat een verhoging passend zou zijn, gezien mijn prestaties van het afgelopen jaar.',
+        wordHints: {
+          'verhoging': { meaning: 'increase/raise', category: 'noun' },
+          'passend': { meaning: 'appropriate', category: 'adj' },
+          'prestaties': { meaning: 'achievements', category: 'noun' }
+        },
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['verhoging', 'prestaties']
+      }],
+    },
+    {
+      id: 'flex', title: 'Flexibility', kind: 'flexibility',
+      intro: 'Rephrase your request to be more speculative.',
+      exercises: [{ 
+        id: 'salary-2', kind: 'flexibility', prompt: 'Rewrite: "I want more money" using "zou" and "kunnen".',
+        target: 'Zou het mogelijk kunnen zijn om over mijn salaris te praten?',
+        requiredWords: ['zou', 'kunnen'],
+        forbiddenWords: ['wil', 'geld'],
+        skills: ['production', 'automaticity'],
+        grammar: ['conditional']
+      }],
+    },
+    {
+      id: 'mission', title: 'The Negotiation', kind: 'personalise',
+      intro: 'Your manager is happy with your work but the budget is tight.',
+      exercises: [{ 
+        id: 'salary-3', kind: 'conversation', prompt: 'Dag! Je wilde me spreken over je contract? Je weet dat we dit jaar voorzichtig moeten zijn met de kosten.', 
+        simulatorResponse: 'Dat begrijp ik, maar waarom vind je dat je nu al een verhoging verdient?',
+        aiPersonality: { isDifficult: true, style: 'helpful', pushbackProbability: 0.9 },
+        skills: ['speaking', 'production', 'automaticity'],
+        vocabulary: ['salaris', 'verhoging', 'verantwoordelijkheid'],
+        grammar: ['hoewel', 'omdat-clause']
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

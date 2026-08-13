@@ -70,6 +70,15 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'personalise'" class="renderer">
+        <PersonalisationExercise 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'conversation'" class="renderer">
         <MissionSimulator 
           :exercise="session.exercise.value" 

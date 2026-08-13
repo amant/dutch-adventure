@@ -73,7 +73,8 @@ function checkSeparableVerbError(normalized: string, target: string) {
     { full: 'schoonmaken', stem: 'maak', prefix: 'schoon' },
     { full: 'opbellen', stem: 'bel', prefix: 'op' },
     { full: 'uitnodigen', stem: 'nodig', prefix: 'uit' },
-    { full: 'voorbereiden', stem: 'bereid', prefix: 'voor' }
+    { full: 'voorbereiden', stem: 'bereid', prefix: 'voor' },
+    { full: 'opstaan', stem: 'sta', prefix: 'op' }
   ]
   
   for (const v of separableVerbs) {
@@ -87,6 +88,37 @@ function checkSeparableVerbError(normalized: string, target: string) {
           example: {
             wrong: `Ik ${v.full} de kamer.`,
             right: `Ik ${v.stem} de kamer ${v.prefix}.`
+          }
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
+function checkSubordinateClauseError(normalized: string, conjunction: string) {
+  const words = normalized.split(' ')
+  const index = words.indexOf(conjunction)
+  if (index !== -1 && index < words.length - 2) {
+    const nextWords = words.slice(index + 1)
+    const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
+    // A common mistake is to put the verb right after the subject in a subordinate clause
+    if (pronouns.includes(nextWords[0]) && nextWords.length > 1) {
+      // This is a very rough heuristic but often catches SVO in subordinate clauses
+      // We check if the last word is NOT a verb-like word (usually ends in -en, -t, or is short)
+      // Actually, it's safer to just check if the second word is a common verb
+      const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen']
+      if (commonVerbs.includes(nextWords[1])) {
+        return {
+          found: true,
+          message: `After '${conjunction}', the verb moves to the end of the sentence!`,
+          miniLesson: {
+            title: 'Subordinate Clauses',
+            content: `When you use '${conjunction}', the word order changes. The verb must go to the very end.`,
+            example: {
+              wrong: `... ${conjunction} ik ${nextWords[1]} ziek.`,
+              right: `... ${conjunction} ik ziek ${nextWords[1]}.`
+            }
           }
         }
       }
@@ -160,6 +192,16 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       return { ...base, outcome: 'retry', message: separableError.message, miniLesson: separableError.miniLesson }
     }
 
+    // Grammar Assistant: Subordinate Clauses (omdat, hoewel)
+    if (normalized.includes('omdat')) {
+      const error = checkSubordinateClauseError(normalized, 'omdat')
+      if (error.found) return { ...base, outcome: 'retry', message: error.message, miniLesson: error.miniLesson }
+    }
+    if (normalized.includes('hoewel')) {
+      const error = checkSubordinateClauseError(normalized, 'hoewel')
+      if (error.found) return { ...base, outcome: 'retry', message: error.message, miniLesson: error.miniLesson }
+    }
+
     // Spelling check
     if (isSpellingMistake(normalized, accepted)) {
       if (!base.skills.includes('spelling')) base.skills.push('spelling')
@@ -207,13 +249,19 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     }
 
     // Heuristic for personalised answers / conversations
-    if (exercise.id.includes('personalise') || exercise.kind === 'conversation') {
-      const hasGrammar = exercise.grammar?.every(g => normalized.includes(g.toLowerCase())) ?? true
-      if (normalized.length > 10 && hasGrammar) {
+    if (exercise.kind === 'personalise' || exercise.kind === 'conversation' || exercise.id.includes('personalise')) {
+      const missingGrammar = exercise.grammar?.find(g => !normalized.includes(g.toLowerCase()))
+      const missingVocab = exercise.vocabulary?.find(v => !normalized.includes(v.toLowerCase()))
+      
+      if (normalized.length > 5) {
+        if (missingGrammar && Math.random() < 0.3) {
+           return { ...base, outcome: 'acceptable', message: `Good! But try to use '${missingGrammar}' to make it even better.` }
+        }
         return { 
           ...base, 
-          outcome: 'acceptable', 
-          message: 'Good effort! Your answer is understandable and uses the pattern.'
+          outcome: 'correct', 
+          message: 'Excellent personalisation! You are using the language to talk about yourself.',
+          changeModifier: (base.changeModifier || 0) + 5
         }
       }
     }
