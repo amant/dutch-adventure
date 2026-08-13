@@ -1880,7 +1880,46 @@ export const b2Capstone: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, b2Capstone]
+export const mirroringChapter: Chapter = {
+  slug: 'native-mirroring-challenge',
+  level: 'B2',
+  title: 'Native Mirroring',
+  capability: 'Transform grammatically correct but stiff Dutch into natural, native-like phrasing.',
+  description: 'Learn to use Dutch like a native speaker by mastering modal particles, natural word order, and idiomatic flow.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'mirror-1', title: 'Mirroring Particles', kind: 'retrieve',
+      intro: 'Dutch uses small particles like "even", "hoor", and "maar" to soften speech. Let\'s practice adding them.',
+      exercises: [
+        {
+          id: 'mir-1', kind: 'mirroring', 
+          prompt: 'You are at a cafe. Ask the waiter to wait a moment.',
+          context: 'Kunt u even wachten?', // Stiff version (wait, even is actually natural, let's make it stiffer)
+          // Wait, actually I should show the stiff one:
+          // "Kunt u wachten?" -> "Kunt u even wachten?"
+        }
+      ]
+    }
+  ]
+}
+
+// Correcting the example
+mirroringChapter.stages[0].exercises[0].context = 'Kunt u wachten?'
+mirroringChapter.stages[0].exercises[0].target = 'Kunt u even wachten?'
+mirroringChapter.stages[0].exercises[0].explanation = 'Adding "even" makes the request much more natural and less demanding.'
+
+const mir2: Exercise = {
+  id: 'mir-2', kind: 'mirroring',
+  prompt: 'A friend asks if you are coming. Confirm you are.',
+  context: 'Ja, ik kom.',
+  target: 'Ja, ik kom eraan hoor!',
+  explanation: 'Using "eraan" and "hoor" adds a layer of natural reassurance and flow.'
+}
+
+mirroringChapter.stages[0].exercises.push(mir2)
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

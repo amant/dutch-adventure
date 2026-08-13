@@ -76,6 +76,19 @@ const bottlenecks = computed(() => {
     })
   }
 
+  // 4. Stagnant naturalness
+  const history = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)].flatMap(v => v.usageHistory || [])
+  const recentPragmatic = history.slice(0, 5).reduce((acc, h) => acc + (h.pragmaticScore || 0), 0) / Math.min(5, history.length || 1)
+  if (history.length > 10 && recentPragmatic < 70) {
+    items.push({
+      label: 'Stiff Dutch',
+      status: 'orange',
+      text: 'Your Dutch is correct but sounds literal. Time to mirror native flow.',
+      action: '/chapter/native-mirroring-challenge',
+      actionLabel: 'Try Mirroring'
+    })
+  }
+
   return items.slice(0, 3)
 })
 </script>

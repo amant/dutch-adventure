@@ -14,7 +14,7 @@ export interface ConceptState {
   encounters: number
   successes: number
   lastEncountered?: string
-  usageHistory?: { prompt: string, snippet: string, date: string }[]
+  usageHistory?: { prompt: string, snippet: string, date: string, pragmaticScore?: number }[]
   redlineHistory?: { userAnswer: string, naturalCorrection: string, date: string }[]
   responseTimes?: number[]
 }
@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring'
 
 export interface Exercise {
   id: string

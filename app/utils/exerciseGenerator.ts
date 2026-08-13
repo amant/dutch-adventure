@@ -203,6 +203,36 @@ export function createSpeedChapter(vocabularyKeys: string[], grammarKeys: string
   }
 }
 
+export function createFluencyChapter(history: { key: string, prompt: string, snippet: string, type: 'vocabulary' | 'grammar' }[]): Chapter {
+  return {
+    slug: 'fluency-challenge',
+    level: 'B2',
+    title: 'Dynamic Fluency Challenge',
+    capability: 'Automate production of your most used phrases.',
+    description: 'A challenge built from your own history. Speak fast to build automaticity.',
+    estimatedMinutes: 5,
+    stages: [
+      {
+        id: 'fluency-stage',
+        title: 'Spontaneous Retrieval',
+        kind: 'review',
+        intro: 'You have used these before. Now say them faster.',
+        exercises: history.map((h, idx) => ({
+          id: `fluency-${h.key}-${idx}`,
+          kind: 'fluency-challenge',
+          prompt: h.prompt,
+          target: h.snippet,
+          context: `You previously said: "${h.snippet}"`,
+          skills: ['automaticity', 'speaking', 'production'],
+          vocabulary: h.type === 'vocabulary' ? [h.key] : [],
+          grammar: h.type === 'grammar' ? [h.key] : [],
+          automaticitySeconds: 10
+        }))
+      }
+    ]
+  }
+}
+
 export function createScenarioMission(scenario: string, concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
   return {
     slug: 'sandbox-mission',

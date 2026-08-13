@@ -119,6 +119,16 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'mirroring'" class="renderer">
+        <NativeMirroring
+          :exercise="session.exercise.value"
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'collocation-drill'" class="renderer">
         <CollocationDrill
           :exercise="session.exercise.value"
@@ -238,6 +248,17 @@ function next() { feedback.value = undefined; session.advance() }
           v-model="session.response.value"
           :feedback="feedback"
           @submit="submit"
+        />
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'fluency-challenge'" class="renderer">
+        <FluencyChallenge 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+          @retry="feedback = undefined"
         />
       </div>
 

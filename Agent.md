@@ -25,7 +25,8 @@ Every chapter should follow this loop to move concepts from recognition to autom
 ### Memory & Automaticity
 
 - **Memory Lab**: A dedicated hub for tracking "Memory Decay" and performing **Stage 6 Retrieval**. The system stores the exact prompts and sentences produced by the learner (`usageHistory`) and brings them back 2-7 days later to test if retrieval is becoming automatic.
-- **Fluency Metrics**: Every production exercise tracks **Retrieval Speed** (Response Time). These metrics are visualized on the Progress page to show the transition from "Thinking/Translating" to "Automatic/Fluent".
+- **Fluency Metrics**: Every production exercise tracks **Retrieval Speed** (Response Time). These metrics are visualized on the Progress page to show the transition from "Thinking/Translating" to "Automatic/Fluent". Includes **Dynamic Fluency Challenges** for Stage 7 Automation.
+- **Pragmatic Evolution**: Every interaction's **Naturalness Score** is tracked in the Language Graph, allowing the learner to see their progress from "Literal/Stiff" to "Native-like" flow via trend charts on the Progress page.
 
 ### Voice & Speaking
 
@@ -104,6 +105,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - `RecombinationDrill.vue`: Challenges learners to use multiple specific concepts in a single sentence.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
+    - `FluencyChallenge.vue`: High-pressure, timed retrieval challenge for Stage 7 Automation.
+    - `NativeMirroring.vue`: Specialized drill for transforming stiff Dutch into natural, native-like phrasing.
     - `CorrectionChallenge.vue`: Interactive interface for identifying and fixing errors in a provided passage.
     - `CircumlocutionChallenge.vue`: Component for explaining concepts without using forbidden words.
     - `NuanceDrill.vue`: Interactive tool for injecting naturalness into stiff Dutch sentences.

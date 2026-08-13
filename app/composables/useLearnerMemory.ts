@@ -138,7 +138,8 @@ export function useLearnerMemory() {
           dict[key].usageHistory!.unshift({ 
             snippet, 
             prompt: prompt || '',
-            date: new Date().toISOString() 
+            date: new Date().toISOString(),
+            pragmaticScore: feedback?.pragmaticScore 
           })
           if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop()
         }

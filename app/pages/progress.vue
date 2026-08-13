@@ -97,6 +97,21 @@ const pipeline = computed(() => {
     automated: all.filter(v => v.automaticity > 50).length
   }
 })
+
+const naturalnessTrend = computed(() => {
+  const allHistory = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+    .flatMap(v => v.usageHistory || [])
+    .filter(h => h.pragmaticScore !== undefined)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+  if (allHistory.length < 4) return null
+
+  const recent = allHistory.slice(0, 5).reduce((acc, h) => acc + (h.pragmaticScore || 0), 0) / Math.min(5, allHistory.length)
+  const previous = allHistory.slice(5, 10).reduce((acc, h) => acc + (h.pragmaticScore || 0), 0) / Math.min(5, Math.max(0, allHistory.length - 5))
+
+  if (isNaN(previous)) return { score: Math.round(recent), change: 0 }
+  return { score: Math.round(recent), change: Math.round(recent - previous) }
+})
 </script>
 
 <template>
@@ -159,17 +174,33 @@ const pipeline = computed(() => {
     </div>
 
     <div class="fluency-section">
-      <h2>Fluency & Automaticity</h2>
-      <div class="card fluency-card">
-        <div class="stat-main">
-          <span class="value">{{ averageRetrievalSpeed > 0 ? averageRetrievalSpeed.toFixed(1) : '--' }}s</span>
-          <span class="label">Avg. Retrieval Time</span>
+      <div class="trend-grid">
+        <div class="card fluency-card">
+          <div class="stat-main">
+            <span class="value">{{ averageRetrievalSpeed > 0 ? averageRetrievalSpeed.toFixed(1) : '--' }}s</span>
+            <span class="label">Avg. Retrieval Time</span>
+          </div>
+          <div class="stat-desc">
+            <p v-if="averageRetrievalSpeed > 5">You are in the <strong>Thinking</strong> phase. Retrieval is conscious and slow.</p>
+            <p v-else-if="averageRetrievalSpeed > 2">You are reaching <strong>Functional Fluency</strong>. Retrieval is becoming semi-automatic.</p>
+            <p v-else-if="averageRetrievalSpeed > 0">You are reaching <strong>Automaticity</strong>. You retrieve Dutch almost as fast as your native language.</p>
+            <p v-else>Start missions and drills to measure your retrieval speed.</p>
+          </div>
         </div>
-        <div class="stat-desc">
-          <p v-if="averageRetrievalSpeed > 5">You are in the <strong>Thinking</strong> phase. Retrieval is conscious and slow.</p>
-          <p v-else-if="averageRetrievalSpeed > 2">You are reaching <strong>Functional Fluency</strong>. Retrieval is becoming semi-automatic.</p>
-          <p v-else-if="averageRetrievalSpeed > 0">You are reaching <strong>Automaticity</strong>. You retrieve Dutch almost as fast as your native language.</p>
-          <p v-else>Start missions and drills to measure your retrieval speed.</p>
+
+        <div v-if="naturalnessTrend" class="card trend-card">
+          <div class="stat-main">
+            <span class="value">{{ naturalnessTrend.score }}%</span>
+            <span class="label">Naturalness Score</span>
+          </div>
+          <div class="trend-meta">
+            <div class="trend-indicator" :class="{ up: naturalnessTrend.change > 0, down: naturalnessTrend.change < 0 }">
+              {{ naturalnessTrend.change > 0 ? '↑' : naturalnessTrend.change < 0 ? '↓' : '→' }} 
+              {{ Math.abs(naturalnessTrend.change) }}%
+            </div>
+            <p class="muted">Trend over last 10 interactions.</p>
+            <p class="desc">B2 learners should aim for >80% naturalness using native particles and flow.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -251,7 +282,14 @@ const pipeline = computed(() => {
 .pipeline-arrow.active { color: #176b5b; }
 
 .fluency-section { margin: 40px 0; }
-.fluency-card { display: flex; align-items: center; gap: 40px; padding: 32px; background: #fffdf9; border: 1px solid #f9e8b9; }
+.trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.fluency-card, .trend-card { display: flex; align-items: center; gap: 40px; padding: 32px; background: #fffdf9; border: 1px solid #f9e8b9; }
+.trend-card { background: #fdf2f8; border-color: #fbcfe8; }
+.trend-meta { flex: 1; }
+.trend-indicator { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.trend-indicator.up { color: #176b5b; }
+.trend-indicator.down { color: #ef4444; }
+.trend-meta .desc { font-size: 13px; color: #9d174d; margin-top: 8px; }
 .stat-main { display: flex; flex-direction: column; align-items: center; min-width: 140px; }
 .stat-main .value { font-size: 42px; font-weight: 800; color: #d06b3c; font-family: Fraunces, serif; }
 .stat-main .label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8a9a94; letter-spacing: 0.1em; }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter } from '~/utils/exerciseGenerator'
+import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter, createFluencyChapter } from '~/utils/exerciseGenerator'
 import { useChapterSession } from '~/composables/useChapterSession'
 
-const { getWeakConcepts, getFrontierConcepts, hydrate } = useLearnerMemory()
+const { getWeakConcepts, getFrontierConcepts, hydrate, memory } = useLearnerMemory()
 const route = useRoute()
 
 const chapter = ref<any>(null)
@@ -46,6 +46,15 @@ onMounted(() => {
   if (route.query.mode === 'activation') {
     const frontier = getFrontierConcepts(3)
     chapter.value = createActivationChapter(frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
+  } else if (route.query.mode === 'fluency') {
+    const history: { key: string, prompt: string, snippet: string, type: 'vocabulary' | 'grammar' }[] = []
+    Object.entries(memory.value.vocabulary).forEach(([key, state]) => {
+      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'vocabulary' }))
+    })
+    Object.entries(memory.value.grammar).forEach(([key, state]) => {
+      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'grammar' }))
+    })
+    chapter.value = createFluencyChapter(history.sort(() => 0.5 - Math.random()).slice(0, 5))
   } else if (route.query.mode === 'speed') {
     const { vocabulary, grammar } = getWeakConcepts(5)
     chapter.value = createSpeedChapter(vocabulary, grammar)
@@ -163,12 +172,33 @@ function next() {
           />
         </div>
 
+        <div v-else-if="session.exercise.value.kind === 'fluency-challenge'" class="renderer">
+          <FluencyChallenge 
+            :exercise="session.exercise.value" 
+            v-model="session.response.value"
+            :feedback="feedback"
+            @submit="submit"
+            @next="next"
+            @retry="feedback = undefined"
+          />
+        </div>
+
         <div v-else-if="session.exercise.value.kind === 'recombination-drill'" class="renderer">
           <RecombinationDrill 
             :exercise="session.exercise.value" 
             v-model="session.response.value"
             :feedback="feedback"
             @submit="submit"
+          />
+        </div>
+
+        <div v-else-if="session.exercise.value.kind === 'mirroring'" class="renderer">
+          <NativeMirroring 
+            :exercise="session.exercise.value" 
+            v-model="session.response.value"
+            :feedback="feedback"
+            @submit="submit"
+            @next="next"
           />
         </div>
 

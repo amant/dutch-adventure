@@ -113,7 +113,15 @@ const collocations = computed(() => {
     <div v-else class="layout">
       <div class="main-content">
         <div v-if="corpusSearch && allUsageSnippets.length > 0" class="corpus-results">
-          <div class="eyebrow">Personal Sentence Corpus</div>
+          <div class="corpus-header">
+            <div class="eyebrow">Personal Sentence Corpus</div>
+            <NuxtLink 
+              :to="{ path: '/smart-review', query: { mode: 'fluency' } }" 
+              class="button secondary small"
+            >
+              Practice My Phrases
+            </NuxtLink>
+          </div>
           <div class="usage-grid">
             <div v-for="(h, idx) in allUsageSnippets" :key="idx" class="card usage-card" @click="selectedWord = h.word">
               <p class="snippet">"{{ h.snippet }}"</p>
@@ -172,7 +180,15 @@ const collocations = computed(() => {
         </div>
 
         <div v-if="selectedState.usageHistory && selectedState.usageHistory.length > 0" class="history-section">
-          <div class="eyebrow">Usage History</div>
+          <div class="section-header">
+            <div class="eyebrow">Usage History</div>
+            <NuxtLink 
+              :to="{ path: '/smart-review', query: { mode: 'fluency' } }" 
+              class="practice-link"
+            >
+              Automate this word
+            </NuxtLink>
+          </div>
           <ul class="usage-list">
             <li v-for="(h, idx) in selectedState.usageHistory" :key="idx" class="usage-item">
               <p class="snippet">"{{ h.snippet }}"</p>
@@ -372,6 +388,30 @@ const collocations = computed(() => {
 .dim-bar-container { flex: 1; height: 6px; background: #e0e6e1; border-radius: 3px; margin: 0 10px; overflow: hidden; }
 .dim-bar { height: 100%; background: #176b5b; transition: width 0.3s; }
 .dim-value { width: 30px; text-align: right; color: #176b5b; }
+
+.section-header, .corpus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.practice-link {
+  font-size: 11px;
+  font-weight: 700;
+  color: #176b5b;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.practice-link:hover {
+  text-decoration: underline;
+}
+
+.button.small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
 
 .history-section { margin-top: 24px; }
 .usage-list { list-style: none; padding: 0; margin: 12px 0; }
