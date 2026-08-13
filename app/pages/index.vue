@@ -77,7 +77,7 @@ const staleItems = computed(() => {
           <span class="score">Last seen {{ new Date(item.lastSeen).toLocaleDateString() }}</span>
         </div>
       </div>
-      <NuxtLink to="/vocabulary" class="button secondary">Reactivate now</NuxtLink>
+      <NuxtLink to="/smart-review" class="button secondary">Reactivate with Smart Review</NuxtLink>
     </div>
 
     <div v-else-if="weakAreas.length > 0" class="card review-card">
@@ -90,7 +90,7 @@ const staleItems = computed(() => {
           <span class="score">{{ item.score }}% mastery</span>
         </div>
       </div>
-      <p class="muted">Revisit chapters to improve your spontaneous production.</p>
+      <NuxtLink to="/smart-review" class="button">Start Smart Review</NuxtLink>
     </div>
     
     <div class="grid">

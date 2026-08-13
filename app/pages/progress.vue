@@ -65,6 +65,18 @@ const canDoItems = computed(() => {
   
   return items.slice(-4) // Show the 4 most recent achievements
 })
+
+const recentGains = computed(() => {
+  const items = [...Object.entries(memory.value.vocabulary), ...Object.entries(memory.value.grammar)]
+    .filter(([_, state]) => state.encounters > 3 && state.successes / state.encounters > 0.8)
+    .sort((a, b) => new Date(b[1].lastEncountered || 0).getTime() - new Date(a[1].lastEncountered || 0).getTime())
+    .slice(0, 3)
+    .map(([key, state]) => ({ 
+      label: key.replace(/-/g, ' '), 
+      score: Math.round((state.production + state.automaticity) / 2) 
+    }))
+  return items
+})
 </script>
 
 <template>
@@ -91,6 +103,17 @@ const canDoItems = computed(() => {
         </div>
         <div class="skill-level">
           {{ row.level }}
+        </div>
+      </div>
+    </div>
+
+    <div class="recent-progress" v-if="recentGains.length > 0">
+      <h2>Recent Gains</h2>
+      <div class="grid">
+        <div v-for="gain in recentGains" :key="gain.label" class="card gain-card">
+          <div class="tag success">Mastery Improving</div>
+          <h3>{{ gain.label }}</h3>
+          <div class="score-badge">{{ gain.score }}%</div>
         </div>
       </div>
     </div>
@@ -135,7 +158,11 @@ const canDoItems = computed(() => {
 .bottleneck-card.orange { border-left-color: #d06b3c; }
 .bottleneck-card.orange .tag { color: #d06b3c; }
 .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d06b3c; margin-bottom: 8px; }
-.bottleneck-card h3 { margin: 0 0 12px; }
+.tag.success { color: #176b5b; }
+.bottleneck-card h3, .gain-card h3 { margin: 0 0 12px; }
+
+.gain-card { position: relative; border-left: 4px solid #176b5b; }
+.score-badge { position: absolute; top: 16px; right: 16px; font-size: 24px; font-weight: 800; color: #176b5b; opacity: 0.2; }
 
 .actions { margin-top: 40px; }
 

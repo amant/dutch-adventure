@@ -118,5 +118,29 @@ export function useLearnerMemory() {
     if (import.meta.client) localStorage.removeItem(storageKey)
   }
 
-  return { memory, hydrated, hydrate, record, recordExposure, reset }
+  function getWeakConcepts(limit = 5) {
+    const vList = Object.entries(memory.value.vocabulary)
+      .map(([key, state]) => ({ 
+        key, 
+        score: (state.production + state.automaticity) / 2,
+        ratio: state.encounters > 0 ? state.successes / state.encounters : 1
+      }))
+      .sort((a, b) => a.score - b.score || a.ratio - b.ratio)
+      .slice(0, limit)
+      .map(i => i.key)
+
+    const gList = Object.entries(memory.value.grammar)
+      .map(([key, state]) => ({ 
+        key, 
+        score: (state.production + state.automaticity) / 2,
+        ratio: state.encounters > 0 ? state.successes / state.encounters : 1
+      }))
+      .sort((a, b) => a.score - b.score || a.ratio - b.ratio)
+      .slice(0, Math.ceil(limit / 2))
+      .map(i => i.key)
+
+    return { vocabulary: vList, grammar: gList }
+  }
+
+  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts }
 }
