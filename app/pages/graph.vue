@@ -42,7 +42,19 @@ const chapterData = computed(() => {
 
 const filteredChapters = (level: string) => chapterData.value.filter(c => c.level === level)
 
-const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: string } | null>(null)
+const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: string, chapterTitle: string } | null>(null)
+
+const conceptRelations = computed(() => {
+  if (!activeConcept.value) return []
+  
+  const relations: { fromChapter: string, toChapter: string }[] = []
+  chapterData.value.forEach(c => {
+    if (c.concepts.some(con => con.id === activeConcept.value?.id) && c.title !== activeConcept.value?.chapterTitle) {
+      relations.push({ fromChapter: activeConcept.value!.chapterTitle, toChapter: c.title })
+    }
+  })
+  return relations
+})
 </script>
 
 <template>
@@ -60,7 +72,7 @@ const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: s
         </div>
         
         <div class="chapters-stack">
-          <div v-for="chapter in filteredChapters(level)" :key="chapter.slug" class="chapter-node">
+          <div v-for="chapter in filteredChapters(level)" :key="chapter.slug" class="chapter-node" :class="{ related: conceptRelations.some(r => r.toChapter === chapter.title) }">
             <div class="chapter-info">
               <h3>{{ chapter.title }}</h3>
               <div class="mastery-mini-bar">
@@ -73,12 +85,12 @@ const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: s
                 v-for="concept in chapter.concepts" 
                 :key="concept.id"
                 class="concept-dot"
-                :class="[concept.type, { active: activeConcept?.id === concept.id }]"
+                :class="[concept.type, { active: activeConcept?.id === concept.id, highlighted: activeConcept?.id === concept.id }]"
                 :style="{ 
                   opacity: 0.3 + (concept.mastery / 100) * 0.7,
                   transform: `scale(${0.8 + (concept.mastery / 100) * 0.4})`
                 }"
-                @mouseenter="activeConcept = { ...concept, level }"
+                @mouseenter="activeConcept = { ...concept, level, chapterTitle: chapter.title }"
                 @mouseleave="activeConcept = null"
               >
                 <div class="tooltip" v-if="activeConcept?.id === concept.id">
@@ -151,9 +163,14 @@ const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: s
   transition: all 0.3s;
 }
 
-.chapter-node:hover {
+.chapter-node:hover, .chapter-node.related {
   border-color: #176b5b;
   box-shadow: 0 10px 25px rgba(23, 107, 91, 0.05);
+}
+
+.chapter-node.related {
+  background: #f0f7f4;
+  transform: scale(1.02);
 }
 
 .chapter-info h3 {
@@ -193,6 +210,13 @@ const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: s
 
 .concept-dot.vocabulary { background: #176b5b; }
 .concept-dot.grammar { background: #d06b3c; }
+
+.concept-dot.highlighted {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #176b5b;
+  z-index: 5;
+  opacity: 1 !important;
+  transform: scale(1.3) !important;
+}
 
 .concept-dot:hover {
   transform: scale(1.5) !important;

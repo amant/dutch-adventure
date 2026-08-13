@@ -107,6 +107,26 @@ const recentGains = computed(() => {
       </div>
     </div>
 
+    <div class="reading-progress">
+      <h2>Reading Proficiency</h2>
+      <div class="card">
+        <div class="reading-stats-grid">
+          <div class="stat">
+            <span class="label">Total Words Encountered</span>
+            <span class="value">{{ Object.keys(memory.vocabulary).length }}</span>
+          </div>
+          <div class="stat">
+            <span class="label">Mastered in Context</span>
+            <span class="value">{{ Object.values(memory.vocabulary).filter(v => v.recognition > 70).length }}</span>
+          </div>
+          <div class="stat">
+            <span class="label">Reading Accuracy</span>
+            <span class="value">{{ Math.round((Object.values(memory.vocabulary).reduce((acc, v) => acc + (v.successes / (v.encounters || 1)), 0) / (Object.keys(memory.vocabulary).length || 1)) * 100) }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="recent-progress" v-if="recentGains.length > 0">
       <h2>Recent Gains</h2>
       <div class="grid">
@@ -150,6 +170,12 @@ const recentGains = computed(() => {
 .skill-level { width: 40px; font-weight: 700; text-align: right; color: #176b5b; }
 .meter { height: 8px; background: #e2e9e3; border-radius: 4px; overflow: hidden; }
 .meter div { height: 100%; background: #176b5b; transition: width 0.6s ease; }
+
+.reading-progress { margin: 40px 0; }
+.reading-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+.reading-stats-grid .stat { display: flex; flex-direction: column; gap: 8px; }
+.reading-stats-grid .label { font-size: 12px; color: #8a9a94; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+.reading-stats-grid .value { font-size: 28px; font-weight: 700; color: #176b5b; font-family: Fraunces, serif; }
 
 .bottlenecks { margin-top: 60px; }
 .bottleneck-card { border-left: 4px solid #ccc; }

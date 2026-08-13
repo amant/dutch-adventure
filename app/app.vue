@@ -2,9 +2,10 @@
   <div class="app-shell">
     <NuxtRouteAnnouncer />
     <header class="topbar">
-      <NuxtLink to="/" class="brand">taalruimte</NuxtLink>
+      <NuxtLink to="/" class="brand">Netherlands Taal Avonturen</NuxtLink>
       <nav>
         <NuxtLink to="/graph">Graph</NuxtLink>
+        <NuxtLink to="/reading">Reading</NuxtLink>
         <NuxtLink to="/vocabulary">Vocabulary</NuxtLink>
         <NuxtLink to="/grammar">Grammar</NuxtLink>
         <NuxtLink to="/progress">Progress</NuxtLink>
