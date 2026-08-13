@@ -63,6 +63,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - Interrupting or asking follow-up questions.
     - Expressing disagreement or confusion.
     - Using colloquial expressions.
+    - **Dynamic Register Switching**: Missions can trigger a change in the required formality level mid-conversation (e.g., "Zeg maar je hoor!"). The system tracks this `requiredRegister` override and evaluates subsequent responses against it.
 - **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Detects word-order inversion, perfect tense auxiliaries, separable verbs, subordinate clauses, article (de/het) errors, adjective endings, reflexive verbs, and fixed prepositions.
 - **Monitoring & Self-Correction**: At higher levels (B2), learners are trained to act as their own "Teacher".
     - **Correction Challenge**: Exercises where learners must identify and fix errors in provided Dutch texts, building linguistic awareness.

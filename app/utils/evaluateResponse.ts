@@ -21,6 +21,7 @@ export interface EvaluationContext {
   timeLeft?: number
   isSpeaking?: boolean
   isShadowing?: boolean
+  overrideRegister?: 'formal' | 'informal'
 }
 
 function calculateSimilarity(s1: string, s2: string): number {
@@ -388,6 +389,9 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       exercise.missionGoals.forEach(goal => {
         if (goal.keywords?.some(k => normalized.includes(k.toLowerCase()))) {
           achievedGoalIds.push(goal.id)
+          if (goal.setRegister) {
+            base.requiredRegister = goal.setRegister
+          }
         }
       })
       base.achievedGoalIds = achievedGoalIds
@@ -646,6 +650,26 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'retry',
         message: 'Mixing formal "u" and informal "je" in the same response is inconsistent. Stick to one style!',
         teacherTip: 'In Dutch, it is important to be consistent with your level of formality. If you start with "u", continue with "uw". If you use "je", continue with "jou".'
+      }
+    }
+
+    const targetRegister = context?.overrideRegister || exercise.requiredRegister
+
+    if (targetRegister === 'formal' && hasInformal && !hasFormal) {
+      return {
+        ...base,
+        outcome: 'retry',
+        message: 'This situation requires a formal register. Use "u" and "uw" instead of "je".',
+        teacherTip: 'When speaking to strangers, elder people, or in many professional contexts in the Netherlands, using "u" is safer and more respectful.'
+      }
+    }
+
+    if (targetRegister === 'informal' && hasFormal && !hasInformal) {
+      return {
+        ...base,
+        outcome: 'retry',
+        message: 'The speaker asked you to use the informal register ("tutoyeren"). Use "je" instead of "u".',
+        teacherTip: 'If someone says "Zeg maar je hoor!", it is a sign of friendliness. Sticking to "u" after that can actually sound distant or awkward.'
       }
     }
 

@@ -86,7 +86,9 @@ export interface Exercise {
   // For formality switcher
   formalityLevels?: { level: 'casual' | 'neutral' | 'formal', target: string, prompt?: string }[]
   // For missions
-  missionGoals?: { id: string, label: string, achieved?: boolean, keywords?: string[] }[]
+  missionGoals?: { id: string, label: string, achieved?: boolean, keywords?: string[], setRegister?: 'formal' | 'informal' }[]
+  // For register control
+  requiredRegister?: 'formal' | 'informal'
   // For mediation
   mediationSource?: { title: string, content: string, language: 'en' | 'nl' }
   mediationPoints?: { id: string, label: string, keywords: string[] }[]
@@ -158,6 +160,7 @@ export interface Feedback {
   pragmaticScore?: number
   pragmaticFeedback?: string
   achievedGoalIds?: string[]
+  requiredRegister?: 'formal' | 'informal'
   mediationPointsAchieved?: string[]
 }
 

@@ -17,6 +17,7 @@ const frontier = computed(() => getFrontierConcepts(3))
 const stressLevel = ref(0) // 0 to 100
 const achievedGoalIds = ref<Set<string>>(new Set())
 const conversationHistory = ref<{ role: 'ai' | 'user', text: string }[]>([{ role: 'ai', text: props.exercise.prompt }])
+const currentRegister = ref(props.exercise.requiredRegister)
 
 function handleVoiceResult(text: string) {
   response.value = text
@@ -26,11 +27,15 @@ function handleVoiceResult(text: string) {
 
 function handleSubmit() {
   if (!response.value) return
-  emit('submit', { isSpeaking: isSpeaking.value })
+  emit('submit', { isSpeaking: isSpeaking.value, overrideRegister: currentRegister.value })
 }
 
 watch(() => props.feedback, (f) => {
   if (!f) return
+  
+  if (f.requiredRegister) {
+    currentRegister.value = f.requiredRegister
+  }
   
   if (f.achievedGoalIds) {
     f.achievedGoalIds.forEach(id => achievedGoalIds.value.add(id))
@@ -89,6 +94,9 @@ const allGoalsMet = computed(() => {
       <div class="stress-meter">
         <span class="label">AI Patience</span>
         <div class="bar-bg"><div class="bar" :style="{ width: `${100 - stressLevel}%`, background: stressLevel > 70 ? '#d06b3c' : '#176b5b' }"></div></div>
+      </div>
+      <div v-if="currentRegister" class="register-indicator" :class="currentRegister">
+        {{ currentRegister === 'formal' ? 'U (Formal)' : 'Je (Informal)' }}
       </div>
     </div>
 
@@ -194,6 +202,27 @@ const allGoalsMet = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.register-indicator {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.register-indicator.formal {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.register-indicator.informal {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
 }
 
 .stress-meter .label {

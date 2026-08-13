@@ -1575,12 +1575,34 @@ export const registerChapter: Chapter = {
         {
           id: 'register-mission-1',
           kind: 'conversation',
+          requiredRegister: 'formal',
           prompt: 'Introduce yourself and ask about their business politely.',
           skills: ['speaking', 'pragmatic'],
           aiPersonality: { style: 'polite', isDifficult: true },
           missionGoals: [
             { id: 'goal-u', label: 'Use formal "u"', keywords: ['u', 'uw'] },
             { id: 'goal-polite', label: 'Use "zou" or "graag"', keywords: ['zou', 'graag'] }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'register-switch',
+      title: 'The Tutoyeer Switch',
+      kind: 'personalise',
+      intro: 'In this mission, you start formally, but look for the moment to switch to "je".',
+      exercises: [
+        {
+          id: 'register-mission-2',
+          kind: 'conversation',
+          requiredRegister: 'formal',
+          prompt: 'You are talking to an older neighbor you don\'t know well. Start formally: "Goedemorgen, hoe gaat het met u?"',
+          skills: ['speaking', 'pragmatic'],
+          aiPersonality: { style: 'helpful', isDifficult: false },
+          simulatorResponse: 'Goedemorgen! Met mij gaat het prima hoor. Maar zeg maar "je" en "jij" tegen me, we zijn immers buren!',
+          missionGoals: [
+            { id: 'start-u', label: 'Start with formal "u"', keywords: ['u', 'uw'] },
+            { id: 'switch-je', label: 'Switch to informal after requested', keywords: ['je', 'jij', 'jou', 'jouw'], setRegister: 'informal' }
           ]
         }
       ]
