@@ -23,6 +23,34 @@ const words = computed(() => {
 const selectedWord = ref<string | null>(null)
 const selectedState = computed(() => selectedWord.value ? memory.value.vocabulary[selectedWord.value] : null)
 
+const corpusSearch = ref('')
+
+const filteredWords = computed(() => {
+  if (!corpusSearch.value) return words.value
+  const q = corpusSearch.value.toLowerCase()
+  return words.value.filter(([word, state]) => {
+    const inWord = word.toLowerCase().includes(q)
+    const inHistory = state.usageHistory?.some(h => h.snippet.toLowerCase().includes(q))
+    return inWord || inHistory
+  })
+})
+
+const allUsageSnippets = computed(() => {
+  if (!corpusSearch.value) return []
+  const q = corpusSearch.value.toLowerCase()
+  const snippets: { word: string, snippet: string, date: string }[] = []
+  
+  words.value.forEach(([word, state]) => {
+    state.usageHistory?.forEach(h => {
+      if (h.snippet.toLowerCase().includes(q) || word.toLowerCase().includes(q)) {
+        snippets.push({ word, ...h })
+      }
+    })
+  })
+  
+  return snippets.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+})
+
 const relatedChapters = computed(() => {
   if (!selectedWord.value) return []
   const w = selectedWord.value.toLowerCase()
@@ -40,15 +68,34 @@ const relatedChapters = computed(() => {
     <h1>Vocabulary Library</h1>
     <p class="muted">Every word you've encountered and your current mastery across all dimensions.</p>
 
+    <div class="search-corpus card">
+      <input v-model="corpusSearch" placeholder="Search words or your own sentences..." class="corpus-input" />
+      <div v-if="corpusSearch" class="search-meta">Found {{ filteredWords.length }} words and {{ allUsageSnippets.length }} snippets</div>
+    </div>
+
     <div v-if="words.length === 0" class="empty-state">
       <p>You haven't encountered any words yet. Start a chapter to build your vocabulary!</p>
       <NuxtLink to="/" class="button">Browse chapters</NuxtLink>
     </div>
 
     <div v-else class="layout">
-      <div class="word-grid">
-        <div 
-          v-for="[word, state] in words" 
+      <div class="main-content">
+        <div v-if="corpusSearch && allUsageSnippets.length > 0" class="corpus-results">
+          <div class="eyebrow">Personal Sentence Corpus</div>
+          <div class="usage-grid">
+            <div v-for="(h, idx) in allUsageSnippets" :key="idx" class="card usage-card" @click="selectedWord = h.word">
+              <p class="snippet">"{{ h.snippet }}"</p>
+              <div class="usage-meta">
+                <span class="word-link">{{ h.word }}</span>
+                <span class="date">{{ new Date(h.date).toLocaleDateString() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="word-grid">
+          <div 
+            v-for="[word, state] in filteredWords" 
           :key="word" 
           class="card word-card"
           :class="{ active: selectedWord === word }"
@@ -74,8 +121,9 @@ const relatedChapters = computed(() => {
           </div>
         </div>
       </div>
+    </div>
 
-      <aside v-if="selectedWord && selectedState" class="detail-panel card">
+    <aside v-if="selectedWord && selectedState" class="detail-panel card">
         <div class="detail-header">
           <h2>{{ selectedWord }}</h2>
           <button class="close-btn" @click="selectedWord = null">×</button>
@@ -126,6 +174,72 @@ const relatedChapters = computed(() => {
   gap: 30px;
   margin-top: 32px;
   align-items: start;
+}
+
+.search-corpus {
+  margin-top: 24px;
+  padding: 16px;
+  background: #f8faf9;
+  border-color: #eef2f0;
+}
+
+.corpus-input {
+  width: 100%;
+  border: 1px solid #cad6ce;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 16px;
+  background: white;
+}
+
+.search-meta {
+  font-size: 11px;
+  margin-top: 8px;
+  color: #8a9a94;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.corpus-results {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #eef2f0;
+}
+
+.usage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.usage-card {
+  cursor: pointer;
+  padding: 16px;
+  background: #fff;
+  border-color: #e1e5de;
+}
+
+.usage-card:hover {
+  border-color: #176b5b;
+  transform: translateY(-2px);
+}
+
+.usage-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.word-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #176b5b;
+  background: #e6f2f0;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 @media (max-width: 900px) {

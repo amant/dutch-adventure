@@ -42,6 +42,8 @@ export interface Exercise {
   audioUrl?: string
   transcript?: string
   translation?: string
+  listeningQuestion?: string
+  listeningOptions?: { text: string, isCorrect: boolean }[]
   // For conversation
   simulatorResponse?: string
   // For reading ladder

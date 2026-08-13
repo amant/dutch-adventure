@@ -22,6 +22,12 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'formal-v-informal': { prompt: 'How are you? (formal)', target: 'Hoe gaat het met u?', explanation: 'Use "u" for formal situations.' },
   'duurzaam': { prompt: 'Sustainable energy', target: 'Duurzame energie', explanation: 'Duurzaam means sustainable.' },
   'tot slot': { prompt: 'In conclusion', target: 'Tot slot', explanation: 'Use "Tot slot" to end a presentation.' },
+  'speculeren': { prompt: 'I am speculating about the future.', target: 'Ik ben aan het speculeren over de toekomst.', explanation: 'Speculeren means to speculate.' },
+  'onderhandelen': { prompt: 'We need to negotiate the salary.', target: 'We moeten onderhandelen over het salaris.', explanation: 'Onderhandelen means to negotiate.' },
+  'samenvatten': { prompt: 'Can you summarize the article?', target: 'Kun je het artikel samenvatten?', explanation: 'Samenvatten means to summarize.' },
+  'overtuigen': { prompt: 'I want to convince you.', target: 'Ik wil je overtuigen.', explanation: 'Overtuigen means to convince.' },
+  'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
+  'zou': { prompt: 'I would like to go.', target: 'Ik zou graag gaan.', explanation: 'Use "zou" for hypothetical or polite requests.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {

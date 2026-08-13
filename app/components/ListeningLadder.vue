@@ -10,6 +10,8 @@ const emit = defineEmits(['submit', 'next', 'retry'])
 
 const showTranscript = ref(false)
 const response = defineModel<string>()
+const selectedOption = ref<number | null>(null)
+const hasAttempted = ref(false)
 
 const difficulty = ref(1) // 1 to 5
 const rate = computed(() => {
@@ -106,7 +108,39 @@ const toggleTranscript = () => {
 
     <div v-if="difficulty === 5" class="noise-overlay" />
 
-    <form v-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
+    <div v-if="exercise.listeningQuestion" class="comprehension-area">
+      <div class="card question-card">
+        <div class="eyebrow">Comprehension Check</div>
+        <p class="question-text">{{ exercise.listeningQuestion }}</p>
+        <div class="options-grid">
+          <button 
+            v-for="(opt, idx) in exercise.listeningOptions" 
+            :key="idx"
+            class="option-button"
+            :class="{ 
+              selected: selectedOption === idx,
+              correct: hasAttempted && opt.isCorrect,
+              wrong: hasAttempted && selectedOption === idx && !opt.isCorrect
+            }"
+            :disabled="hasAttempted && feedback?.outcome !== 'retry'"
+            @click="selectedOption = idx"
+          >
+            {{ opt.text }}
+          </button>
+        </div>
+        <div v-if="!hasAttempted || (feedback && feedback.outcome === 'retry')" class="actions">
+          <button 
+            class="button" 
+            :disabled="selectedOption === null"
+            @click="hasAttempted = true; emit('submit', { answer: exercise.listeningOptions![selectedOption!].text })"
+          >
+            Check Answer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <form v-else-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
       <textarea 
         v-model="response" 
         :placeholder="exercise.placeholder || 'What did you hear? (or translate to English)'" 
@@ -121,13 +155,14 @@ const toggleTranscript = () => {
       </div>
     </form>
 
-    <div v-if="showTranscript" class="transcript-box card">
+    <div v-if="showTranscript || (hasAttempted && feedback?.outcome === 'correct')" class="transcript-box card">
       <h4>Transcript</h4>
       <p class="dutch">{{ exercise.transcript || exercise.target }}</p>
       <div v-if="exercise.translation">
         <h4>Translation</h4>
         <p class="muted">{{ exercise.translation }}</p>
       </div>
+      <button v-if="feedback && feedback.outcome !== 'retry'" class="button" @click="emit('next')">Continue</button>
     </div>
   </div>
 </template>
@@ -202,6 +237,68 @@ input[type=range] {
   font-size: 18px;
   padding: 12px 30px;
   margin-bottom: 12px;
+}
+
+.comprehension-area {
+  margin-top: 10px;
+}
+
+.question-card {
+  background: white;
+  padding: 24px;
+}
+
+.question-text {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 12px 0 20px;
+  color: #20302d;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.option-button {
+  background: #f8faf9;
+  border: 2px solid #eef2f0;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #52645f;
+}
+
+.option-button:hover:not(:disabled) {
+  border-color: #176b5b;
+  background: white;
+}
+
+.option-button.selected {
+  border-color: #176b5b;
+  background: #f0f7f4;
+}
+
+.option-button.correct {
+  background: #e6f2f0;
+  border-color: #176b5b;
+  color: #176b5b;
+}
+
+.option-button.wrong {
+  background: #fef1e8;
+  border-color: #d06b3c;
+  color: #d06b3c;
+}
+
+.option-button:disabled {
+  cursor: default;
 }
 
 .input-area textarea {

@@ -266,6 +266,13 @@ export const workDiscussionMission: Chapter = {
       intro: 'Your manager is explaining the new office policy.',
       exercises: [{ 
         id: 'work-2', kind: 'listening', prompt: 'What is the manager saying?', 
+        listeningQuestion: 'How many days per week should employees come to the office?',
+        listeningOptions: [
+          { text: 'Two days', isCorrect: false },
+          { text: 'Three days', isCorrect: true },
+          { text: 'Four days', isCorrect: false },
+          { text: 'Five days', isCorrect: false }
+        ],
         transcript: 'We willen dat iedereen weer drie dagen per week naar kantoor komt, voor de teamgeest.', 
         translation: 'We want everyone to come back to the office three days a week, for the team spirit.',
         skills: ['listening', 'meaning'],
@@ -860,6 +867,13 @@ export const newsSummaryChapter: Chapter = {
       intro: 'Listen to two people discussing the latest news. Pay attention to how they disagree politely.',
       exercises: [{
         id: 'news-sum-1', kind: 'listening', prompt: 'Listen to the debate.',
+        listeningQuestion: 'What are critics claiming about the proposal?',
+        listeningOptions: [
+          { text: 'It is not ambitious enough', isCorrect: false },
+          { text: 'The costs are too high', isCorrect: true },
+          { text: 'It is too focused on climate', isCorrect: false },
+          { text: 'It will take too long', isCorrect: false }
+        ],
         transcript: 'A: Heb je het voorstel van de regering over duurzame energie gelezen?\nB: Ja, hoewel het ambitieus klinkt, beweren critici dat de kosten te hoog zijn.\nA: Dat klopt, maar voorstanders wijzen op de noodzaak van klimaatactie.\nB: Aan de andere kant moeten we ook denken aan de burgers met een laag inkomen.',
         skills: ['listening', 'recognition'],
         vocabulary: ['voorstel', 'duurzaam', 'hoewel', 'beweren', 'kosten', 'echter'],

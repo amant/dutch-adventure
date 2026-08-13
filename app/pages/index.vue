@@ -65,7 +65,7 @@ const staleItems = computed(() => {
   <section class="home">
     <div class="hero">
       <div class="eyebrow">Dutch you can use</div>
-      <h1>Turn what you know into language you can actually use.</h1>
+      <h2>Use Language as you learn and explore!</h2>
       <p class="muted intro">Short, purposeful practice: notice a pattern, retrieve it, change it, and make it yours.</p>
     </div>
 

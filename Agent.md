@@ -37,7 +37,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 - **Speaking**: Can they use it in a conversation?
 - **Automaticity**: Can they use it without thinking (fast retrieval)?
 - **Pragmatic**: Can they use the correct level of formality and social nuance (e.g., softeners, particles)?
-- **Usage History**: The system tracks the exact snippets of successful usage for every concept, building a "personal corpus" of what the learner *can actually use*.
+- **Usage History**: The system tracks the exact snippets of successful usage for every concept, building a "personal corpus" of what the learner *can actually use*. Accessible via **Personal Sentence Corpus** search in the Vocabulary Library.
 
 **Rule**: If a word is "learned" but cannot be produced spontaneously, the system marks it as a **bottleneck** and injects it into future activities.
 
@@ -59,7 +59,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Capabilities**: Group chapters by CEFR level (A1 Survival, A2 Everyday Independence, B1 Independent Communication, B2 Complex Communication).
 - **Missions**: High-level challenges that combine multiple skills (e.g., "Complain about a hotel").
 - **Ladders**: 
-    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues.
+    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues and **comprehension checks** (answering questions before transcript reveal).
     - **Reading Ladder**: From artificial dialogues to authentic Dutch news. Includes post-reading production challenges.
 - **Pragmatic Drills**: Explicit practice for social nuances, choosing the best phrasing for a specific context (formal vs. informal).
 
