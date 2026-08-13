@@ -476,6 +476,26 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       return { ...base, outcome: 'acceptable', message: 'Almost! Watch out for that small spelling mistake.', correction: exercise.correction || target }
     }
 
+    // Recombination Drill Evaluation
+    if (exercise.kind === 'recombination-drill') {
+      const missing = exercise.requiredWords?.filter(w => !normalized.includes(w.toLowerCase()))
+      if (missing && missing.length > 0) {
+        return { 
+          ...base, 
+          outcome: 'retry', 
+          message: `You missed: ${missing.join(', ')}. Try to combine all target concepts!` 
+        }
+      }
+      if (normalized.length > 10) {
+        return { 
+          ...base, 
+          outcome: 'correct', 
+          message: 'Excellent recombination! You effectively used multiple concepts in one thought.',
+          changeModifier: (base.changeModifier || 0) + 5
+        }
+      }
+    }
+
     // Flexibility Drill Evaluation
     if (exercise.kind === 'flexibility') {
       const hasForbidden = exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))

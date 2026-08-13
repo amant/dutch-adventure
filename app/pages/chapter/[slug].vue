@@ -178,6 +178,15 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'recombination-drill'" class="renderer">
+        <RecombinationDrill 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+        />
+      </div>
+
       <div v-else class="default-renderer">
         <h2>{{ session.exercise.value.prompt }}</h2>
         <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>

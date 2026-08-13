@@ -1325,7 +1325,73 @@ export const argumentationChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter]
+export const synthesisChapter: Chapter = {
+  id: 'b2-synthesis',
+  slug: 'synthesizing-dutch',
+  title: 'Synthesizing Dutch',
+  level: 'B2',
+  capability: 'Combine multiple complex structures to express nuanced thoughts.',
+  description: 'Practice the art of Dutch "recombination"—using everything you know at once.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'warmup', title: 'The Power of And', kind: 'understand',
+      intro: 'At B2, you don\'t just use one pattern; you layer them. Let\'s look at how to combine a subordinate clause with a past tense movement verb.',
+      exercises: [
+        {
+          id: 'syn-1',
+          kind: 'info',
+          prompt: 'Recombination Example',
+          context: 'Hoewel (Although) + ben gegaan (went). "Hoewel het regende, ben ik toch gegaan." (Although it rained, I went anyway.)',
+          skills: ['recognition', 'meaning']
+        }
+      ]
+    },
+    {
+      id: 'recombine', title: 'Recombination Drills', kind: 'transform',
+      intro: 'Use the target concepts to build the requested sentences.',
+      exercises: [
+        {
+          id: 'syn-2',
+          kind: 'recombination-drill',
+          prompt: 'Explain that you went to the office although you were sick.',
+          context: 'Use: "Hoewel" and "Ben gegaan".',
+          requiredWords: ['Hoewel', 'ben gegaan'],
+          skills: ['production', 'automaticity', 'coherence'],
+          correction: 'Hoewel ik ziek was, ben ik toch naar kantoor gegaan.',
+          explanation: 'Remember that "hoewel" triggers the verb-at-the-end order, and "ben gegaan" is the correct past tense for motion.'
+        },
+        {
+          id: 'syn-3',
+          kind: 'recombination-drill',
+          prompt: 'Say that you summarized the report because it was too long.',
+          context: 'Use: "Omdat" and "Samengevat".',
+          requiredWords: ['Omdat', 'samengevat'],
+          skills: ['production', 'automaticity', 'coherence'],
+          correction: 'Ik heb het rapport samengevat omdat het te lang was.',
+          explanation: 'Combine the past tense "heb samengevat" with the "omdat" subordinate clause.'
+        }
+      ]
+    },
+    {
+      id: 'final', title: 'The Synthesis Challenge', kind: 'challenge',
+      intro: 'Now, try to combine three things: a reason (omdat), a contrast (daarentegen), and a professional verb (overleggen).',
+      exercises: [
+        {
+          id: 'syn-4',
+          kind: 'challenge',
+          prompt: 'Argue why you need to meet with your colleagues. Use "omdat", "daarentegen", and "overleggen".',
+          minimumLength: 25,
+          skills: ['production', 'automaticity', 'pragmatic', 'coherence'],
+          grammar: ['subordinate-clauses'],
+          vocabulary: ['overleggen']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

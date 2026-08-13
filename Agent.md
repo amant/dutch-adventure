@@ -15,7 +15,7 @@ Every chapter should follow this loop to move concepts from recognition to autom
 
 1.  **Discover**: Very short explanation (2–5 mins).
 2.  **Understand**: Examples in context (dialogues, stories).
-3.  **Retrieve**: Intelligent drilling (production, transformation, substitution).
+3.  **Retrieve**: Intelligent drilling (production, transformation, recombination, substitution).
 4.  **Personalise**: "Why are you staying home today?"
 5.  **Conversation**: AI simulator pushing for improvisation.
 6.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
@@ -77,6 +77,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `VoiceInput.vue`: Global component for capturing Dutch speech via Web Speech API.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
     - `ConnectorDrill.vue`: Choose the correct logical connector to complete a passage.
+    - `RecombinationDrill.vue`: Challenges learners to use multiple specific concepts in a single sentence.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.

@@ -137,6 +137,15 @@ function next() {
           />
         </div>
 
+        <div v-else-if="session.exercise.value.kind === 'recombination-drill'" class="renderer">
+          <RecombinationDrill 
+            :exercise="session.exercise.value" 
+            v-model="session.response.value"
+            :feedback="feedback"
+            @submit="submit"
+          />
+        </div>
+
         <div v-else-if="session.exercise.value.kind === 'pragmatic-drill'" class="renderer">
           <PragmaticDrill 
             :exercise="session.exercise.value" 
