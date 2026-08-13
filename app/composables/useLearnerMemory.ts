@@ -76,6 +76,7 @@ export function useLearnerMemory() {
       if (!dict[key]) dict[key] = emptyConcept()
       
       dict[key].encounters++
+      dict[key].lastEncountered = new Date().toISOString()
       if (outcome === 'correct' || outcome === 'acceptable') {
         dict[key].successes++
       }
@@ -101,6 +102,7 @@ export function useLearnerMemory() {
     
     next.vocabulary[word].encounters++
     next.vocabulary[word].successes++ // Exposure counts as success for recognition
+    next.vocabulary[word].lastEncountered = new Date().toISOString()
 
     for (const skill of skills) {
       if (skill in next.vocabulary[word]) {

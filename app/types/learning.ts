@@ -10,6 +10,7 @@ export interface ConceptState {
   spelling: number
   encounters: number
   successes: number
+  lastEncountered?: string
 }
 
 export interface LearnerMemory {

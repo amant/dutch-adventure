@@ -4,6 +4,7 @@
     <header class="topbar">
       <NuxtLink to="/" class="brand">taalruimte</NuxtLink>
       <nav>
+        <NuxtLink to="/graph">Graph</NuxtLink>
         <NuxtLink to="/vocabulary">Vocabulary</NuxtLink>
         <NuxtLink to="/grammar">Grammar</NuxtLink>
         <NuxtLink to="/progress">Progress</NuxtLink>

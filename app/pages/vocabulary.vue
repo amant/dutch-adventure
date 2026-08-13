@@ -34,7 +34,12 @@ const words = computed(() => {
     <div v-else class="word-grid">
       <div v-for="[word, state] in words" :key="word" class="card word-card">
         <div class="word-header">
-          <h3>{{ word }}</h3>
+          <div>
+            <h3>{{ word }}</h3>
+            <div v-if="state.lastEncountered" class="last-seen">
+              Seen {{ new Date(state.lastEncountered).toLocaleDateString() }}
+            </div>
+          </div>
           <div class="encounter-badge">{{ state.successes }}/{{ state.encounters }} hits</div>
         </div>
         <div class="dimensions">
@@ -71,6 +76,7 @@ const words = computed(() => {
   color: #176b5b;
   font-size: 20px;
 }
+.last-seen { font-size: 11px; color: #8a9a94; margin-top: 2px; }
 
 .encounter-badge {
   font-size: 11px;
