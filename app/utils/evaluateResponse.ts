@@ -338,6 +338,37 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Mediation check
+    if (exercise.kind === 'mediation' && exercise.mediationPoints) {
+      const achievedPoints = exercise.mediationPoints.filter(point => 
+        point.keywords.some(k => normalized.includes(k.toLowerCase()))
+      )
+      
+      if (achievedPoints.length === exercise.mediationPoints.length) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent mediation! You captured all the key information accurately.',
+          mediationPointsAchieved: achievedPoints.map(p => p.id),
+          changeModifier: (base.changeModifier || 0) + 5
+        }
+      } else if (achievedPoints.length > 0) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: `Good start, but you missed some points: ${exercise.mediationPoints.filter(p => !achievedPoints.find(ap => ap.id === p.id)).map(p => p.label).join(', ')}.`,
+          mediationPointsAchieved: achievedPoints.map(p => p.id),
+          changeModifier: (base.changeModifier || 0) + 2
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'You need to include the key points from the source material in your Dutch explanation.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

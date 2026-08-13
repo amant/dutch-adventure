@@ -1181,7 +1181,75 @@ export const workplaceChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter]
+export const mediationChapter: Chapter = {
+  id: 'b2-mediation',
+  slug: 'mediating-information',
+  title: 'Mediating Information',
+  level: 'B2',
+  capability: 'Summarise and explain information for others in Dutch.',
+  description: 'Learn to translate formal contexts into natural Dutch explanations.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'letter', title: 'The Formal Letter', kind: 'understand',
+      intro: 'Read this formal notification about roadworks in your neighborhood.',
+      exercises: [
+        {
+          id: 'med-1',
+          kind: 'reading',
+          prompt: 'Notice the key details in this formal announcement.',
+          readingContent: 'Geachte bewoner, op maandag 21 augustus starten wij met grootschalige onderhoudswerkzaamheden aan de Kerkstraat. De straat zal voor alle verkeer afgesloten zijn tot en met vrijdag 25 augustus. Wij verzoeken u vriendelijk uw auto elders te parkeren gedurende deze periode.',
+          wordHints: {
+            'onderhoudswerkzaamheden': { meaning: 'maintenance works', category: 'noun' },
+            'afgesloten': { meaning: 'closed off', category: 'adjective' },
+            'elders': { meaning: 'elsewhere', category: 'adverb' },
+            'gedurende': { meaning: 'during', category: 'preposition' }
+          },
+          skills: ['reading', 'recognition']
+        }
+      ]
+    },
+    {
+      id: 'challenge', title: 'Mediation Challenge', kind: 'transform',
+      intro: 'Your neighbor, who doesn\'t read Dutch well, asks what the letter says. Explain it simply.',
+      exercises: [
+        {
+          id: 'med-2',
+          kind: 'mediation',
+          prompt: 'Explain the roadworks to your neighbor in natural Dutch.',
+          mediationSource: {
+            title: 'Official Notification: Roadworks',
+            language: 'nl',
+            content: 'Kerkstraat closed from Aug 21 to Aug 25 for major maintenance. No traffic allowed. Park elsewhere.'
+          },
+          mediationPoints: [
+            { id: 'start', label: 'When it starts (Aug 21)', keywords: ['21', 'maandag', 'augustus'] },
+            { id: 'end', label: 'When it ends (Aug 25)', keywords: ['25', 'vrijdag'] },
+            { id: 'what', label: 'What is happening (Roadworks/Closed)', keywords: ['werkzaamheden', 'dicht', 'afgesloten', 'onderhoud'] },
+            { id: 'parking', label: 'Parking instructions', keywords: ['parkeren', 'auto', 'elders'] }
+          ],
+          skills: ['production', 'flexibility'],
+          vocabulary: ['werkzaamheden', 'afgesloten', 'parkeren']
+        }
+      ]
+    },
+    {
+      id: 'personal', title: 'Personal Application', kind: 'personalise',
+      intro: 'Think of a time you had to explain something complex. Try to explain a simple rule from your job or hobby in Dutch.',
+      exercises: [
+        {
+          id: 'med-3',
+          kind: 'personalise',
+          prompt: 'Explain a "rule" or "process" from your daily life in simple Dutch.',
+          skills: ['speaking', 'interaction'],
+          grammar: ['subordinate-clauses']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

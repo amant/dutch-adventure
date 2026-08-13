@@ -23,7 +23,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'mediation'
 
 export interface Exercise {
   id: string
@@ -66,6 +66,9 @@ export interface Exercise {
   pragmaticOptions?: { text: string, context: string, isBest: boolean, explanation: string }[]
   // For missions
   missionGoals?: { id: string, label: string, achieved?: boolean, keywords?: string[] }[]
+  // For mediation
+  mediationSource?: { title: string, content: string, language: 'en' | 'nl' }
+  mediationPoints?: { id: string, label: string, keywords: string[] }[]
 }
 
 export interface ChapterStage {
@@ -113,6 +116,7 @@ export interface Feedback {
   pragmaticScore?: number
   pragmaticFeedback?: string
   achievedGoalIds?: string[]
+  mediationPointsAchieved?: string[]
 }
 
 export interface Attempt {
