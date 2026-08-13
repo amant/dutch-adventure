@@ -160,6 +160,13 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'formality-drill'" class="renderer">
+        <FormalityDrill 
+          :exercise="session.exercise.value" 
+          @submit="(val) => { session.response.value = val; submit() }"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'mediation'" class="renderer">
         <MediationChallenge 
           :exercise="session.exercise.value" 

@@ -12,6 +12,7 @@ const emptyConcept = (): ConceptState => ({
   spelling: 0,
   pragmatic: 0,
   coherence: 0,
+  idiomatic: 0,
   encounters: 0,
   successes: 0
 })
@@ -26,10 +27,12 @@ const emptyMemory = (): LearnerMemory => ({
     speaking: 0,
     spelling: 0,
     pragmatic: 0,
-    coherence: 0
+    coherence: 0,
+    idiomatic: 0
   },
   vocabulary: {},
   grammar: {},
+  idioms: {},
   recentRedlines: []
 })
 
@@ -54,6 +57,7 @@ export function useLearnerMemory() {
         }
         if (parsed.vocabulary) fresh.vocabulary = parsed.vocabulary
         if (parsed.grammar) fresh.grammar = parsed.grammar
+        if (parsed.idioms) fresh.idioms = parsed.idioms
         if (parsed.recentRedlines) fresh.recentRedlines = parsed.recentRedlines
         memory.value = fresh
       }
@@ -66,6 +70,7 @@ export function useLearnerMemory() {
     outcome: 'correct' | 'acceptable' | 'retry',
     vocabulary?: string[],
     grammar?: string[],
+    idioms?: string[],
     changeModifier: number = 0,
     snippet?: string,
     prompt?: string,
@@ -105,6 +110,7 @@ export function useLearnerMemory() {
       }
       vocabulary?.forEach(v => addToConceptRedline(v, next.vocabulary))
       grammar?.forEach(g => addToConceptRedline(g, next.grammar))
+      idioms?.forEach(i => addToConceptRedline(i, next.idioms))
     }
 
     // Update overall
@@ -139,6 +145,7 @@ export function useLearnerMemory() {
 
     if (vocabulary) vocabulary.forEach(v => updateConcept(v, next.vocabulary))
     if (grammar) grammar.forEach(g => updateConcept(g, next.grammar))
+    if (idioms) idioms.forEach(i => updateConcept(i, next.idioms))
 
     memory.value = next
     if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))

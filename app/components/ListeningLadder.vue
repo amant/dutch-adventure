@@ -34,11 +34,18 @@ const tokens = computed(() => {
     const hint = props.exercise.wordHints?.[cleanWord]
     return {
       text: token,
-      isInteractable: !!hint,
+      isInteractable: true,
       hint
     }
   })
 })
+
+const onTokenClick = (token: any) => {
+  if (token.hint) {
+    showHint(token)
+  }
+  speakWord(token.text)
+}
 
 const showHint = (token: any) => {
   if (token.hint) {
@@ -109,6 +116,17 @@ const speak = async () => {
     msg.voice = voices.value[0] || null
     window.speechSynthesis.speak(msg)
   }
+}
+
+const speakWord = (word: string) => {
+  if (!window.speechSynthesis) return
+  window.speechSynthesis.cancel()
+  const msg = new SpeechSynthesisUtterance()
+  msg.text = word.replace(/[.,!?;:()]/g, '').trim()
+  msg.lang = 'nl-NL'
+  msg.rate = 0.8 // A bit slower for individual words
+  msg.voice = voices.value[0] || null
+  window.speechSynthesis.speak(msg)
 }
 
 const toggleTranscript = () => {
@@ -197,8 +215,11 @@ const toggleTranscript = () => {
           <span 
             v-if="token.isInteractable" 
             class="word interactable" 
-            @click="showHint(token)"
-            :class="{ active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }"
+            @click="onTokenClick(token)"
+            :class="{ 
+              active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim(),
+              'has-hint': !!token.hint 
+            }"
           >
             {{ token.text }}
           </span>
@@ -408,17 +429,21 @@ input[type=range] {
 }
 
 .word.interactable {
-  color: #176b5b;
-  font-weight: 600;
-  text-decoration: underline decoration-skip-ink;
-  text-underline-offset: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 0 2px;
 }
 
 .word.interactable:hover {
   background: #e8f3ec;
   border-radius: 4px;
+}
+
+.word.has-hint {
+  color: #176b5b;
+  font-weight: 600;
+  text-decoration: underline dotted #cad6ce;
+  text-underline-offset: 4px;
 }
 
 .word.interactable.active {

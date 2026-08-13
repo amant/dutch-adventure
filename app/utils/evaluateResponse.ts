@@ -298,6 +298,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       skills: [...exercise.skills], 
       vocabulary: exercise.vocabulary, 
       grammar: exercise.grammar,
+      idioms: exercise.idioms,
       changeModifier: 0
     }
 
@@ -585,6 +586,18 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       feedback.changeModifier = (feedback.changeModifier || 0) + (coherence.found.length * 2)
       if (!feedback.pragmaticFeedback) feedback.pragmaticFeedback = `Excellent logical flow! You used these connectors: ${coherence.found.join(', ')}.`
       else feedback.pragmaticFeedback += ` Also, great use of logical connectors like '${coherence.found[0]}'.`
+    }
+
+    // Idiom detection
+    if (exercise.idioms) {
+      const foundIdiom = exercise.idioms.find(i => normalized.includes(i.toLowerCase().replace(/[.,!?]/g, '')))
+      if (foundIdiom) {
+        if (!feedback.skills.includes('idiomatic')) feedback.skills.push('idiomatic')
+        feedback.changeModifier = (feedback.changeModifier || 0) + 15
+        if (feedback.outcome === 'correct') {
+          feedback.message = `Fantastic! You used the idiom '${foundIdiom}' correctly.`
+        }
+      }
     }
   }
 

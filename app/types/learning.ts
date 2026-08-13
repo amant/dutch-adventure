@@ -1,4 +1,4 @@
-export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic' | 'coherence'
+export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic' | 'coherence' | 'idiomatic'
 
 export interface ConceptState {
   recognition: number
@@ -10,6 +10,7 @@ export interface ConceptState {
   spelling: number
   pragmatic: number
   coherence: number
+  idiomatic: number
   encounters: number
   successes: number
   lastEncountered?: string
@@ -33,12 +34,13 @@ export interface LearnerMemory {
   overall: Record<SkillDimension, number>
   vocabulary: Record<string, ConceptState>
   grammar: Record<string, ConceptState>
+  idioms: Record<string, ConceptState>
   recentRedlines?: Redline[]
 }
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'mediation' | 'connector-drill' | 'recombination-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill'
 
 export interface Exercise {
   id: string
@@ -52,6 +54,7 @@ export interface Exercise {
   skills: SkillDimension[]
   vocabulary?: string[]
   grammar?: string[]
+  idioms?: string[]
   placeholder?: string
   // For listening ladder
   audioUrl?: string
@@ -79,6 +82,8 @@ export interface Exercise {
   }
   // For pragmatic context choice
   pragmaticOptions?: { text: string, context: string, isBest: boolean, explanation: string }[]
+  // For formality switcher
+  formalityLevels?: { level: 'casual' | 'neutral' | 'formal', target: string, prompt?: string }[]
   // For missions
   missionGoals?: { id: string, label: string, achieved?: boolean, keywords?: string[] }[]
   // For mediation
@@ -117,6 +122,7 @@ export interface Feedback {
   skills: SkillDimension[]
   vocabulary?: string[]
   grammar?: string[]
+  idioms?: string[]
   changeModifier?: number
   miniLesson?: {
     title: string

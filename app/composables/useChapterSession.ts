@@ -10,9 +10,10 @@ const fresh = (chapter: Chapter): PersistedSession => ({
   attempts: [], 
   completed: false, 
   memory: { 
-    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0, pragmatic: 0 },
+    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0, pragmatic: 0, coherence: 0, idiomatic: 0 },
     vocabulary: {},
-    grammar: {}
+    grammar: {},
+    idioms: {}
   } 
 })
 
@@ -49,6 +50,7 @@ export function useChapterSession(chapter: Chapter) {
       feedback.outcome, 
       feedback.vocabulary, 
       feedback.grammar, 
+      feedback.idioms,
       feedback.changeModifier, 
       answer,
       exercise.value.prompt,

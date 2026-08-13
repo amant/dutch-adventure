@@ -1470,7 +1470,87 @@ export const paraphrasingChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter]
+export const registerChapter: Chapter = {
+  slug: 'linguistic-register',
+  level: 'B2',
+  title: 'Linguistic Register',
+  capability: 'Adapt speech to social context and formality level.',
+  description: 'Learn to switch between casual and formal Dutch depending on who you are talking to.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'register-intro',
+      title: 'Discovering Registers',
+      kind: 'discover',
+      intro: 'In Dutch, the choice between "je" and "u" is just the beginning. The entire tone of your sentence changes.',
+      exercises: [
+        {
+          id: 'register-info-1',
+          kind: 'info',
+          prompt: 'Casual vs Formal',
+          context: 'Casual: "Hoi, kun je me even helpen?"\nFormal: "Goedendag, zou u mij wellicht kunnen assisteren?"',
+          skills: ['recognition', 'meaning']
+        }
+      ]
+    },
+    {
+      id: 'register-idioms',
+      title: 'Using Idioms Naturally',
+      kind: 'transform',
+      intro: 'Idioms like "Met de deur in huis vallen" can be used in different registers, but they often sound better in specific contexts.',
+      exercises: [
+        {
+          id: 'register-idiom-1',
+          kind: 'typed',
+          prompt: 'Use "Met de deur in huis vallen" to say you\'ll get straight to the point.',
+          target: 'Ik zal meteen met de deur in huis vallen.',
+          skills: ['production', 'idiomatic'],
+          idioms: ['Met de deur in huis vallen']
+        }
+      ]
+    },
+    {
+      id: 'register-switcher',
+      title: 'The Formality Switcher',
+      kind: 'transform',
+      intro: 'Express the same core thought for three different audiences.',
+      exercises: [
+        {
+          id: 'register-switch-1',
+          kind: 'formality-drill',
+          prompt: 'I want to know if I can leave early today.',
+          skills: ['pragmatic', 'production'],
+          formalityLevels: [
+            { level: 'casual', prompt: 'Asking a close colleague/friend.', target: 'Kan ik vandaag wat eerder weg?' },
+            { level: 'neutral', prompt: 'Asking your team lead in a meeting.', target: 'Zou ik vandaag eventueel wat eerder weg kunnen?' },
+            { level: 'formal', prompt: 'Asking the department director.', target: 'Zou het schikken als ik vandaag iets eerder vertrek?' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'register-final',
+      title: 'Adapt to Context',
+      kind: 'personalise',
+      intro: 'Scenario: You are at a networking event. You meet a potential business partner.',
+      exercises: [
+        {
+          id: 'register-mission-1',
+          kind: 'conversation',
+          prompt: 'Introduce yourself and ask about their business politely.',
+          skills: ['speaking', 'pragmatic'],
+          aiPersonality: { style: 'polite', isDifficult: true },
+          missionGoals: [
+            { id: 'goal-u', label: 'Use formal "u"', keywords: ['u', 'uw'] },
+            { id: 'goal-polite', label: 'Use "zou" or "graag"', keywords: ['zou', 'graag'] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

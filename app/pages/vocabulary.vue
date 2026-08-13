@@ -14,7 +14,8 @@ const dimensions: { id: SkillDimension, label: string }[] = [
   { id: 'production', label: 'Production' },
   { id: 'speaking', label: 'Speaking' },
   { id: 'automaticity', label: 'Automaticity' },
-  { id: 'coherence', label: 'Coherence' }
+  { id: 'coherence', label: 'Coherence' },
+  { id: 'idiomatic', label: 'Idiomatic' }
 ]
 
 const words = computed(() => {
