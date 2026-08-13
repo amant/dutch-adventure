@@ -262,6 +262,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       base.changeModifier = (base.changeModifier || 0) + 2
     }
 
+    // Goal detection for missions
+    const achievedGoalIds: string[] = []
+    if (exercise.missionGoals) {
+      exercise.missionGoals.forEach(goal => {
+        if (goal.keywords?.some(k => normalized.includes(k.toLowerCase()))) {
+          achievedGoalIds.push(goal.id)
+        }
+      })
+      base.achievedGoalIds = achievedGoalIds
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

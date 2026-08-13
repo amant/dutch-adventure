@@ -11,60 +11,77 @@ const response = defineModel<string>()
 const isSpeaking = ref(false)
 
 const stressLevel = ref(0) // 0 to 100
+const achievedGoalIds = ref<Set<string>>(new Set())
+const conversationHistory = ref<{ role: 'ai' | 'user', text: string }[]>([{ role: 'ai', text: props.exercise.prompt }])
 
 function handleVoiceResult(text: string) {
   response.value = text
   isSpeaking.value = true
-  // In a simulator, we might want to auto-submit on voice result
-  emit('submit', { isSpeaking: true })
+  handleSubmit()
+}
+
+function handleSubmit() {
+  if (!response.value) return
+  emit('submit', { isSpeaking: isSpeaking.value })
 }
 
 watch(() => props.feedback, (f) => {
   if (!f) return
+  
+  if (f.achievedGoalIds) {
+    f.achievedGoalIds.forEach(id => achievedGoalIds.value.add(id))
+  }
+  
+  if (response.value && !conversationHistory.value.some(m => m.text === response.value)) {
+    conversationHistory.value.push({ role: 'user', text: response.value })
+  }
+  
   if (f.outcome === 'retry') {
     stressLevel.value = Math.min(100, stressLevel.value + 15)
-  } else if (f.outcome === 'correct') {
+    if (!conversationHistory.value.some(m => m.text === f.message)) {
+      conversationHistory.value.push({ role: 'ai', text: f.message })
+    }
+  } else {
     stressLevel.value = Math.max(0, stressLevel.value - 10)
+    
+    const personality = props.exercise.aiPersonality
+    let aiText = props.exercise.simulatorResponse || 'Heel goed! Dat begrijp ik.'
+    
+    if (stressLevel.value > 60) {
+      aiText = 'Kunt u nu eindelijk antwoord geven? Ik heb haast!'
+    } else if (personality?.isDifficult && Math.random() < (personality.pushbackProbability || 0.5)) {
+      const styles: Record<string, string> = {
+        impatient: 'Kunt u sneller praten? Ik heb niet de hele dag.',
+        colloquial: 'Echt? Nou, dat wist ik niet hoor. Maar goed...',
+        helpful: 'Dat begrijp ik niet helemaal. Kun je dat anders uitleggen?'
+      }
+      aiText = styles[personality.style || 'helpful'] || aiText
+    }
+    
+    conversationHistory.value.push({ role: 'ai', text: aiText })
+    response.value = '' 
+    isSpeaking.value = false
   }
 })
 
-const messages = computed(() => {
-  const msgs = [
-    { role: 'ai', text: props.exercise.prompt }
-  ]
-  
-  if (props.feedback || response.value) {
-    if (response.value) {
-      msgs.push({ role: 'user', text: response.value })
-    }
-    
-    if (props.feedback && props.feedback.outcome !== 'retry') {
-      const personality = props.exercise.aiPersonality
-      let aiText = props.exercise.simulatorResponse || 'Heel goed! Dat begrijp ik.'
-      
-      if (stressLevel.value > 60) {
-        aiText = 'Kunt u nu eindelijk antwoord geven? Ik heb haast!'
-      } else if (personality?.isDifficult && Math.random() < (personality.pushbackProbability || 0.5)) {
-        if (personality.style === 'impatient') {
-          aiText = 'Kunt u sneller praten? Ik heb niet de hele dag.'
-        } else if (personality.style === 'colloquial') {
-          aiText = 'Echt? Nou, dat wist ik niet hoor. Maar goed...'
-        } else {
-          aiText = 'Dat begrijp ik niet helemaal. Kun je dat anders uitleggen?'
-        }
-      }
-      
-      msgs.push({ role: 'ai', text: aiText })
-    }
-  }
-  
-  return msgs
+const allGoalsMet = computed(() => {
+  if (!props.exercise.missionGoals?.length) return true
+  return props.exercise.missionGoals.every(g => achievedGoalIds.value.has(g.id))
 })
 </script>
 
 <template>
   <div class="mission-simulator">
     <div class="simulator-meta">
+      <div v-if="exercise.missionGoals?.length" class="goals-tracker">
+        <div class="label">Mission Goals</div>
+        <div class="goals-list">
+          <div v-for="goal in exercise.missionGoals" :key="goal.id" class="goal-item" :class="{ achieved: achievedGoalIds.has(goal.id) }">
+            <span class="status">{{ achievedGoalIds.has(goal.id) ? '✓' : '○' }}</span>
+            <span class="goal-label">{{ goal.label }}</span>
+          </div>
+        </div>
+      </div>
       <div class="stress-meter">
         <span class="label">AI Patience</span>
         <div class="bar-bg"><div class="bar" :style="{ width: `${100 - stressLevel}%`, background: stressLevel > 70 ? '#d06b3c' : '#176b5b' }"></div></div>
@@ -72,7 +89,7 @@ const messages = computed(() => {
     </div>
 
     <div class="chat-window">
-      <div v-for="(msg, idx) in messages" :key="idx" class="message" :class="msg.role">
+      <div v-for="(msg, idx) in conversationHistory" :key="idx" class="message" :class="msg.role">
         <div class="avatar">{{ msg.role === 'ai' ? '🤖' : '👤' }}</div>
         <div class="bubble">
           {{ msg.text }}
@@ -80,7 +97,15 @@ const messages = computed(() => {
       </div>
     </div>
 
-    <form v-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
+    <div v-if="allGoalsMet && feedback && feedback.outcome !== 'retry'" class="mission-success">
+      <div class="success-content">
+        <h3>Mission Successful! 🎯</h3>
+        <p>You met all the objectives for this conversation.</p>
+        <button class="button" @click="emit('next')">Finish Mission</button>
+      </div>
+    </div>
+
+    <form v-else-if="!allGoalsMet" @submit.prevent="handleSubmit" class="input-area">
       <textarea 
         v-model="response" 
         :placeholder="exercise.placeholder || 'Type your response...'" 
@@ -104,7 +129,52 @@ const messages = computed(() => {
 
 .simulator-meta {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.goals-tracker {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.goals-tracker .label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8a9a94;
+}
+
+.goals-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.goal-item {
+  background: #f0f4f2;
+  border: 1px solid #cad6ce;
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #52645f;
+  transition: all 0.3s ease;
+}
+
+.goal-item.achieved {
+  background: #e6f2f0;
+  border-color: #176b5b;
+  color: #176b5b;
+}
+
+.goal-item .status {
+  font-weight: 700;
 }
 
 .stress-meter {
@@ -206,6 +276,24 @@ const messages = computed(() => {
   justify-content: flex-end;
   align-items: center;
   gap: 12px;
+}
+
+.mission-success {
+  background: #e6f2f0;
+  border: 2px solid #176b5b;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.success-content h3 {
+  margin: 0 0 8px;
+  color: #176b5b;
+}
+
+.success-content p {
+  margin: 0 0 16px;
+  color: #20302d;
 }
 
 .input-area .button {

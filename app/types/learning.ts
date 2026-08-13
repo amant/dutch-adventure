@@ -62,6 +62,8 @@ export interface Exercise {
   }
   // For pragmatic context choice
   pragmaticOptions?: { text: string, context: string, isBest: boolean, explanation: string }[]
+  // For missions
+  missionGoals?: { id: string, label: string, achieved?: boolean, keywords?: string[] }[]
 }
 
 export interface ChapterStage {
@@ -108,6 +110,7 @@ export interface Feedback {
   }
   pragmaticScore?: number
   pragmaticFeedback?: string
+  achievedGoalIds?: string[]
 }
 
 export interface Attempt {

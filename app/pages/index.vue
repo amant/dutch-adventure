@@ -82,6 +82,10 @@ const staleItems = computed(() => {
       <NuxtLink to="/smart-review" class="button secondary">Reactivate with Smart Review</NuxtLink>
     </div>
 
+    <div class="capability-map-section">
+      <CapabilityMap />
+    </div>
+
     <div v-if="frontier.length > 0" class="frontier-section">
       <FrontierCard :frontier="frontier" @activate="navigateTo({ path: '/smart-review', query: { mode: 'activation' } })" />
     </div>
@@ -97,16 +101,6 @@ const staleItems = computed(() => {
         </div>
       </div>
       <NuxtLink to="/smart-review" class="button">Start Smart Review</NuxtLink>
-    </div>
-    
-    <div class="grid">
-      <div v-for="chapter in chapters" :key="chapter.slug" class="card chapter-card">
-        <div class="eyebrow">{{ chapter.level }} capability</div>
-        <h2>{{ chapter.title }}</h2>
-        <p class="muted">{{ chapter.capability }}</p>
-        <div class="meta">{{ chapter.stages.length }} stages · {{ chapter.estimatedMinutes }} minutes</div>
-        <NuxtLink class="button" :to="`/chapter/${chapter.slug}`">Start chapter</NuxtLink>
-      </div>
     </div>
   </section>
 </template>

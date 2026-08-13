@@ -229,6 +229,10 @@ export const doctorMission: Chapter = {
       exercises: [{ 
         id: 'doc-5', kind: 'typed', prompt: 'Explain your problem and ask for an appointment.', 
         target: 'Ik heb last van ..., ik wil graag een afspraak maken.', 
+        missionGoals: [
+          { id: 'explain', label: 'Explain the problem', keywords: ['last', 'pijn', 'heb'] },
+          { id: 'request', label: 'Ask for appointment', keywords: ['afspraak', 'maken', 'wil'] }
+        ],
         explanation: 'State your problem and clearly ask for the appointment.', 
         skills: ['production', 'speaking', 'automaticity'],
         vocabulary: ['last hebben van', 'afspraak'],
@@ -411,6 +415,10 @@ export const hotelMission: Chapter = {
       exercises: [{ 
         id: 'hotel-4', kind: 'conversation', prompt: 'Wat is de oplossing volgens jou?', 
         simulatorResponse: 'Ik kan u een gratis ontbijt aanbieden voor het ongemak. Is dat voldoende?',
+        missionGoals: [
+          { id: 'complain', label: 'Describe dissatisfaction', keywords: ['tevreden', 'vies', 'niet'] },
+          { id: 'solution', label: 'Propose a solution', keywords: ['korting', 'andere', 'ontbijt', 'schoonmaken'] }
+        ],
         explanation: 'Propose a solution like a discount or cleaning the room immediately.', 
         skills: ['speaking', 'production', 'automaticity'],
         grammar: ['word-order'],
@@ -605,6 +613,10 @@ export const landlordMission: Chapter = {
       exercises: [{ 
         id: 'landlord-2', kind: 'conversation', prompt: 'Hallo? Met De Vries. Waarom belt u mij op dit tijdstip?', 
         simulatorResponse: 'Tjonge, dat is vervelend. Maar ik kan pas volgende week iemand sturen.',
+        missionGoals: [
+          { id: 'problem', label: 'Explain the heating failure', keywords: ['verwarming', 'koud', 'werkt', 'doet'] },
+          { id: 'urgency', label: 'Stress the urgency', keywords: ['vandaag', 'snel', 'weekend', 'nu'] }
+        ],
         aiPersonality: { isDifficult: true, style: 'colloquial', pushbackProbability: 0.6 },
         skills: ['speaking', 'production'],
         vocabulary: ['verwarming', 'repareren'],
@@ -978,6 +990,10 @@ export const futureSpeculationChapter: Chapter = {
       intro: 'A colleague asks about the future of the company.',
       exercises: [{
         id: 'spec-5', kind: 'conversation', prompt: 'Hoe zie jij de toekomst van ons bedrijf?',
+        missionGoals: [
+          { id: 'future', label: 'Predict a change', keywords: ['zal', 'zullen', 'veranderen', 'groeien'] },
+          { id: 'hypothetical', label: 'Use a hypothetical', keywords: ['zou', 'stel', 'denk'] }
+        ],
         context: 'Speculate about two things that might happen in the next 5 years. Use "zal" or "zullen".',
         vocabulary: ['toekomst', 'bedrijf', 'veranderen', 'groeien'],
         grammar: ['future tense'],

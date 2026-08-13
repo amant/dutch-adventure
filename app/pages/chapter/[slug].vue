@@ -43,6 +43,21 @@ function submit(extraContext?: any) {
     ...extraContext
   }) 
 }
+const achievedGoalIds = ref<Set<string>>(new Set())
+watch(() => session.exercise.value?.id, () => achievedGoalIds.value.clear())
+watch(feedback, (f) => {
+  if (f?.achievedGoalIds) {
+    f.achievedGoalIds.forEach(id => achievedGoalIds.value.add(id))
+  }
+})
+
+const allGoalsMet = computed(() => {
+  if (session.exercise.value?.kind !== 'conversation') return true
+  const goals = session.exercise.value.missionGoals
+  if (!goals?.length) return true
+  return goals.every(g => achievedGoalIds.value.has(g.id))
+})
+
 function next() { feedback.value = undefined; session.advance() }
 </script>
 <template>
@@ -160,7 +175,7 @@ function next() { feedback.value = undefined; session.advance() }
         <button v-else-if="!feedback" class="button" @click="next">I’m ready to continue</button>
       </div>
 
-      <div v-if="feedback" class="feedback" :class="feedback.outcome">
+      <div v-if="feedback && (session.exercise.value.kind !== 'conversation' || allGoalsMet)" class="feedback" :class="feedback.outcome">
         <strong>{{ feedback.outcome === 'retry' ? 'Try once more' : feedback.outcome === 'acceptable' ? 'That works' : 'Correct' }}</strong>
         <p>{{ feedback.message }}</p>
         <p v-if="feedback.target"><b>Useful answer:</b> {{ feedback.target }}</p>
