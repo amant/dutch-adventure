@@ -2248,7 +2248,81 @@ export const persuasionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
+export const understatementChapter: Chapter = {
+  slug: 'the-art-of-understatement',
+  level: 'B2',
+  title: 'The Art of Understatement',
+  capability: 'Express praise and opinions using culturally appropriate understatements.',
+  description: 'Dutch speakers often avoid extreme direct praise. Learn to use "niet verkeerd" and "het valt wel mee" like a native.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'discover', title: 'Discover', kind: 'discover',
+      intro: 'Dutch "nuchterheid" (soberness) means direct praise can sometimes feel a bit "too much".',
+      exercises: [
+        {
+          id: 'under-1', kind: 'info', prompt: 'Subtle Praise',
+          context: 'Instead of saying "Het is geweldig!", a Dutch person might say "Het is niet verkeerd." or "Het is best wel goed."',
+          skills: ['recognition', 'pragmatic']
+        }
+      ]
+    },
+    {
+      id: 'retrieve', title: 'Retrieve', kind: 'retrieve',
+      intro: 'Practice shifting from direct to understated.',
+      exercises: [
+        {
+          id: 'under-2', kind: 'understatement-drill', 
+          prompt: 'Your colleague made a great presentation.',
+          context: 'It was an amazing presentation!',
+          target: 'Het was niet verkeerd.',
+          explanation: 'Use "niet verkeerd" to show you are impressed without being overly dramatic.',
+          skills: ['production', 'pragmatic']
+        },
+        {
+          id: 'under-3', kind: 'understatement-drill',
+          prompt: 'You just ate at a high-end restaurant.',
+          context: 'The food was fantastic!',
+          target: 'Het eten was niet slecht.',
+          explanation: '"Niet slecht" is high praise in Dutch context.',
+          skills: ['production', 'pragmatic']
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Personalise', kind: 'personalise',
+      intro: 'Apply it to your own life.',
+      exercises: [
+        {
+          id: 'under-4', kind: 'personalise',
+          prompt: 'Wat vind je van het weer vandaag? (Give an understated opinion)',
+          target: 'Het valt wel mee.',
+          explanation: 'Use "Het valt wel mee" if it is okay, or "Niet verkeerd" if it is actually good.',
+          skills: ['production', 'pragmatic'],
+          placeholder: 'Het valt...'
+        }
+      ]
+    },
+    {
+      id: 'conversation', title: 'Conversation', kind: 'conversation',
+      intro: 'Chat with a skeptical Dutch friend.',
+      exercises: [
+        {
+          id: 'under-5', kind: 'conversation',
+          prompt: 'Je vriend vraagt: "Vond je die film echt zo goed?" (Try to keep it understated)',
+          simulatorResponse: 'Nou, ik vond het niet verkeerd. De sfeer was best wel goed.',
+          skills: ['speaking', 'pragmatic'],
+          aiPersonality: { style: 'colloquial', isDifficult: true },
+          missionGoals: [
+            { id: 'under-goal', label: 'Use an understatement', keywords: ['niet verkeerd', 'niet slecht', 'valt wel mee'] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

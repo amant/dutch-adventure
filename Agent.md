@@ -86,6 +86,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Nuance Injector**: Exercises that challenge learners to take stiff sentences and inject modal particles (*hoor*, *even*, *maar*) to sound native-like.
     - **Pragmatic Inference**: Training learners to "read between the lines" and understand indirect requests or subtle disagreements.
     - **Collocation Precision**: Training the brain to use standard native word pairings (e.g., *besluit nemen*) to avoid literal translations (Anglicisms).
+    - **Dutch Understatement**: B2 learners are trained in the cultural nuance of "nuchterheid" (soberness), replacing extreme praise with appropriate understatements like "niet verkeerd" or "het valt wel mee".
 
 ## 5. Information Architecture
 
@@ -127,6 +128,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `NuanceDrill.vue`: Interactive tool for injecting naturalness into stiff Dutch sentences.
     - `CollocationDrill.vue`: Precision-based tool for practicing native word pairings.
     - `PrecisionDrill.vue`: Component for replacing "lazy" words with more precise synonyms in a sentence.
+    - `UnderstatementDrill.vue`: Pragmatic tool for transforming direct praise into culturally appropriate Dutch understatements.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
     - `PragmaticDrill.vue`: Context-based choice for social nuances.

@@ -620,6 +620,35 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       return { ...base, outcome: 'retry', message: "Not quite the most natural word. Try another option!" }
     }
 
+    // Understatement Drill Evaluation
+    if (exercise.kind === 'understatement-drill') {
+      const positiveWords = ['geweldig', 'super', 'fantastisch', 'mooi', 'goed', 'leuk']
+      const hasPositive = positiveWords.some(w => normalized.includes(w))
+      
+      const understatements = ['niet verkeerd', 'niet slecht', 'valt wel mee', 'best wel', 'aardig']
+      const hasUnderstatement = understatements.some(u => normalized.includes(u))
+
+      if (hasPositive && !hasUnderstatement) {
+        return { 
+          ...base, 
+          outcome: 'retry', 
+          message: "A bit too direct! Can you express this in a more typically Dutch, understated way?",
+          explanation: "Try using 'niet verkeerd' or 'valt wel mee' to sound more native."
+        }
+      }
+      
+      if (hasUnderstatement) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: "Exactly! That's the Dutch way. Subtle and understated.",
+          changeModifier: (base.changeModifier || 0) + 3,
+          pragmaticScore: 90,
+          pragmaticFeedback: "Dutch speakers often prefer 'not bad' over 'amazing'. You nailed the cultural nuance!"
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

@@ -98,6 +98,16 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'understatement-drill'" class="renderer">
+        <UnderstatementDrill
+          :exercise="session.exercise.value"
+          :feedback="feedback"
+          v-model="session.response.value"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'correction-challenge'" class="renderer">
         <CorrectionChallenge
           :exercise="session.exercise.value"

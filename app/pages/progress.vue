@@ -136,6 +136,22 @@ const naturalnessTrend = computed(() => {
   if (isNaN(previous)) return { score: Math.round(recent), change: 0 }
   return { score: Math.round(recent), change: Math.round(recent - previous) }
 })
+
+const retrievalTrend = computed(() => {
+  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  const allSpeeds = all.flatMap(v => v.responseTimes || [])
+  
+  if (allSpeeds.length < 10) return null
+
+  const recent = allSpeeds.slice(-10).reduce((a, b) => a + b, 0) / 10
+  const previous = allSpeeds.slice(-20, -10).reduce((a, b) => a + b, 0) / Math.min(10, Math.max(1, allSpeeds.length - 10))
+
+  return { 
+    current: recent, 
+    change: previous - recent, // Positive means faster (time decreased)
+    history: allSpeeds.slice(-20) 
+  }
+})
 </script>
 
 <template>
@@ -252,6 +268,31 @@ const naturalnessTrend = computed(() => {
           </div>
         </div>
       </div>
+
+      <div v-if="retrievalTrend" class="card speed-trend-card mt-6">
+        <div class="trend-header">
+          <div class="stat-main">
+            <span class="value">{{ retrievalTrend.current.toFixed(1) }}s</span>
+            <span class="label">Current Speed</span>
+          </div>
+          <div class="trend-meta">
+            <div class="trend-indicator" :class="{ up: retrievalTrend.change > 0, down: retrievalTrend.change < 0 }">
+              {{ retrievalTrend.change > 0 ? '↑ Faster' : retrievalTrend.change < 0 ? '↓ Slower' : '→ Steady' }} 
+              ({{ Math.abs(retrievalTrend.change).toFixed(1) }}s)
+            </div>
+            <p class="muted">Trend based on last 20 production attempts.</p>
+          </div>
+        </div>
+        <div class="speed-graph">
+          <div 
+            v-for="(speed, idx) in retrievalTrend.history" 
+            :key="idx" 
+            class="speed-bar"
+            :style="{ height: `${Math.min(100, (10 / speed) * 30)}%` }"
+            :title="`${speed.toFixed(1)}s`"
+          ></div>
+        </div>
+      </div>
     </div>
 
     <div class="reading-progress">
@@ -356,6 +397,40 @@ const naturalnessTrend = computed(() => {
 .stat-main .label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8a9a94; letter-spacing: 0.1em; }
 .stat-desc { flex: 1; font-size: 16px; line-height: 1.5; color: #2c3e50; }
 .stat-desc strong { color: #d06b3c; }
+
+.speed-trend-card {
+  padding: 32px;
+  background: #f0fdfa;
+  border-color: #99f6e4;
+}
+
+.trend-header {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 24px;
+}
+
+.speed-graph {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 60px;
+  padding: 10px 0;
+  border-bottom: 1px solid #99f6e4;
+}
+
+.speed-bar {
+  flex: 1;
+  background: #176b5b;
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.speed-bar:hover {
+  background: #0d9488;
+}
 
 .reading-progress { margin: 40px 0; }
 .reading-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
