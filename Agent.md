@@ -51,12 +51,13 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Capabilities**: Group chapters by CEFR level (A1 Survival, A2 Everyday Independence, B1 Independent Communication, B2 Complex Communication).
 - **Missions**: High-level challenges that combine multiple skills (e.g., "Complain about a hotel").
 - **Ladders**: 
-    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise.
-    - **Reading Ladder**: From artificial dialogues to authentic Dutch news.
+    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues.
+    - **Reading Ladder**: From artificial dialogues to authentic Dutch news. Includes post-reading production challenges.
 
 ## 6. Technical Implementation for Agents
 
 - **Types**: See `app/types/learning.ts` for the core domain model.
+- **Articles**: Authentic content lives in `app/data/articles.ts`.
 - **Memory**: `useLearnerMemory.ts` handles the persistence of the Language Graph.
 - **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
@@ -64,6 +65,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `MissionSimulator.vue`: AI personality-driven chat.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
+    - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
 
 ## 7. Development Guidelines
 

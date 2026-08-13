@@ -134,6 +134,16 @@ function next() {
             <p>{{ feedback.miniLesson.content }}</p>
           </div>
 
+          <div v-if="feedback.teacherCorrection" class="teacher-correction card">
+            <div class="tag">Teacher's Tip</div>
+            <h3>A more natural way to say it:</h3>
+            <TeacherRedline 
+              :userAnswer="session.response.value" 
+              :naturalCorrection="feedback.teacherCorrection.natural" 
+            />
+            <p class="muted">{{ feedback.teacherCorrection.explanation }}</p>
+          </div>
+
           <div class="actions">
             <button v-if="feedback.outcome !== 'retry'" class="button" @click="next">Continue</button>
             <button v-else class="button secondary" @click="feedback = undefined">Retry</button>
@@ -165,6 +175,10 @@ function next() {
 .mini-lesson { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #cad6ce; text-align: left; }
 .mini-lesson h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
 .mini-lesson .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
+
+.teacher-correction { margin: 20px 0; padding: 16px; background: #fefce8; border: 1px solid #fef08a; text-align: left; }
+.teacher-correction h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
+.teacher-correction .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
 
 .completion { max-width:700px; margin:50px auto; text-align: center; }
 .completion h1 { margin: 20px 0; }

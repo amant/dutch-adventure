@@ -20,14 +20,58 @@ const rate = computed(() => {
   return 0.6 + (difficulty.value * 0.2)
 })
 
-const speak = () => {
+const voices = ref<SpeechSynthesisVoice[]>([])
+const loadVoices = () => {
+  voices.value = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('nl'))
+}
+
+onMounted(() => {
+  loadVoices()
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = loadVoices
+  }
+})
+
+const speak = async () => {
   if (!window.speechSynthesis) return
-  window.speechSynthesis.cancel() // Stop any current speech
-  const msg = new SpeechSynthesisUtterance()
-  msg.text = props.exercise.transcript || props.exercise.target || ''
-  msg.lang = 'nl-NL'
-  msg.rate = rate.value
-  window.speechSynthesis.speak(msg)
+  window.speechSynthesis.cancel() 
+  
+  const text = props.exercise.transcript || props.exercise.target || ''
+  
+  // Check if it's a dialogue
+  if (text.includes('A:') && text.includes('B:')) {
+    const lines = text.split('\n').filter(l => l.trim())
+    for (const line of lines) {
+      const msg = new SpeechSynthesisUtterance()
+      const content = line.replace(/^[AB]:\s*/, '').trim()
+      msg.text = content
+      msg.lang = 'nl-NL'
+      msg.rate = rate.value
+      
+      // Try to switch voices or pitch
+      if (line.startsWith('A:')) {
+        msg.voice = voices.value[0] || null
+        msg.pitch = 1
+      } else {
+        msg.voice = voices.value[1] || voices.value[0] || null
+        msg.pitch = voices.value[1] ? 1 : 1.2 // Higher pitch if same voice
+      }
+      
+      window.speechSynthesis.speak(msg)
+      
+      // Wait for the line to finish before next one
+      await new Promise(resolve => {
+        msg.onend = resolve
+      })
+    }
+  } else {
+    const msg = new SpeechSynthesisUtterance()
+    msg.text = text
+    msg.lang = 'nl-NL'
+    msg.rate = rate.value
+    msg.voice = voices.value[0] || null
+    window.speechSynthesis.speak(msg)
+  }
 }
 
 const toggleTranscript = () => {

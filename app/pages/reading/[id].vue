@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { articles } from '~/data/articles'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { evaluateResponse } from '~/utils/evaluateResponse'
+import type { Feedback } from '~/types/learning'
 
 const route = useRoute()
-const { memory, hydrate, recordExposure } = useLearnerMemory()
+const { memory, hydrate, recordExposure, updateConceptMastery } = useLearnerMemory()
 onMounted(hydrate)
 
 const article = computed(() => articles.find(a => a.id === route.params.id))
@@ -76,9 +78,27 @@ const handleWordClick = (token: any) => {
 }
 
 const readingFinished = ref(false)
+const showChallenge = ref(false)
+const currentResponse = ref('')
+const feedback = ref<Feedback | null>(null)
+
 const finishReading = () => {
   readingFinished.value = true
-  // In a real app, we might award points or update progress
+  if (article.value?.challenge) {
+    showChallenge.value = true
+  }
+}
+
+const handleSubmitChallenge = () => {
+  if (!article.value?.challenge) return
+  
+  feedback.value = evaluateResponse(article.value.challenge, currentResponse.value)
+  
+  if (feedback.value.outcome === 'correct' || feedback.value.outcome === 'acceptable') {
+    // Update memory based on the challenge success
+    article.value.challenge.vocabulary?.forEach(v => updateConceptMastery(v, 'vocabulary', true, feedback.value!.skills))
+    article.value.challenge.grammar?.forEach(g => updateConceptMastery(g, 'grammar', true, feedback.value!.skills))
+  }
 }
 </script>
 
@@ -142,6 +162,46 @@ const finishReading = () => {
           <button v-if="!readingFinished" class="button full-width" @click="finishReading">Finish Reading</button>
           <div v-else class="finished-state">
             <span class="check">✓</span> Finished! Knowledge graph updated.
+          </div>
+        </div>
+
+        <div v-if="showChallenge && article.challenge" class="post-reading-challenge card">
+          <div class="eyebrow">Post-Reading Challenge</div>
+          <h3>{{ article.challenge.prompt }}</h3>
+          <p class="muted">{{ article.challenge.context }}</p>
+          
+          <div class="input-area">
+            <textarea 
+              v-model="currentResponse" 
+              :placeholder="article.challenge.placeholder || 'Your response...'"
+              rows="4"
+              :disabled="feedback?.outcome === 'correct'"
+            />
+            <button 
+              v-if="feedback?.outcome !== 'correct'" 
+              class="button full-width" 
+              @click="handleSubmitChallenge"
+            >
+              Submit Answer
+            </button>
+          </div>
+
+          <div v-if="feedback" class="feedback card" :class="feedback.outcome">
+            <div class="outcome-header">
+              <span class="icon">{{ feedback.outcome === 'correct' ? '🎉' : '⚠️' }}</span>
+              {{ feedback.message }}
+            </div>
+            
+            <div v-if="feedback.correction" class="correction">
+              <TeacherRedline 
+                :userAnswer="currentResponse" 
+                :naturalCorrection="feedback.correction" 
+              />
+            </div>
+
+            <div v-if="feedback.outcome === 'correct'" class="success-actions">
+              <button class="button secondary full-width" @click="showChallenge = false">Back to reading</button>
+            </div>
           </div>
         </div>
       </aside>
@@ -239,6 +299,65 @@ const finishReading = () => {
   margin-top: 20px; text-align: center; color: #176b5b; font-weight: 600; font-size: 14px; 
 }
 .check { font-size: 20px; }
+
+.post-reading-challenge {
+  background: #fdfaf3;
+  border-color: #f2e6c9;
+}
+
+.post-reading-challenge h3 {
+  font-size: 18px;
+  margin: 12px 0 8px;
+}
+
+.post-reading-challenge .input-area {
+  margin-top: 20px;
+}
+
+.post-reading-challenge textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cad6ce;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.feedback {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.feedback.correct { background: #eef8f2; border-color: #c5e7d4; color: #176b5b; }
+.feedback.retry { background: #fef1e8; border-color: #fadcc8; color: #d06b3c; }
+
+.outcome-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.correction {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.correction .label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.correction p {
+  margin: 4px 0 0;
+  font-style: italic;
+}
 
 @media (max-width: 800px) {
   .content-container { grid-template-columns: 1fr; }

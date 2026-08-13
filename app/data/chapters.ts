@@ -835,7 +835,93 @@ export const presentationChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter]
+export const newsSummaryChapter: Chapter = {
+  slug: 'nieuws-samenvatten',
+  level: 'B2',
+  title: 'Summarizing the News',
+  capability: 'Summarise information from a complex news source and express a position.',
+  description: 'Practice taking an article and explaining it to someone else while using advanced connectors.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'listen', title: 'Multiple Speaker Discussion', kind: 'understand',
+      intro: 'Listen to two people discussing the latest news. Pay attention to how they disagree politely.',
+      exercises: [{
+        id: 'news-sum-1', kind: 'listening', prompt: 'Listen to the debate.',
+        transcript: 'A: Heb je het voorstel van de regering over duurzame energie gelezen?\nB: Ja, hoewel het ambitieus klinkt, beweren critici dat de kosten te hoog zijn.\nA: Dat klopt, maar voorstanders wijzen op de noodzaak van klimaatactie.\nB: Aan de andere kant moeten we ook denken aan de burgers met een laag inkomen.',
+        skills: ['listening', 'recognition'],
+        vocabulary: ['voorstel', 'duurzaam', 'hoewel', 'beweren', 'kosten', 'echter'],
+        grammar: ['subordinate clauses']
+      }],
+    },
+    {
+      id: 'mission', title: 'The Summary Mission', kind: 'personalise',
+      intro: 'Now it is your turn. Summarize the main points of the debate you just heard.',
+      exercises: [{
+        id: 'news-sum-2', kind: 'challenge', prompt: 'Vat het nieuwsgesprek kort samen.',
+        context: 'Describe the two different viewpoints mentioned. Use at least 40 words.',
+        minimumLength: 40,
+        vocabulary: ['voorstanders', 'critici', 'enerzijds', 'anderzijds'],
+        grammar: ['subordinate clauses'],
+        skills: ['production', 'writing']
+      }]
+    }
+  ]
+}
+
+export const doubtChapter: Chapter = {
+  slug: 'twijfel-uiten',
+  level: 'B1',
+  title: 'Doubt & Certainty',
+  capability: 'Express degrees of certainty and doubt when discussing plans or ideas.',
+  description: 'Learn to use modal adverbs and phrases to show how sure you are.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'discover', title: 'Modal Adverbs', kind: 'discover',
+      intro: 'Dutch uses words like "waarschijnlijk" and "misschien" to express doubt.',
+      exercises: [{
+        id: 'doubt-1', kind: 'info', prompt: 'Certainty Levels',
+        context: 'Zeker (100%): Ik weet het zeker.\nWaarschijnlijk (80%): Het zal waarschijnlijk regenen.\nMisschien (50%): Misschien gaan we naar buiten.',
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['zeker', 'waarschijnlijk', 'misschien']
+      }],
+    },
+    {
+      id: 'automate', title: 'Fast Retrieval', kind: 'retrieve',
+      intro: 'Quickly produce the correct adverb.',
+      exercises: [
+        { 
+          id: 'doubt-2', kind: 'speed-drill', prompt: 'Probably', 
+          target: 'Waarschijnlijk', 
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production'],
+          vocabulary: ['waarschijnlijk']
+        },
+        { 
+          id: 'doubt-3', kind: 'speed-drill', prompt: 'Maybe', 
+          target: 'Misschien', 
+          automaticitySeconds: 2,
+          skills: ['automaticity', 'production'],
+          vocabulary: ['misschien']
+        }
+      ],
+    },
+    {
+      id: 'mission', title: 'The Speculation', kind: 'personalise',
+      intro: 'Speculate about the weather and your plans for next weekend.',
+      exercises: [{
+        id: 'doubt-4', kind: 'personalise', prompt: 'Wat ga je volgend weekend doen?',
+        context: 'Express doubt about your plans. Use "waarschijnlijk" or "misschien".',
+        vocabulary: ['waarschijnlijk', 'misschien'],
+        skills: ['speaking', 'production'],
+        target: 'Volgend weekend ga ik waarschijnlijk naar Amsterdam, maar misschien blijf ik thuis.'
+      }]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

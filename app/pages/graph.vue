@@ -55,14 +55,30 @@ const conceptRelations = computed(() => {
   })
   return relations
 })
+
+const suggestedChapter = computed(() => {
+  // Find the first chapter that has < 80% mastery but has some encounters
+  // Or the first chapter that has 0 encounters but is at the "frontier" of their level
+  const frontier = chapterData.value.find(c => c.avgMastery < 80)
+  return frontier
+})
 </script>
 
 <template>
   <div class="graph-page">
-    <div class="hero">
-      <div class="eyebrow">Language Graph</div>
-      <h1>Your Dutch Network</h1>
-      <p class="muted">Every concept you learn connects to another. Watch your network grow as you build capabilities.</p>
+    <div class="hero-flex">
+      <div class="hero">
+        <div class="eyebrow">Language Graph</div>
+        <h1>Your Dutch Network</h1>
+        <p class="muted">Every concept you learn connects to another. Watch your network grow as you build capabilities.</p>
+      </div>
+
+      <div v-if="suggestedChapter" class="suggestion card">
+        <div class="eyebrow">Suggested Next Step</div>
+        <h3>{{ suggestedChapter.title }}</h3>
+        <p class="muted">{{ suggestedChapter.capability }}</p>
+        <NuxtLink :to="`/chapter/${suggestedChapter.slug}`" class="button secondary">Continue Path</NuxtLink>
+      </div>
     </div>
 
     <div class="graph-container">
@@ -115,7 +131,19 @@ const conceptRelations = computed(() => {
 
 <style scoped>
 .graph-page { padding: 20px 0; }
-.hero { margin-bottom: 60px; }
+.hero { flex: 1; }
+.hero-flex { display: flex; align-items: flex-end; gap: 40px; margin-bottom: 60px; }
+
+.suggestion {
+  flex: 0 0 320px;
+  background: #fdfaf3;
+  border-color: #f2e6c9;
+  padding: 20px;
+}
+
+.suggestion h3 { font-size: 18px; margin: 8px 0; }
+.suggestion p { font-size: 13px; margin-bottom: 16px; }
+.suggestion .button { font-size: 13px; padding: 10px 18px; }
 
 .graph-container {
   display: flex;

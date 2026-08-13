@@ -165,7 +165,10 @@ function next() { feedback.value = undefined; session.advance() }
         <div v-if="feedback.teacherCorrection" class="teacher-correction card">
           <div class="tag">Teacher's Tip</div>
           <h3>A more natural way to say it:</h3>
-          <p class="natural-text">"{{ feedback.teacherCorrection.natural }}"</p>
+          <TeacherRedline 
+            :userAnswer="session.response.value" 
+            :naturalCorrection="feedback.teacherCorrection.natural" 
+          />
           <p class="muted">{{ feedback.teacherCorrection.explanation }}</p>
         </div>
 
