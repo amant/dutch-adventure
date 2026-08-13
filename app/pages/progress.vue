@@ -37,9 +37,17 @@ const grammarScore = computed(() => {
   return items.reduce((acc, item) => acc + (item.recognition + item.meaning + item.production) / 3, 0) / items.length
 })
 
+const averageRetrievalSpeed = computed(() => {
+  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  const speeds = all.flatMap(v => v.responseTimes || [])
+  if (speeds.length === 0) return 0
+  return speeds.reduce((a, b) => a + b, 0) / speeds.length
+})
+
 const bottlenecks = computed(() => {
+  const speed = averageRetrievalSpeed.value
   const skills = [
-    { id: 'speaking', label: 'Speaking fluency', score: memory.value.overall.automaticity, status: 'red', text: 'You know the vocabulary but retrieve it slowly.' },
+    { id: 'speaking', label: 'Retrieval speed', score: speed > 0 ? Math.max(0, 100 - speed * 10) : 100, status: speed > 6 ? 'red' : speed > 3 ? 'orange' : 'green', text: speed > 0 ? `Your average retrieval time is ${speed.toFixed(1)}s.` : 'Retrieval speed not yet measured.' },
     { id: 'listening', label: 'Listening', score: memory.value.overall.listening, status: 'orange', text: 'Normal-speed speech is difficult.' },
     { id: 'grammar', label: 'Word order', score: grammarScore.value, status: 'orange', text: 'Subordinate clauses remain inconsistent.' }
   ]
@@ -150,6 +158,22 @@ const pipeline = computed(() => {
       </div>
     </div>
 
+    <div class="fluency-section">
+      <h2>Fluency & Automaticity</h2>
+      <div class="card fluency-card">
+        <div class="stat-main">
+          <span class="value">{{ averageRetrievalSpeed > 0 ? averageRetrievalSpeed.toFixed(1) : '--' }}s</span>
+          <span class="label">Avg. Retrieval Time</span>
+        </div>
+        <div class="stat-desc">
+          <p v-if="averageRetrievalSpeed > 5">You are in the <strong>Thinking</strong> phase. Retrieval is conscious and slow.</p>
+          <p v-else-if="averageRetrievalSpeed > 2">You are reaching <strong>Functional Fluency</strong>. Retrieval is becoming semi-automatic.</p>
+          <p v-else-if="averageRetrievalSpeed > 0">You are reaching <strong>Automaticity</strong>. You retrieve Dutch almost as fast as your native language.</p>
+          <p v-else>Start missions and drills to measure your retrieval speed.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="reading-progress">
       <h2>Reading Proficiency</h2>
       <div class="card">
@@ -225,6 +249,14 @@ const pipeline = computed(() => {
 .pipeline-step.active .desc { color: #176b5b; opacity: 0.8; }
 .pipeline-arrow { font-size: 20px; color: #cbd5e1; font-weight: 700; }
 .pipeline-arrow.active { color: #176b5b; }
+
+.fluency-section { margin: 40px 0; }
+.fluency-card { display: flex; align-items: center; gap: 40px; padding: 32px; background: #fffdf9; border: 1px solid #f9e8b9; }
+.stat-main { display: flex; flex-direction: column; align-items: center; min-width: 140px; }
+.stat-main .value { font-size: 42px; font-weight: 800; color: #d06b3c; font-family: Fraunces, serif; }
+.stat-main .label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8a9a94; letter-spacing: 0.1em; }
+.stat-desc { flex: 1; font-size: 16px; line-height: 1.5; color: #2c3e50; }
+.stat-desc strong { color: #d06b3c; }
 
 .reading-progress { margin: 40px 0; }
 .reading-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }

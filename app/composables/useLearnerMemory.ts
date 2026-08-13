@@ -74,7 +74,8 @@ export function useLearnerMemory() {
     changeModifier: number = 0,
     snippet?: string,
     prompt?: string,
-    feedback?: any
+    feedback?: any,
+    responseTime?: number
   ) {
     let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
     change = Math.max(1, change + changeModifier)
@@ -124,11 +125,23 @@ export function useLearnerMemory() {
       
       dict[key].encounters++
       dict[key].lastEncountered = new Date().toISOString()
+
+      if (responseTime !== undefined) {
+        if (!dict[key].responseTimes) dict[key].responseTimes = []
+        dict[key].responseTimes!.unshift(responseTime)
+        if (dict[key].responseTimes!.length > 10) dict[key].responseTimes!.pop()
+      }
       
       if (snippet && (outcome === 'correct' || outcome === 'acceptable')) {
         if (!dict[key].usageHistory) dict[key].usageHistory = []
-        dict[key].usageHistory!.unshift({ snippet, date: new Date().toISOString() })
-        if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop()
+        if (!dict[key].usageHistory!.some(u => u.snippet === snippet)) {
+          dict[key].usageHistory!.unshift({ 
+            snippet, 
+            prompt: prompt || '',
+            date: new Date().toISOString() 
+          })
+          if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop()
+        }
       }
 
       if (outcome === 'correct' || outcome === 'acceptable') {

@@ -50,6 +50,25 @@ onMounted(() => {
     const scenario = (route.query.scenario as string) || 'Buying coffee'
     const frontier = getFrontierConcepts(5)
     chapter.value = createScenarioMission(scenario, frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
+  } else if (route.query.mode === 'custom') {
+    const customExercise = JSON.parse(sessionStorage.getItem('custom-review-exercise') || '{}')
+    if (customExercise.id) {
+      chapter.value = {
+        slug: 'custom-review',
+        level: 'B1',
+        title: 'Memory Lab Review',
+        capability: 'Delayed Retrieval',
+        description: 'Reactivating concepts from your history.',
+        estimatedMinutes: 5,
+        stages: [{
+          id: 'stage-6',
+          title: 'Stage 6 — Recall',
+          kind: 'personalise',
+          intro: 'Retrieve this expression you used a few days ago.',
+          exercises: [customExercise]
+        }]
+      }
+    }
   } else {
     const { vocabulary, grammar } = getWeakConcepts(4)
     if (vocabulary.length === 0 && grammar.length === 0) {

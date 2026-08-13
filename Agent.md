@@ -19,8 +19,13 @@ Every chapter should follow this loop to move concepts from recognition to autom
 4.  **Review Redlines**: Persistent feedback loop for past mistakes.
 5.  **Personalise**: "Why are you staying home today?"
 6.  **Conversation**: AI simulator pushing for improvisation.
-7.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
+7.  **Delayed Retrieval**: Re-testing concepts days later with no hints. Uses personalized history (Stage 6) to reactivate past production.
 8.  **Automate**: Timed drills and high-pressure missions.
+
+### Memory & Automaticity
+
+- **Memory Lab**: A dedicated hub for tracking "Memory Decay" and performing **Stage 6 Retrieval**. The system stores the exact prompts and sentences produced by the learner (`usageHistory`) and brings them back 2-7 days later to test if retrieval is becoming automatic.
+- **Fluency Metrics**: Every production exercise tracks **Retrieval Speed** (Response Time). These metrics are visualized on the Progress page to show the transition from "Thinking/Translating" to "Automatic/Fluent".
 
 ### Voice & Speaking
 

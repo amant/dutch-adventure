@@ -27,6 +27,11 @@ export function useChapterSession(chapter: Chapter) {
   const exercise = computed(() => stage.value?.exercises[state.value.exerciseIndex])
   const lastAttempt = computed(() => state.value.attempts[state.value.attempts.length - 1])
 
+  const startTime = ref(Date.now())
+  watch(() => exercise.value?.id, () => {
+    startTime.value = Date.now()
+  })
+
   function persist() { if (import.meta.client) localStorage.setItem(key(chapter.slug), JSON.stringify(state.value)) }
   function hydrate() {
     learnerMemory.hydrate()
@@ -42,6 +47,7 @@ export function useChapterSession(chapter: Chapter) {
   }
   function submit(answer = response.value, context?: EvaluationContext): Feedback | undefined {
     if (!exercise.value) return
+    const responseTime = (Date.now() - startTime.value) / 1000
     const feedback = evaluateResponse(exercise.value, answer, context)
     const attempt: Attempt = { exerciseId: exercise.value.id, answer, feedback, createdAt: new Date().toISOString() }
     state.value.attempts = [...state.value.attempts, attempt]
@@ -54,7 +60,8 @@ export function useChapterSession(chapter: Chapter) {
       feedback.changeModifier, 
       answer,
       exercise.value.prompt,
-      feedback
+      feedback,
+      responseTime
     )
     persist()
     response.value = ''

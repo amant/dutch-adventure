@@ -14,8 +14,9 @@ export interface ConceptState {
   encounters: number
   successes: number
   lastEncountered?: string
-  usageHistory?: { snippet: string, date: string }[]
+  usageHistory?: { prompt: string, snippet: string, date: string }[]
   redlineHistory?: { userAnswer: string, naturalCorrection: string, date: string }[]
+  responseTimes?: number[]
 }
 
 export interface Redline {

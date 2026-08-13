@@ -17,6 +17,7 @@ useHead({
       <NuxtLink to="/" class="brand">Netherlands Taal Avonturen</NuxtLink>
       <nav>
         <NuxtLink to="/graph">Graph</NuxtLink>
+        <NuxtLink to="/memory">Memory</NuxtLink>
         <NuxtLink to="/reading">Reading</NuxtLink>
         <NuxtLink to="/sandbox">Sandbox</NuxtLink>
         <NuxtLink to="/idioms">Idioms</NuxtLink>
