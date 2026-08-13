@@ -34,31 +34,49 @@ const weakAreas = computed(() => {
   return items.sort((a, b) => b.priority - a.priority).slice(0, 3)
 })
 
-const staleItems = computed(() => {
-  const items: { label: string, type: 'vocabulary' | 'grammar', lastSeen: string }[] = []
-  const now = new Date()
+const bottlenecks = computed(() => {
+  const items: { label: string, status: 'red' | 'orange' | 'green', text: string, action: string, actionLabel: string }[] = []
   
-  const process = (dict: Record<string, any>, type: 'vocabulary' | 'grammar') => {
-    Object.entries(dict).forEach(([label, state]) => {
-      if (!state.lastEncountered) return
-      const last = new Date(state.lastEncountered)
-      const hoursSince = (now.getTime() - last.getTime()) / (1000 * 60 * 60)
-      
-      // Items seen more than 24 hours ago OR just high priority items to review
-      if (hoursSince > 24 || (state.encounters > 0 && state.successes / state.encounters < 0.7)) {
-        items.push({ 
-          label: type === 'grammar' ? label.replace(/-/g, ' ') : label, 
-          type, 
-          lastSeen: state.lastEncountered 
-        })
-      }
+  // 1. Retrieval Speed
+  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  const speeds = all.flatMap(v => v.responseTimes || [])
+  const avgSpeed = speeds.length > 0 ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0
+  
+  if (avgSpeed > 4) {
+    items.push({ 
+      label: 'Retrieval Speed', 
+      status: avgSpeed > 7 ? 'red' : 'orange', 
+      text: `Your average response time is ${avgSpeed.toFixed(1)}s. You're thinking too much!`,
+      action: '/smart-review?mode=speed',
+      actionLabel: 'Start Speed Drills'
     })
   }
-  
-  process(memory.value.vocabulary, 'vocabulary')
-  process(memory.value.grammar, 'grammar')
-  
-  return items.sort((a, b) => new Date(a.lastSeen).getTime() - new Date(b.lastSeen).getTime()).slice(0, 3)
+
+  // 2. Frontier (Recognized but not produced)
+  const frontier = getFrontierConcepts(5)
+  if (frontier.length > 3) {
+    items.push({
+      label: 'Knowledge Gap',
+      status: 'orange',
+      text: `You recognize ${frontier.length} concepts but haven't used them in conversation yet.`,
+      action: '/smart-review?mode=activation',
+      actionLabel: 'Activate Concepts'
+    })
+  }
+
+  // 3. Specific Weak Grammar (e.g. word order)
+  const wordOrder = memory.value.grammar['word-order']
+  if (wordOrder && (wordOrder.production < 60 || wordOrder.successes / wordOrder.encounters < 0.6)) {
+    items.push({
+      label: 'Word Order',
+      status: 'red',
+      text: 'You struggle with Dutch inversion and sentence structure.',
+      action: '/chapter/opinions-en-redenen',
+      actionLabel: 'Review Word Order'
+    })
+  }
+
+  return items.slice(0, 3)
 })
 </script>
 <template>
@@ -69,17 +87,18 @@ const staleItems = computed(() => {
       <p class="muted intro">Short, purposeful practice: notice a pattern, retrieve it, change it, and make it yours.</p>
     </div>
 
-    <div v-if="staleItems.length > 0" class="card review-card delayed">
-      <div class="eyebrow">Delayed Retrieval</div>
-      <h3>Time to reactivate these:</h3>
-      <div class="weak-list">
-        <div v-for="item in staleItems" :key="item.label" class="weak-item">
-          <span class="type-tag" :class="item.type">{{ item.type }}</span>
-          <span class="label">{{ item.label }}</span>
-          <span class="score">Last seen {{ new Date(item.lastSeen).toLocaleDateString() }}</span>
+    <div v-if="bottlenecks.length > 0" class="bottlenecks-section">
+      <div class="eyebrow">Actionable Bottlenecks</div>
+      <div class="bottlenecks-grid">
+        <div v-for="b in bottlenecks" :key="b.label" class="card bottleneck-card">
+          <div class="b-meta">
+            <span class="status-dot" :class="b.status"></span>
+            <span class="b-label">{{ b.label }}</span>
+          </div>
+          <p class="b-text">{{ b.text }}</p>
+          <NuxtLink :to="b.action" class="button secondary small">{{ b.actionLabel }}</NuxtLink>
         </div>
       </div>
-      <NuxtLink to="/smart-review" class="button secondary">Reactivate with Smart Review</NuxtLink>
     </div>
 
     <div class="capability-map-section">
@@ -98,19 +117,6 @@ const staleItems = computed(() => {
         <NuxtLink to="/sandbox" class="button">Go to Scenario Sandbox</NuxtLink>
       </div>
     </div>
-
-    <div v-if="weakAreas.length > 0" class="card review-card">
-      <div class="eyebrow">Recommended Review</div>
-      <h3>Strengthen these weak spots:</h3>
-      <div class="weak-list">
-        <div v-for="item in weakAreas" :key="item.label" class="weak-item">
-          <span class="type-tag" :class="item.type">{{ item.type }}</span>
-          <span class="label">{{ item.label }}</span>
-          <span class="score">{{ item.score }}% mastery</span>
-        </div>
-      </div>
-      <NuxtLink to="/smart-review" class="button">Start Smart Review</NuxtLink>
-    </div>
   </section>
 </template>
 <style scoped>
@@ -123,6 +129,17 @@ const staleItems = computed(() => {
 .chapter-card h2 { margin: 14px 0 10px; }
 .chapter-card p { flex: 1; margin-bottom: 16px; }
 .meta { color: #687873; font-size: 14px; margin-bottom: 22px; }
+
+.bottlenecks-section { margin-bottom: 50px; }
+.bottlenecks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 16px; }
+.bottleneck-card { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.b-meta { display: flex; align-items: center; gap: 10px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; }
+.status-dot.red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+.status-dot.orange { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+.b-label { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+.b-text { font-size: 15px; color: #334155; line-height: 1.5; flex: 1; }
+.button.small { padding: 8px 16px; font-size: 13px; align-self: flex-start; }
 
 .sandbox-cta { background: #176b5b; color: white; margin-bottom: 40px; padding: 32px; border: 0; }
 .sandbox-cta .eyebrow { color: #88c7ba; }

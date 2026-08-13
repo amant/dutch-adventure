@@ -7,12 +7,31 @@ export const introductionChapter: Chapter = {
   capability: 'Give basic personal details like your name, where you live, and what you do.',
   description: 'Learn the most common way to start a Dutch conversation.',
   estimatedMinutes: 8,
+  relatedArticleSlug: 'a1-weer',
   stages: [
     {
       id: 'discover', title: 'Discover', kind: 'discover',
       intro: 'Dutch introductions use simple "ben" (am) and "woon" (live).',
-      exercises: [{ 
-        id: 'intro-1', kind: 'info', prompt: 'Basic self-intro', 
+      exercises: [
+        {
+          id: 'intro-induction', kind: 'induction', prompt: 'Notice the patterns',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Name', answer: 'Ik ben Jan.' },
+              { prompt: 'Location', answer: 'Ik woon in Amsterdam.' },
+              { prompt: 'Profession', answer: 'Ik ben programmeur.' }
+            ],
+            ruleChallenge: 'Which word connects the person to their name or job?',
+            options: [
+              { text: 'ben', isCorrect: true },
+              { text: 'woon', isCorrect: false },
+              { text: 'in', isCorrect: false }
+            ]
+          }
+        },
+        { 
+          id: 'intro-1', kind: 'info', prompt: 'Basic self-intro', 
         context: 'Ik ben Jan. Ik woon in Amsterdam. Ik ben programmeur.', 
         skills: ['recognition', 'meaning'],
         vocabulary: ['wonen', 'zijn']
@@ -71,12 +90,31 @@ export const opinionChapter: Chapter = {
   capability: 'Express a clear opinion and support it with a reason.',
   description: 'Build a useful Dutch opinion pattern, then make it yours through retrieval and transformation.',
   estimatedMinutes: 12,
+  relatedArticleSlug: 'b1-thuiswerken',
   stages: [
     {
       id: 'discover', title: 'Discover', kind: 'discover',
       intro: 'Dutch opinions become easier to use when you have a small set of reliable openings.',
-      exercises: [{ 
-        id: 'discover-1', kind: 'info', prompt: 'Useful opinion openings', 
+      exercises: [
+        {
+          id: 'opinion-induction', kind: 'induction', prompt: 'Pattern: Ik denk dat...',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Idea', answer: 'Ik denk dat het handig is.' },
+              { prompt: 'Person', answer: 'Ik denk dat Jan ziek is.' },
+              { prompt: 'Weather', answer: 'Ik denk dat het regent.' }
+            ],
+            ruleChallenge: 'What happens to the verb (is, regent) in an "Ik denk dat" clause?',
+            options: [
+              { text: 'It stays in the second position', isCorrect: false },
+              { text: 'It moves to the end of the clause', isCorrect: true },
+              { text: 'It moves to the start of the clause', isCorrect: false }
+            ]
+          }
+        },
+        { 
+          id: 'discover-1', kind: 'info', prompt: 'Useful opinion openings', 
         context: 'Ik denk dat thuiswerken handig is.\nVolgens mij is contact met collega\'s belangrijk.', 
         skills: ['recognition', 'meaning'],
         vocabulary: ['denken', 'vinden']

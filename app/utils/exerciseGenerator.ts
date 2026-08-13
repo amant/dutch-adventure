@@ -177,6 +177,32 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
   }
 }
 
+export function createSpeedChapter(vocabularyKeys: string[], grammarKeys: string[]): Chapter {
+  const allKeys = [...vocabularyKeys, ...grammarKeys]
+  return {
+    slug: 'speed-review',
+    level: 'B1',
+    title: 'High-Pressure Retrieval',
+    capability: 'Automaticity under pressure.',
+    description: 'Focus on reducing retrieval time for familiar concepts.',
+    estimatedMinutes: 5,
+    stages: [
+      {
+        id: 'speed-drills',
+        title: 'Speed Drills',
+        kind: 'retrieve',
+        intro: 'You have very little time. Don\'t think, just produce!',
+        exercises: allKeys.slice(0, 5).map(k => {
+          const type = vocabularyKeys.includes(k) ? 'vocabulary' : 'grammar'
+          const ex = generateExercisesForConcept(k, type, 'speed-drill')
+          ex.automaticitySeconds = 3 // Extra tight!
+          return ex
+        })
+      }
+    ]
+  }
+}
+
 export function createScenarioMission(scenario: string, concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
   return {
     slug: 'sandbox-mission',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { createSmartReviewChapter, createActivationChapter, createScenarioMission } from '~/utils/exerciseGenerator'
+import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter } from '~/utils/exerciseGenerator'
 import { useChapterSession } from '~/composables/useChapterSession'
 
 const { getWeakConcepts, getFrontierConcepts, hydrate } = useLearnerMemory()
@@ -46,6 +46,9 @@ onMounted(() => {
   if (route.query.mode === 'activation') {
     const frontier = getFrontierConcepts(3)
     chapter.value = createActivationChapter(frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
+  } else if (route.query.mode === 'speed') {
+    const { vocabulary, grammar } = getWeakConcepts(5)
+    chapter.value = createSpeedChapter(vocabulary, grammar)
   } else if (route.query.mode === 'sandbox') {
     const scenario = (route.query.scenario as string) || 'Buying coffee'
     const frontier = getFrontierConcepts(5)

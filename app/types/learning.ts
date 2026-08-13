@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction'
 
 export interface Exercise {
   id: string
@@ -92,6 +92,12 @@ export interface Exercise {
   mediationPoints?: { id: string, label: string, keywords: string[] }[]
   // For connectors
   connectorOptions?: { text: string, isCorrect: boolean }[]
+  // For induction
+  inductionData?: {
+    examples: { prompt: string, answer: string }[]
+    ruleChallenge: string
+    options: { text: string, isCorrect: boolean }[]
+  }
 }
 
 export interface ChapterStage {
@@ -110,6 +116,7 @@ export interface Chapter {
   description: string
   estimatedMinutes: number
   stages: ChapterStage[]
+  relatedArticleSlug?: string
 }
 
 export type FeedbackOutcome = 'correct' | 'acceptable' | 'retry'

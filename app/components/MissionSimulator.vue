@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Exercise, Feedback } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory'
 
 const props = defineProps<{
   exercise: Exercise
@@ -9,6 +10,9 @@ const props = defineProps<{
 const emit = defineEmits(['submit', 'next', 'retry'])
 const response = defineModel<string>()
 const isSpeaking = ref(false)
+
+const { getFrontierConcepts } = useLearnerMemory()
+const frontier = computed(() => getFrontierConcepts(3))
 
 const stressLevel = ref(0) // 0 to 100
 const achievedGoalIds = ref<Set<string>>(new Set())
@@ -105,18 +109,26 @@ const allGoalsMet = computed(() => {
       </div>
     </div>
 
-    <form v-else-if="!allGoalsMet" @submit.prevent="handleSubmit" class="input-area">
-      <textarea 
-        v-model="response" 
-        :placeholder="exercise.placeholder || 'Type your response...'" 
-        rows="2" 
-        autofocus 
+    <div v-else-if="!allGoalsMet" class="input-container">
+      <SmartPalette 
+        :user-text="response || ''"
+        :target-vocabulary="exercise.vocabulary"
+        :target-grammar="exercise.grammar"
+        :frontier-concepts="frontier"
       />
-      <div class="actions">
-        <VoiceInput @result="handleVoiceResult" />
-        <button class="button" type="submit">Send Message</button>
-      </div>
-    </form>
+      <form @submit.prevent="handleSubmit" class="input-area">
+        <textarea 
+          v-model="response" 
+          :placeholder="exercise.placeholder || 'Type your response...'" 
+          rows="2" 
+          autofocus 
+        />
+        <div class="actions">
+          <VoiceInput @result="handleVoiceResult" />
+          <button class="button" type="submit">Send Message</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 

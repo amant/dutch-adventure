@@ -62,9 +62,21 @@ function next() { feedback.value = undefined; session.advance() }
 </script>
 <template>
   <section v-if="session.state.value.completed" class="card completion">
-    <div class="eyebrow">Loop complete</div><h1>You practised a real capability.</h1>
+    <div class="eyebrow">Loop complete</div>
+    <h1>You practised a real capability.</h1>
     <p class="muted">You worked on {{ chapter.capability }} Your next review item is the same pattern in a fresh context.</p>
-    <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
+    
+    <div v-if="chapter.relatedArticleSlug" class="related-article-cta">
+      <div class="eyebrow">Next step: Real Dutch</div>
+      <h3>Apply this in context</h3>
+      <p>We found an article that uses similar language. Try reading it to see these patterns "in the wild".</p>
+      <NuxtLink :to="`/reading/${chapter.relatedArticleSlug}`" class="button secondary">Read Related Article</NuxtLink>
+    </div>
+
+    <div class="completion-actions">
+      <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
+      <NuxtLink class="button secondary" to="/">Back to Home</NuxtLink>
+    </div>
   </section>
   <section v-else-if="session.stage.value && session.exercise.value" class="session">
     <div class="session-head">
@@ -79,7 +91,14 @@ function next() { feedback.value = undefined; session.advance() }
       <div class="eyebrow">{{ session.stage.value.kind }}</div>
       <p class="muted">{{ session.stage.value.intro }}</p>
       
-      <div v-if="session.exercise.value.kind === 'listening'" class="renderer">
+      <div v-if="session.exercise.value.kind === 'induction'" class="renderer">
+        <PatternInduction 
+          :exercise="session.exercise.value" 
+          @submit="submit"
+        />
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'listening'" class="renderer">
         <ListeningLadder 
           :exercise="session.exercise.value" 
           v-model="session.response.value"
@@ -282,6 +301,18 @@ function next() { feedback.value = undefined; session.advance() }
 .right { color: #176b5b; }
 
 .completion { max-width:700px; margin:50px auto; text-align: center; }
-.completion h1 { margin: 20px 0; }
-.completion .button { margin-top: 30px; }
+.completion h1 { margin: 20px 0; font-size: 36px; }
+.completion-actions { display: flex; gap: 16px; justify-content: center; margin-top: 32px; }
+
+.related-article-cta {
+  background: #f0f7ff;
+  border: 1px solid #cce3ff;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 40px auto;
+  max-width: 500px;
+  text-align: left;
+}
+.related-article-cta h3 { margin: 8px 0 12px; color: #1e40af; }
+.related-article-cta p { font-size: 15px; color: #475569; margin-bottom: 24px; }
 </style>

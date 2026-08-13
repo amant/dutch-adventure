@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Exercise, Feedback } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory'
 
 const props = defineProps<{
   exercise: Exercise
@@ -9,12 +10,8 @@ const props = defineProps<{
 const emit = defineEmits(['submit'])
 const response = defineModel<string>()
 
-const tags = computed(() => {
-  return [
-    ...(props.exercise.vocabulary || []),
-    ...(props.exercise.grammar || [])
-  ]
-})
+const { getFrontierConcepts } = useLearnerMemory()
+const frontier = computed(() => getFrontierConcepts(3))
 </script>
 
 <template>
@@ -27,14 +24,12 @@ const tags = computed(() => {
       </div>
     </div>
 
-    <div v-if="tags.length > 0" class="tags-container">
-      <span class="eyebrow">Try to include:</span>
-      <div class="tags">
-        <span v-for="tag in tags" :key="tag" class="tag" :class="{ used: response?.toLowerCase().includes(tag.toLowerCase()) }">
-          {{ tag.replace(/-/g, ' ') }}
-        </span>
-      </div>
-    </div>
+    <SmartPalette 
+      :user-text="response || ''"
+      :target-vocabulary="exercise.vocabulary"
+      :target-grammar="exercise.grammar"
+      :frontier-concepts="frontier"
+    />
 
     <form v-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
       <textarea 
