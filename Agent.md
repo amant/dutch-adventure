@@ -32,6 +32,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 - **Production**: Can they recall it when prompted?
 - **Speaking**: Can they use it in a conversation?
 - **Automaticity**: Can they use it without thinking (fast retrieval)?
+- **Pragmatic**: Can they use the correct level of formality and social nuance (e.g., softeners, particles)?
 - **Usage History**: The system tracks the exact snippets of successful usage for every concept, building a "personal corpus" of what the learner *can actually use*.
 
 **Rule**: If a word is "learned" but cannot be produced spontaneously, the system marks it as a **bottleneck** and injects it into future activities.
@@ -41,6 +42,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 The AI in this app is not just a chatbot; it's a coach.
 
 - **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation). Includes visual "Teacher's Redline" to highlight changes.
+- **Pragmatic Analysis**: Every correct response is evaluated for its "Naturalness" (Pragmatic Score). Suggestions are provided to soften direct requests (using "even", "zou", "graag") or add native-like particles ("hoor", "nou").
 - **The "Difficult" AI**: At higher levels (B1/B2), the AI should simulate real-world difficulty:
     - **Patience Meter**: AI responsiveness and tone change based on learner accuracy and social/pragmatic appropriateness (e.g., formality).
     - Interrupting or asking follow-up questions.
@@ -55,6 +57,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Ladders**: 
     - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues.
     - **Reading Ladder**: From artificial dialogues to authentic Dutch news. Includes post-reading production challenges.
+- **Pragmatic Drills**: Explicit practice for social nuances, choosing the best phrasing for a specific context (formal vs. informal).
 
 ## 6. Technical Implementation for Agents
 
@@ -68,6 +71,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
+    - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
+    - `PragmaticDrill.vue`: Context-based choice for social nuances.
 
 ## 7. Development Guidelines
 

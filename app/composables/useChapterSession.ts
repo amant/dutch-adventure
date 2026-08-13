@@ -10,7 +10,7 @@ const fresh = (chapter: Chapter): PersistedSession => ({
   attempts: [], 
   completed: false, 
   memory: { 
-    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0 },
+    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0, pragmatic: 0 },
     vocabulary: {},
     grammar: {}
   } 

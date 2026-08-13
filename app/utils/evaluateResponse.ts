@@ -190,6 +190,44 @@ function checkAdjectiveEndingError(normalized: string) {
   return { found: false }
 }
 
+function calculatePragmaticScore(normalized: string, exercise: Exercise): { score: number, feedback?: string } {
+  let score = 70 // Base score for correct but neutral Dutch
+  let feedback = ""
+
+  // 1. Softeners (Politeness)
+  const softeners = ['graag', 'even', 'misschien', 'zou', 'mag', 'kunt', 'wil']
+  const hasSofteners = softeners.some(s => normalized.includes(s))
+  if (hasSofteners) {
+    score += 15
+    feedback = "Nice use of softeners! It makes you sound more polite."
+  }
+
+  // 2. Native Fillers / Particles
+  const fillers = ['hoor', 'nou', 'eigenlijk', 'wel', 'toch', 'natuurlijk']
+  const hasFillers = fillers.some(f => normalized.split(' ').includes(f))
+  if (hasFillers) {
+    score += 10
+    feedback = feedback ? feedback + " Also, your use of particles is very natural." : "Great use of Dutch particles! This is very native-like."
+  }
+
+  // 3. Stiff phrasing (Direct translation from English)
+  const stiffPhrases = [
+    { stiff: 'ik wil', better: 'ik zou graag ... willen' },
+    { stiff: 'kan ik hebben', better: 'mag ik' },
+    { stiff: 'ik ben goed', better: 'het gaat goed met mij' }
+  ]
+  
+  for (const p of stiffPhrases) {
+    if (normalized.includes(p.stiff)) {
+      score -= 20
+      feedback = `Technically correct, but '${p.stiff}' is a bit stiff. Try using '${p.better}' instead.`
+      break
+    }
+  }
+
+  return { score: Math.min(100, Math.max(0, score)), feedback }
+}
+
 export function evaluateResponse(exercise: Exercise, answer: string, context?: EvaluationContext): Feedback {
   const normalized = normalizeAnswer(answer)
   const target = exercise.target
@@ -338,6 +376,16 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Pragmatic Drill Evaluation
+    if (exercise.kind === 'pragmatic-drill') {
+      const selected = exercise.pragmaticOptions?.find(o => normalizeAnswer(o.text) === normalized)
+      if (selected?.isBest) {
+        return { ...base, outcome: 'correct', message: 'Perfect! That is exactly how a native speaker would handle this situation.' }
+      } else if (selected) {
+        return { ...base, outcome: 'acceptable', message: 'Technically okay, but there is a more natural way to say it.' }
+      }
+    }
+
     // Heuristic for personalised answers / conversations
     if (exercise.kind === 'personalise' || exercise.kind === 'conversation' || exercise.id.includes('personalise')) {
       const missingGrammar = exercise.grammar?.find(g => !normalized.includes(g.toLowerCase()))
@@ -360,6 +408,16 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
   }
 
   const feedback = getFeedback()
+    
+  // Add Pragmatic Analysis for correct/acceptable answers
+  if (feedback.outcome !== 'retry') {
+    const pragmatics = calculatePragmaticScore(normalized, exercise)
+    feedback.pragmaticScore = pragmatics.score
+    feedback.pragmaticFeedback = pragmatics.feedback
+    if (pragmatics.score > 70 && !feedback.skills.includes('pragmatic')) {
+      feedback.skills.push('pragmatic')
+    }
+  }
 
   // Add teacher correction if provided and the answer wasn't a complete failure
   if (exercise.correction && feedback.outcome !== 'retry') {

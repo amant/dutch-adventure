@@ -1,4 +1,4 @@
-export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling'
+export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic'
 
 export interface ConceptState {
   recognition: number
@@ -8,6 +8,7 @@ export interface ConceptState {
   listening: number
   speaking: number
   spelling: number
+  pragmatic: number
   encounters: number
   successes: number
   lastEncountered?: string
@@ -22,7 +23,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill'
 
 export interface Exercise {
   id: string
@@ -59,6 +60,8 @@ export interface Exercise {
     style?: 'polite' | 'colloquial' | 'impatient' | 'helpful'
     pushbackProbability?: number
   }
+  // For pragmatic context choice
+  pragmaticOptions?: { text: string, context: string, isBest: boolean, explanation: string }[]
 }
 
 export interface ChapterStage {
@@ -103,6 +106,8 @@ export interface Feedback {
     natural: string
     explanation: string
   }
+  pragmaticScore?: number
+  pragmaticFeedback?: string
 }
 
 export interface Attempt {

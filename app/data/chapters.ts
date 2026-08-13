@@ -989,7 +989,104 @@ export const futureSpeculationChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter]
+export const socialNuanceChapter: Chapter = {
+  slug: 'sociale-nuances',
+  level: 'B2',
+  title: 'Social Nuance',
+  capability: 'Adapt speech to context and use pragmatic markers to sound more natural.',
+  description: 'Learn the unwritten rules of Dutch communication using particles like "even", "hoor", and "nou".',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'Pragmatic Markers', kind: 'discover',
+      intro: 'Dutch speakers use small words to change the "feeling" of a sentence.',
+      exercises: [{
+        id: 'sn-1', kind: 'info', prompt: 'Softening with "Even" and "Hoor"',
+        context: 'Even: Softens a request. "Wacht even" (Wait a second) vs "Wacht" (Wait!).\nHoor: Adds reassurance or emphasis. "Het is goed hoor" (It is fine, really).',
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['even', 'hoor', 'eigenlijk', 'toch']
+      }],
+    },
+    {
+      id: 'understand', title: 'Contextual Choice', kind: 'understand',
+      intro: 'Choose the most natural way to respond in these social situations.',
+      exercises: [
+        {
+          id: 'sn-2b', kind: 'pragmatic-drill', 
+          prompt: 'You are at a formal work meeting and you need to ask a question.',
+          context: 'A colleague is speaking, but you need clarification.',
+          skills: ['pragmatic'],
+          pragmaticOptions: [
+            { 
+              text: 'Ik heb een vraag.', 
+              context: 'Direct', 
+              isBest: false, 
+              explanation: 'Technically correct but a bit abrupt for a formal meeting.' 
+            },
+            { 
+              text: 'Mag ik even iets vragen?', 
+              context: 'Natural/Polite', 
+              isBest: true, 
+              explanation: 'The use of "mag" and "even" makes this a polite, professional interruption.' 
+            },
+            { 
+              text: 'Hé, luister naar mij!', 
+              context: 'Inappropriate', 
+              isBest: false, 
+              explanation: 'Way too aggressive for a Dutch work environment!' 
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'retrieve', title: 'The Natural Response', kind: 'retrieve',
+      intro: 'Try to make these sentences sound more Dutch.',
+      exercises: [
+        { 
+          id: 'sn-2', kind: 'typed', prompt: 'Wait a second.', 
+          target: 'Wacht even', 
+          skills: ['production', 'grammar'],
+          vocabulary: ['wacht', 'even']
+        },
+        { 
+          id: 'sn-3', kind: 'typed', prompt: 'I am coming, really.', 
+          target: 'Ik kom eraan hoor', 
+          skills: ['production', 'grammar'],
+          vocabulary: ['komen', 'hoor']
+        }
+      ],
+    },
+    {
+      id: 'flexibility', title: 'Direct vs Natural', kind: 'transform',
+      intro: 'Rewrite these direct sentences to be more polite or natural.',
+      exercises: [
+        { 
+          id: 'sn-4', kind: 'transformation', prompt: 'Ik wil koffie.', 
+          context: 'Make it more polite using "graag" or "zou".',
+          target: 'Ik zou graag koffie willen', 
+          acceptedAnswers: ['Mag ik een koffie?', 'Koffie graag'],
+          skills: ['production', 'grammar']
+        }
+      ],
+    },
+    {
+      id: 'mission', title: 'The Social Interaction', kind: 'personalise',
+      intro: 'You are at a birthday party. A Dutch person offers you a drink you don\'t like.',
+      exercises: [{
+        id: 'sn-5', kind: 'conversation', prompt: 'Wil je nog een biertje?',
+        context: 'Politely decline, but use a pragmatic marker like "hoor" or "wel" to sound friendly.',
+        vocabulary: ['bedankt', 'hoor', 'genoeg', 'eigenlijk'],
+        grammar: ['negation'],
+        skills: ['speaking', 'production'],
+        aiPersonality: { isDifficult: false, style: 'helpful', pushbackProbability: 0.2 },
+        simulatorResponse: 'Geen probleem! Wil je dan misschien wat fris?'
+      }]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

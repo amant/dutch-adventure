@@ -10,6 +10,7 @@ const emptyConcept = (): ConceptState => ({
   listening: 0,
   speaking: 0,
   spelling: 0,
+  pragmatic: 0,
   encounters: 0,
   successes: 0
 })
@@ -22,7 +23,8 @@ const emptyMemory = (): LearnerMemory => ({
     automaticity: 0,
     listening: 0,
     speaking: 0,
-    spelling: 0
+    spelling: 0,
+    pragmatic: 0
   },
   vocabulary: {},
   grammar: {}

@@ -21,6 +21,7 @@ const skillRows = computed(() => [
   { label: 'Writing', score: memory.value.overall.production, level: levelForScore(memory.value.overall.production) },
   { label: 'Speaking', score: memory.value.overall.speaking, level: levelForScore(memory.value.overall.speaking) },
   { label: 'Fluency', score: memory.value.overall.automaticity, level: levelForScore(memory.value.overall.automaticity) },
+  { label: 'Pragmatic', score: memory.value.overall.pragmatic, level: levelForScore(memory.value.overall.pragmatic) },
 ])
 
 const vocabularyScore = computed(() => {

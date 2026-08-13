@@ -1,3 +1,15 @@
+<script setup lang="ts">
+useHead({
+  title: 'Netherlands Taal Avonturen',
+  meta: [
+    { name: 'description', content: 'Learn Dutch with interactive exercises and progress tracking.' },
+  ],
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: `/favicon.svg` },
+  ],
+})
+</script>
+
 <template>
   <div class="app-shell">
     <NuxtRouteAnnouncer />

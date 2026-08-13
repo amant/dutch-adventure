@@ -111,6 +111,14 @@ function next() {
           />
         </div>
 
+        <div v-else-if="session.exercise.value.kind === 'pragmatic-drill'" class="renderer">
+          <PragmaticDrill 
+            :exercise="session.exercise.value" 
+            :feedback="feedback"
+            @submit="(val) => { session.response.value = val; submit() }"
+          />
+        </div>
+
         <div v-else class="default-renderer">
           <h2>{{ session.exercise.value.prompt }}</h2>
           <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>
@@ -133,6 +141,12 @@ function next() {
             <h3>{{ feedback.miniLesson.title }}</h3>
             <p>{{ feedback.miniLesson.content }}</p>
           </div>
+
+          <PragmaticIndicator 
+            v-if="feedback.pragmaticScore !== undefined" 
+            :score="feedback.pragmaticScore" 
+            :feedback="feedback.pragmaticFeedback" 
+          />
 
           <div v-if="feedback.teacherCorrection" class="teacher-correction card">
             <div class="tag">Teacher's Tip</div>
