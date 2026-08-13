@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
 import { chapters } from '~/data/chapters'
+import { getFamilyForWord } from '~/data/wordFamilies'
 import type { SkillDimension } from '~/types/learning'
 
 const { memory, hydrate } = useLearnerMemory()
@@ -91,6 +92,11 @@ const collocations = computed(() => {
   })
   
   return [...new Set(found)].slice(0, 5)
+})
+
+const wordFamily = computed(() => {
+  if (!selectedWord.value) return null
+  return getFamilyForWord(selectedWord.value)
 })
 </script>
 
@@ -203,6 +209,28 @@ const collocations = computed(() => {
             <div v-for="coll in collocations" :key="coll" class="coll-item">
               {{ coll }}
             </div>
+          </div>
+        </div>
+
+        <div v-if="wordFamily" class="family-section">
+          <div class="eyebrow">Word Family</div>
+          <div class="family-grid">
+            <div 
+              v-for="member in wordFamily.members" 
+              :key="member.word"
+              class="family-member"
+              :class="{ current: member.word.toLowerCase() === selectedWord.toLowerCase() }"
+              @click="selectedWord = member.word"
+            >
+              <span class="member-word">{{ member.word }}</span>
+              <span class="member-role">{{ member.role }}</span>
+            </div>
+          </div>
+          <div v-if="wordFamily.synonyms" class="synonyms mt-3">
+            <span class="muted">Synonyms: </span>
+            <span v-for="(s, idx) in wordFamily.synonyms" :key="s">
+              {{ s }}{{ idx < wordFamily.synonyms.length - 1 ? ', ' : '' }}
+            </span>
           </div>
         </div>
 
@@ -430,6 +458,27 @@ const collocations = computed(() => {
   border: 1px solid #e2e8f0;
   font-weight: 600;
 }
+
+.family-section { margin-top: 24px; }
+.family-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.family-member {
+  cursor: pointer;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 80px;
+  transition: all 0.2s;
+}
+.family-member:hover { border-color: #94a3b8; background: #f8fafc; }
+.family-member.current { border-color: #176b5b; background: #e6f2f0; }
+.member-word { font-size: 14px; font-weight: 700; color: #1e293b; }
+.member-role { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600; }
+.synonyms { font-size: 13px; color: #475569; margin-top: 12px; }
+.mt-3 { margin-top: 12px; }
 
 .related-section { margin-top: 24px; }
 .chapter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }

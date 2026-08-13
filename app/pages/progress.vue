@@ -1,9 +1,33 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { articles } from '~/data/articles'
 import type { SkillDimension } from '~/types/learning'
 
 const { memory, hydrate, reset } = useLearnerMemory()
 onMounted(hydrate)
+
+const readingStats = computed(() => {
+  const allVocab = Object.values(memory.value.vocabulary)
+  const mastered = allVocab.filter(v => v.production > 80).length
+  const recognized = allVocab.filter(v => v.recognition > 50 && v.production <= 80).length
+  const totalEncountered = allVocab.length
+
+  // Calculate avg coverage across articles
+  const coverages = articles.map(article => {
+    const words = article.content.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/).filter(w => w.length > 2)
+    const unique = new Set(words)
+    const known = Array.from(unique).filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
+    return (known.length / unique.size) * 100
+  })
+  const avgCoverage = coverages.reduce((a, b) => a + b, 0) / articles.length
+
+  return {
+    mastered,
+    recognized,
+    totalEncountered,
+    avgCoverage: Math.round(avgCoverage)
+  }
+})
 
 const levelForScore = (score: number) => {
   if (score < 20) return 'A0'
@@ -142,6 +166,31 @@ const naturalnessTrend = computed(() => {
       </div>
     </div>
 
+    <div class="card reading-stats-card">
+      <div class="eyebrow">Reading Proficiency</div>
+      <div class="stats-grid mt-4">
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.totalEncountered }}</span>
+          <span class="stat-label">Words Encountered</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.mastered }}</span>
+          <span class="stat-label">Mastered</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.recognized }}</span>
+          <span class="stat-label">Recognized</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.avgCoverage }}%</span>
+          <span class="stat-label">Avg. Coverage</span>
+        </div>
+      </div>
+      <div class="mt-6">
+        <NuxtLink to="/reading" class="button secondary small">Explore Reading Feed</NuxtLink>
+      </div>
+    </div>
+
     <div class="pipeline-section">
       <h2>Knowledge Pipeline</h2>
       <div class="pipeline-container card">
@@ -268,6 +317,18 @@ const naturalnessTrend = computed(() => {
 .skill-level { width: 40px; font-weight: 700; text-align: right; color: #176b5b; }
 .meter { height: 8px; background: #e2e9e3; border-radius: 4px; overflow: hidden; }
 .meter div { height: 100%; background: #176b5b; transition: width 0.6s ease; }
+
+.reading-stats-card { margin-top: 30px; padding: 24px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.stat-value { font-size: 24px; font-weight: 800; color: #176b5b; }
+.stat-label { font-size: 12px; color: #687873; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
 .pipeline-section { margin: 40px 0; }
 .pipeline-container { padding: 30px; background: #f8fafc; }

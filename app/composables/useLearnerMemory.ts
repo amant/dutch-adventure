@@ -235,5 +235,14 @@ export function useLearnerMemory() {
       .slice(0, limit)
   }
 
-  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts, getFrontierConcepts }
+  function getWordState(word: string) {
+    const state = memory.value.vocabulary[word.toLowerCase().replace(/[.,!?;:()]/g, '').trim()]
+    if (!state) return 'new'
+    if (state.production > 80) return 'mastered'
+    if (state.recognition > 60 && state.production < 30) return 'frontier'
+    if (state.recognition > 40) return 'recognized'
+    return 'new'
+  }
+
+  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts, getFrontierConcepts, getWordState }
 }

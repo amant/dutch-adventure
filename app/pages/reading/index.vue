@@ -5,11 +5,24 @@ import { useLearnerMemory } from '~/composables/useLearnerMemory'
 const { memory, hydrate } = useLearnerMemory()
 onMounted(hydrate)
 
-const getMatchPercentage = (articleContent: string) => {
+const getMatchStats = (articleContent: string) => {
   const words = articleContent.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/)
-  const uniqueWords = new Set(words)
-  const knownWords = Array.from(uniqueWords).filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
-  return Math.round((knownWords.length / uniqueWords.size) * 100)
+  const uniqueWords = Array.from(new Set(words.filter(w => w.length > 2)))
+  
+  const known = uniqueWords.filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
+  const frontier = uniqueWords.filter(w => {
+    const s = memory.value.vocabulary[w]
+    return s && s.recognition > 0.5 && s.production < 0.3
+  })
+  
+  const percentage = Math.round((known.length / uniqueWords.size) * 100)
+  
+  return {
+    percentage,
+    knownCount: known.length,
+    frontierCount: frontier.length,
+    totalCount: uniqueWords.size
+  }
 }
 </script>
 
@@ -37,11 +50,16 @@ const getMatchPercentage = (articleContent: string) => {
         
         <div class="article-footer">
           <div class="match">
-            <span class="label">Vocabulary Match</span>
-            <div class="progress-bar">
-              <div class="fill" :style="{ width: getMatchPercentage(article.content) + '%' }"></div>
+            <div class="match-meta">
+              <span class="label">Vocabulary Match</span>
+              <span class="value">{{ getMatchStats(article.content).percentage }}%</span>
             </div>
-            <span class="value">{{ getMatchPercentage(article.content) }}%</span>
+            <div class="progress-bar">
+              <div class="fill" :style="{ width: getMatchStats(article.content).percentage + '%' }"></div>
+            </div>
+            <div v-if="getMatchStats(article.content).frontierCount > 0" class="frontier-count">
+              {{ getMatchStats(article.content).frontierCount }} activation opportunities
+            </div>
           </div>
           <span class="date">{{ article.publishedAt }}</span>
         </div>
@@ -118,7 +136,13 @@ const getMatchPercentage = (articleContent: string) => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+}
+
+.match-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .match .label {
@@ -132,7 +156,8 @@ const getMatchPercentage = (articleContent: string) => {
   height: 4px;
   background: #f0f2f0;
   border-radius: 2px;
-  width: 80px;
+  width: 100%;
+  max-width: 120px;
   overflow: hidden;
 }
 
@@ -145,6 +170,16 @@ const getMatchPercentage = (articleContent: string) => {
   font-size: 12px;
   font-weight: 700;
   color: #176b5b;
+}
+
+.frontier-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: #d06b3c;
+  background: #fff7ed;
+  padding: 1px 6px;
+  border-radius: 4px;
+  align-self: flex-start;
 }
 
 .date {

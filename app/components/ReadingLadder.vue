@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['submit', 'next', 'retry'])
-const { recordExposure } = useLearnerMemory()
+const { recordExposure, getWordState } = useLearnerMemory()
 
 const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
 
@@ -25,10 +25,13 @@ const tokens = computed(() => {
 
     const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
     const hint = props.exercise.wordHints?.[cleanWord]
+    const state = getWordState(cleanWord)
+
     return {
       text: token,
       isInteractable: !!hint,
-      hint
+      hint,
+      state
     }
   })
 })
@@ -50,7 +53,10 @@ const showHint = (token: any) => {
           v-if="token.isInteractable" 
           class="word interactable" 
           @click="showHint(token)"
-          :class="{ active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }"
+          :class="[
+            token.state,
+            { active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }
+          ]"
         >
           {{ token.text }}
         </span>
@@ -92,16 +98,21 @@ const showHint = (token: any) => {
 }
 
 .word.interactable {
-  color: #176b5b;
-  font-weight: 600;
-  text-decoration: underline decoration-skip-ink;
-  text-underline-offset: 4px;
+  color: #1a1a1a;
+  font-weight: 500;
+  border-bottom: 2px solid #e2e8f0;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 0 2px;
 }
 
+.word.interactable.new { border-bottom-color: #cbd5e1; }
+.word.interactable.recognized { border-bottom-color: #94a3b8; font-weight: 600; }
+.word.interactable.frontier { border-bottom-color: #f59e0b; color: #b45309; font-weight: 600; }
+.word.interactable.mastered { border-bottom-color: #10b981; color: #065f46; font-weight: 600; }
+
 .word.interactable:hover {
-  background: #e8f3ec;
+  background: #f1f5f9;
   border-radius: 4px;
 }
 
