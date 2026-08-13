@@ -1,7 +1,30 @@
-import type { LearnerMemory, SkillDimension } from '~/types/learning'
+import type { LearnerMemory, SkillDimension, ConceptState } from '~/types/learning'
 
 const storageKey = 'dutch-adventure-memory'
-const emptyMemory = (): LearnerMemory => ({ recognition: 0, meaning: 0, production: 0, automaticity: 0 })
+
+const emptyConcept = (): ConceptState => ({
+  recognition: 0,
+  meaning: 0,
+  production: 0,
+  automaticity: 0,
+  listening: 0,
+  speaking: 0,
+  spelling: 0
+})
+
+const emptyMemory = (): LearnerMemory => ({
+  overall: {
+    recognition: 0,
+    meaning: 0,
+    production: 0,
+    automaticity: 0,
+    listening: 0,
+    speaking: 0,
+    spelling: 0
+  },
+  vocabulary: {},
+  grammar: {}
+})
 
 export function useLearnerMemory() {
   const memory = useState<LearnerMemory>('learner-memory', emptyMemory)
@@ -10,22 +33,54 @@ export function useLearnerMemory() {
   function hydrate() {
     if (hydrated.value || !import.meta.client) return
     try {
-      const parsed = JSON.parse(localStorage.getItem(storageKey) ?? '')
-      if (parsed && typeof parsed === 'object') {
+      const stored = localStorage.getItem(storageKey)
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        // Migration/Sanitization
         const fresh = emptyMemory()
-        for (const skill of Object.keys(fresh) as SkillDimension[]) {
-          if (typeof parsed[skill] === 'number' && Number.isFinite(parsed[skill])) fresh[skill] = Math.max(0, Math.min(100, parsed[skill]))
+        if (parsed.overall) {
+          for (const skill of Object.keys(fresh.overall) as SkillDimension[]) {
+            if (typeof parsed.overall[skill] === 'number') {
+              fresh.overall[skill] = Math.max(0, Math.min(100, parsed.overall[skill]))
+            }
+          }
         }
+        if (parsed.vocabulary) fresh.vocabulary = parsed.vocabulary
+        if (parsed.grammar) fresh.grammar = parsed.grammar
         memory.value = fresh
       }
-    } catch { /* Missing or malformed storage starts safely fresh. */ }
+    } catch { /* Fail safe */ }
     hydrated.value = true
   }
 
-  function record(skills: SkillDimension[], outcome: 'correct' | 'acceptable' | 'retry') {
+  function record(
+    skills: SkillDimension[],
+    outcome: 'correct' | 'acceptable' | 'retry',
+    vocabulary?: string[],
+    grammar?: string[]
+  ) {
     const change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
-    const next = { ...memory.value }
-    for (const skill of skills) next[skill] = Math.min(100, next[skill] + change)
+    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
+
+    // Update overall
+    for (const skill of skills) {
+      next.overall[skill] = Math.min(100, next.overall[skill] + change)
+    }
+
+    // Update concepts
+    const updateConcept = (key: string, dict: Record<string, ConceptState>) => {
+      if (!dict[key]) dict[key] = emptyConcept()
+      for (const skill of skills) {
+        if (skill in dict[key]) {
+          const s = skill as keyof ConceptState
+          dict[key][s] = Math.min(100, dict[key][s] + change)
+        }
+      }
+    }
+
+    if (vocabulary) vocabulary.forEach(v => updateConcept(v, next.vocabulary))
+    if (grammar) grammar.forEach(g => updateConcept(g, next.grammar))
+
     memory.value = next
     if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))
   }

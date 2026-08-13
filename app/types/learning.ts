@@ -1,10 +1,28 @@
-export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity'
+export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling'
+
+export interface ConceptState {
+  recognition: number
+  meaning: number
+  production: number
+  automaticity: number
+  listening: number
+  speaking: number
+  spelling: number
+}
+
+export interface LearnerMemory {
+  overall: Record<SkillDimension, number>
+  vocabulary: Record<string, ConceptState>
+  grammar: Record<string, ConceptState>
+}
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening'
+
 export interface Exercise {
   id: string
-  kind: 'info' | 'typed'
+  kind: ExerciseKind
   prompt: string
   context?: string
   target?: string
@@ -12,7 +30,15 @@ export interface Exercise {
   explanation?: string
   correction?: string
   skills: SkillDimension[]
+  vocabulary?: string[]
+  grammar?: string[]
   placeholder?: string
+  // For listening ladder
+  audioUrl?: string
+  transcript?: string
+  translation?: string
+  // For conversation
+  simulatorResponse?: string
 }
 
 export interface ChapterStage {
@@ -25,7 +51,7 @@ export interface ChapterStage {
 
 export interface Chapter {
   slug: string
-  level: 'B1'
+  level: 'A1' | 'A2' | 'B1' | 'B2'
   title: string
   capability: string
   description: string
@@ -42,6 +68,8 @@ export interface Feedback {
   explanation?: string
   correction?: string
   skills: SkillDimension[]
+  vocabulary?: string[]
+  grammar?: string[]
 }
 
 export interface Attempt {
@@ -51,7 +79,6 @@ export interface Attempt {
   createdAt: string
 }
 
-export type LearnerMemory = Record<SkillDimension, number>
 
 export interface PersistedSession {
   chapterSlug: string

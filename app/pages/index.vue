@@ -1,24 +1,79 @@
 <script setup lang="ts">
-import { opinionChapter } from '~/data/chapters'
-import { useChapterSession } from '~/composables/useChapterSession'
-const session = useChapterSession(opinionChapter)
-onMounted(session.hydrate)
-const hasProgress = computed(() => session.state.value.attempts.length > 0 && !session.state.value.completed)
+import { chapters } from '~/data/chapters'
+import { useLearnerMemory } from '~/composables/useLearnerMemory'
+
+const { memory, hydrate } = useLearnerMemory()
+onMounted(hydrate)
+
+const weakAreas = computed(() => {
+  const items: { label: string, type: 'vocabulary' | 'grammar', score: number }[] = []
+  
+  Object.entries(memory.value.vocabulary).forEach(([word, state]) => {
+    const avg = (state.production + state.automaticity) / 2
+    if (avg > 0 && avg < 60) {
+      items.push({ label: word, type: 'vocabulary', score: Math.round(avg) })
+    }
+  })
+  
+  Object.entries(memory.value.grammar).forEach(([point, state]) => {
+    const avg = (state.production + state.automaticity) / 2
+    if (avg > 0 && avg < 60) {
+      items.push({ label: point.replace(/-/g, ' '), type: 'grammar', score: Math.round(avg) })
+    }
+  })
+  
+  return items.sort((a, b) => a.score - b.score).slice(0, 3)
+})
 </script>
 <template>
-  <section class="hero">
-    <div class="eyebrow">Dutch you can use</div>
-    <h1>Turn what you know into language you can actually use.</h1>
-    <p class="muted intro">Short, purposeful practice: notice a pattern, retrieve it, change it, and make it yours.</p>
-    <div class="card chapter-card">
-      <div class="eyebrow">{{ opinionChapter.level }} capability</div>
-      <h2>{{ opinionChapter.title }}</h2>
-      <p class="muted">{{ opinionChapter.description }}</p>
-      <div class="meta">{{ opinionChapter.stages.length }} stages · {{ opinionChapter.estimatedMinutes }} minutes</div>
-      <NuxtLink class="button" :to="`/chapter/${opinionChapter.slug}`">{{ hasProgress ? 'Resume chapter' : 'Start chapter' }}</NuxtLink>
+  <section class="home">
+    <div class="hero">
+      <div class="eyebrow">Dutch you can use</div>
+      <h1>Turn what you know into language you can actually use.</h1>
+      <p class="muted intro">Short, purposeful practice: notice a pattern, retrieve it, change it, and make it yours.</p>
+    </div>
+
+    <div v-if="weakAreas.length > 0" class="card review-card">
+      <div class="eyebrow">Recommended Review</div>
+      <h3>Strengthen these weak spots:</h3>
+      <div class="weak-list">
+        <div v-for="item in weakAreas" :key="item.label" class="weak-item">
+          <span class="type-tag" :class="item.type">{{ item.type }}</span>
+          <span class="label">{{ item.label }}</span>
+          <span class="score">{{ item.score }}% mastery</span>
+        </div>
+      </div>
+      <p class="muted">Revisit chapters to improve your spontaneous production.</p>
+    </div>
+    
+    <div class="grid">
+      <div v-for="chapter in chapters" :key="chapter.slug" class="card chapter-card">
+        <div class="eyebrow">{{ chapter.level }} capability</div>
+        <h2>{{ chapter.title }}</h2>
+        <p class="muted">{{ chapter.capability }}</p>
+        <div class="meta">{{ chapter.stages.length }} stages · {{ chapter.estimatedMinutes }} minutes</div>
+        <NuxtLink class="button" :to="`/chapter/${chapter.slug}`">Start chapter</NuxtLink>
+      </div>
     </div>
   </section>
 </template>
 <style scoped>
-.hero { padding: 45px 0; }.intro { font-size: 19px; max-width: 550px; margin-bottom: 42px; }.chapter-card { max-width: 620px; }.chapter-card h2 { margin: 14px 0 10px; }.meta { color: #687873; font-size: 14px; margin: 22px 0; }
+.home { padding: 45px 0; }
+.hero { margin-bottom: 50px; }
+.intro { font-size: 19px; max-width: 550px; margin-top: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 24px; }
+.chapter-card { display: flex; flex-direction: column; }
+.chapter-card h2 { margin: 14px 0 10px; }
+.chapter-card p { flex: 1; margin-bottom: 16px; }
+.meta { color: #687873; font-size: 14px; margin-bottom: 22px; }
+
+.review-card { background: #fffcf4; border: 1px solid #f9e8b9; margin-bottom: 40px; }
+.review-card h3 { margin: 12px 0 18px; }
+.weak-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.weak-item { display: flex; align-items: center; gap: 12px; font-size: 15px; }
+.type-tag { font-size: 10px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.05em; }
+.type-tag.vocabulary { background: #e8f3ec; color: #176b5b; }
+.type-tag.grammar { background: #fef1e8; color: #d06b3c; }
+.weak-item .label { font-weight: 600; flex: 1; }
+.weak-item .score { color: #8a9a94; font-size: 13px; }
 </style>

@@ -3,7 +3,18 @@ import { evaluateResponse } from '~/utils/evaluateResponse'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
 
 const key = (slug: string) => `dutch-adventure-session-${slug}`
-const fresh = (chapter: Chapter): PersistedSession => ({ chapterSlug: chapter.slug, stageIndex: 0, exerciseIndex: 0, attempts: [], completed: false, memory: { recognition: 0, meaning: 0, production: 0, automaticity: 0 } })
+const fresh = (chapter: Chapter): PersistedSession => ({ 
+  chapterSlug: chapter.slug, 
+  stageIndex: 0, 
+  exerciseIndex: 0, 
+  attempts: [], 
+  completed: false, 
+  memory: { 
+    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0 },
+    vocabulary: {},
+    grammar: {}
+  } 
+})
 
 export function useChapterSession(chapter: Chapter) {
   const state = useState<PersistedSession>(`chapter-session-${chapter.slug}`, () => fresh(chapter))
@@ -21,7 +32,10 @@ export function useChapterSession(chapter: Chapter) {
     if (hydrated.value || !import.meta.client) return
     try {
       const parsed = JSON.parse(localStorage.getItem(key(chapter.slug)) ?? '')
-      if (parsed?.chapterSlug === chapter.slug && Array.isArray(parsed.attempts)) state.value = { ...fresh(chapter), ...parsed }
+      if (parsed?.chapterSlug === chapter.slug && Array.isArray(parsed.attempts)) {
+        // Simple merge/sanitization for the session state
+        state.value = { ...fresh(chapter), ...parsed }
+      }
     } catch { /* Corrupt sessions are discarded. */ }
     hydrated.value = true
   }
@@ -30,7 +44,7 @@ export function useChapterSession(chapter: Chapter) {
     const feedback = evaluateResponse(exercise.value, answer)
     const attempt: Attempt = { exerciseId: exercise.value.id, answer, feedback, createdAt: new Date().toISOString() }
     state.value.attempts = [...state.value.attempts, attempt]
-    learnerMemory.record(feedback.skills, feedback.outcome)
+    learnerMemory.record(feedback.skills, feedback.outcome, feedback.vocabulary, feedback.grammar)
     persist()
     response.value = ''
     return feedback

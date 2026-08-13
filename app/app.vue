@@ -3,7 +3,11 @@
     <NuxtRouteAnnouncer />
     <header class="topbar">
       <NuxtLink to="/" class="brand">taalruimte</NuxtLink>
-      <nav><NuxtLink to="/progress">Your progress</NuxtLink></nav>
+      <nav>
+        <NuxtLink to="/vocabulary">Vocabulary</NuxtLink>
+        <NuxtLink to="/grammar">Grammar</NuxtLink>
+        <NuxtLink to="/progress">Progress</NuxtLink>
+      </nav>
     </header>
     <main><NuxtPage /></main>
   </div>
@@ -18,7 +22,10 @@ a { color: inherit; }
 .app-shell { min-height: 100vh; }
 .topbar { max-width: 1100px; margin: auto; padding: 28px 28px 18px; display: flex; justify-content: space-between; align-items: center; }
 .brand { font: 600 25px Fraunces, serif; text-decoration: none; color: #176b5b; }
-.topbar nav a { text-decoration: none; font-size: 14px; color: #52645f; }
+.topbar nav { display: flex; gap: 20px; }
+.topbar nav a { text-decoration: none; font-size: 14px; color: #52645f; font-weight: 500; transition: color 0.2s; }
+.topbar nav a:hover { color: #176b5b; }
+.topbar nav a.router-link-active { color: #176b5b; font-weight: 700; }
 main { max-width: 1100px; margin: auto; padding: 30px 28px 80px; }
 .eyebrow { color: #d06b3c; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 700; }
 h1, h2 { font-family: Fraunces, serif; font-weight: 600; line-height: 1.1; }
