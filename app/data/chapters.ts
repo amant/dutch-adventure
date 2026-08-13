@@ -2001,7 +2001,82 @@ export const precisionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, b2Capstone]
+export const inferenceChapter: Chapter = {
+  slug: 'reading-between-the-lines',
+  level: 'B2',
+  title: 'Reading Between the Lines',
+  capability: 'Understand implied meaning and pragmatics in Dutch communication.',
+  description: 'Dutch directness is famous, but subtle understatements and pragmatic particles change everything. Learn to hear what isn\'t being said.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'inference-discovery', title: 'Discovery: Implied Meaning', kind: 'discover',
+      intro: 'In Dutch, some statements are actually requests or polite disagreements.',
+      exercises: [
+        {
+          id: 'inf-1', kind: 'inference-challenge', 
+          prompt: 'Het is hier een beetje fris, vind je niet?',
+          context: 'The speaker wants to talk about the weather:false|The speaker wants you to close the window:true|The speaker is asking for your opinion on the temperature:false',
+          explanation: 'This is a classic Dutch "indirect request". By pointing out it\'s chilly, they are subtly asking to close the window or turn up the heat.',
+          skills: ['recognition', 'pragmatic']
+        },
+        {
+          id: 'inf-2', kind: 'inference-challenge', 
+          prompt: 'Zou je dat nou wel doen?',
+          context: 'The speaker is curious about your plans:false|The speaker thinks your plan is a bad idea:true|The speaker wants to join you:false',
+          explanation: 'The word "nou" combined with "zou je dat wel doen" is a common way to express doubt or subtle disapproval without being overly aggressive.',
+          skills: ['recognition', 'pragmatic']
+        }
+      ]
+    },
+    {
+      id: 'pragmatic-particles', title: 'Pragmatic Particles', kind: 'understand',
+      intro: 'Particles like "hoor", "even", and "maar" change the tone of a sentence.',
+      exercises: [
+        {
+          id: 'part-1', kind: 'inference-challenge', 
+          prompt: 'Kom maar binnen hoor!',
+          context: 'The speaker is impatient:false|The speaker is being very welcoming and reassuring:true|The speaker is telling you to hurry up:false',
+          explanation: '"Maar" softens the command, and "hoor" adds a layer of reassurance. It means "You are absolutely welcome to come in, don\'t hesitate."',
+          skills: ['recognition', 'pragmatic']
+        }
+      ]
+    },
+    {
+      id: 'nuance-production', title: 'Injecting Nuance', kind: 'transform',
+      intro: 'Now try to make stiff sentences sound more natural and subtle.',
+      exercises: [
+        {
+          id: 'nuance-1', kind: 'nuance-drill', 
+          prompt: 'Wacht.',
+          context: 'even',
+          target: 'Wacht even.',
+          explanation: '"Wacht" sounds like a harsh command. "Wacht even" is much more natural and polite.',
+          skills: ['production', 'pragmatic']
+        }
+      ]
+    },
+    {
+      id: 'final-mission', title: 'Final Mission: The Subtle Colleague', kind: 'personalise',
+      intro: 'Handle a conversation with a colleague who uses understatements.',
+      exercises: [
+        {
+          id: 'subtle-mission', kind: 'conversation',
+          prompt: 'Your colleague says: "Goh, dat is een... interessant voorstel. Zouden we daar niet nog even naar moeten kijken?"',
+          skills: ['speaking', 'production', 'pragmatic'],
+          missionGoals: [
+            { id: 'understand', label: 'Recognize the doubt', keywords: ['begrijp', 'twijfel', 'niet zeker'] },
+            { id: 'soften', label: 'Use a softener in your reply', keywords: ['even', 'misschien', 'eigenlijk'] },
+            { id: 'ask', label: 'Ask for clarification', keywords: ['wat bedoel je', 'waarom'] }
+          ],
+          aiPersonality: { style: 'professional', isDifficult: true }
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
