@@ -31,6 +31,24 @@ export const introductionChapter: Chapter = {
       }],
     },
     {
+      id: 'automate', title: 'Speed Drill', kind: 'retrieve',
+      intro: 'Quick! Recall these phrases.',
+      exercises: [
+        { 
+          id: 'intro-speed-1', kind: 'speed-drill', prompt: 'I am ...', 
+          target: 'Ik ben', 
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production']
+        },
+        { 
+          id: 'intro-speed-2', kind: 'speed-drill', prompt: 'I live in ...', 
+          target: 'Ik woon in', 
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        }
+      ],
+    },
+    {
       id: 'personalise', title: 'Personalise', kind: 'personalise',
       intro: 'Now introduce yourself for real.',
       exercises: [{ 
@@ -103,6 +121,26 @@ export const opinionChapter: Chapter = {
         placeholder: 'Rewrite the sentence...',
         automaticitySeconds: 15
       }],
+    },
+    {
+      id: 'automate', title: 'Speed Opinions', kind: 'retrieve',
+      intro: 'Rapid fire opinions.',
+      exercises: [
+        { 
+          id: 'opinion-speed-1', kind: 'speed-drill', prompt: 'I think that...', 
+          target: 'Ik denk dat', 
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production'],
+          grammar: ['omdat-clause']
+        },
+        { 
+          id: 'opinion-speed-2', kind: 'speed-drill', prompt: 'In my opinion...', 
+          target: 'Volgens mij', 
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production'],
+          grammar: ['word-order']
+        }
+      ],
     },
     {
       id: 'personalise', title: 'Personalise', kind: 'personalise',
@@ -678,7 +716,126 @@ export const salaryNegotiationMission: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission]
+export const formalityChapter: Chapter = {
+  slug: 'formeel-vs-informeel',
+  level: 'B2',
+  title: 'Adapting to Context',
+  capability: 'Switch between formal and informal Dutch appropriately based on the audience.',
+  description: 'Learn when to use "U" and when to use "Je", and how to maintain consistency.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'discover', title: 'Context Rules', kind: 'discover',
+      intro: 'Formal (U) is for strangers, elders, and professional hierarchy. Informal (Je) is for friends, family, and peers.',
+      exercises: [{ 
+        id: 'formal-1', kind: 'info', prompt: 'Formal vs Informal', 
+        context: 'Formal: Hoe gaat het met u?\nInformal: Hoe gaat het met je?', 
+        skills: ['recognition', 'meaning'],
+        grammar: ['formal-v-informal']
+      }],
+    },
+    {
+      id: 'transform', title: 'Formalize it', kind: 'transform',
+      intro: 'Change the informal sentence into a formal one.',
+      exercises: [{ 
+        id: 'formal-2', kind: 'transformation', prompt: 'Jij kunt hier zitten.', 
+        target: 'U kunt hier zitten.',
+        explanation: 'Change "Jij" to "U". Note that "kunt" remains the same for "U".',
+        skills: ['production', 'automaticity'],
+        grammar: ['formal-v-informal']
+      }],
+    },
+    {
+      id: 'automate', title: 'Speed Switching', kind: 'retrieve',
+      intro: 'Quickly produce the correct form.',
+      exercises: [
+        { 
+          id: 'formal-3', kind: 'speed-drill', prompt: 'Your book (formal)', 
+          target: 'Uw boek', 
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production'],
+          grammar: ['formal-v-informal']
+        },
+        { 
+          id: 'formal-4', kind: 'speed-drill', prompt: 'How are you? (informal)', 
+          target: 'Hoe gaat het met je?', 
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production'],
+          grammar: ['formal-v-informal']
+        }
+      ],
+    },
+    {
+      id: 'mission', title: 'The Interview', kind: 'personalise',
+      intro: 'You are at a job interview. Answer the recruiter politely.',
+      exercises: [{ 
+        id: 'formal-5', kind: 'conversation', prompt: 'Goedenacht. Bedankt voor uw komst. Kunt u iets over uzelf vertellen?', 
+        simulatorResponse: 'Interessant. En waarom wilt u bij ons bedrijf werken?',
+        aiPersonality: { isDifficult: true, style: 'polite', pushbackProbability: 0.8 },
+        skills: ['speaking', 'production', 'automaticity'],
+        grammar: ['formal-v-informal']
+      }],
+    }
+  ]
+}
+
+export const presentationChapter: Chapter = {
+  slug: 'presenteren',
+  level: 'B2',
+  title: 'Professional Presentation',
+  capability: 'Summarise complex information and explain abstract ideas to an audience.',
+  description: 'Master the art of presenting your ideas clearly and persuasively.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'understand', title: 'Structuring Ideas', kind: 'understand',
+      intro: 'Common phrases for presentations.',
+      exercises: [{ 
+        id: 'pres-1', kind: 'reading', prompt: 'Opening a presentation',
+        readingContent: 'Vandaag ga ik het hebben over de toekomst van duurzame energie. Eerst zal ik de huidige situatie schetsen...',
+        wordHints: {
+          'duurzame': { meaning: 'sustainable', category: 'adj' },
+          'schetsen': { meaning: 'to sketch/outline', category: 'verb' }
+        },
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['duurzaam', 'schetsen']
+      }],
+    },
+    {
+      id: 'automate', title: 'Rapid Summarizing', kind: 'retrieve',
+      intro: 'Translate these linking words fast.',
+      exercises: [
+        { 
+          id: 'pres-2', kind: 'speed-drill', prompt: 'In conclusion', 
+          target: 'Tot slot', 
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production'],
+          vocabulary: ['tot slot']
+        },
+        { 
+          id: 'pres-3', kind: 'speed-drill', prompt: 'On the other hand', 
+          target: 'Aan de andere kant', 
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production'],
+          vocabulary: ['aan de andere kant']
+        }
+      ],
+    },
+    {
+      id: 'mission', title: 'Final Challenge', kind: 'personalise',
+      intro: 'Give a 2-minute summary of your last project.',
+      exercises: [{ 
+        id: 'pres-4', kind: 'challenge', prompt: 'Presenteer je laatste project in het kort.', 
+        context: 'Explain the goal, the process, and the result. Use at least 50 words.',
+        minimumLength: 50,
+        skills: ['production', 'automaticity'],
+        vocabulary: ['project', 'doel', 'resultaat']
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

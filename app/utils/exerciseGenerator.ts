@@ -19,6 +19,9 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'verwarming': { prompt: 'The heating is broken.', target: 'De verwarming is kapot.', explanation: 'Verwarming means heating.' },
   'repareren': { prompt: 'Can you repair it?', target: 'Kunt u het repareren?', explanation: 'Repareren means to fix or repair.' },
   'tevreden': { prompt: 'I am not satisfied with the service.', target: 'Ik ben niet tevreden over de service.', explanation: 'Tevreden means satisfied.' },
+  'formal-v-informal': { prompt: 'How are you? (formal)', target: 'Hoe gaat het met u?', explanation: 'Use "u" for formal situations.' },
+  'duurzaam': { prompt: 'Sustainable energy', target: 'Duurzame energie', explanation: 'Duurzaam means sustainable.' },
+  'tot slot': { prompt: 'In conclusion', target: 'Tot slot', explanation: 'Use "Tot slot" to end a presentation.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -32,6 +35,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'typed') skills.push('production', 'spelling')
   if (kind === 'flexibility') skills.push('production', 'automaticity')
   if (kind === 'conversation') skills.push('speaking', 'production')
+  if (kind === 'speed-drill') skills.push('automaticity', 'production')
 
   return {
     id: `smart-${type}-${key}-${kind}`,
@@ -41,7 +45,8 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
     explanation: info.explanation,
     skills,
     vocabulary: type === 'vocabulary' ? [key] : [],
-    grammar: type === 'grammar' ? [key] : []
+    grammar: type === 'grammar' ? [key] : [],
+    automaticitySeconds: kind === 'speed-drill' ? 4 : undefined
   }
 }
 
@@ -85,6 +90,16 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
   // Stage 3: High-pressure use
   if (vocabularyKeys.length > 0 || grammarKeys.length > 0) {
     const mainConcept = vocabularyKeys[0] || grammarKeys[0]
+    stages.push({
+      id: 'smart-automate',
+      title: 'Automate Retrieval',
+      kind: 'review',
+      intro: 'Quick! Recall these concepts before the timer runs out.',
+      exercises: [
+        generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'speed-drill')
+      ]
+    })
+
     stages.push({
       id: 'smart-personalise',
       title: 'Real-world Use',

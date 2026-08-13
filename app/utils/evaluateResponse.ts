@@ -202,6 +202,21 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       if (error.found) return { ...base, outcome: 'retry', message: error.message, miniLesson: error.miniLesson }
     }
 
+    // Grammar Assistant: Formal vs Informal consistency (B2 Capability: Adapt speech to context)
+    const formalWords = ['u', 'uw']
+    const informalWords = ['je', 'jij', 'jou', 'jouw']
+    const hasFormal = formalWords.some(w => normalized.split(/\s+/).includes(w))
+    const hasInformal = informalWords.some(w => normalized.split(/\s+/).includes(w))
+    
+    if (hasFormal && hasInformal) {
+      return {
+        ...base,
+        outcome: 'retry',
+        message: 'Mixing formal "u" and informal "je" in the same response is inconsistent. Stick to one style!',
+        teacherTip: 'In Dutch, it is important to be consistent with your level of formality. If you start with "u", continue with "uw". If you use "je", continue with "jou".'
+      }
+    }
+
     // Spelling check
     if (isSpellingMistake(normalized, accepted)) {
       if (!base.skills.includes('spelling')) base.skills.push('spelling')
