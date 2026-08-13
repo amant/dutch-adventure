@@ -694,6 +694,26 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Er-Drill Evaluation
+    if (exercise.kind === 'er-drill' && exercise.erDrillData) {
+      const correctOption = exercise.erDrillData.options.find(o => o.isCorrect)
+      if (normalized === normalizeAnswer(correctOption?.text || '')) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Perfect! You identified the correct usage.',
+          changeModifier: (base.changeModifier || 0) + 3
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. That function or placement doesn\'t fit this context.',
+          explanation: exercise.erDrillData.explanation || 'Review the role of "er" in this sentence.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

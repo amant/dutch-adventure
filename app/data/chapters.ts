@@ -2397,7 +2397,122 @@ export const logicalFlowChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone]
+export const erChapter: Chapter = {
+  slug: 'het-woordje-er',
+  level: 'B2',
+  title: "The Little Word 'Er'",
+  capability: "Use 'er' correctly in all four of its functions and master Dutch position verbs.",
+  description: "One of the biggest hurdles for Dutch learners. Move beyond 'zijn' and master the structural heart of the language.",
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'Discover', kind: 'discover',
+      intro: "Dutch often avoids using 'zijn' (to be) for objects. Instead, we use position verbs + 'er'.",
+      exercises: [
+        {
+          id: 'er-induction', kind: 'induction', prompt: 'Notice the position verbs',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'A glass on the table', answer: 'Er staat een glas op tafel.' },
+              { prompt: 'A book on the floor', answer: 'Er ligt een boek op de grond.' },
+              { prompt: 'A coat on the rack', answer: 'Er hangt een jas aan de kapstok.' },
+              { prompt: 'A cat on the chair', answer: 'Er zit een kat op de stoel.' }
+            ],
+            ruleChallenge: 'Which verb would you use for a laptop on a desk?',
+            options: [
+              { text: 'staat', isCorrect: true },
+              { text: 'ligt', isCorrect: false },
+              { text: 'hangt', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'The 4 Roles of Er', kind: 'understand',
+      intro: "'Er' isn't just one word; it has four distinct jobs in a sentence.",
+      exercises: [
+        {
+          id: 'er-role-1', kind: 'er-drill', prompt: 'Identify the role of er',
+          context: 'Ik woon in Amsterdam. Ik woon er al tien jaar.',
+          skills: ['recognition', 'grammar'],
+          erDrillData: {
+            sentence: 'Ik woon er al tien jaar.',
+            options: [
+              { text: 'Locative (there)', isCorrect: true, function: 'locative' },
+              { text: 'Partitive (of them)', isCorrect: false, function: 'partitive' },
+              { text: 'Prepositional', isCorrect: false, function: 'prepositional' },
+              { text: 'Subjective', isCorrect: false, function: 'subjective' }
+            ],
+            explanation: "Here 'er' replaces 'in Amsterdam' (a place)."
+          }
+        },
+        {
+          id: 'er-role-2', kind: 'er-drill', prompt: 'Identify the role of er',
+          context: 'Hoeveel broers heb je? Ik heb er twee.',
+          skills: ['recognition', 'grammar'],
+          erDrillData: {
+            sentence: 'Ik heb er twee.',
+            options: [
+              { text: 'Locative', isCorrect: false, function: 'locative' },
+              { text: 'Partitive (of them)', isCorrect: true, function: 'partitive' },
+              { text: 'Prepositional', isCorrect: false, function: 'prepositional' },
+              { text: 'Subjective', isCorrect: false, function: 'subjective' }
+            ],
+            explanation: "When you have a number without a noun, you need 'er' to mean 'of them'."
+          }
+        }
+      ]
+    },
+    {
+      id: 'retrieve', title: 'Position Retrieval', kind: 'retrieve',
+      intro: "Now try to use the correct position verb with 'er'.",
+      exercises: [
+        {
+          id: 'er-pos-1', kind: 'typed', prompt: 'There is a bottle on the table.',
+          context: 'Use: fles / tafel',
+          target: 'Er staat een fles op tafel.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['fles', 'tafel', 'staan']
+        },
+        {
+          id: 'er-pos-2', kind: 'typed', prompt: 'There are three people in the room.',
+          context: 'Use: mensen / kamer',
+          target: 'Er zitten drie mensen in de kamer.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['mensen', 'zitten']
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Transforming with Er', kind: 'transform',
+      intro: "Combine 'er' with prepositions (er + op = erop).",
+      exercises: [
+        {
+          id: 'er-prep-1', kind: 'transformation', prompt: 'Ik reken op je hulp. -> Ik reken ...',
+          target: 'Ik reken erop.',
+          skills: ['grammar', 'production'],
+          explanation: "In Dutch, we don't say 'op het', we say 'erop'."
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Real World Er', kind: 'personalise',
+      intro: "Talk about your own environment using 'er' and position verbs.",
+      exercises: [
+        {
+          id: 'er-pers-1', kind: 'personalise', prompt: 'Wat staat er op dit moment op je bureau?',
+          skills: ['production', 'speaking', 'grammar'],
+          vocabulary: ['staan', 'liggen', 'bureau'],
+          grammar: ['er']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
