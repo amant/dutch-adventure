@@ -19,6 +19,7 @@ useHead({
         <NuxtLink to="/graph">Graph</NuxtLink>
         <NuxtLink to="/memory">Memory</NuxtLink>
         <NuxtLink to="/reading">Reading</NuxtLink>
+        <NuxtLink to="/reader">Reader</NuxtLink>
         <NuxtLink to="/sandbox">Sandbox</NuxtLink>
         <NuxtLink to="/idioms">Idioms</NuxtLink>
         <NuxtLink to="/corrections">Corrections</NuxtLink>

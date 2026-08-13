@@ -100,6 +100,10 @@ const bottlenecks = computed(() => {
       <p class="muted intro">Short, purposeful practice: notice a pattern, retrieve it, change it, and make it yours.</p>
     </div>
 
+    <div class="daily-path-section">
+      <DailyPath />
+    </div>
+
     <div v-if="bottlenecks.length > 0" class="bottlenecks-section">
       <div class="eyebrow">Actionable Bottlenecks</div>
       <div class="bottlenecks-grid">
@@ -135,6 +139,7 @@ const bottlenecks = computed(() => {
 <style scoped>
 .home { padding: 45px 0; }
 .hero { margin-bottom: 50px; }
+.daily-path-section { margin-bottom: 50px; }
 .frontier-section { margin-bottom: 40px; }
 .intro { font-size: 19px; max-width: 550px; margin-top: 14px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 24px; }

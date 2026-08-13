@@ -70,6 +70,11 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Debate Mode**: A multi-phase conversation (Opening, Rebuttal, Defense, Summary) that trains high-level persuasion and the use of logical connectors (daarentegen, immers, derhalve).
 - **Listening Ladder (Active Transcription)**:
     - **Selective Transcription (Cloze)**: Exercises where learners must transcribe specific difficult words or connectors from natural speech, bridging the gap between passive listening and active orthographic/grammatical accuracy.
+- **Reading as Real Dutch**:
+    - **Custom Reader**: A tool that analyzes any pasted Dutch text against the learner's Language Graph, providing real-time stats (Mastered/Frontier/New) and interactive hints.
+    - **Vocabulary Capture**: Every interaction with authentic text is recorded as an encounter, updating the learner's exposure history and identified "frontier" words.
+- **Daily Loop & Automaticity**:
+    - **Personalized Daily Path**: A dynamic 4-step routine (Activation, Maintenance, Fluency, Authentic) that prioritizes high-impact tasks based on current bottlenecks.
 - **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Detects word-order inversion, perfect tense auxiliaries, separable verbs, subordinate clauses, article (de/het) errors, adjective endings, reflexive verbs, and fixed prepositions.
 - **Monitoring & Self-Correction**: At higher levels (B2), learners are trained to act as their own "Teacher".
     - **Correction Challenge**: Exercises where learners must identify and fix errors in provided Dutch texts, building linguistic awareness.
@@ -100,6 +105,8 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Idioms**: The idiom library is defined in `app/data/idioms.ts`.
 - **Memory**: `useLearnerMemory.ts` handles the persistence of the Language Graph.
 - **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
+- **Reader**: `app/pages/reader.vue` and `app/components/TextAnalyzer.vue` provide authentic text analysis.
+- **Dictionary**: `app/utils/dictionary.ts` provides a global lookup for interactive hints.
 - **Corrections**: `app/pages/corrections.vue` provides a hub for reviewing and re-trying persistent "Redlines".
 - **Sandbox**: `app/pages/sandbox.vue` allows for custom mission generation using `exerciseGenerator.ts`.
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
