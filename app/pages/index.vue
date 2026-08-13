@@ -90,6 +90,15 @@ const staleItems = computed(() => {
       <FrontierCard :frontier="frontier" @activate="navigateTo({ path: '/smart-review', query: { mode: 'activation' } })" />
     </div>
 
+    <div class="card sandbox-cta">
+      <div class="cta-content">
+        <div class="eyebrow">Personalized Practice</div>
+        <h3>Got a specific situation in mind?</h3>
+        <p class="muted">Use the Sandbox to design a mission for a real-world scenario you're facing. We'll weave in your target vocabulary.</p>
+        <NuxtLink to="/sandbox" class="button">Go to Scenario Sandbox</NuxtLink>
+      </div>
+    </div>
+
     <div v-if="weakAreas.length > 0" class="card review-card">
       <div class="eyebrow">Recommended Review</div>
       <h3>Strengthen these weak spots:</h3>
@@ -114,6 +123,12 @@ const staleItems = computed(() => {
 .chapter-card h2 { margin: 14px 0 10px; }
 .chapter-card p { flex: 1; margin-bottom: 16px; }
 .meta { color: #687873; font-size: 14px; margin-bottom: 22px; }
+
+.sandbox-cta { background: #176b5b; color: white; margin-bottom: 40px; padding: 32px; border: 0; }
+.sandbox-cta .eyebrow { color: #88c7ba; }
+.sandbox-cta .muted { color: #c2d6d1; margin: 8px 0 24px; font-size: 16px; }
+.sandbox-cta .button { background: white; color: #176b5b; }
+.sandbox-cta .button:hover { background: #e8f3ec; }
 
 .review-card { background: #fffcf4; border: 1px solid #f9e8b9; margin-bottom: 40px; }
 .review-card.delayed { background: #f0f7ff; border-color: #cce3ff; }

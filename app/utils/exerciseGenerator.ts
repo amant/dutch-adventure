@@ -176,3 +176,55 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
     stages
   }
 }
+
+export function createScenarioMission(scenario: string, concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
+  return {
+    slug: 'sandbox-mission',
+    level: 'B2',
+    title: `Mission: ${scenario}`,
+    capability: 'Adapt your language to a specific, custom context.',
+    description: `A personalized mission focused on: ${scenario}`,
+    estimatedMinutes: 10,
+    stages: [
+      {
+        id: 'sandbox-understand',
+        title: 'Vocabulary Preparation',
+        kind: 'understand',
+        intro: `To prepare for this scenario, let's look at how we might use these concepts.`,
+        exercises: concepts.map(c => ({
+          id: `sandbox-info-${c.key}`,
+          kind: 'info',
+          prompt: `Relevant concept: ${c.key}`,
+          context: contextDictionary[c.key]?.target || `In this scenario, you might need ${c.key}.`,
+          skills: ['recognition', 'meaning'],
+          vocabulary: c.kind === 'vocabulary' ? [c.key] : [],
+          grammar: c.kind === 'grammar' ? [c.key] : []
+        }))
+      },
+      {
+        id: 'sandbox-mission',
+        title: 'The Simulation',
+        kind: 'personalise',
+        intro: `Goal: ${scenario}. Use as much Dutch as you can, and try to incorporate your target concepts.`,
+        exercises: [{
+          id: 'sandbox-simulator',
+          kind: 'conversation',
+          prompt: `Let's start. You are in this situation: ${scenario}. What do you say?`,
+          skills: ['speaking', 'production', 'pragmatic'],
+          vocabulary: concepts.filter(c => c.kind === 'vocabulary').map(c => c.key),
+          grammar: concepts.filter(c => c.kind === 'grammar').map(c => c.key),
+          aiPersonality: {
+            isDifficult: true,
+            style: 'colloquial',
+            pushbackProbability: 0.6
+          },
+          missionGoals: concepts.slice(0, 3).map(c => ({
+            id: `goal-${c.key}`,
+            label: `Use "${c.key}" naturally`,
+            keywords: [c.key]
+          }))
+        }]
+      }
+    ]
+  }
+}

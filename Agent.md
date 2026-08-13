@@ -49,6 +49,7 @@ The AI in this app is not just a chatbot; it's a coach.
 
 - **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation). Includes visual "Teacher's Redline" to highlight changes.
 - **Correction Hub**: Persistent storage of "Redlines" allows learners to revisit and re-try exercises they struggled with, closing the feedback loop.
+- **Scenario Sandbox**: A personalization tool that allows learners to design custom missions for their real-world needs. The system automatically incorporates "Frontier" concepts into these missions to ensure effective activation.
 - **Pragmatic Analysis**: Every correct response is evaluated for its "Naturalness" (Pragmatic Score). Suggestions are provided to soften direct requests (using "even", "zou", "graag") or add native-like particles ("hoor", "nou").
 - **The "Difficult" AI**: At higher levels (B1/B2), the AI should simulate real-world difficulty:
     - **Patience Meter**: AI responsiveness and tone change based on learner accuracy and social/pragmatic appropriateness (e.g., formality).
@@ -74,6 +75,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Memory**: `useLearnerMemory.ts` handles the persistence of the Language Graph.
 - **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
 - **Corrections**: `app/pages/corrections.vue` provides a hub for reviewing and re-trying persistent "Redlines".
+- **Sandbox**: `app/pages/sandbox.vue` allows for custom mission generation using `exerciseGenerator.ts`.
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
 - **Components**:
     - `MissionSimulator.vue`: AI personality-driven chat with Speech-to-Text (Voice) support.
