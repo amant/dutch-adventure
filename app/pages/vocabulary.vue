@@ -33,7 +33,10 @@ const words = computed(() => {
 
     <div v-else class="word-grid">
       <div v-for="[word, state] in words" :key="word" class="card word-card">
-        <h3>{{ word }}</h3>
+        <div class="word-header">
+          <h3>{{ word }}</h3>
+          <div class="encounter-badge">{{ state.successes }}/{{ state.encounters }} hits</div>
+        </div>
         <div class="dimensions">
           <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
             <span class="dim-label">{{ dim.label }}</span>
@@ -56,11 +59,26 @@ const words = computed(() => {
   margin-top: 32px;
 }
 
-.word-card h3 {
-  margin-top: 0;
+.word-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 16px;
+}
+
+.word-header h3 {
+  margin: 0;
   color: #176b5b;
   font-size: 20px;
+}
+
+.encounter-badge {
+  font-size: 11px;
+  background: #f0f4f2;
+  color: #176b5b;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 .dimensions {

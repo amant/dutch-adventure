@@ -9,7 +9,9 @@ const emptyConcept = (): ConceptState => ({
   automaticity: 0,
   listening: 0,
   speaking: 0,
-  spelling: 0
+  spelling: 0,
+  encounters: 0,
+  successes: 0
 })
 
 const emptyMemory = (): LearnerMemory => ({
@@ -72,6 +74,12 @@ export function useLearnerMemory() {
     // Update concepts
     const updateConcept = (key: string, dict: Record<string, ConceptState>) => {
       if (!dict[key]) dict[key] = emptyConcept()
+      
+      dict[key].encounters++
+      if (outcome === 'correct' || outcome === 'acceptable') {
+        dict[key].successes++
+      }
+
       for (const skill of skills) {
         if (skill in dict[key]) {
           const s = skill as keyof ConceptState
@@ -90,6 +98,10 @@ export function useLearnerMemory() {
   function recordExposure(word: string, skills: SkillDimension[] = ['recognition', 'meaning']) {
     const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
     if (!next.vocabulary[word]) next.vocabulary[word] = emptyConcept()
+    
+    next.vocabulary[word].encounters++
+    next.vocabulary[word].successes++ // Exposure counts as success for recognition
+
     for (const skill of skills) {
       if (skill in next.vocabulary[word]) {
         next.vocabulary[word][skill] = Math.min(100, next.vocabulary[word][skill] + 5)

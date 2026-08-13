@@ -35,7 +35,10 @@ const formatKey = (key: string) => {
 
     <div v-else class="grammar-grid">
       <div v-for="[point, state] in grammarPoints" :key="point" class="card grammar-card">
-        <h3>{{ formatKey(point) }}</h3>
+        <div class="grammar-header">
+          <h3>{{ formatKey(point) }}</h3>
+          <div class="encounter-badge">{{ state.successes }}/{{ state.encounters }} hits</div>
+        </div>
         <div class="dimensions">
           <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
             <span class="dim-label">{{ dim.label }}</span>
@@ -58,11 +61,26 @@ const formatKey = (key: string) => {
   margin-top: 32px;
 }
 
-.grammar-card h3 {
-  margin-top: 0;
+.grammar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 16px;
+}
+
+.grammar-header h3 {
+  margin: 0;
   color: #176b5b;
   font-size: 20px;
+}
+
+.encounter-badge {
+  font-size: 11px;
+  background: #fdf2e9;
+  color: #d4a373;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 .dimensions {

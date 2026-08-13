@@ -8,6 +8,8 @@ export interface ConceptState {
   listening: number
   speaking: number
   spelling: number
+  encounters: number
+  successes: number
 }
 
 export interface LearnerMemory {

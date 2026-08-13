@@ -326,7 +326,63 @@ export const newsChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, opinionChapter, workDiscussionMission, newsChapter]
+export const hotelMission: Chapter = {
+  slug: 'klagen-over-hotel',
+  level: 'B1',
+  title: 'Mission: Complain about a hotel',
+  capability: 'Explain a problem in detail, express dissatisfaction, and negotiate a solution.',
+  description: 'Your hotel room is not what you expected. Talk to the receptionist and solve the problem.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'The Problem', kind: 'discover',
+      intro: 'Useful phrases for complaining: "Ik ben niet tevreden over..." (I am not satisfied with) and "Het probleem is dat..." (The problem is that).',
+      exercises: [{ 
+        id: 'hotel-1', kind: 'info', prompt: 'Complaining vocabulary', 
+        context: 'Ik ben niet tevreden over de kamer. De kamer is vies. De verwarming werkt niet.', 
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['tevreden', 'vies', 'verwarming']
+      }],
+    },
+    {
+      id: 'retrieve', title: 'Explain the issue', kind: 'retrieve',
+      intro: 'Tell the receptionist that you are not satisfied with the room.',
+      exercises: [{ 
+        id: 'hotel-2', kind: 'typed', prompt: 'Translate: I am not satisfied with my room because it is dirty.', 
+        target: 'Ik ben niet tevreden over mijn kamer omdat het vies is.', 
+        explanation: 'Use "niet tevreden over" for "not satisfied with".', 
+        skills: ['production', 'meaning'],
+        vocabulary: ['tevreden', 'vies'],
+        grammar: ['omdat-clause']
+      }],
+    },
+    {
+      id: 'request', title: 'Asking for a solution', kind: 'transform',
+      intro: 'Ask for another room or a discount.',
+      exercises: [{ 
+        id: 'hotel-3', kind: 'typed', prompt: 'Translate: I would like a different room.', 
+        target: 'Ik wil graag een andere kamer.', 
+        explanation: 'Use "een andere" for "a different".', 
+        skills: ['production', 'automaticity'],
+        vocabulary: ['andere']
+      }],
+    },
+    {
+      id: 'mission', title: 'The Negotiation', kind: 'personalise',
+      intro: 'The receptionist says: "Het spijt me, maar we zitten helemaal vol. Wat wilt u dat ik doe?"',
+      exercises: [{ 
+        id: 'hotel-4', kind: 'conversation', prompt: 'Wat is de oplossing volgens jou?', 
+        simulatorResponse: 'Ik kan u een gratis ontbijt aanbieden voor het ongemak. Is dat voldoende?',
+        explanation: 'Propose a solution like a discount or cleaning the room immediately.', 
+        skills: ['speaking', 'production', 'automaticity'],
+        grammar: ['word-order'],
+        vocabulary: ['oplossing', 'korting']
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, opinionChapter, workDiscussionMission, newsChapter, hotelMission]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

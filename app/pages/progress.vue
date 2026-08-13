@@ -5,15 +5,6 @@ import type { SkillDimension } from '~/types/learning'
 const { memory, hydrate, reset } = useLearnerMemory()
 onMounted(hydrate)
 
-const skillLabels: Record<SkillDimension, { label: string, desc: string }> = {
-  recognition: { label: 'Reading', desc: 'Recognizing patterns in text' },
-  meaning: { label: 'Meaning', desc: 'Understanding the core concept' },
-  listening: { label: 'Listening', desc: 'Processing spoken Dutch' },
-  production: { label: 'Writing', desc: 'Producing correct Dutch sentences' },
-  speaking: { label: 'Speaking', desc: 'Spontaneous oral production' },
-  automaticity: { label: 'Fluency', desc: 'Using language without thinking' }
-}
-
 const levelForScore = (score: number) => {
   if (score < 20) return 'A0'
   if (score < 40) return 'A1'
@@ -22,20 +13,43 @@ const levelForScore = (score: number) => {
   return 'B2'
 }
 
+const skillRows = computed(() => [
+  { label: 'Reading', score: memory.value.overall.recognition, level: levelForScore(memory.value.overall.recognition) },
+  { label: 'Listening', score: memory.value.overall.listening, level: levelForScore(memory.value.overall.listening) },
+  { label: 'Vocabulary', score: vocabularyScore.value, level: levelForScore(vocabularyScore.value) },
+  { label: 'Grammar', score: grammarScore.value, level: levelForScore(grammarScore.value) },
+  { label: 'Writing', score: memory.value.overall.production, level: levelForScore(memory.value.overall.production) },
+  { label: 'Speaking', score: memory.value.overall.speaking, level: levelForScore(memory.value.overall.speaking) },
+  { label: 'Fluency', score: memory.value.overall.automaticity, level: levelForScore(memory.value.overall.automaticity) },
+])
+
+const vocabularyScore = computed(() => {
+  const items = Object.values(memory.value.vocabulary)
+  if (items.length === 0) return 0
+  return items.reduce((acc, item) => acc + (item.recognition + item.meaning + item.production) / 3, 0) / items.length
+})
+
+const grammarScore = computed(() => {
+  const items = Object.values(memory.value.grammar)
+  if (items.length === 0) return 0
+  return items.reduce((acc, item) => acc + (item.recognition + item.meaning + item.production) / 3, 0) / items.length
+})
+
 const bottlenecks = computed(() => {
-  return Object.entries(memory.value.overall)
-    .sort(([, a], [, b]) => a - b)
+  const skills = [
+    { id: 'speaking', label: 'Speaking fluency', score: memory.value.overall.automaticity, status: 'red', text: 'You know the vocabulary but retrieve it slowly.' },
+    { id: 'listening', label: 'Listening', score: memory.value.overall.listening, status: 'orange', text: 'Normal-speed speech is difficult.' },
+    { id: 'grammar', label: 'Word order', score: grammarScore.value, status: 'orange', text: 'Subordinate clauses remain inconsistent.' }
+  ]
+  return skills
+    .sort((a, b) => a.score - b.score)
+    .filter(s => s.score < 80)
     .slice(0, 3)
-    .filter(([, score]) => score < 90)
-    .map(([id, score]) => ({
-      id: id as SkillDimension,
-      label: skillLabels[id as SkillDimension].label,
-      score
-    }))
 })
 
 const overallLevel = computed(() => {
-  const avg = Object.values(memory.value.overall).reduce((a, b) => a + b, 0) / 6
+  const scores = skillRows.value.map(r => r.score)
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length
   return levelForScore(avg)
 })
 </script>
@@ -47,16 +61,15 @@ const overallLevel = computed(() => {
     <p class="muted">Based on your practice across all capabilities.</p>
 
     <div class="card skill-table">
-      <div v-for="(info, id) in skillLabels" :key="id" class="skill-row">
+      <div v-for="row in skillRows" :key="row.label" class="skill-row">
         <div class="skill-info">
-          <strong>{{ info.label }}</strong>
-          <span class="muted">{{ info.desc }}</span>
+          <strong>{{ row.label }}</strong>
         </div>
         <div class="skill-meter">
-          <div class="meter"><div :style="{ width: `${memory.overall[id]}%` }" /></div>
+          <div class="meter"><div :style="{ width: `${row.score}%` }" /></div>
         </div>
         <div class="skill-level">
-          {{ levelForScore(memory.overall[id]) }}
+          {{ row.level }}
         </div>
       </div>
     </div>
@@ -64,12 +77,10 @@ const overallLevel = computed(() => {
     <div v-if="bottlenecks.length > 0" class="bottlenecks">
       <h2>Your biggest bottlenecks</h2>
       <div class="grid">
-        <div v-for="b in bottlenecks" :key="b.id" class="card bottleneck-card">
-          <div class="tag">Low {{ b.id }}</div>
+        <div v-for="b in bottlenecks" :key="b.id" class="card bottleneck-card" :class="b.status">
+          <div class="tag">Needs attention</div>
           <h3>{{ b.label }}</h3>
-          <p v-if="b.id === 'automaticity'" class="muted">You know the rules but need more timed practice to use them naturally.</p>
-          <p v-else-if="b.id === 'production'" class="muted">You understand Dutch well, but struggle to produce it yourself from scratch.</p>
-          <p v-else class="muted">Focusing on more {{ b.label.toLowerCase() }} exercises will help you reach the next level.</p>
+          <p class="muted">{{ b.text }}</p>
         </div>
       </div>
     </div>
@@ -91,7 +102,11 @@ const overallLevel = computed(() => {
 .meter div { height: 100%; background: #176b5b; transition: width 0.6s ease; }
 
 .bottlenecks { margin-top: 60px; }
-.bottleneck-card { border-left: 4px solid #d06b3c; }
+.bottleneck-card { border-left: 4px solid #ccc; }
+.bottleneck-card.red { border-left-color: #e53e3e; }
+.bottleneck-card.red .tag { color: #e53e3e; }
+.bottleneck-card.orange { border-left-color: #d06b3c; }
+.bottleneck-card.orange .tag { color: #d06b3c; }
 .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d06b3c; margin-bottom: 8px; }
 .bottleneck-card h3 { margin: 0 0 12px; }
 
