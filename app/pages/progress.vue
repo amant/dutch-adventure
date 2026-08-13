@@ -1,0 +1,8 @@
+<script setup lang="ts">
+import { useLearnerMemory } from '~/composables/useLearnerMemory'
+const { memory, hydrate, reset } = useLearnerMemory()
+onMounted(hydrate)
+const labels = { recognition: 'Recognition', meaning: 'Meaning', production: 'Production', automaticity: 'Automaticity' }
+</script>
+<template><section><div class="eyebrow">Your learning memory</div><h1>Progress that helps you practise.</h1><p class="muted">These starter metrics reflect practice in this prototype, not a formal CEFR assessment.</p><div class="grid metrics"><div v-for="(value, key) in memory" :key="key" class="card"><strong>{{ labels[key as keyof typeof labels] }}</strong><div class="meter"><div :style="{ width: `${value}%` }" /></div><span>{{ value }}%</span></div></div><div class="card bottleneck"><h2>Your next focus</h2><p class="muted">Production and automaticity grow when you retrieve a useful phrase without a hint. Return to the chapter to keep building that habit.</p><NuxtLink class="button" to="/chapter/opinions-en-redenen">Practise again</NuxtLink> <button class="button secondary" @click="reset">Reset local progress</button></div></section></template>
+<style scoped>.metrics { margin:30px 0; }.metrics strong { display:block; margin-bottom:18px; }.meter { height:10px; background:#e2e9e3; border-radius:9px; margin-bottom:10px; }.meter div { height:100%; background:#176b5b; border-radius:9px; }.metrics span { color:#687873; font-size:14px; }.bottleneck { max-width:640px; }.bottleneck h2 { margin-top:0; }.bottleneck .button { margin:8px 8px 0 0; }</style>
