@@ -127,6 +127,69 @@ function checkSubordinateClauseError(normalized: string, conjunction: string) {
   return { found: false }
 }
 
+function checkArticleError(normalized: string, target: string) {
+  const deWords = ['man', 'vrouw', 'tafel', 'stoel', 'stad', 'bakker', 'collega', 'vergadering']
+  const hetWords = ['kind', 'meisje', 'boek', 'huis', 'weer', 'werk', 'hotel', 'ontbijt']
+  
+  const words = normalized.split(' ')
+  for (let i = 0; i < words.length - 1; i++) {
+    if (words[i] === 'het' && deWords.includes(words[i+1])) {
+      return {
+        found: true,
+        message: `'${words[i+1]}' is a "de-word", not "het".`,
+        miniLesson: {
+          title: 'De vs Het',
+          content: 'Every Dutch noun is either "de" or "het". Most words (about 75%) are "de". Diminutives (ending in -je) are always "het".',
+          example: {
+            wrong: `het ${words[i+1]}`,
+            right: `de ${words[i+1]}`
+          }
+        }
+      }
+    }
+    if (words[i] === 'de' && hetWords.includes(words[i+1])) {
+      return {
+        found: true,
+        message: `'${words[i+1]}' is a "het-word", not "de".`,
+        miniLesson: {
+          title: 'De vs Het',
+          content: 'Every Dutch noun is either "de" or "het". Learning the article with the word is essential.',
+          example: {
+            wrong: `de ${words[i+1]}`,
+            right: `het ${words[i+1]}`
+          }
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
+function checkAdjectiveEndingError(normalized: string) {
+  const words = normalized.split(' ')
+  // Check for common adjectives missing the -e before a noun
+  const commonAdjectives = ['mooi', 'groot', 'klein', 'leuk', 'lekker', 'warm', 'koud']
+  const deWords = ['man', 'vrouw', 'dag', 'stad', 'tafel', 'stoel', 'bakker']
+  
+  for (let i = 0; i < words.length - 1; i++) {
+    if (commonAdjectives.includes(words[i]) && deWords.includes(words[i+1])) {
+      return {
+        found: true,
+        message: `Before '${words[i+1]}', the adjective should usually end in -e: '${words[i]}e'.`,
+        miniLesson: {
+          title: 'Adjective Endings',
+          content: 'Most adjectives get an -e when they come before a noun, except for "het-words" preceded by "een" or no article.',
+          example: {
+            wrong: `${words[i]} ${words[i+1]}`,
+            right: `${words[i]}e ${words[i+1]}`
+          }
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
 export function evaluateResponse(exercise: Exercise, answer: string, context?: EvaluationContext): Feedback {
   const normalized = normalizeAnswer(answer)
   const target = exercise.target
@@ -200,6 +263,18 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     if (normalized.includes('hoewel')) {
       const error = checkSubordinateClauseError(normalized, 'hoewel')
       if (error.found) return { ...base, outcome: 'retry', message: error.message, miniLesson: error.miniLesson }
+    }
+
+    // Grammar Assistant: Articles (de/het)
+    const articleError = checkArticleError(normalized, target || '')
+    if (articleError.found) {
+      return { ...base, outcome: 'retry', message: articleError.message, miniLesson: articleError.miniLesson }
+    }
+
+    // Grammar Assistant: Adjective Endings
+    const adjectiveError = checkAdjectiveEndingError(normalized)
+    if (adjectiveError.found) {
+      return { ...base, outcome: 'retry', message: adjectiveError.message, miniLesson: adjectiveError.miniLesson }
     }
 
     // Grammar Assistant: Formal vs Informal consistency (B2 Capability: Adapt speech to context)

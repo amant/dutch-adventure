@@ -9,6 +9,17 @@ const props = defineProps<{
 const emit = defineEmits(['submit', 'next', 'retry'])
 const response = defineModel<string>()
 
+const stressLevel = ref(0) // 0 to 100
+
+watch(() => props.feedback, (f) => {
+  if (!f) return
+  if (f.outcome === 'retry') {
+    stressLevel.value = Math.min(100, stressLevel.value + 15)
+  } else if (f.outcome === 'correct') {
+    stressLevel.value = Math.max(0, stressLevel.value - 10)
+  }
+})
+
 const messages = computed(() => {
   const msgs = [
     { role: 'ai', text: props.exercise.prompt }
@@ -23,7 +34,9 @@ const messages = computed(() => {
       const personality = props.exercise.aiPersonality
       let aiText = props.exercise.simulatorResponse || 'Heel goed! Dat begrijp ik.'
       
-      if (personality?.isDifficult && Math.random() < (personality.pushbackProbability || 0.5)) {
+      if (stressLevel.value > 60) {
+        aiText = 'Kunt u nu eindelijk antwoord geven? Ik heb haast!'
+      } else if (personality?.isDifficult && Math.random() < (personality.pushbackProbability || 0.5)) {
         if (personality.style === 'impatient') {
           aiText = 'Kunt u sneller praten? Ik heb niet de hele dag.'
         } else if (personality.style === 'colloquial') {
@@ -43,6 +56,13 @@ const messages = computed(() => {
 
 <template>
   <div class="mission-simulator">
+    <div class="simulator-meta">
+      <div class="stress-meter">
+        <span class="label">AI Patience</span>
+        <div class="bar-bg"><div class="bar" :style="{ width: `${100 - stressLevel}%`, background: stressLevel > 70 ? '#d06b3c' : '#176b5b' }"></div></div>
+      </div>
+    </div>
+
     <div class="chat-window">
       <div v-for="(msg, idx) in messages" :key="idx" class="message" :class="msg.role">
         <div class="avatar">{{ msg.role === 'ai' ? '🤖' : '👤' }}</div>
@@ -69,6 +89,37 @@ const messages = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.simulator-meta {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.stress-meter {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stress-meter .label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8a9a94;
+}
+
+.stress-meter .bar-bg {
+  height: 6px;
+  background: #e1e5de;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stress-meter .bar {
+  height: 100%;
+  transition: width 0.5s ease, background 0.5s ease;
 }
 
 .chat-window {

@@ -32,6 +32,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 - **Production**: Can they recall it when prompted?
 - **Speaking**: Can they use it in a conversation?
 - **Automaticity**: Can they use it without thinking (fast retrieval)?
+- **Usage History**: The system tracks the exact snippets of successful usage for every concept, building a "personal corpus" of what the learner *can actually use*.
 
 **Rule**: If a word is "learned" but cannot be produced spontaneously, the system marks it as a **bottleneck** and injects it into future activities.
 
@@ -39,12 +40,13 @@ We track the learner's progress not by "lessons completed," but through a multid
 
 The AI in this app is not just a chatbot; it's a coach.
 
-- **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation).
+- **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation). Includes visual "Teacher's Redline" to highlight changes.
 - **The "Difficult" AI**: At higher levels (B1/B2), the AI should simulate real-world difficulty:
+    - **Patience Meter**: AI responsiveness and tone change based on learner accuracy and social/pragmatic appropriateness (e.g., formality).
     - Interrupting or asking follow-up questions.
     - Expressing disagreement or confusion.
     - Using colloquial expressions.
-- **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Avoid dumping rules; use "Mini-lessons" (60 seconds).
+- **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Detects word-order inversion, perfect tense auxiliaries, separable verbs, subordinate clauses, article (de/het) errors, and adjective endings.
 
 ## 5. Information Architecture
 

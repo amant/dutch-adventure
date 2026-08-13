@@ -60,7 +60,8 @@ export function useLearnerMemory() {
     outcome: 'correct' | 'acceptable' | 'retry',
     vocabulary?: string[],
     grammar?: string[],
-    changeModifier: number = 0
+    changeModifier: number = 0,
+    snippet?: string
   ) {
     let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
     change = Math.max(1, change + changeModifier)
@@ -77,6 +78,13 @@ export function useLearnerMemory() {
       
       dict[key].encounters++
       dict[key].lastEncountered = new Date().toISOString()
+      
+      if (snippet && (outcome === 'correct' || outcome === 'acceptable')) {
+        if (!dict[key].usageHistory) dict[key].usageHistory = []
+        dict[key].usageHistory!.unshift({ snippet, date: new Date().toISOString() })
+        if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop()
+      }
+
       if (outcome === 'correct' || outcome === 'acceptable') {
         dict[key].successes++
       }

@@ -921,7 +921,75 @@ export const doubtChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter]
+export const futureSpeculationChapter: Chapter = {
+  slug: 'toekomst-speculeren',
+  level: 'B2',
+  title: 'Future & Speculation',
+  capability: 'Speculate about future events and understand implied meanings in complex discussions.',
+  description: 'Master the use of "zullen" and "zou" to talk about what might happen.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'discover', title: 'Zullen vs Zou', kind: 'discover',
+      intro: 'Use "zullen" for future probability and "zou" for hypothetical scenarios.',
+      exercises: [{
+        id: 'spec-1', kind: 'info', prompt: 'Speculating with Modal Verbs',
+        context: 'Zullen (Future): Het zal morgen wel regenen. (It will probably rain tomorrow.)\nZou (Hypothetical): Wat zou je doen als je rijk was? (What would you do if you were rich?)',
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['zullen', 'zou', 'waarschijnlijk', 'hypothetisch']
+      }],
+    },
+    {
+      id: 'retrieve', title: 'Retrieve the Modals', kind: 'retrieve',
+      intro: 'Quickly translate these speculative sentences.',
+      exercises: [
+        { 
+          id: 'spec-2', kind: 'typed', prompt: 'It will probably be warm.', 
+          target: 'Het zal waarschijnlijk warm zijn', 
+          skills: ['production', 'grammar'],
+          grammar: ['future tense'],
+          vocabulary: ['waarschijnlijk', 'warm']
+        },
+        { 
+          id: 'spec-3', kind: 'typed', prompt: 'I would like to stay home.', 
+          target: 'Ik zou graag thuis willen blijven', 
+          skills: ['production', 'grammar'],
+          grammar: ['conditional'],
+          vocabulary: ['thuis', 'blijven']
+        }
+      ],
+    },
+    {
+      id: 'transform', title: 'The Pragmatic Shift', kind: 'transform',
+      intro: 'Change these direct statements into polite, speculative ones.',
+      exercises: [
+        { 
+          id: 'spec-4', kind: 'transformation', prompt: 'Ik heb een vraag.', 
+          context: 'Make it more polite using "zou".',
+          target: 'Ik zou een vraag willen hebben', 
+          acceptedAnswers: ['Ik zou een vraag willen stellen', 'Zou ik een vraag mogen stellen'],
+          skills: ['production', 'grammar'],
+          grammar: ['conditional']
+        }
+      ],
+    },
+    {
+      id: 'mission', title: 'The Future Discussion', kind: 'personalise',
+      intro: 'A colleague asks about the future of the company.',
+      exercises: [{
+        id: 'spec-5', kind: 'conversation', prompt: 'Hoe zie jij de toekomst van ons bedrijf?',
+        context: 'Speculate about two things that might happen in the next 5 years. Use "zal" or "zullen".',
+        vocabulary: ['toekomst', 'bedrijf', 'veranderen', 'groeien'],
+        grammar: ['future tense'],
+        skills: ['speaking', 'production'],
+        aiPersonality: { isDifficult: true, style: 'colloquial', pushbackProbability: 0.8 },
+        simulatorResponse: 'Interessant. Maar denk je echt dat we zo snel zullen groeien?'
+      }]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

@@ -11,6 +11,7 @@ export interface ConceptState {
   encounters: number
   successes: number
   lastEncountered?: string
+  usageHistory?: { snippet: string, date: string }[]
 }
 
 export interface LearnerMemory {
