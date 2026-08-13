@@ -66,6 +66,9 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Monitoring & Self-Correction**: At higher levels (B2), learners are trained to act as their own "Teacher".
     - **Correction Challenge**: Exercises where learners must identify and fix errors in provided Dutch texts, building linguistic awareness.
     - **Self-Correction Goals**: Production exercises that reward immediate repair of one's own spoken or written slips.
+- **Strategic Competence & Circumlocution**: B2 learners must be able to keep speaking even when they lack a specific word.
+    - **Circumlocution Challenge**: Tasks where learners must explain an abstract concept without using forbidden (direct) terms.
+    - **Precision Training**: Drills that force learners to replace "lazy" or "overused" words (e.g., *leuk*, *goed*) with more precise Dutch vocabulary.
 
 ## 5. Information Architecture
 
@@ -97,6 +100,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
     - `CorrectionChallenge.vue`: Interactive interface for identifying and fixing errors in a provided passage.
+    - `CircumlocutionChallenge.vue`: Component for explaining concepts without using forbidden words.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
     - `PragmaticDrill.vue`: Context-based choice for social nuances.
 

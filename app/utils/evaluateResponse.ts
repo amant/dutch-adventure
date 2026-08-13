@@ -419,6 +419,42 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Circumlocution Evaluation
+    if (exercise.kind === 'circumlocution' && exercise.circumlocutionData) {
+      const hasForbidden = exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))
+      if (hasForbidden) {
+        const forbidden = exercise.forbiddenWords?.find(w => normalized.includes(w.toLowerCase()))
+        return { ...base, outcome: 'retry', message: `Oops! You used a forbidden word: '${forbidden}'. Try to explain it without that word.` }
+      }
+
+      const missingKeywords = exercise.circumlocutionData.requiredKeywords.filter(kw => !normalized.includes(kw.toLowerCase()))
+      
+      if (missingKeywords.length > 0) {
+        return { 
+          ...base, 
+          outcome: 'retry', 
+          message: "You're on the right track, but your description isn't quite clear enough yet.",
+          explanation: "Try to be more specific about the purpose or function of the concept."
+        }
+      }
+
+      if (exercise.minimumLength && normalized.length < exercise.minimumLength) {
+        return { 
+          ...base, 
+          outcome: 'retry', 
+          message: "Your description is a bit too short for a B2 level. Can you expand on it?",
+          explanation: "Use full sentences to explain the nuances."
+        }
+      }
+
+      return {
+        ...base,
+        outcome: 'correct',
+        message: `Great description! You successfully explained '${exercise.circumlocutionData.concept}' without the easy terms.`,
+        changeModifier: (base.changeModifier || 0) + 5
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

@@ -1654,7 +1654,75 @@ export const selfCorrectionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter]
+export const circumlocutionChapter: Chapter = {
+  slug: 'omschrijving-en-flexibiliteit',
+  level: 'B2',
+  title: 'Circumlocution & Precision',
+  capability: 'Circumvent vocabulary gaps by using definitions and more general terms to explain complex ideas.',
+  description: 'Learn how to keep a conversation flowing even when you lack a specific word. Master the art of describing abstract concepts using the Dutch you already know.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'The B2 Bridge', kind: 'discover',
+      intro: 'A key B2 skill is "strategic competence". When you don\'t know the word for "Sustainability", don\'t stop speaking. Explain it!',
+      exercises: [{ 
+        id: 'circ-1', kind: 'info', prompt: 'Strategic Circumlocution', 
+        context: 'Instead of saying "Duurzaamheid" (Sustainability), you could say:\n"Het rekening houden met de toekomst en de natuur, zodat bronnen niet opraken."', 
+        skills: ['recognition', 'pragmatic']
+      }],
+    },
+    {
+      id: 'practice', title: 'Explaining the Abstract', kind: 'retrieve',
+      intro: 'Try to describe these concepts without using the forbidden words.',
+      exercises: [
+        { 
+          id: 'circ-2', kind: 'circumlocution', prompt: 'Describe "Privacy"', 
+          skills: ['production', 'writing', 'pragmatic'],
+          forbiddenWords: ['privacy', 'prive', 'geheim', 'alleen'],
+          minimumLength: 30,
+          circumlocutionData: {
+            concept: 'Privacy',
+            requiredKeywords: ['recht', 'anderen', 'zien']
+          }
+        },
+        { 
+          id: 'circ-3', kind: 'circumlocution', prompt: 'Describe "Duurzaamheid"', 
+          skills: ['production', 'speaking', 'pragmatic'],
+          forbiddenWords: ['duurzaam', 'milieu', 'natuur', 'groen'],
+          minimumLength: 40,
+          circumlocutionData: {
+            concept: 'Sustainability',
+            requiredKeywords: ['toekomst', 'lang', 'gebruiken']
+          }
+        }
+      ],
+    },
+    {
+      id: 'transformation', title: 'Paraphrasing Challenge', kind: 'transform',
+      intro: 'Rewrite these specific sentences to be more descriptive and avoid one "lazy" word.',
+      exercises: [
+        { 
+          id: 'circ-4', kind: 'flexibility', prompt: 'Rewrite without using "leuk": "Ik vind dit project erg leuk."', 
+          target: 'Ik vind dit project erg interessant en leerzaam.', 
+          skills: ['production', 'flexibility'],
+          forbiddenWords: ['leuk'],
+          requiredWords: ['interessant']
+        }
+      ],
+    },
+    {
+      id: 'personalise', title: 'Your Own Gap', kind: 'personalise',
+      intro: 'Think of a word you often struggle with in Dutch. Describe it now without using the word itself.',
+      exercises: [{ 
+        id: 'circ-5', kind: 'challenge', prompt: 'Describe a difficult concept from your professional or personal life.', 
+        skills: ['writing', 'production'],
+        explanation: 'Focus on explaining the purpose, function, or feeling associated with the concept.'
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
