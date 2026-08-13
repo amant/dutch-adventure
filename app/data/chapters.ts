@@ -1588,7 +1588,73 @@ export const registerChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter]
+export const selfCorrectionChapter: Chapter = {
+  slug: 'zelfcorrectie',
+  level: 'B2',
+  title: 'The art of self-correction',
+  capability: 'Identify and repair complex errors in your own and others\' Dutch speech and writing.',
+  description: 'Master the ability to monitor your language use, spotting subtle word order and grammatical slips before they become habits.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'Monitoring Mistakes', kind: 'discover',
+      intro: 'B2 learners don\'t just speak; they monitor. If you hear yourself say "Gisteren ik ging...", you should immediately correct it to "Gisteren ging ik...".',
+      exercises: [{ 
+        id: 'correct-1', kind: 'info', prompt: 'Common slip-ups', 
+        context: '1. Gisteren ik ging (Wrong) -> Gisteren ging ik (Right)\n2. Omdat ik ben ziek (Wrong) -> Omdat ik ziek ben (Right)\n3. Ik heb gebleven (Wrong) -> Ik ben gebleven (Right)', 
+        skills: ['recognition', 'grammar']
+      }],
+    },
+    {
+      id: 'teacher-mode', title: 'Teacher Mode', kind: 'understand',
+      intro: 'A student wrote a short email. Can you spot and fix the 3 errors?',
+      exercises: [{ 
+        id: 'correct-2', kind: 'correction-challenge', prompt: 'Fix the student\'s email.', 
+        skills: ['recognition', 'grammar', 'writing'],
+        correctionData: {
+          originalText: 'Beste collega, ik wil graag weten of je komt naar de vergadering. Gisteren ik heb je niet gezien. Ik heb naar huis gegaan om 5 uur.',
+          mistakes: [
+            { segment: 'je komt naar de vergadering', correction: 'je naar de vergadering komt', explanation: 'Word order in a subordinate clause (of-clause).' },
+            { segment: 'Gisteren ik heb', correction: 'Gisteren heb ik', explanation: 'Inversion after an adverb of time (Gisteren).' },
+            { segment: 'Ik heb naar huis gegaan', correction: 'Ik ben naar huis gegaan', explanation: 'Movement verbs like "gaan" use "zijn".' }
+          ]
+        }
+      }],
+    },
+    {
+      id: 'transformation', title: 'Repair Drill', kind: 'transform',
+      intro: 'Correct these sentences as quickly as possible.',
+      exercises: [
+        { 
+          id: 'correct-3', kind: 'transformation', prompt: 'Repair: Ik denk dat hij is moe.', 
+          target: 'Ik denk dat hij moe is.', 
+          skills: ['production', 'automaticity'],
+          grammar: ['word-order'],
+          automaticitySeconds: 5
+        },
+        { 
+          id: 'correct-4', kind: 'transformation', prompt: 'Repair: Morgen we gaan naar zee.', 
+          target: 'Morgen gaan we naar zee.', 
+          skills: ['production', 'automaticity'],
+          grammar: ['word-order'],
+          automaticitySeconds: 5
+        }
+      ],
+    },
+    {
+      id: 'personalise', title: 'The Mirror', kind: 'personalise',
+      intro: 'Write 3 sentences about your week, but deliberately include one mistake, then correct it yourself.',
+      exercises: [{ 
+        id: 'correct-5', kind: 'challenge', prompt: 'Describe your week and perform a self-correction.', 
+        skills: ['writing', 'pragmatic'],
+        targetVocabulary: ['gisteren', 'omdat', 'gegaan'],
+        explanation: 'Show that you can identify a word order or auxiliary verb error and fix it.'
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

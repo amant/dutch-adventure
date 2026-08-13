@@ -98,6 +98,13 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'correction-challenge'" class="renderer">
+        <CorrectionChallenge
+          :exercise="session.exercise.value"
+          @submit="submit"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'listening'" class="renderer">
         <ListeningLadder 
           :exercise="session.exercise.value" 

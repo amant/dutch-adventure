@@ -63,6 +63,9 @@ The AI in this app is not just a chatbot; it's a coach.
     - Expressing disagreement or confusion.
     - Using colloquial expressions.
 - **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Detects word-order inversion, perfect tense auxiliaries, separable verbs, subordinate clauses, article (de/het) errors, and adjective endings.
+- **Monitoring & Self-Correction**: At higher levels (B2), learners are trained to act as their own "Teacher".
+    - **Correction Challenge**: Exercises where learners must identify and fix errors in provided Dutch texts, building linguistic awareness.
+    - **Self-Correction Goals**: Production exercises that reward immediate repair of one's own spoken or written slips.
 
 ## 5. Information Architecture
 
@@ -93,6 +96,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `RecombinationDrill.vue`: Challenges learners to use multiple specific concepts in a single sentence.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
+    - `CorrectionChallenge.vue`: Interactive interface for identifying and fixing errors in a provided passage.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
     - `PragmaticDrill.vue`: Context-based choice for social nuances.
 

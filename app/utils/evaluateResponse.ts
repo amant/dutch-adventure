@@ -395,6 +395,30 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Correction Challenge check
+    if (exercise.kind === 'correction-challenge' && exercise.correctionData) {
+      const remainingMistakes = exercise.correctionData.mistakes.filter(m => 
+        normalized.includes(normalizeAnswer(m.segment)) || !normalized.includes(normalizeAnswer(m.correction))
+      )
+      
+      if (remainingMistakes.length === 0) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent eye! You spotted and fixed all the errors in the text.',
+          changeModifier: (base.changeModifier || 0) + 5
+        }
+      } else {
+        const foundFixed = exercise.correctionData.mistakes.length - remainingMistakes.length
+        return {
+          ...base,
+          outcome: 'retry',
+          message: `You've fixed ${foundFixed} out of ${exercise.correctionData.mistakes.length} errors. Keep looking!`,
+          explanation: `Focus on: ${remainingMistakes[0].explanation}`
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
