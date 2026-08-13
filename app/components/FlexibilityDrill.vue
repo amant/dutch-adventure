@@ -13,6 +13,11 @@ const onInput = (e: Event) => {
   emit('update:modelValue', (e.target as HTMLInputElement).value)
 }
 
+const handleVoice = (text: string) => {
+  emit('update:modelValue', text)
+  emit('submit', { isSpeaking: true })
+}
+
 const onKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && !props.disabled) {
     emit('submit')
@@ -51,6 +56,7 @@ const onKeydown = (e: KeyboardEvent) => {
         @keydown="onKeydown"
         autofocus
       />
+      <VoiceInput v-if="!disabled" @result="handleVoice" />
     </div>
   </div>
 </template>
@@ -104,8 +110,14 @@ const onKeydown = (e: KeyboardEvent) => {
 .tag.required { background: #e6f2f0; color: #176b5b; }
 .tag.forbidden { background: #fee2e2; color: #991b1b; }
 
+.input-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 input {
-  width: 100%;
+  flex: 1;
   padding: 16px;
   font-size: 18px;
   border: 2px solid #e1e5de;

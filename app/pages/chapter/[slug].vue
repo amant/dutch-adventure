@@ -37,8 +37,11 @@ watch([() => session.exercise.value?.id, feedback], () => {
 onUnmounted(() => clearInterval(timerInterval))
 
 onMounted(session.hydrate)
-function submit() { 
-  feedback.value = session.submit(undefined, { timeLeft: timeLeft.value ?? undefined }) 
+function submit(extraContext?: any) { 
+  feedback.value = session.submit(undefined, { 
+    timeLeft: timeLeft.value ?? undefined,
+    ...extraContext
+  }) 
 }
 function next() { feedback.value = undefined; session.advance() }
 </script>
@@ -148,7 +151,10 @@ function next() { feedback.value = undefined; session.advance() }
         
         <form v-if="session.exercise.value.kind === 'typed' && !feedback" @submit.prevent="submit">
           <textarea v-model="session.response.value" :placeholder="session.exercise.value.placeholder" rows="4" autofocus />
-          <button class="button" type="submit">Check answer</button>
+          <div class="typed-actions">
+            <VoiceInput @result="(t) => { session.response.value = t; submit({ isSpeaking: true }) }" />
+            <button class="button" type="submit">Check answer</button>
+          </div>
         </form>
         
         <button v-else-if="!feedback" class="button" @click="next">I’m ready to continue</button>
@@ -206,6 +212,7 @@ function next() { feedback.value = undefined; session.advance() }
 .exercise h2 { font-size:36px; margin:24px 0; }
 .exercise pre { white-space:pre-wrap; font: 500 21px/1.7 'DM Sans',sans-serif; background:#f3f7f2; border-radius:14px; padding:20px; color: #176b5b; }
 .exercise textarea { width:100%; border:1px solid #cad6ce; border-radius:12px; padding:15px; font:inherit; resize:vertical; margin-bottom:14px; }
+.typed-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
 
 .renderer { margin: 24px 0; }
 .default-renderer { margin: 24px 0; }

@@ -13,6 +13,11 @@ const onInput = (e: Event) => {
   emit('update:modelValue', (e.target as HTMLTextAreaElement).value)
 }
 
+const handleVoice = (text: string) => {
+  emit('update:modelValue', text)
+  // We don't auto-submit for long challenges, just populate the text
+}
+
 const wordCount = computed(() => {
   return props.modelValue.trim() ? props.modelValue.trim().split(/\s+/).length : 0
 })
@@ -39,6 +44,9 @@ const isLengthMet = computed(() => {
         rows="6"
         autofocus
       ></textarea>
+      <div v-if="!disabled" class="voice-fab">
+        <VoiceInput @result="handleVoice" />
+      </div>
       
       <div class="footer">
         <div class="stats">
@@ -97,6 +105,12 @@ textarea:focus {
 textarea:disabled {
   background: #f8faf9;
   color: #52645f;
+}
+
+.voice-fab {
+  position: absolute;
+  right: 12px;
+  top: 12px;
 }
 
 .footer {

@@ -8,8 +8,16 @@ const props = defineProps<{
 
 const emit = defineEmits(['submit', 'next', 'retry'])
 const response = defineModel<string>()
+const isSpeaking = ref(false)
 
 const stressLevel = ref(0) // 0 to 100
+
+function handleVoiceResult(text: string) {
+  response.value = text
+  isSpeaking.value = true
+  // In a simulator, we might want to auto-submit on voice result
+  emit('submit', { isSpeaking: true })
+}
 
 watch(() => props.feedback, (f) => {
   if (!f) return
@@ -79,7 +87,10 @@ const messages = computed(() => {
         rows="2" 
         autofocus 
       />
-      <button class="button" type="submit">Send Message</button>
+      <div class="actions">
+        <VoiceInput @result="handleVoiceResult" />
+        <button class="button" type="submit">Send Message</button>
+      </div>
     </form>
   </div>
 </template>
@@ -177,16 +188,24 @@ const messages = computed(() => {
 
 .input-area {
   display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
 .input-area textarea {
-  flex: 1;
+  width: 100%;
   border: 1px solid #cad6ce;
   border-radius: 12px;
   padding: 12px 15px;
   font: inherit;
   resize: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
 }
 
 .input-area .button {

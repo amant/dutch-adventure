@@ -21,6 +21,10 @@ Every chapter should follow this loop to move concepts from recognition to autom
 6.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
 7.  **Automate**: Timed drills and high-pressure missions.
 
+### Voice & Speaking
+
+Production stages (Retrieve, Personalise, Conversation, Challenge) support **Speech-to-Text (Voice Input)**. Spoken responses are evaluated with specific heuristics and provide increased rewards for the `speaking` and `automaticity` dimensions of the Language Graph.
+
 ## 3. The Language Graph
 
 We track the learner's progress not by "lessons completed," but through a multidimensional state for every word and grammar pattern:
@@ -67,7 +71,8 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
 - **Components**:
-    - `MissionSimulator.vue`: AI personality-driven chat.
+    - `MissionSimulator.vue`: AI personality-driven chat with Speech-to-Text (Voice) support.
+    - `VoiceInput.vue`: Global component for capturing Dutch speech via Web Speech API.
     - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
     - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.

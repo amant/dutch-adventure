@@ -19,6 +19,7 @@ function isSpellingMistake(normalized: string, accepted: string[]) {
 
 export interface EvaluationContext {
   timeLeft?: number
+  isSpeaking?: boolean
 }
 
 function checkInversionError(normalized: string) {
@@ -252,6 +253,13 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       } else if (context?.timeLeft !== undefined && context.timeLeft > exercise.automaticitySeconds / 2) {
         base.changeModifier = (base.changeModifier || 0) + 4
       }
+    }
+
+    // Speaking check
+    if (context?.isSpeaking) {
+      if (!base.skills.includes('speaking')) base.skills.push('speaking')
+      if (!base.skills.includes('automaticity')) base.skills.push('automaticity')
+      base.changeModifier = (base.changeModifier || 0) + 2
     }
 
     if (!normalized && exercise.kind === 'typed') {
