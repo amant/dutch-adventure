@@ -52,6 +52,12 @@ export interface Exercise {
   requiredWords?: string[]
   // For challenge
   minimumLength?: number
+  // For AI Personas
+  aiPersonality?: {
+    isDifficult?: boolean
+    style?: 'polite' | 'colloquial' | 'impatient' | 'helpful'
+    pushbackProbability?: number
+  }
 }
 
 export interface ChapterStage {
@@ -91,6 +97,10 @@ export interface Feedback {
       wrong: string
       right: string
     }
+  }
+  teacherCorrection?: {
+    natural: string
+    explanation: string
   }
 }
 

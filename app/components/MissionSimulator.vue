@@ -20,7 +20,20 @@ const messages = computed(() => {
     }
     
     if (props.feedback && props.feedback.outcome !== 'retry') {
-      msgs.push({ role: 'ai', text: props.exercise.simulatorResponse || 'Heel goed! Dat begrijp ik.' })
+      const personality = props.exercise.aiPersonality
+      let aiText = props.exercise.simulatorResponse || 'Heel goed! Dat begrijp ik.'
+      
+      if (personality?.isDifficult && Math.random() < (personality.pushbackProbability || 0.5)) {
+        if (personality.style === 'impatient') {
+          aiText = 'Kunt u sneller praten? Ik heb niet de hele dag.'
+        } else if (personality.style === 'colloquial') {
+          aiText = 'Echt? Nou, dat wist ik niet hoor. Maar goed...'
+        } else {
+          aiText = 'Dat begrijp ik niet helemaal. Kun je dat anders uitleggen?'
+        }
+      }
+      
+      msgs.push({ role: 'ai', text: aiText })
     }
   }
   

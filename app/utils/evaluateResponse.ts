@@ -98,120 +98,138 @@ function checkSeparableVerbError(normalized: string, target: string) {
 export function evaluateResponse(exercise: Exercise, answer: string, context?: EvaluationContext): Feedback {
   const normalized = normalizeAnswer(answer)
   const target = exercise.target
-  const base: Feedback = { 
-    outcome: 'retry',
-    message: '',
-    target, 
-    explanation: exercise.explanation, 
-    skills: [...exercise.skills], 
-    vocabulary: exercise.vocabulary, 
-    grammar: exercise.grammar,
-    changeModifier: 0
-  }
-
-  // Automaticity check
-  if (exercise.automaticitySeconds !== undefined) {
-    if (!base.skills.includes('automaticity')) base.skills.push('automaticity')
-    if (context?.timeLeft === 0) {
-      base.changeModifier = (base.changeModifier || 0) - 5
-    } else if (context?.timeLeft !== undefined && context.timeLeft > exercise.automaticitySeconds / 2) {
-      base.changeModifier = (base.changeModifier || 0) + 4
-    }
-  }
-
-  if (!normalized && exercise.kind === 'typed') {
-    return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
-  }
-
-  if (exercise.kind === 'info' || exercise.kind === 'reading') {
-    return { ...base, outcome: 'correct', message: 'Notice this pattern for the next activity.' }
-  }
-
-  const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
   
-  if (accepted.includes(normalized)) {
-    return { ...base, outcome: 'correct', message: 'That sounds perfectly natural!' }
-  }
-
-  // Grammar Assistant: Inversion Check
-  const inversionError = checkInversionError(normalized)
-  if (inversionError.found) {
-    if (!base.skills.includes('automaticity')) base.skills.push('automaticity') // Inversion mistakes slow you down
-    return { 
-      ...base, 
-      outcome: 'retry', 
-      message: inversionError.message, 
-      explanation: inversionError.explanation,
-      miniLesson: inversionError.miniLesson
-    }
-  }
-
-  // Grammar Assistant: Perfect Tense
-  const perfectError = checkPerfectTenseError(normalized)
-  if (perfectError.found) {
-    return { ...base, outcome: 'retry', message: perfectError.message, miniLesson: perfectError.miniLesson }
-  }
-
-  // Grammar Assistant: Separable Verbs
-  const separableError = checkSeparableVerbError(normalized, target || '')
-  if (separableError.found) {
-    return { ...base, outcome: 'retry', message: separableError.message, miniLesson: separableError.miniLesson }
-  }
-
-  // Spelling check
-  if (isSpellingMistake(normalized, accepted)) {
-    if (!base.skills.includes('spelling')) base.skills.push('spelling')
-    return { ...base, outcome: 'acceptable', message: 'Almost! Watch out for that small spelling mistake.', correction: exercise.correction || target }
-  }
-
-  // Flexibility Drill Evaluation
-  if (exercise.kind === 'flexibility') {
-    const hasForbidden = exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))
-    const hasRequired = exercise.requiredWords?.every(w => normalized.includes(w.toLowerCase()))
-
-    if (hasForbidden) {
-      const forbidden = exercise.forbiddenWords?.find(w => normalized.includes(w.toLowerCase()))
-      return { ...base, outcome: 'retry', message: `Nice try, but you need to avoid using '${forbidden}' for this challenge!` }
-    }
-    if (!hasRequired) {
-      const missing = exercise.requiredWords?.find(w => !normalized.includes(w.toLowerCase()))
-      return { ...base, outcome: 'retry', message: `Don't forget to use '${missing}' in your answer.` }
+  const getFeedback = (): Feedback => {
+    const base: Feedback = { 
+      outcome: 'retry',
+      message: '',
+      target, 
+      explanation: exercise.explanation, 
+      skills: [...exercise.skills], 
+      vocabulary: exercise.vocabulary, 
+      grammar: exercise.grammar,
+      changeModifier: 0
     }
 
-    if (normalized.length > 5) {
-      return { ...base, outcome: 'correct', message: 'Great job! You successfully used a different structure.' }
+    // Automaticity check
+    if (exercise.automaticitySeconds !== undefined) {
+      if (!base.skills.includes('automaticity')) base.skills.push('automaticity')
+      if (context?.timeLeft === 0) {
+        base.changeModifier = (base.changeModifier || 0) - 5
+      } else if (context?.timeLeft !== undefined && context.timeLeft > exercise.automaticitySeconds / 2) {
+        base.changeModifier = (base.changeModifier || 0) + 4
+      }
     }
-  }
 
-  // Final Challenge Evaluation
-  if (exercise.kind === 'challenge') {
-    const words = normalized.split(' ').filter(Boolean)
-    const minLength = exercise.minimumLength || 0
+    if (!normalized && exercise.kind === 'typed') {
+      return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
+    }
+
+    if (exercise.kind === 'info' || exercise.kind === 'reading') {
+      return { ...base, outcome: 'correct', message: 'Notice this pattern for the next activity.' }
+    }
+
+    const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
     
-    if (words.length < minLength) {
-      return { ...base, outcome: 'retry', message: `Keep going! Try to write at least ${minLength} words.` }
+    if (accepted.includes(normalized)) {
+      return { ...base, outcome: 'correct', message: 'That sounds perfectly natural!' }
     }
 
-    // Check for a few forbidden patterns in challenges (e.g., repeating the prompt)
-    if (exercise.prompt && normalized.includes(normalizeAnswer(exercise.prompt))) {
-      return { ...base, outcome: 'retry', message: "Try to use your own words instead of just repeating the prompt." }
+    // Grammar Assistant: Inversion Check
+    const inversionError = checkInversionError(normalized)
+    if (inversionError.found) {
+      if (!base.skills.includes('automaticity')) base.skills.push('automaticity') // Inversion mistakes slow you down
+      return { 
+        ...base, 
+        outcome: 'retry', 
+        message: inversionError.message, 
+        explanation: inversionError.explanation,
+        miniLesson: inversionError.miniLesson
+      }
     }
 
-    return { 
-      ...base, 
-      outcome: 'correct', 
-      message: 'Excellent! You demonstrated real-world usage of these concepts.',
-      changeModifier: (base.changeModifier || 0) + 10 // Challenge gives big boost
+    // Grammar Assistant: Perfect Tense
+    const perfectError = checkPerfectTenseError(normalized)
+    if (perfectError.found) {
+      return { ...base, outcome: 'retry', message: perfectError.message, miniLesson: perfectError.miniLesson }
+    }
+
+    // Grammar Assistant: Separable Verbs
+    const separableError = checkSeparableVerbError(normalized, target || '')
+    if (separableError.found) {
+      return { ...base, outcome: 'retry', message: separableError.message, miniLesson: separableError.miniLesson }
+    }
+
+    // Spelling check
+    if (isSpellingMistake(normalized, accepted)) {
+      if (!base.skills.includes('spelling')) base.skills.push('spelling')
+      return { ...base, outcome: 'acceptable', message: 'Almost! Watch out for that small spelling mistake.', correction: exercise.correction || target }
+    }
+
+    // Flexibility Drill Evaluation
+    if (exercise.kind === 'flexibility') {
+      const hasForbidden = exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))
+      const hasRequired = exercise.requiredWords?.every(w => normalized.includes(w.toLowerCase()))
+
+      if (hasForbidden) {
+        const forbidden = exercise.forbiddenWords?.find(w => normalized.includes(w.toLowerCase()))
+        return { ...base, outcome: 'retry', message: `Nice try, but you need to avoid using '${forbidden}' for this challenge!` }
+      }
+      if (!hasRequired) {
+        const missing = exercise.requiredWords?.find(w => !normalized.includes(w.toLowerCase()))
+        return { ...base, outcome: 'retry', message: `Don't forget to use '${missing}' in your answer.` }
+      }
+
+      if (normalized.length > 5) {
+        return { ...base, outcome: 'correct', message: 'Great job! You successfully used a different structure.' }
+      }
+    }
+
+    // Final Challenge Evaluation
+    if (exercise.kind === 'challenge') {
+      const words = normalized.split(' ').filter(Boolean)
+      const minLength = exercise.minimumLength || 0
+      
+      if (words.length < minLength) {
+        return { ...base, outcome: 'retry', message: `Keep going! Try to write at least ${minLength} words.` }
+      }
+
+      if (exercise.prompt && normalized.includes(normalizeAnswer(exercise.prompt))) {
+        return { ...base, outcome: 'retry', message: "Try to use your own words instead of just repeating the prompt." }
+      }
+
+      return { 
+        ...base, 
+        outcome: 'correct', 
+        message: 'Excellent! You demonstrated real-world usage of these concepts.',
+        changeModifier: (base.changeModifier || 0) + 10 
+      }
+    }
+
+    // Heuristic for personalised answers / conversations
+    if (exercise.id.includes('personalise') || exercise.kind === 'conversation') {
+      const hasGrammar = exercise.grammar?.every(g => normalized.includes(g.toLowerCase())) ?? true
+      if (normalized.length > 10 && hasGrammar) {
+        return { 
+          ...base, 
+          outcome: 'acceptable', 
+          message: 'Good effort! Your answer is understandable and uses the pattern.'
+        }
+      }
+    }
+
+    return { ...base, outcome: 'retry', message: 'Not quite. Check the word order or spelling and try again.', correction: exercise.correction }
+  }
+
+  const feedback = getFeedback()
+
+  // Add teacher correction if provided and the answer wasn't a complete failure
+  if (exercise.correction && feedback.outcome !== 'retry') {
+    feedback.teacherCorrection = {
+      natural: exercise.correction,
+      explanation: exercise.explanation || "Here is how to say it more naturally."
     }
   }
 
-  // Heuristic for personalised answers / conversations
-  if (exercise.id.includes('personalise') || exercise.kind === 'conversation') {
-    const hasGrammar = exercise.grammar?.every(g => normalized.includes(g.toLowerCase())) ?? true
-    if (normalized.length > 10 && hasGrammar) {
-      return { ...base, outcome: 'acceptable', message: 'Good effort! Your answer is understandable and uses the pattern.' }
-    }
-  }
-
-  return { ...base, outcome: 'retry', message: 'Not quite. Check the word order or spelling and try again.', correction: exercise.correction }
+  return feedback
 }

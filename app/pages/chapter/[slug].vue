@@ -144,6 +144,13 @@ function next() { feedback.value = undefined; session.advance() }
           </div>
         </div>
 
+        <div v-if="feedback.teacherCorrection" class="teacher-correction card">
+          <div class="tag">Teacher's Tip</div>
+          <h3>A more natural way to say it:</h3>
+          <p class="natural-text">"{{ feedback.teacherCorrection.natural }}"</p>
+          <p class="muted">{{ feedback.teacherCorrection.explanation }}</p>
+        </div>
+
         <div class="actions">
           <button v-if="feedback.outcome !== 'retry'" class="button" @click="next">Continue</button>
           <button v-else class="button secondary" @click="feedback = undefined">Retry</button>
@@ -174,9 +181,12 @@ function next() { feedback.value = undefined; session.advance() }
 .feedback p { margin: 8px 0; font-size: 16px; line-height: 1.5; }
 .feedback .actions { margin-top: 20px; }
 .mini-lesson { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #cad6ce; text-align: left; }
-.mini-lesson h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
-.mini-lesson .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
+.mini-lesson h3, .teacher-correction h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
+.mini-lesson .tag, .teacher-correction .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
 .comparison { margin-top: 12px; background: #f8faf9; padding: 12px; border-radius: 8px; font-family: monospace; }
+
+.teacher-correction { margin: 20px 0; padding: 16px; background: #fefce8; border: 1px solid #fef08a; text-align: left; }
+.natural-text { font-size: 19px; font-weight: 600; color: #854d0e; margin: 12px 0 !important; font-style: italic; }
 .wrong { color: #e53e3e; margin-bottom: 4px; }
 .right { color: #176b5b; }
 

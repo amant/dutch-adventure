@@ -496,7 +496,98 @@ export const debatingWorkChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, talkingAboutDayChapter, opinionChapter, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter]
+export const bakeryChapter: Chapter = {
+  slug: 'bakkerij',
+  level: 'A2',
+  title: 'At the Bakery',
+  capability: 'Order specific items, ask about ingredients, and handle a slightly impatient shopkeeper.',
+  description: 'Survival Dutch in a real-world setting. You will have to be quick and clear.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'discover', title: 'Bakery Vocabulary', kind: 'discover',
+      intro: 'Ordering food requires knowing exactly what you want.',
+      exercises: [{ 
+        id: 'bakery-1', kind: 'info', prompt: 'Essential items', 
+        context: 'een volkorenbrood (whole wheat)\ntwee krentenbollen (currant buns)\neen half wit (half a white loaf)', 
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['volkorenbrood', 'krentenbollen']
+      }],
+    },
+    {
+      id: 'drill', title: 'Ordering', kind: 'retrieve',
+      intro: 'Practice the standard "Mag ik..." structure.',
+      exercises: [{ 
+        id: 'bakery-2', kind: 'typed', prompt: 'May I have two currant buns?', 
+        target: 'Mag ik twee krentenbollen?',
+        skills: ['production', 'automaticity'],
+        vocabulary: ['krentenbollen'],
+        automaticitySeconds: 8
+      }],
+    },
+    {
+      id: 'mission', title: 'The Busy Bakery', kind: 'personalise',
+      intro: 'The baker is busy and wants to move to the next customer.',
+      exercises: [{ 
+        id: 'bakery-3', kind: 'conversation', prompt: 'Goedemiddag, wat wilt u hebben? We hebben haast vandaag!', 
+        aiPersonality: { isDifficult: true, style: 'impatient', pushbackProbability: 0.8 },
+        skills: ['speaking', 'production', 'automaticity'],
+        vocabulary: ['haast'],
+        grammar: ['word-order']
+      }],
+    }
+  ]
+}
+
+export const landlordMission: Chapter = {
+  slug: 'huisbaas-verwarming',
+  level: 'B1',
+  title: 'The Cold Apartment',
+  capability: 'Explain a technical problem, request a repair, and negotiate a timeline with your landlord.',
+  description: 'Your heating is broken. You need to call your landlord and make sure it gets fixed before the weekend.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'understand', title: 'Technical Problems', kind: 'understand',
+      intro: 'How to describe things that aren\'t working.',
+      exercises: [{ 
+        id: 'landlord-1', kind: 'reading', prompt: 'Read this email from a tenant.',
+        readingContent: 'Beste meneer de Vries, de verwarming in mijn woonkamer doet het niet meer. Het is erg koud in huis.',
+        wordHints: {
+          'verwarming': { meaning: 'heating', category: 'noun' },
+          'doet het niet': { meaning: 'doesn\'t work', category: 'phrase' }
+        },
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['verwarming']
+      }],
+    },
+    {
+      id: 'mission', title: 'The Phone Call', kind: 'personalise',
+      intro: 'Call your landlord. Be polite but firm.',
+      exercises: [{ 
+        id: 'landlord-2', kind: 'conversation', prompt: 'Hallo? Met De Vries. Waarom belt u mij op dit tijdstip?', 
+        simulatorResponse: 'Tjonge, dat is vervelend. Maar ik kan pas volgende week iemand sturen.',
+        aiPersonality: { isDifficult: true, style: 'colloquial', pushbackProbability: 0.6 },
+        skills: ['speaking', 'production'],
+        vocabulary: ['verwarming', 'repareren'],
+        grammar: ['omdat-clause']
+      }],
+    },
+    {
+      id: 'final', title: 'Confirmation', kind: 'review',
+      intro: 'Write a short text confirming the appointment.',
+      exercises: [{ 
+        id: 'landlord-3', kind: 'challenge', prompt: 'Write a message to the landlord confirming he will send a plumber tomorrow.', 
+        minimumLength: 15,
+        correction: 'Bedankt voor het gesprek. Ik wacht morgen op de loodgieter voor de verwarming.',
+        skills: ['production', 'writing'],
+        vocabulary: ['loodgieter', 'afspraak']
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

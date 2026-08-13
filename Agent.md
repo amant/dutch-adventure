@@ -1,0 +1,73 @@
+# Agent Guidelines: Dutch Adventure
+
+This document defines the core philosophy, architectural principles, and pedagogical engine of the Dutch Adventure webapp. Any AI agent working on this project must adhere to these guidelines to ensure consistency and effectiveness in the "B2 from day one" mission.
+
+## 1. Core Philosophy
+
+> **"Don't teach the learner more language. Turn what they know into language they can actually use."**
+
+- **B2 Destination Architecture**: Every feature, even at A1, should be designed with the B2 destination in mind. We are building a path to fluency, not just a collection of vocabulary lists.
+- **Can-Do Approach**: Structure the app around capabilities (what the learner can *do*) rather than grammar units.
+
+## 2. The Learning Engine (The Loop)
+
+Every chapter should follow this loop to move concepts from recognition to automaticity:
+
+1.  **Discover**: Very short explanation (2–5 mins).
+2.  **Understand**: Examples in context (dialogues, stories).
+3.  **Retrieve**: Intelligent drilling (production, transformation, substitution).
+4.  **Personalise**: "Why are you staying home today?"
+5.  **Conversation**: AI simulator pushing for improvisation.
+6.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
+7.  **Automate**: Timed drills and high-pressure missions.
+
+## 3. The Language Graph
+
+We track the learner's progress not by "lessons completed," but through a multidimensional state for every word and grammar pattern:
+
+- **Recognition**: Can they identify it?
+- **Meaning**: Do they know what it means?
+- **Listening**: Can they hear it in natural speech?
+- **Spelling**: Can they write it correctly?
+- **Production**: Can they recall it when prompted?
+- **Speaking**: Can they use it in a conversation?
+- **Automaticity**: Can they use it without thinking (fast retrieval)?
+
+**Rule**: If a word is "learned" but cannot be produced spontaneously, the system marks it as a **bottleneck** and injects it into future activities.
+
+## 4. AI Behavior & Teacher Persona
+
+The AI in this app is not just a chatbot; it's a coach.
+
+- **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation).
+- **The "Difficult" AI**: At higher levels (B1/B2), the AI should simulate real-world difficulty:
+    - Interrupting or asking follow-up questions.
+    - Expressing disagreement or confusion.
+    - Using colloquial expressions.
+- **Grammar Assistant**: Grammar should appear **when needed** (e.g., attached to a mistake). Avoid dumping rules; use "Mini-lessons" (60 seconds).
+
+## 5. Information Architecture
+
+- **Capabilities**: Group chapters by CEFR level (A1 Survival, A2 Everyday Independence, B1 Independent Communication, B2 Complex Communication).
+- **Missions**: High-level challenges that combine multiple skills (e.g., "Complain about a hotel").
+- **Ladders**: 
+    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise.
+    - **Reading Ladder**: From artificial dialogues to authentic Dutch news.
+
+## 6. Technical Implementation for Agents
+
+- **Types**: See `app/types/learning.ts` for the core domain model.
+- **Memory**: `useLearnerMemory.ts` handles the persistence of the Language Graph.
+- **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
+- **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
+- **Components**:
+    - `MissionSimulator.vue`: AI personality-driven chat.
+    - `ListeningLadder.vue` / `ReadingLadder.vue`: Progressive difficulty renderers.
+    - `FlexibilityDrill.vue`: Challenges learners to rewrite sentences using different frames.
+
+## 7. Development Guidelines
+
+1.  **Always set random seeds** (if applicable) for reproducible exercises.
+2.  **Minimize multiple choice**: Favour production (typing/speaking) to build retrieval strength.
+3.  **Context is King**: Never teach a word in isolation; always provide a sentence or a scenario.
+4.  **Feedback first**: Ensure every interaction provides meaningful, actionable feedback.
