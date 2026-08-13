@@ -62,6 +62,36 @@ const relatedChapters = computed(() => {
     )
   )
 })
+
+const collocations = computed(() => {
+  if (!selectedWord.value) return []
+  const w = selectedWord.value.toLowerCase()
+  const found: string[] = []
+  
+  chapters.forEach(c => {
+    c.stages.forEach(s => {
+      s.exercises.forEach(e => {
+        if (e.kind === 'collocation-drill' && e.context?.toLowerCase().includes(w)) {
+          // If the word we selected is the noun, the collocation is target + noun
+          if (e.target) {
+            found.push(`${e.target} ${e.context}`)
+          }
+        }
+        // Also check if it's explicitly listed in info contexts
+        if (e.context?.toLowerCase().includes(w) && e.context.includes(' + ')) {
+          const lines = e.context.split('\n')
+          lines.forEach(line => {
+            if (line.toLowerCase().includes(w) && line.includes(' ')) {
+               found.push(line.replace(/^- /, ''))
+            }
+          })
+        }
+      })
+    })
+  })
+  
+  return [...new Set(found)].slice(0, 5)
+})
 </script>
 
 <template>
@@ -149,6 +179,15 @@ const relatedChapters = computed(() => {
               <span class="date">{{ new Date(h.date).toLocaleDateString() }}</span>
             </li>
           </ul>
+        </div>
+
+        <div v-if="collocations.length > 0" class="collocations-section">
+          <div class="eyebrow">Common Collocations</div>
+          <div class="coll-list">
+            <div v-for="coll in collocations" :key="coll" class="coll-item">
+              {{ coll }}
+            </div>
+          </div>
         </div>
 
         <div v-if="relatedChapters.length > 0" class="related-section">
@@ -339,6 +378,18 @@ const relatedChapters = computed(() => {
 .usage-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e1e5de; }
 .snippet { font-style: italic; margin: 0; font-size: 14px; }
 .date { font-size: 10px; color: #8a9a94; }
+
+.collocations-section { margin-top: 24px; }
+.coll-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.coll-item { 
+  font-size: 14px; 
+  color: #1e293b; 
+  background: white; 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
+}
 
 .related-section { margin-top: 24px; }
 .chapter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }

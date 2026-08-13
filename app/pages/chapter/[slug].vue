@@ -112,6 +112,20 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'nuance-drill'" class="renderer">
+        <NuanceDrill
+          :exercise="session.exercise.value"
+          @submit="submit"
+        />
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'collocation-drill'" class="renderer">
+        <CollocationDrill
+          :exercise="session.exercise.value"
+          @submit="submit"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'listening'" class="renderer">
         <ListeningLadder 
           :exercise="session.exercise.value" 

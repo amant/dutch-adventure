@@ -1722,7 +1722,106 @@ export const circumlocutionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter]
+export const nuanceChapter: Chapter = {
+  slug: 'de-ziel-van-het-nederlands',
+  level: 'B2',
+  title: 'Natural Flow & Particles',
+  capability: 'Use modal particles to soften requests, express attitude, and sound more like a native speaker.',
+  description: 'Technically correct Dutch can sometimes sound stiff or rude. Learn how "hoor", "even", and "maar" act as the social grease of the language.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'discover', title: 'The Social Grease', kind: 'discover',
+      intro: 'In Dutch, "Ik wil koffie" is a bit too direct. Native speakers use particles to make it sound friendly.',
+      exercises: [{ 
+        id: 'nuance-1', kind: 'info', prompt: 'Modal Particles', 
+        context: 'Wait a moment:\n- Wacht.\n- Wacht even hoor.', 
+        skills: ['recognition', 'pragmatic']
+      }],
+    },
+    {
+      id: 'practice', title: 'Injection Challenge', kind: 'retrieve',
+      intro: 'Take these stiff sentences and inject the right particles to make them natural.',
+      exercises: [
+        { 
+          id: 'nuance-2', kind: 'nuance-drill', prompt: 'Make it natural: "Ik ga naar huis."', 
+          context: 'Ik ga naar huis.',
+          skills: ['production', 'pragmatic'],
+        },
+        { 
+          id: 'nuance-3', kind: 'nuance-drill', prompt: 'Make it softer: "Geef mij de krant."', 
+          context: 'Geef mij de krant.',
+          skills: ['production', 'pragmatic'],
+        }
+      ],
+    },
+    {
+      id: 'personalise', title: 'Daily Softening', kind: 'personalise',
+      intro: 'Think of a typical request you make at work or at home. Try to say it now with at least two particles.',
+      exercises: [{ 
+        id: 'nuance-4', kind: 'challenge', prompt: 'Ask someone to help you with a task using natural Dutch.', 
+        skills: ['writing', 'production', 'pragmatic']
+      }],
+    }
+  ]
+}
+
+export const collocationChapter: Chapter = {
+  slug: 'professionele-precisie',
+  level: 'B2',
+  title: 'Professional Precision',
+  capability: 'Use precise collocations and word pairings to sound accurate and professional in Dutch.',
+  description: 'Avoid literal translations from English. Master the word pairings that native speakers use for meetings, projects, and decisions.',
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'Native Pairings', kind: 'discover',
+      intro: 'Certain verbs and nouns always go together. We don\'t "make" a choice, we "take" one.',
+      exercises: [{ 
+        id: 'coll-1', kind: 'info', prompt: 'Essential Collocations', 
+        context: 'Nemen vs. Maken:\n- Een besluit nemen (To make a decision)\n- Een afspraak maken (To make an appointment)', 
+        skills: ['recognition']
+      }],
+    },
+    {
+      id: 'practice', title: 'The Right Verb', kind: 'retrieve',
+      intro: 'Choose the correct verb to complete the collocation.',
+      exercises: [
+        { 
+          id: 'coll-2', kind: 'collocation-drill', prompt: 'We moeten een belangrijk {target}.', 
+          context: 'besluit',
+          target: 'nemen',
+          options: ['maken', 'nemen', 'doen', 'hebben'],
+          forbiddenWords: ['maken'],
+          skills: ['production'],
+        },
+        { 
+          id: 'coll-3', kind: 'collocation-drill', prompt: 'Kan ik even {target}?', 
+          context: 'een vraag stellen',
+          target: 'stellen',
+          options: ['maken', 'doen', 'stellen', 'vragen'],
+          forbiddenWords: ['maken'],
+          skills: ['production'],
+        }
+      ],
+    },
+    {
+      id: 'transformation', title: 'Correcting Anglicisms', kind: 'transform',
+      intro: 'Rewrite these sentences using more natural Dutch collocations.',
+      exercises: [
+        { 
+          id: 'coll-4', kind: 'flexibility', prompt: 'Change "maken" to the correct verb: "Ik ga mijn best maken."', 
+          target: 'Ik ga mijn best doen.', 
+          skills: ['production', 'flexibility'],
+          forbiddenWords: ['maken'],
+          requiredWords: ['doen']
+        }
+      ],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

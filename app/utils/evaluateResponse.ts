@@ -455,6 +455,49 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Nuance Drill Evaluation
+    if (exercise.kind === 'nuance-drill') {
+      const particles = ['even', 'hoor', 'maar', 'toch', 'nou', 'eens', 'misschien', 'eigenlijk']
+      const usedParticles = particles.filter(p => normalized.includes(p))
+      
+      if (usedParticles.length === 0) {
+        return { 
+          ...base, 
+          outcome: 'retry', 
+          message: "Technically correct, but still a bit stiff. Can you add a modal particle to soften it?",
+          explanation: "Try adding 'even', 'hoor', or 'maar' to sound more natural."
+        }
+      }
+      
+      return {
+        ...base,
+        outcome: 'correct',
+        message: `Nice! Adding '${usedParticles[0]}' makes the sentence sound much more natural.`,
+        changeModifier: (base.changeModifier || 0) + 3,
+        pragmaticScore: 85
+      }
+    }
+
+    // Collocation Drill Evaluation
+    if (exercise.kind === 'collocation-drill') {
+      if (exercise.target && normalized === exercise.target.toLowerCase()) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: "Exactly! That's the most natural pairing.",
+          changeModifier: (base.changeModifier || 0) + 2
+        }
+      } else if (exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))) {
+        return {
+          ...base,
+          outcome: 'incorrect',
+          message: "That's an 'Anglicism' or a literal translation. It's technically understandable, but not how a native speaker would say it.",
+          explanation: "In Dutch, we use specific verbs with certain nouns. For example, you 'take' a decision (besluit nemen) rather than 'make' it."
+        }
+      }
+      return { ...base, outcome: 'retry', message: "Not quite the most natural word. Try another option!" }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }

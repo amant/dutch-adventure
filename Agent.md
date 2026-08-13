@@ -69,6 +69,9 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Strategic Competence & Circumlocution**: B2 learners must be able to keep speaking even when they lack a specific word.
     - **Circumlocution Challenge**: Tasks where learners must explain an abstract concept without using forbidden (direct) terms.
     - **Precision Training**: Drills that force learners to replace "lazy" or "overused" words (e.g., *leuk*, *goed*) with more precise Dutch vocabulary.
+- **Naturalness & Pragmatic Competence**: Moving beyond "correctness" to "naturalness".
+    - **Nuance Injector**: Exercises that challenge learners to take stiff sentences and inject modal particles (*hoor*, *even*, *maar*) to sound native-like.
+    - **Collocation Precision**: Training the brain to use standard native word pairings (e.g., *besluit nemen*) to avoid literal translations (Anglicisms).
 
 ## 5. Information Architecture
 
@@ -101,6 +104,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - `TeacherRedline.vue`: Visualizes the diff between user input and natural native corrections.
     - `CorrectionChallenge.vue`: Interactive interface for identifying and fixing errors in a provided passage.
     - `CircumlocutionChallenge.vue`: Component for explaining concepts without using forbidden words.
+    - `NuanceDrill.vue`: Interactive tool for injecting naturalness into stiff Dutch sentences.
+    - `CollocationDrill.vue`: Precision-based tool for practicing native word pairings.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
     - `PragmaticDrill.vue`: Context-based choice for social nuances.
 
