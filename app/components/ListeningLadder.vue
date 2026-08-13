@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Exercise, Feedback } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import VoiceInput from './VoiceInput.vue'
 
 const props = defineProps<{
   exercise: Exercise
@@ -8,10 +10,43 @@ const props = defineProps<{
 
 const emit = defineEmits(['submit', 'next', 'retry'])
 
+const { recordExposure } = useLearnerMemory()
 const showTranscript = ref(false)
 const response = defineModel<string>()
 const selectedOption = ref<number | null>(null)
 const hasAttempted = ref(false)
+const isShadowing = ref(false)
+const shadowingResult = ref('')
+
+const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
+
+const tokens = computed(() => {
+  const text = props.exercise.transcript || props.exercise.target || ''
+  if (!text) return []
+  
+  // Split by whitespace but keep it
+  const rawTokens = text.split(/(\s+)/)
+  
+  return rawTokens.map(token => {
+    if (token.match(/^\s+$/)) return { text: token, isInteractable: false }
+    
+    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
+    const hint = props.exercise.wordHints?.[cleanWord]
+    return {
+      text: token,
+      isInteractable: !!hint,
+      hint
+    }
+  })
+})
+
+const showHint = (token: any) => {
+  if (token.hint) {
+    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint }
+    const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
+    recordExposure(cleanWord)
+  }
+}
 
 const difficulty = ref(1) // 1 to 5
 const rate = computed(() => {
@@ -157,12 +192,49 @@ const toggleTranscript = () => {
 
     <div v-if="showTranscript || (hasAttempted && feedback?.outcome === 'correct')" class="transcript-box card">
       <h4>Transcript</h4>
-      <p class="dutch">{{ exercise.transcript || exercise.target }}</p>
+      <div class="dutch">
+        <template v-for="(token, idx) in tokens" :key="idx">
+          <span 
+            v-if="token.isInteractable" 
+            class="word interactable" 
+            @click="showHint(token)"
+            :class="{ active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }"
+          >
+            {{ token.text }}
+          </span>
+          <span v-else>{{ token.text }}</span>
+        </template>
+      </div>
+
+      <div v-if="selectedWord" class="hint-popup card inline-hint">
+        <div class="hint-header">
+          <span class="word-label">{{ selectedWord.word }}</span>
+          <button class="close-btn" @click="selectedWord = null">×</button>
+        </div>
+        <p class="meaning">{{ selectedWord.meaning }}</p>
+      </div>
+
       <div v-if="exercise.translation">
         <h4>Translation</h4>
         <p class="muted">{{ exercise.translation }}</p>
       </div>
-      <button v-if="feedback && feedback.outcome !== 'retry'" class="button" @click="emit('next')">Continue</button>
+
+      <div v-if="!isShadowing && feedback?.outcome === 'correct'" class="shadowing-promo">
+        <p><strong>B2 Challenge:</strong> Practice your automaticity by shadowing this sentence.</p>
+        <button class="button secondary" @click="isShadowing = true">Start Shadowing</button>
+      </div>
+
+      <div v-if="isShadowing" class="shadowing-area card">
+        <div class="eyebrow">Shadowing Mode</div>
+        <p class="instruction">Repeat the sentence clearly. We'll check your flow.</p>
+        
+        <VoiceInput 
+          v-model="shadowingResult" 
+          @submit="emit('submit', { answer: shadowingResult, isShadowing: true })" 
+        />
+      </div>
+
+      <button v-if="feedback && feedback.outcome !== 'retry' && !isShadowing" class="button" @click="emit('next')">Continue</button>
     </div>
   </div>
 </template>
@@ -332,5 +404,56 @@ input[type=range] {
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.word.interactable {
+  color: #176b5b;
+  font-weight: 600;
+  text-decoration: underline decoration-skip-ink;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.word.interactable:hover {
+  background: #e8f3ec;
+  border-radius: 4px;
+}
+
+.word.interactable.active {
+  background: #176b5b;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.inline-hint {
+  background: #fffcf4;
+  border: 1px solid #f9e8b9;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.shadowing-promo {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f0f7f4;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.shadowing-area {
+  margin-top: 20px;
+  padding: 24px;
+  background: #fff;
+  border-color: #176b5b;
+  text-align: center;
+}
+
+.instruction {
+  font-size: 15px;
+  margin: 8px 0 20px;
+  color: #52645f;
 }
 </style>

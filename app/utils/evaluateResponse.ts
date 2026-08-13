@@ -20,6 +20,37 @@ function isSpellingMistake(normalized: string, accepted: string[]) {
 export interface EvaluationContext {
   timeLeft?: number
   isSpeaking?: boolean
+  isShadowing?: boolean
+}
+
+function calculateSimilarity(s1: string, s2: string): number {
+  const longer = s1.length > s2.length ? s1 : s2
+  const shorter = s1.length > s2.length ? s2 : s1
+  const longerLength = longer.length
+  if (longerLength === 0) return 1.0
+  return (longerLength - editDistance(longer, shorter)) / longerLength
+}
+
+function editDistance(s1: string, s2: string): number {
+  const costs = []
+  for (let i = 0; i <= s1.length; i++) {
+    let lastValue = i
+    for (let j = 0; j <= s2.length; j++) {
+      if (i === 0) costs[j] = j
+      else {
+        if (j > 0) {
+          let newValue = costs[j - 1]
+          if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1
+          }
+          costs[j - 1] = lastValue
+          lastValue = newValue
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue
+  }
+  return costs[s2.length]
 }
 
 function checkInversionError(normalized: string) {
@@ -271,6 +302,40 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         }
       })
       base.achievedGoalIds = achievedGoalIds
+    }
+
+    // Shadowing check
+    if (context?.isShadowing) {
+      const targetText = normalizeAnswer(exercise.transcript || exercise.target || '')
+      const score = calculateSimilarity(normalized, targetText)
+      
+      if (score > 0.85) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent flow! You matched the native pace and rhythm perfectly.',
+          isShadowing: true,
+          natural: exercise.transcript || exercise.target,
+          skills: [...base.skills, 'speaking', 'automaticity'],
+          changeModifier: (base.changeModifier || 0) + 8
+        }
+      } else if (score > 0.6) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Good attempt, but your rhythm was a bit off. Try to mimic the speaker more closely.',
+          isShadowing: true,
+          skills: [...base.skills, 'speaking', 'automaticity'],
+          changeModifier: (base.changeModifier || 0) + 2
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'That was a bit stumbling. Listen to the audio again and try to repeat it in one smooth breath.',
+          isShadowing: true
+        }
+      }
     }
 
     if (!normalized && exercise.kind === 'typed') {

@@ -1116,7 +1116,72 @@ export const socialNuanceChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter]
+export const workplaceChapter: Chapter = {
+  id: 'b2-workplace',
+  slug: 'dutch-workplace',
+  title: 'The Dutch Workplace',
+  level: 'B2',
+  capability: 'Navigate professional discussions and adapt speech to the workplace context.',
+  description: 'Learn to handle project delays and professional feedback in a Dutch environment.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'shadow', title: 'Professional Shadowing', kind: 'understand',
+      intro: 'Listen to a colleague explaining a project delay. Practice your flow and automaticity.',
+      exercises: [
+        {
+          id: 'work-shadow-1',
+          kind: 'listening',
+          prompt: 'Listen carefully to the rhythm and intonation.',
+          transcript: 'Helaas hebben we een kleine vertraging opgelopen bij het ontwikkelen van de nieuwe software.',
+          translation: 'Unfortunately, we have encountered a small delay in developing the new software.',
+          skills: ['listening', 'automaticity'],
+          vocabulary: ['helaas', 'vertraging', 'opgelopen', 'ontwikkelen'],
+          wordHints: {
+            'helaas': { meaning: 'unfortunately', category: 'adverb' },
+            'vertraging': { meaning: 'delay', category: 'noun' },
+            'opgelopen': { meaning: 'encountered / incurred', category: 'verb' },
+            'ontwikkelen': { meaning: 'to develop', category: 'verb' }
+          }
+        }
+      ]
+    },
+    {
+      id: 'flex', title: 'Structural Flexibility', kind: 'drill',
+      intro: 'Rephrase the explanation to focus on different aspects while maintaining professional tone.',
+      exercises: [
+        {
+          id: 'work-flex-1',
+          kind: 'flexibility',
+          prompt: 'Say the same thing, but start with "Vanwege een probleem..." (Because of a problem...)',
+          target: 'Vanwege een probleem hebben we een kleine vertraging opgelopen bij de software.',
+          requiredWords: ['vanwege', 'opgelopen'],
+          forbiddenWords: ['helaas'],
+          skills: ['grammar', 'flexibility'],
+          grammar: ['inversion']
+        }
+      ]
+    },
+    {
+      id: 'mission', title: 'The Status Update', kind: 'personalise',
+      intro: 'A manager asks for an update on the delay. Be professional and propose a solution.',
+      exercises: [{
+        id: 'work-mission-1',
+        kind: 'conversation',
+        prompt: 'Explain the situation to Jan.',
+        intro: 'Your manager, Jan, is waiting for an update.',
+        simulatorResponse: 'Ik begrijp het, maar wanneer verwacht je dat het project nu klaar is?',
+        skills: ['speaking', 'interaction'],
+        missionGoals: [
+          { id: 'apology', label: 'Explain the situation professionally', keywords: ['helaas', 'vertraging', 'probleem'] },
+          { id: 'solution', label: 'Propose a timeline', keywords: ['volgende week', 'klaar', 'afgerond'] }
+        ]
+      }]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

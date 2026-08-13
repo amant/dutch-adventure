@@ -59,7 +59,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Capabilities**: Group chapters by CEFR level (A1 Survival, A2 Everyday Independence, B1 Independent Communication, B2 Complex Communication).
 - **Missions**: High-level challenges that combine multiple skills (e.g., "Complain about a hotel").
 - **Ladders**: 
-    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues and **comprehension checks** (answering questions before transcript reveal).
+    - **Listening Ladder**: From slow/clear to fast/colloquial with background noise. Supports multiple-speaker dialogues, **comprehension checks**, and **Shadowing** (repeating native audio to build automaticity).
     - **Reading Ladder**: From artificial dialogues to authentic Dutch news. Includes post-reading production challenges.
 - **Pragmatic Drills**: Explicit practice for social nuances, choosing the best phrasing for a specific context (formal vs. informal).
 
