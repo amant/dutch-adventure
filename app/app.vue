@@ -18,6 +18,7 @@ useHead({
       <nav>
         <NuxtLink to="/graph">Graph</NuxtLink>
         <NuxtLink to="/reading">Reading</NuxtLink>
+        <NuxtLink to="/corrections">Corrections</NuxtLink>
         <NuxtLink to="/vocabulary">Vocabulary</NuxtLink>
         <NuxtLink to="/grammar">Grammar</NuxtLink>
         <NuxtLink to="/progress">Progress</NuxtLink>

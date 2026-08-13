@@ -1391,7 +1391,86 @@ export const synthesisChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter]
+export const paraphrasingChapter: Chapter = {
+  id: 'b2-paraphrasing',
+  slug: 'advanced-paraphrasing',
+  title: 'Advanced Paraphrasing',
+  level: 'B2',
+  capability: 'Express the same thought using different grammatical structures and vocabulary.',
+  description: 'Master the flexibility required for B2 by learning how to pivot your language when one structure fails or when you want to change emphasis.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'pivot', title: 'The Pivot', kind: 'understand',
+      intro: 'In Dutch, there are often multiple ways to express the same idea. For example, "omdat" (subordinate) vs "want" (main clause).',
+      exercises: [
+        {
+          id: 'para-1',
+          kind: 'info',
+          prompt: 'Omdat vs Want',
+          context: '1. Ik blijf thuis omdat het regent. (Verb at end)\n2. Ik blijf thuis, want het regent. (Verb in position 2)',
+          skills: ['recognition', 'meaning']
+        }
+      ]
+    },
+    {
+      id: 'flex', title: 'Flexibility Drills', kind: 'transform',
+      intro: 'Rewrite the sentences using the requested structure.',
+      exercises: [
+        {
+          id: 'para-2',
+          kind: 'flexibility',
+          prompt: 'Rewrite using "Want": Ik ga niet werken omdat ik ziek ben.',
+          forbiddenWords: ['omdat'],
+          requiredWords: ['want'],
+          target: 'Ik ga niet werken, want ik ben ziek.',
+          skills: ['production', 'automaticity'],
+          explanation: 'Remember that "want" is a coordinating conjunction, so it doesn\'t change the word order of the following clause.'
+        },
+        {
+          id: 'para-3',
+          kind: 'flexibility',
+          prompt: 'Rewrite using "Ondanks" (Despite): Hoewel het regende, ging hij wandelen.',
+          forbiddenWords: ['hoewel'],
+          requiredWords: ['ondanks'],
+          target: 'Ondanks de regen ging hij wandelen.',
+          skills: ['production', 'automaticity', 'pragmatic'],
+          explanation: '"Ondanks" is a preposition and usually takes a noun phrase.'
+        }
+      ]
+    },
+    {
+      id: 'synonym', title: 'Synonym Substitution', kind: 'transform',
+      intro: 'Replace the highlighted words with more advanced B2-level synonyms.',
+      exercises: [
+        {
+          id: 'para-4',
+          kind: 'typed',
+          prompt: 'Replace "denk dat" with "ben van mening dat": Ik denk dat we meer moeten investeren.',
+          target: 'Ik ben van mening dat we meer moeten investeren.',
+          skills: ['production', 'pragmatic'],
+          explanation: '"Van mening zijn dat" is a more formal and professional way to express an opinion.'
+        }
+      ]
+    },
+    {
+      id: 'final-para', title: 'Final Challenge: The Rewriter', kind: 'challenge',
+      intro: 'Explain the same concept in two different ways. First, use a simple structure. Then, use a more complex, professional structure.',
+      exercises: [
+        {
+          id: 'para-5',
+          kind: 'challenge',
+          prompt: 'Topic: Remote work is productive. Write two sentences expressing this differently.',
+          minimumLength: 40,
+          skills: ['production', 'automaticity', 'coherence', 'pragmatic'],
+          grammar: ['subordinate-clauses', 'word-order']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

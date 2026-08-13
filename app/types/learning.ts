@@ -14,12 +14,26 @@ export interface ConceptState {
   successes: number
   lastEncountered?: string
   usageHistory?: { snippet: string, date: string }[]
+  redlineHistory?: { userAnswer: string, naturalCorrection: string, date: string }[]
+}
+
+export interface Redline {
+  id: string
+  exerciseId: string
+  prompt: string
+  userAnswer: string
+  naturalCorrection: string
+  explanation: string
+  date: string
+  vocabulary?: string[]
+  grammar?: string[]
 }
 
 export interface LearnerMemory {
   overall: Record<SkillDimension, number>
   vocabulary: Record<string, ConceptState>
   grammar: Record<string, ConceptState>
+  recentRedlines?: Redline[]
 }
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'

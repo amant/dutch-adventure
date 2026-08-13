@@ -29,7 +29,8 @@ const emptyMemory = (): LearnerMemory => ({
     coherence: 0
   },
   vocabulary: {},
-  grammar: {}
+  grammar: {},
+  recentRedlines: []
 })
 
 export function useLearnerMemory() {
@@ -53,6 +54,7 @@ export function useLearnerMemory() {
         }
         if (parsed.vocabulary) fresh.vocabulary = parsed.vocabulary
         if (parsed.grammar) fresh.grammar = parsed.grammar
+        if (parsed.recentRedlines) fresh.recentRedlines = parsed.recentRedlines
         memory.value = fresh
       }
     } catch { /* Fail safe */ }
@@ -65,11 +67,45 @@ export function useLearnerMemory() {
     vocabulary?: string[],
     grammar?: string[],
     changeModifier: number = 0,
-    snippet?: string
+    snippet?: string,
+    prompt?: string,
+    feedback?: any
   ) {
     let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
     change = Math.max(1, change + changeModifier)
     const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
+
+    // Update redlines if needed
+    if (feedback && (outcome === 'acceptable' || outcome === 'retry') && (feedback.teacherCorrection || feedback.correction) && prompt && snippet) {
+      const redline = {
+        id: Math.random().toString(36).substr(2, 9),
+        exerciseId: 'recorded-session',
+        prompt,
+        userAnswer: snippet,
+        naturalCorrection: feedback.teacherCorrection?.natural || feedback.correction || '',
+        explanation: feedback.teacherCorrection?.explanation || feedback.explanation || feedback.message || '',
+        date: new Date().toISOString(),
+        vocabulary,
+        grammar
+      }
+      if (!next.recentRedlines) next.recentRedlines = []
+      next.recentRedlines.unshift(redline)
+      if (next.recentRedlines.length > 10) next.recentRedlines.pop()
+
+      // Also add to concepts
+      const addToConceptRedline = (key: string, dict: Record<string, ConceptState>) => {
+        if (!dict[key]) dict[key] = emptyConcept()
+        if (!dict[key].redlineHistory) dict[key].redlineHistory = []
+        dict[key].redlineHistory!.unshift({ 
+          userAnswer: snippet, 
+          naturalCorrection: redline.naturalCorrection, 
+          date: redline.date 
+        })
+        if (dict[key].redlineHistory!.length > 5) dict[key].redlineHistory!.pop()
+      }
+      vocabulary?.forEach(v => addToConceptRedline(v, next.vocabulary))
+      grammar?.forEach(g => addToConceptRedline(g, next.grammar))
+    }
 
     // Update overall
     for (const skill of skills) {

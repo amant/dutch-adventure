@@ -16,10 +16,11 @@ Every chapter should follow this loop to move concepts from recognition to autom
 1.  **Discover**: Very short explanation (2–5 mins).
 2.  **Understand**: Examples in context (dialogues, stories).
 3.  **Retrieve**: Intelligent drilling (production, transformation, recombination, substitution).
-4.  **Personalise**: "Why are you staying home today?"
-5.  **Conversation**: AI simulator pushing for improvisation.
-6.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
-7.  **Automate**: Timed drills and high-pressure missions.
+4.  **Review Redlines**: Persistent feedback loop for past mistakes.
+5.  **Personalise**: "Why are you staying home today?"
+6.  **Conversation**: AI simulator pushing for improvisation.
+7.  **Delayed Retrieval**: Re-testing concepts days later with no hints.
+8.  **Automate**: Timed drills and high-pressure missions.
 
 ### Voice & Speaking
 
@@ -47,6 +48,7 @@ We track the learner's progress not by "lessons completed," but through a multid
 The AI in this app is not just a chatbot; it's a coach.
 
 - **Teacher Corrections**: When a learner makes a mistake, provide a "Natural" rewrite and a "Teacher's Tip" (short, pedagogical explanation). Includes visual "Teacher's Redline" to highlight changes.
+- **Correction Hub**: Persistent storage of "Redlines" allows learners to revisit and re-try exercises they struggled with, closing the feedback loop.
 - **Pragmatic Analysis**: Every correct response is evaluated for its "Naturalness" (Pragmatic Score). Suggestions are provided to soften direct requests (using "even", "zou", "graag") or add native-like particles ("hoor", "nou").
 - **The "Difficult" AI**: At higher levels (B1/B2), the AI should simulate real-world difficulty:
     - **Patience Meter**: AI responsiveness and tone change based on learner accuracy and social/pragmatic appropriateness (e.g., formality).
@@ -71,6 +73,7 @@ The AI in this app is not just a chatbot; it's a coach.
 - **Articles**: Authentic content lives in `app/data/articles.ts`.
 - **Memory**: `useLearnerMemory.ts` handles the persistence of the Language Graph.
 - **Chapters**: Add new curriculum content in `app/data/chapters.ts`.
+- **Corrections**: `app/pages/corrections.vue` provides a hub for reviewing and re-trying persistent "Redlines".
 - **Evaluation**: Logic for pedagogical feedback lives in `app/utils/evaluateResponse.ts`.
 - **Components**:
     - `MissionSimulator.vue`: AI personality-driven chat with Speech-to-Text (Voice) support.

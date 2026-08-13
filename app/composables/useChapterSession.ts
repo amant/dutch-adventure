@@ -44,7 +44,16 @@ export function useChapterSession(chapter: Chapter) {
     const feedback = evaluateResponse(exercise.value, answer, context)
     const attempt: Attempt = { exerciseId: exercise.value.id, answer, feedback, createdAt: new Date().toISOString() }
     state.value.attempts = [...state.value.attempts, attempt]
-    learnerMemory.record(feedback.skills, feedback.outcome, feedback.vocabulary, feedback.grammar, feedback.changeModifier, answer)
+    learnerMemory.record(
+      feedback.skills, 
+      feedback.outcome, 
+      feedback.vocabulary, 
+      feedback.grammar, 
+      feedback.changeModifier, 
+      answer,
+      exercise.value.prompt,
+      feedback
+    )
     persist()
     response.value = ''
     return feedback
