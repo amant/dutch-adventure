@@ -3,6 +3,9 @@ import { articles } from '~/data/articles'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
 import { evaluateResponse } from '~/utils/evaluateResponse'
 import type { Feedback } from '~/types/learning'
+import SummaryChallenge from '~/components/SummaryChallenge.vue'
+import TeacherRedline from '~/components/TeacherRedline.vue'
+import VoiceInput from '~/components/VoiceInput.vue'
 
 const route = useRoute()
 const { memory, hydrate, recordExposure, updateConceptMastery } = useLearnerMemory()
@@ -84,21 +87,32 @@ const feedback = ref<Feedback | null>(null)
 
 const finishReading = () => {
   readingFinished.value = true
-  if (article.value?.challenge) {
+    if (article.value?.challenge) {
     showChallenge.value = true
+    // Scroll to challenge if it's a summary challenge
+    if (article.value.challenge.kind === 'summary-challenge') {
+      setTimeout(() => {
+        document.querySelector('.summary-challenge-section')?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
   }
 }
 
-const handleSubmitChallenge = () => {
+const handleChallengeSubmit = (response: string) => {
   if (!article.value?.challenge) return
+  currentResponse.value = response
   
-  feedback.value = evaluateResponse(article.value.challenge, currentResponse.value)
+  feedback.value = evaluateResponse(article.value.challenge, response)
   
   if (feedback.value.outcome === 'correct' || feedback.value.outcome === 'acceptable') {
-    // Update memory based on the challenge success
     article.value.challenge.vocabulary?.forEach(v => updateConceptMastery(v, 'vocabulary', true, feedback.value!.skills))
     article.value.challenge.grammar?.forEach(g => updateConceptMastery(g, 'grammar', true, feedback.value!.skills))
   }
+}
+
+const handleNext = () => {
+  showChallenge.value = false
+  navigateTo('/reading')
 }
 </script>
 
@@ -133,6 +147,15 @@ const handleSubmitChallenge = () => {
         </template>
       </div>
 
+      <div v-if="showChallenge && article.challenge?.kind === 'summary-challenge'" class="summary-challenge-section mt-10">
+        <SummaryChallenge
+          :exercise="article.challenge"
+          :feedback="feedback"
+          @submit="handleChallengeSubmit"
+          @next="handleNext"
+        />
+      </div>
+
       <aside class="sidebar">
         <div v-if="selectedWord" class="word-card card">
           <div class="header">
@@ -165,7 +188,7 @@ const handleSubmitChallenge = () => {
           </div>
         </div>
 
-        <div v-if="showChallenge && article.challenge" class="post-reading-challenge card">
+        <div v-if="showChallenge && article.challenge && article.challenge.kind !== 'summary-challenge'" class="post-reading-challenge card">
           <div class="eyebrow">Post-Reading Challenge</div>
           <h3>{{ article.challenge.prompt }}</h3>
           <p class="muted">{{ article.challenge.context }}</p>

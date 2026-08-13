@@ -74,14 +74,19 @@ export const articles: Article[] = [
     },
     challenge: {
       id: 'b1-thuiswerken-challenge',
-      kind: 'challenge',
-      skills: ['writing', 'production'],
-      prompt: 'Wat vind jij van thuiswerken?',
-      context: 'Summarize one advantage and one disadvantage mentioned in the article.',
+      kind: 'summary-challenge',
+      skills: ['writing', 'production', 'coherence'],
+      prompt: 'Vat het artikel over thuiswerken kort samen.',
+      context: 'Zorg ervoor dat je de belangrijkste voordelen en nadelen noemt.',
+      summaryPoints: [
+        { id: 'p1', label: 'Minder reistijd', keywords: ['minder reistijd', 'reistijd', 'geen reistijd'] },
+        { id: 'p2', label: 'Betere balans', keywords: ['balans', 'werk en privé', 'privé'] },
+        { id: 'p3', label: 'Contact met collega\'s', keywords: ['contact', 'collega', 'collega\'s', 'missen'] }
+      ],
       vocabulary: ['voordelen', 'werknemers', 'echter', 'lastig'],
       grammar: ['omdat'],
-      minimumLength: 15,
-      target: 'Thuiswerken heeft voordelen voor werknemers, echter is het soms lastig om geconcentreerd te blijven.'
+      minimumLength: 20,
+      target: 'Thuiswerken heeft voordelen voor werknemers, zoals minder reistijd en een betere balans, maar men mist soms het contact met collega\'s.'
     }
   },
   {
@@ -101,15 +106,19 @@ export const articles: Article[] = [
     },
     challenge: {
       id: 'b2-duurzaamheid-challenge',
-      kind: 'flexibility',
-      skills: ['writing', 'grammar'],
-      prompt: 'Herschrijf deze zin: "Critici beweren echter dat de kosten te hoog zijn."',
-      context: 'Gebruik het woord "hoewel" om dezelfde betekenis uit te drukken.',
-      requiredWords: ['hoewel'],
-      forbiddenWords: ['echter'],
-      vocabulary: ['beweren', 'kosten'],
+      kind: 'summary-challenge',
+      skills: ['writing', 'grammar', 'coherence'],
+      prompt: 'Vat het voorstel voor duurzame energie samen en noem de verschillende standpunten.',
+      context: 'Identificeer het doel van de regering, het argument van critici en de mening van voorstanders.',
+      summaryPoints: [
+        { id: 's1', label: 'Transitie versnellen', keywords: ['transitie', 'versnellen', 'voorstel', 'duurzame energie'] },
+        { id: 's2', label: 'Hoge kosten', keywords: ['kosten', 'burgers', 'te hoog', 'duur'] },
+        { id: 's3', label: 'Noodzaak klimaatactie', keywords: ['noodzaak', 'klimaatactie', 'klimaat', 'actie'] }
+      ],
+      vocabulary: ['beweren', 'kosten', 'voorstel', 'versnellen'],
       grammar: ['subordinate clauses'],
-      target: 'Hoewel voorstanders blij zijn, beweren critici dat de kosten te hoog zijn.'
+      minimumLength: 30,
+      target: 'De regering wil de transitie naar duurzame energie versnellen. Hoewel critici wijzen op de hoge kosten voor burgers, benadrukken voorstanders de noodzaak van klimaatactie.'
     }
   }
 ]

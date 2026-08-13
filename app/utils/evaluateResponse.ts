@@ -669,6 +669,31 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Summary Challenge Evaluation
+    if (exercise.kind === 'summary-challenge' && exercise.summaryPoints) {
+      const captured = exercise.summaryPoints.filter(point => 
+        point.keywords.some(k => normalized.includes(k.toLowerCase()))
+      )
+      
+      const missing = exercise.summaryPoints.filter(p => !captured.find(cp => cp.id === p.id))
+      
+      if (missing.length === 0) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Great summary! You captured all the essential information from the article.',
+          changeModifier: (base.changeModifier || 0) + 5
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: `You're missing some key information: ${missing.map(m => m.label).join(', ')}.`,
+          explanation: `Try to incorporate more details about: ${missing[0].label}.`
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
