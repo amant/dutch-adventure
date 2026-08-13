@@ -1,5 +1,5 @@
 import type { Attempt, Chapter, Feedback, PersistedSession } from '~/types/learning'
-import { evaluateResponse } from '~/utils/evaluateResponse'
+import { evaluateResponse, type EvaluationContext } from '~/utils/evaluateResponse'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
 
 const key = (slug: string) => `dutch-adventure-session-${slug}`
@@ -39,12 +39,12 @@ export function useChapterSession(chapter: Chapter) {
     } catch { /* Corrupt sessions are discarded. */ }
     hydrated.value = true
   }
-  function submit(answer = response.value): Feedback | undefined {
+  function submit(answer = response.value, context?: EvaluationContext): Feedback | undefined {
     if (!exercise.value) return
-    const feedback = evaluateResponse(exercise.value, answer)
+    const feedback = evaluateResponse(exercise.value, answer, context)
     const attempt: Attempt = { exerciseId: exercise.value.id, answer, feedback, createdAt: new Date().toISOString() }
     state.value.attempts = [...state.value.attempts, attempt]
-    learnerMemory.record(feedback.skills, feedback.outcome, feedback.vocabulary, feedback.grammar)
+    learnerMemory.record(feedback.skills, feedback.outcome, feedback.vocabulary, feedback.grammar, feedback.changeModifier)
     persist()
     response.value = ''
     return feedback

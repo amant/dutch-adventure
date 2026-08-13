@@ -92,14 +92,16 @@ export const opinionChapter: Chapter = {
       id: 'transform', title: 'Transform', kind: 'transform',
       intro: 'Keep the structure and change the reason.',
       exercises: [{ 
-        id: 'transform-1', kind: 'typed', prompt: 'Change the reason to: because it is quiet.', 
+        id: 'transform-1', kind: 'transformation', prompt: 'Change the reason to: because it is quiet.', 
+        context: 'Ik denk dat thuiswerken handig is, omdat ik meer tijd heb.',
         target: 'Ik denk dat thuiswerken handig is, omdat het rustig is.', 
         acceptedAnswers: ['Ik denk dat thuiswerken handig is omdat het rustig is'], 
         explanation: 'Keep the opinion frame and replace only the reason.', 
         skills: ['production', 'automaticity'], 
         vocabulary: ['rustig'],
         grammar: ['omdat-clause'],
-        placeholder: 'Rewrite the sentence...' 
+        placeholder: 'Rewrite the sentence...',
+        automaticitySeconds: 15
       }],
     },
     {
@@ -253,7 +255,78 @@ export const workDiscussionMission: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, doctorMission, opinionChapter, workDiscussionMission]
+export const storyChapter: Chapter = {
+  slug: 'een-dagje-uit',
+  level: 'A1',
+  title: 'A day out',
+  capability: 'Understand simple stories about daily activities and locations.',
+  description: 'Read a short story about a trip to Amsterdam.',
+  estimatedMinutes: 8,
+  stages: [
+    {
+      id: 'story', title: 'The Story', kind: 'understand',
+      intro: 'Read about Thomas\'s trip. Click for translations.',
+      exercises: [{ 
+        id: 'story-1', kind: 'reading', prompt: 'Thomas in Amsterdam', 
+        readingContent: 'Thomas gaat naar Amsterdam. Hij koopt een kaartje voor de trein. In de stad drinkt hij koffie en eet hij een broodje.',
+        wordHints: {
+          'gaat': { meaning: 'goes', category: 'verb' },
+          'koopt': { meaning: 'buys', category: 'verb' },
+          'kaartje': { meaning: 'ticket', category: 'noun' },
+          'trein': { meaning: 'train', category: 'noun' },
+          'drinkt': { meaning: 'drinks', category: 'verb' },
+          'eet': { meaning: 'eats', category: 'verb' },
+          'broodje': { meaning: 'sandwich', category: 'noun' }
+        },
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['trein', 'kaartje', 'broodje']
+      }],
+    }
+  ]
+}
+
+export const newsChapter: Chapter = {
+  slug: 'nieuws-lezen',
+  level: 'B2',
+  title: 'Reading the news',
+  capability: 'Understand authentic Dutch news articles and identify key terminology.',
+  description: 'Practice reading real-world Dutch news snippets with interactive vocabulary support.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'reading', title: 'Authentic Article', kind: 'understand',
+      intro: 'Read this snippet about a new government proposal. Click on highlighted words if you need help.',
+      exercises: [{ 
+        id: 'news-1', kind: 'reading', prompt: 'Read the article snippet', 
+        readingContent: 'De regering heeft gisteren een nieuw voorstel ingediend om de woningmarkt te hervormen. Volgens de minister is dit een noodzakelijke stap om de krapte op de markt aan te pakken.',
+        wordHints: {
+          'regering': { meaning: 'government', category: 'noun' },
+          'voorstel': { meaning: 'proposal', category: 'noun' },
+          'ingediend': { meaning: 'submitted', category: 'verb' },
+          'hervormen': { meaning: 'to reform', category: 'verb' },
+          'noodzakelijke': { meaning: 'necessary', category: 'adjective' },
+          'krapte': { meaning: 'shortage', category: 'noun' },
+          'aan te pakken': { meaning: 'to tackle / to address', category: 'verb phrase' }
+        },
+        skills: ['recognition', 'meaning'],
+        vocabulary: ['regering', 'voorstel', 'ingediend', 'hervormen']
+      }],
+    },
+    {
+      id: 'retrieve', title: 'Recall', kind: 'retrieve',
+      intro: 'Quick! What was the keyword for "proposal"? You have 5 seconds.',
+      exercises: [{ 
+        id: 'news-2', kind: 'typed', prompt: 'Dutch word for "proposal":', 
+        target: 'voorstel', 
+        skills: ['production', 'automaticity'],
+        vocabulary: ['voorstel'],
+        automaticitySeconds: 5
+      }],
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, doctorMission, opinionChapter, workDiscussionMission, newsChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

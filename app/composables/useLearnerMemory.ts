@@ -57,9 +57,11 @@ export function useLearnerMemory() {
     skills: SkillDimension[],
     outcome: 'correct' | 'acceptable' | 'retry',
     vocabulary?: string[],
-    grammar?: string[]
+    grammar?: string[],
+    changeModifier: number = 0
   ) {
-    const change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
+    let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
+    change = Math.max(1, change + changeModifier)
     const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
 
     // Update overall
@@ -85,10 +87,22 @@ export function useLearnerMemory() {
     if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))
   }
 
+  function recordExposure(word: string, skills: SkillDimension[] = ['recognition', 'meaning']) {
+    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
+    if (!next.vocabulary[word]) next.vocabulary[word] = emptyConcept()
+    for (const skill of skills) {
+      if (skill in next.vocabulary[word]) {
+        next.vocabulary[word][skill] = Math.min(100, next.vocabulary[word][skill] + 5)
+      }
+    }
+    memory.value = next
+    if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))
+  }
+
   function reset() {
     memory.value = emptyMemory()
     if (import.meta.client) localStorage.removeItem(storageKey)
   }
 
-  return { memory, hydrated, hydrate, record, reset }
+  return { memory, hydrated, hydrate, record, recordExposure, reset }
 }

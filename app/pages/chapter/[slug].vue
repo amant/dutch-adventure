@@ -5,8 +5,41 @@ const chapter = getChapter(String(route.params.slug))
 if (!chapter) throw createError({ statusCode: 404, statusMessage: 'Chapter not found' })
 const session = useChapterSession(chapter)
 const feedback = ref<ReturnType<typeof session.submit>>()
+
+const timeLeft = ref<number | null>(null)
+let timerInterval: any = null
+
+const startTimer = () => {
+  if (timerInterval) clearInterval(timerInterval)
+  if (session.exercise.value?.automaticitySeconds) {
+    timeLeft.value = session.exercise.value.automaticitySeconds
+    timerInterval = setInterval(() => {
+      if (timeLeft.value !== null && timeLeft.value > 0) {
+        timeLeft.value--
+      } else {
+        clearInterval(timerInterval)
+      }
+    }, 1000)
+  } else {
+    timeLeft.value = null
+  }
+}
+
+watch([() => session.exercise.value?.id, feedback], () => {
+  if (session.exercise.value && !feedback.value) {
+    startTimer()
+  } else {
+    clearInterval(timerInterval)
+    timeLeft.value = null
+  }
+}, { immediate: true })
+
+onUnmounted(() => clearInterval(timerInterval))
+
 onMounted(session.hydrate)
-function submit() { feedback.value = session.submit() }
+function submit() { 
+  feedback.value = session.submit(undefined, { timeLeft: timeLeft.value ?? undefined }) 
+}
 function next() { feedback.value = undefined; session.advance() }
 </script>
 <template>
@@ -16,7 +49,13 @@ function next() { feedback.value = undefined; session.advance() }
     <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
   </section>
   <section v-else-if="session.stage.value && session.exercise.value" class="session">
-    <div class="session-head"><span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span><span>{{ session.stage.value.title }}</span></div>
+    <div class="session-head">
+      <span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span>
+      <div v-if="timeLeft !== null" class="timer" :class="{ urgent: timeLeft < 5 }">
+        <span class="icon">⏱️</span> {{ timeLeft }}s
+      </div>
+      <span>{{ session.stage.value.title }}</span>
+    </div>
     <div class="progress-track"><div :style="{ width: `${((session.state.value.stageIndex + 1) / chapter.stages.length) * 100}%` }" /></div>
     <article class="card exercise">
       <div class="eyebrow">{{ session.stage.value.kind }}</div>
@@ -33,6 +72,23 @@ function next() { feedback.value = undefined; session.advance() }
 
       <div v-else-if="session.exercise.value.kind === 'conversation'" class="renderer">
         <MissionSimulator 
+          :exercise="session.exercise.value" 
+          v-model="session.response.value"
+          :feedback="feedback"
+          @submit="submit"
+        />
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'reading'" class="renderer">
+        <ReadingLadder 
+          :exercise="session.exercise.value" 
+          :feedback="feedback"
+          @submit="submit"
+        />
+      </div>
+
+      <div v-else-if="session.exercise.value.kind === 'transformation'" class="renderer">
+        <TransformationDrill 
           :exercise="session.exercise.value" 
           v-model="session.response.value"
           :feedback="feedback"
@@ -68,6 +124,9 @@ function next() { feedback.value = undefined; session.advance() }
 <style scoped>
 .session { max-width: 760px; margin: auto; }
 .session-head { display:flex; justify-content:space-between; color:#687873; margin-bottom:12px; align-items: baseline; }
+.timer { font-weight: 700; color: #176b5b; background: #e8f3ec; padding: 2px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.timer.urgent { color: #d06b3c; background: #fef1e8; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 .progress-track { height:7px; background:#dfe7df; border-radius:9px; margin-bottom:32px; overflow: hidden; }
 .progress-track div { height:100%; background:#d06b3c; border-radius:9px; transition:width .3s; }
 

@@ -18,7 +18,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation'
 
 export interface Exercise {
   id: string
@@ -39,6 +39,11 @@ export interface Exercise {
   translation?: string
   // For conversation
   simulatorResponse?: string
+  // For reading ladder
+  readingContent?: string
+  wordHints?: Record<string, { meaning: string, category?: string }>
+  // For timed drills
+  automaticitySeconds?: number
 }
 
 export interface ChapterStage {
@@ -70,6 +75,7 @@ export interface Feedback {
   skills: SkillDimension[]
   vocabulary?: string[]
   grammar?: string[]
+  changeModifier?: number
 }
 
 export interface Attempt {
