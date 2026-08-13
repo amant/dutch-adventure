@@ -222,6 +222,69 @@ function checkAdjectiveEndingError(normalized: string) {
   return { found: false }
 }
 
+function checkReflexiveError(normalized: string) {
+  const reflexives = [
+    { verb: 'herinner', correct: 'me', wrong: ['mij'] },
+    { verb: 'verveel', correct: 'je', wrong: [] },
+    { verb: 'vergist', correct: 'je', wrong: [] },
+    { verb: 'voel', correct: 'me', subject: 'ik' },
+    { verb: 'voelt', correct: 'je', subject: 'je' }
+  ]
+  
+  const words = normalized.split(' ')
+  
+  if (words.includes('ik') && (words.includes('herinner') || words.includes('voel')) && !words.includes('me')) {
+    return {
+      found: true,
+      message: "Don't forget the reflexive pronoun! 'Ik voel me...' or 'Ik herinner me...'",
+      miniLesson: {
+        title: 'Reflexive Verbs',
+        content: 'Some verbs in Dutch are reflexive, meaning the action reflects back to the subject. You must use "me", "je", "zich", etc.',
+        example: {
+          wrong: 'Ik voel goed.',
+          right: 'Ik voel me goed.'
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
+function checkFixedPrepositionError(normalized: string) {
+  const fixed = [
+    { verb: 'wachten', prep: 'op' },
+    { verb: 'rekenen', prep: 'op' },
+    { verb: 'denken', prep: 'aan' },
+    { verb: 'houden', prep: 'van' },
+    { verb: 'bang', prep: 'voor' },
+    { verb: 'geïnteresseerd', prep: 'in' },
+    { verb: 'trots', prep: 'op' }
+  ]
+  
+  const words = normalized.split(' ')
+  for (const f of fixed) {
+    if (words.some(w => w.startsWith(f.verb)) && !words.includes(f.prep)) {
+      // Check if there is another preposition used instead
+      const otherPreps = ['met', 'van', 'bij', 'voor', 'naar', 'in', 'op', 'aan'].filter(p => p !== f.prep)
+      if (otherPreps.some(p => words.includes(p))) {
+        return {
+          found: true,
+          message: `The verb '${f.verb}' always goes with '${f.prep}' in this context.`,
+          miniLesson: {
+            title: 'Fixed Prepositions',
+            content: 'Many Dutch verbs and adjectives are paired with a specific preposition. These must be learned together as a single unit.',
+            example: {
+              wrong: `Ik wacht voor de bus.`,
+              right: `Ik wacht op de bus.`
+            }
+          }
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
 function checkCoherenceConnectors(normalized: string): { score: number, found: string[] } {
   const connectors = {
     addition: ['bovendien', 'daarnaast', 'ook', 'verder'],
@@ -523,6 +586,18 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         explanation: inversionError.explanation,
         miniLesson: inversionError.miniLesson
       }
+    }
+
+    // Grammar Assistant: Reflexive Check
+    const reflexiveError = checkReflexiveError(normalized)
+    if (reflexiveError.found) {
+      return { ...base, outcome: 'retry', message: reflexiveError.message, miniLesson: reflexiveError.miniLesson }
+    }
+
+    // Grammar Assistant: Fixed Preposition Check
+    const prepositionError = checkFixedPrepositionError(normalized)
+    if (prepositionError.found) {
+      return { ...base, outcome: 'retry', message: prepositionError.message, miniLesson: prepositionError.miniLesson }
     }
 
     // Grammar Assistant: Perfect Tense

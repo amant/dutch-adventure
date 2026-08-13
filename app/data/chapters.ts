@@ -1919,7 +1919,89 @@ const mir2: Exercise = {
 
 mirroringChapter.stages[0].exercises.push(mir2)
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, b2Capstone]
+export const precisionChapter: Chapter = {
+  slug: 'precision-and-nuance',
+  level: 'B2',
+  title: 'B2 Precision & Nuance',
+  capability: 'Express complex ideas with precision and use reflexive verbs naturally.',
+  description: 'Move beyond "good" and "bad". Learn to use precise Dutch vocabulary and master the tricky reflexive verbs.',
+  estimatedMinutes: 12,
+  stages: [
+    {
+      id: 'reflexive-discovery', title: 'Discovery: Reflexive Verbs', kind: 'discover',
+      intro: 'Some Dutch verbs need a "reflexive pronoun" (me, je, zich).',
+      exercises: [
+        {
+          id: 'refl-1', kind: 'info', prompt: 'Common Reflexive Verbs',
+          context: 'Reflexive pronouns follow the verb:\n- ik herinner me (I remember)\n- jij vergist je (you are mistaken)\n- hij voelt zich (he feels)',
+          skills: ['recognition'],
+          vocabulary: ['herinneren', 'vergissen', 'voelen']
+        }
+      ]
+    },
+    {
+      id: 'precision-drills', title: 'Vocabulary Precision', kind: 'transform',
+      intro: 'In B2, we replace common "lazy" words with more professional synonyms.',
+      exercises: [
+        {
+          id: 'prec-1', kind: 'precision-drill', 
+          prompt: 'Dat is een goed plan.',
+          context: 'goed -> uitstekend',
+          target: 'Dat is een uitstekend plan.',
+          skills: ['production', 'flexibility'],
+          vocabulary: ['uitstekend']
+        },
+        {
+          id: 'prec-2', kind: 'precision-drill', 
+          prompt: 'Ik heb een groot probleem.',
+          context: 'groot -> aanzienlijk',
+          target: 'Ik heb een aanzienlijk probleem.',
+          skills: ['production', 'flexibility'],
+          vocabulary: ['aanzienlijk']
+        }
+      ]
+    },
+    {
+      id: 'fixed-prepositions', title: 'Fixed Prepositions', kind: 'retrieve',
+      intro: 'Many verbs only work with one specific preposition.',
+      exercises: [
+        {
+          id: 'prep-1', kind: 'typed', prompt: 'Say: I am waiting for the results.',
+          target: 'Ik wacht op de resultaten.',
+          explanation: 'Wachten always goes with "op".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['wachten op']
+        },
+        {
+          id: 'prep-2', kind: 'typed', prompt: 'Say: I am interested in this job.',
+          target: 'Ik ben geïnteresseerd in deze baan.',
+          explanation: 'Geïnteresseerd always goes with "in".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['geïnteresseerd in']
+        }
+      ]
+    },
+    {
+      id: 'final-mission', title: 'Final Mission: The Performance Review', kind: 'personalise',
+      intro: 'Apply your precision and reflexive verbs in a professional performance review.',
+      exercises: [
+        {
+          id: 'prec-mission', kind: 'conversation',
+          prompt: 'Your manager says: "Hoe voel je je over je prestaties van het afgelopen jaar?"',
+          skills: ['speaking', 'production', 'pragmatic'],
+          missionGoals: [
+            { id: 'feel', label: 'Explain how you feel (reflexive)', keywords: ['voel me', 'herinner me'] },
+            { id: 'precise', label: 'Use precise adjectives', keywords: ['uitstekend', 'aanzienlijk', 'indrukwekkend'] },
+            { id: 'prep', label: 'Use a fixed preposition', keywords: ['trots op', 'rekenen op', 'wachten op'] }
+          ],
+          aiPersonality: { style: 'professional', isDifficult: false }
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, b2Capstone]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

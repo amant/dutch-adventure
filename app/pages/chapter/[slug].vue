@@ -112,6 +112,16 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'precision-drill'" class="renderer">
+        <PrecisionDrill
+          :exercise="session.exercise.value"
+          :feedback="feedback"
+          v-model="session.response.value"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'nuance-drill'" class="renderer">
         <NuanceDrill
           :exercise="session.exercise.value"
