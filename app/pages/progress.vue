@@ -78,6 +78,16 @@ const recentGains = computed(() => {
     }))
   return items
 })
+
+const pipeline = computed(() => {
+  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  return {
+    new: all.filter(v => v.encounters < 3).length,
+    recognized: all.filter(v => v.recognition > 50 && v.production <= 50).length,
+    produced: all.filter(v => v.production > 50 && v.automaticity <= 50).length,
+    automated: all.filter(v => v.automaticity > 50).length
+  }
+})
 </script>
 
 <template>
@@ -104,6 +114,37 @@ const recentGains = computed(() => {
         </div>
         <div class="skill-level">
           {{ row.level }}
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-section">
+      <h2>Knowledge Pipeline</h2>
+      <div class="pipeline-container card">
+        <div class="pipeline-grid">
+          <div class="pipeline-step">
+            <span class="count">{{ pipeline.new }}</span>
+            <span class="label">New</span>
+            <span class="desc">Exposure</span>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step">
+            <span class="count">{{ pipeline.recognized }}</span>
+            <span class="label">Recognized</span>
+            <span class="desc">Passive</span>
+          </div>
+          <div class="pipeline-arrow active">→</div>
+          <div class="pipeline-step active">
+            <span class="count">{{ pipeline.produced }}</span>
+            <span class="label">Produced</span>
+            <span class="desc">Active</span>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step">
+            <span class="count">{{ pipeline.automated }}</span>
+            <span class="label">Automated</span>
+            <span class="desc">Fluent</span>
+          </div>
         </div>
       </div>
     </div>
@@ -171,6 +212,18 @@ const recentGains = computed(() => {
 .skill-level { width: 40px; font-weight: 700; text-align: right; color: #176b5b; }
 .meter { height: 8px; background: #e2e9e3; border-radius: 4px; overflow: hidden; }
 .meter div { height: 100%; background: #176b5b; transition: width 0.6s ease; }
+
+.pipeline-section { margin: 40px 0; }
+.pipeline-container { padding: 30px; background: #f8fafc; }
+.pipeline-grid { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pipeline-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pipeline-step.active { color: #176b5b; }
+.pipeline-step .count { font-size: 24px; font-weight: 800; font-family: Fraunces, serif; margin-bottom: 4px; }
+.pipeline-step .label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.pipeline-step .desc { font-size: 11px; color: #8a9a94; }
+.pipeline-step.active .desc { color: #176b5b; opacity: 0.8; }
+.pipeline-arrow { font-size: 20px; color: #cbd5e1; font-weight: 700; }
+.pipeline-arrow.active { color: #176b5b; }
 
 .reading-progress { margin: 40px 0; }
 .reading-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }

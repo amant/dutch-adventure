@@ -2,8 +2,10 @@
 import { chapters } from '~/data/chapters'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
 
-const { memory, hydrate } = useLearnerMemory()
+const { memory, hydrate, getFrontierConcepts } = useLearnerMemory()
 onMounted(hydrate)
+
+const frontier = computed(() => getFrontierConcepts(3))
 
 const weakAreas = computed(() => {
   const items: { label: string, type: 'vocabulary' | 'grammar', score: number, priority: number }[] = []
@@ -80,7 +82,11 @@ const staleItems = computed(() => {
       <NuxtLink to="/smart-review" class="button secondary">Reactivate with Smart Review</NuxtLink>
     </div>
 
-    <div v-else-if="weakAreas.length > 0" class="card review-card">
+    <div v-if="frontier.length > 0" class="frontier-section">
+      <FrontierCard :frontier="frontier" @activate="navigateTo({ path: '/smart-review', query: { mode: 'activation' } })" />
+    </div>
+
+    <div v-if="weakAreas.length > 0" class="card review-card">
       <div class="eyebrow">Recommended Review</div>
       <h3>Strengthen these weak spots:</h3>
       <div class="weak-list">
@@ -107,6 +113,7 @@ const staleItems = computed(() => {
 <style scoped>
 .home { padding: 45px 0; }
 .hero { margin-bottom: 50px; }
+.frontier-section { margin-bottom: 40px; }
 .intro { font-size: 19px; max-width: 550px; margin-top: 14px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 24px; }
 .chapter-card { display: flex; flex-direction: column; }

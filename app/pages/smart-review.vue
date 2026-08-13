@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { createSmartReviewChapter } from '~/utils/exerciseGenerator'
+import { createSmartReviewChapter, createActivationChapter } from '~/utils/exerciseGenerator'
 import { useChapterSession } from '~/composables/useChapterSession'
 
-const { getWeakConcepts, hydrate } = useLearnerMemory()
+const { getWeakConcepts, getFrontierConcepts, hydrate } = useLearnerMemory()
+const route = useRoute()
 
 const chapter = ref<any>(null)
 const session = ref<any>(null)
@@ -41,13 +42,20 @@ onUnmounted(() => clearInterval(timerInterval))
 
 onMounted(() => {
   hydrate()
-  const { vocabulary, grammar } = getWeakConcepts(4)
-  if (vocabulary.length === 0 && grammar.length === 0) {
-    // Fallback if memory is empty
-    chapter.value = createSmartReviewChapter(['zijn', 'wonen'], ['word-order'])
+  
+  if (route.query.mode === 'activation') {
+    const frontier = getFrontierConcepts(3)
+    chapter.value = createActivationChapter(frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
   } else {
-    chapter.value = createSmartReviewChapter(vocabulary, grammar)
+    const { vocabulary, grammar } = getWeakConcepts(4)
+    if (vocabulary.length === 0 && grammar.length === 0) {
+      // Fallback if memory is empty
+      chapter.value = createSmartReviewChapter(['zijn', 'wonen'], ['word-order'])
+    } else {
+      chapter.value = createSmartReviewChapter(vocabulary, grammar)
+    }
   }
+  
   session.value = useChapterSession(chapter.value)
   session.value.hydrate()
 })

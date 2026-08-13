@@ -123,3 +123,50 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
     stages
   }
 }
+
+export function createActivationChapter(concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
+  const stages: ChapterStage[] = []
+
+  // Stage 1: Transformation (Bridging the gap)
+  if (concepts.length > 0) {
+    stages.push({
+      id: 'activate-bridge',
+      title: 'Bridge the Gap',
+      kind: 'transform',
+      intro: 'You know what these mean. Now let\'s try to manipulate them.',
+      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'flexibility'))
+    })
+
+    // Stage 2: Retrieval
+    stages.push({
+      id: 'activate-retrieve',
+      title: 'Own the Concept',
+      kind: 'retrieve',
+      intro: 'Produce these from scratch.',
+      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'typed'))
+    })
+
+    // Stage 3: Personalisation
+    stages.push({
+      id: 'activate-personalise',
+      title: 'Make it Yours',
+      kind: 'personalise',
+      intro: 'Use these in your own context.',
+      exercises: concepts.map(c => ({
+        ...generateExercisesForConcept(c.key, c.kind, 'conversation'),
+        prompt: `Tell me something using "${c.key}".`,
+        aiPersonality: { isDifficult: false, style: 'helpful', pushbackProbability: 0.3 }
+      }))
+    })
+  }
+
+  return {
+    slug: 'activation-session',
+    level: 'B2',
+    title: 'Activation Session',
+    capability: 'Turn passive recognition into active production.',
+    description: 'A focused session to bridge your knowledge gaps.',
+    estimatedMinutes: 8,
+    stages
+  }
+}

@@ -152,5 +152,29 @@ export function useLearnerMemory() {
     return { vocabulary: vList, grammar: gList }
   }
 
-  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts }
+  function getFrontierConcepts(limit = 3) {
+    const vList = Object.entries(memory.value.vocabulary)
+      .filter(([_, state]) => state.recognition > 60 && state.production < 30)
+      .map(([key, state]) => ({
+        key,
+        kind: 'vocabulary',
+        passive: state.recognition,
+        active: state.production
+      }))
+
+    const gList = Object.entries(memory.value.grammar)
+      .filter(([_, state]) => state.recognition > 60 && state.production < 30)
+      .map(([key, state]) => ({
+        key,
+        kind: 'grammar',
+        passive: state.recognition,
+        active: state.production
+      }))
+
+    return [...vList, ...gList]
+      .sort((a, b) => b.passive - a.passive)
+      .slice(0, limit)
+  }
+
+  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts, getFrontierConcepts }
 }
