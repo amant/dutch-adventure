@@ -61,6 +61,11 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'laten repareren': { prompt: 'She had her car repaired.', target: 'Zij heeft haar auto laten repareren.', explanation: 'Causative "laten" takes the double infinitive "laten repareren".' },
   'leren programmeren': { prompt: 'He taught me how to program.', target: 'Hij heeft me leren programmeren.', explanation: '"Leren" takes the double infinitive without "ge-" prefix in compound tenses.' },
   'horen aankomen': { prompt: 'We heard the train arriving.', target: 'We hebben de trein horen aankomen.', explanation: 'Perception verbs trigger the double infinitive in compound tenses.' },
+  'toegevende-verbanden': { prompt: 'Although the costs are high, we proceed.', target: 'Hoewel de kosten hoog zijn, gaan we door.', explanation: 'Use "hoewel" with verb-final word order for concessive clauses.' },
+  'ondanks': { prompt: 'Despite the bad weather, we went outside.', target: 'Ondanks het slechte weer gingen we naar buiten.', explanation: '"Ondanks" is a preposition taking a noun phrase.' },
+  'ondanks dat': { prompt: 'Despite the fact that it was late, we worked on.', target: 'Ondanks dat het laat was, werkten we door.', explanation: '"Ondanks dat" is a conjunction introducing a subclause.' },
+  'weliswaar': { prompt: 'The plan is ambitious, but feasible.', target: 'Het plan is weliswaar ambitieus, maar haalbaar.', explanation: '"Weliswaar" is paired with "maar" for balanced contrast.' },
+  'hoe ook': { prompt: 'No matter how difficult it is, we keep going.', target: 'Hoe moeilijk het ook is, we gaan door.', explanation: 'Use "hoe + [adj] + ... + ook" for correlative concessions.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -82,6 +87,8 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'reported-speech-drill') skills.push('production', 'grammar')
   if (kind === 'relative-clause-drill') skills.push('production', 'grammar')
   if (kind === 'infinitive-drill') skills.push('production', 'grammar')
+  if (kind === 'double-infinitive-drill') skills.push('production', 'grammar')
+  if (kind === 'concession-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -231,6 +238,27 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         governingType: key.includes('laten') ? 'causative-laten' : key.includes('leren') ? 'instruction-leren-helpen' : key.includes('horen') ? 'perception' : 'modal',
         mainVerb: key.replace('laten ', '').replace('leren ', '').replace('horen ', '').replace('moeten ', ''),
         hint: 'Apply the Infinitivus Pro Participio (IPP) rule with double infinitive at the end.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'concession-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      concessionData: {
+        triggerType: key.includes('ondanks') ? 'ondanks-noun-vs-clause' : key.includes('al') ? 'al-inversion' : key.includes('hoe') ? 'hoe-ook-correlative' : key.includes('weliswaar') ? 'weliswaar-maar' : 'hoewel-ofschoon',
+        premiseA: `De omstandigheid (${key}) is uitdagend.`,
+        contrastB: 'We zetten het plan desondanks succesvol voort.',
+        connectorCue: key,
+        structureFormula: 'Toegevende structuur met correcte woordvolgorde',
+        hint: 'Combine the statements with accurate conjunctions and word order.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

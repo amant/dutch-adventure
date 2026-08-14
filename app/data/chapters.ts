@@ -3515,7 +3515,192 @@ export const doubleInfinitiveChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter]
+export const concessionChapter: Chapter = {
+  slug: 'toegevende-verbanden-contrast',
+  level: 'B2',
+  title: 'Concessive Clauses & Contrast Mastery',
+  capability: "Formulate complex contrasts and concessions using 'hoewel', 'ondanks (dat)', verb-first 'al', correlative 'hoe... ook', and 'weliswaar... maar' with native word order.",
+  description: "Master the full spectrum of Dutch concessive discourse: subordinating conjunctions ('hoewel', 'ofschoon', 'ondanks dat'), prepositional noun phrases ('ondanks'), verb-first inversion with 'al', correlative frames ('hoe... ook'), and coordinate contrast ('weliswaar... maar').",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Spectrum of Dutch Concession', kind: 'discover',
+      intro: "Compare how Dutch expresses concessions through conjunctions, prepositions, verb-first inversion, and correlative pairs.",
+      exercises: [
+        {
+          id: 'conc-ind-1', kind: 'induction', prompt: 'Compare the different concessive structures in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Subordinating conjunction (Subclause SOV)', answer: 'Hoewel het hard regende, gingen we wandelen.' },
+              { prompt: 'Preposition + Noun phrase (No verb in clause)', answer: 'Ondanks de harde regen gingen we wandelen.' },
+              { prompt: 'Conjunction "ondanks dat" (Subclause SOV)', answer: 'Ondanks dat het hard regende, gingen we wandelen.' },
+              { prompt: 'Concessive "al" (Verb-First Inversion)', answer: 'Al regende het hard, we gingen toch wandelen.' },
+              { prompt: 'Correlative "hoe... ook" (Verb-final)', answer: 'Hoe hard het ook regende, we gingen toch wandelen.' },
+              { prompt: 'Coordinate contrast "weliswaar... maar"', answer: 'Het regende weliswaar hard, maar we gingen toch wandelen.' }
+            ],
+            ruleChallenge: 'What is the grammatical difference between "ondanks" and "ondanks dat"?',
+            options: [
+              { text: '"Ondanks" is a preposition that takes a noun phrase, while "ondanks dat" is a conjunction that introduces a full clause with a conjugated verb.', isCorrect: true },
+              { text: '"Ondanks" is only used for positive situations, whereas "ondanks dat" is for negative situations.', isCorrect: false },
+              { text: '"Ondanks" can only appear at the end of a sentence.', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Nuance & Inferences in Concessive Speech', kind: 'understand',
+      intro: "Observe how Dutch professionals and organizations use subtle concessive phrasing to balance risks, costs, and strategic decisions.",
+      exercises: [
+        {
+          id: 'conc-inf-1', kind: 'inference-challenge', prompt: 'What is the company\'s strategic stance?',
+          context: 'Hoewel de initiële investeringskosten substantieel hoger uitvallen, verwachten we op termijn een aanzienlijke efficiëntiewinst.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'The Chief Technology Officer presents the new infrastructure budget to the board.',
+            options: [
+              { text: 'The company acknowledges the high upfront expense but considers it justified by long-term efficiency gains.', isCorrect: true, explanation: 'Correct. "Hoewel... uitvallen, verwachten we..." balances the acknowledged cost with positive long-term return.' },
+              { text: 'The company is cancelling the investment because the costs are unacceptably high.', isCorrect: false, explanation: 'Incorrect. The concession ("hoewel") acknowledges the cost while reaffirming the commitment.' },
+              { text: 'The company expects immediate cost savings in the first quarter.', isCorrect: false, explanation: 'Incorrect. Upfront costs are higher, and returns are expected "op termijn" (over time).' }
+            ]
+          }
+        },
+        {
+          id: 'conc-inf-2', kind: 'inference-challenge', prompt: 'What does the board intend to do despite objections?',
+          context: 'Al hebben verscheidene aandeelhouders hun ernstige twijfels geuit, het bestuur zet de strategische overname onverminderd door.',
+          skills: ['recognition', 'grammar'],
+          inferenceData: {
+            scenario: 'A financial newspaper reports on a contested corporate acquisition.',
+            options: [
+              { text: 'The board will proceed with the acquisition regardless of shareholder doubts.', isCorrect: true, explanation: 'Correct. "Al hebben... geuit, het bestuur zet... door" uses verb-first concessive inversion to indicate determined continuation despite objections.' },
+              { text: 'The board has decided to halt the takeover until all shareholders agree.', isCorrect: false, explanation: 'Incorrect. "Zet onverminderd door" means continuing undeterred.' },
+              { text: 'Shareholders have fully endorsed the board\'s acquisition strategy.', isCorrect: false, explanation: 'Incorrect. The shareholders expressed serious doubts ("ernstige twijfels geuit").' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Concessive Clause Production Drills', kind: 'transform',
+      intro: "Construct fluent concessive sentences using 'hoewel', 'ondanks (dat)', verb-first 'al', 'hoe... ook', and 'weliswaar... maar'.",
+      exercises: [
+        {
+          id: 'conc-d-1', kind: 'concession-drill', prompt: 'Concessive subclause with "hoewel" (Formal discourse)',
+          skills: ['production', 'grammar'],
+          concessionData: {
+            triggerType: 'hoewel-ofschoon',
+            premiseA: 'De grondstoffenprijzen zijn het afgelopen kwartaal sterk gestegen.',
+            contrastB: 'Het bedrijf heeft zijn winstmarges uitstekend weten te handhaven.',
+            connectorCue: 'hoewel',
+            structureFormula: 'Hoewel + [onderwerp + rest + werkwoord(en)], [persoonsvorm + onderwerp + rest]',
+            hint: 'Subclause word order after "hoewel", then inverted order in the main clause.'
+          },
+          target: 'Hoewel de grondstoffenprijzen sterk zijn gestegen, heeft het bedrijf zijn winstmarges weten te handhaven',
+          acceptedAnswers: [
+            'Hoewel de grondstoffenprijzen sterk zijn gestegen, heeft het bedrijf zijn winstmarges weten te handhaven',
+            'Hoewel de grondstoffenprijzen sterk zijn gestegen, heeft het bedrijf zijn winstmarges behouden',
+            'Hoewel de prijzen sterk zijn gestegen, heeft het bedrijf zijn marges weten te behouden',
+            'Hoewel de grondstoffenprijzen het afgelopen kwartaal sterk zijn gestegen, heeft het bedrijf zijn winstmarges weten te handhaven'
+          ],
+          explanation: '"Hoewel" introduces a subordinate clause (verb-final: "gestegen zijn" or "zijn gestegen"), followed by an inverted main clause ("heeft het bedrijf...").'
+        },
+        {
+          id: 'conc-d-2', kind: 'concession-drill', prompt: 'Prepositional concession with "ondanks" (Noun phrase)',
+          skills: ['production', 'grammar'],
+          concessionData: {
+            triggerType: 'ondanks-noun-vs-clause',
+            premiseA: 'Er was sprake van ernstige verkeershinder op de A1.',
+            contrastB: 'De directrice arriveerde keurig op tijd voor de opening van het congres.',
+            connectorCue: 'ondanks',
+            structureFormula: 'Ondanks + [zelfstandig naamwoord / nominale groep], [persoonsvorm + onderwerp + rest]',
+            hint: 'Use "ondanks" directly with the noun phrase "de ernstige verkeershinder" (no "dat", no verb in the opening phrase).'
+          },
+          target: 'Ondanks de ernstige verkeershinder arriveerde de directrice keurig op tijd voor de opening van het congres',
+          acceptedAnswers: [
+            'Ondanks de ernstige verkeershinder arriveerde de directrice keurig op tijd voor de opening van het congres',
+            'Ondanks de ernstige verkeershinder was de directrice keurig op tijd voor de opening',
+            'Ondanks de verkeershinder arriveerde de directrice op tijd voor het congres',
+            'Ondanks de ernstige verkeershinder kwam de directrice keurig op tijd aan voor de opening'
+          ],
+          explanation: '"Ondanks" is a preposition requiring a noun phrase ("de ernstige verkeershinder") followed by the main clause verb ("arriveerde").'
+        },
+        {
+          id: 'conc-d-3', kind: 'concession-drill', prompt: 'Concessive "al" with Verb-First Inversion',
+          skills: ['production', 'grammar'],
+          concessionData: {
+            triggerType: 'al-inversion',
+            premiseA: 'Het implementatietraject brengt aanzienlijke technische risico\'s met zich mee.',
+            contrastB: 'We zetten het innovatieve project met volle overtuiging voort.',
+            connectorCue: 'al',
+            structureFormula: 'Al + [persoonsvorm V1] + [onderwerp]..., [persoonsvorm V2 + onderwerp / we zetten...]',
+            hint: 'Start with "Al brengt het implementatietraject...", followed by the main clause.'
+          },
+          target: 'Al brengt het traject aanzienlijke risico\'s met zich mee, we zetten het project met volle overtuiging voort',
+          acceptedAnswers: [
+            'Al brengt het traject aanzienlijke risico\'s met zich mee, we zetten het project met volle overtuiging voort',
+            'Al brengt het implementatietraject aanzienlijke risico\'s met zich mee, we zetten het project met volle overtuiging voort',
+            'Al brengt het traject risico\'s met zich mee, we zetten het project vol overtuiging voort',
+            'Al brengt het implementatietraject aanzienlijke risico\'s met zich mee, toch zetten we het project voort'
+          ],
+          explanation: 'When starting with concessive "al", place the conjugated verb immediately after "al" (verb-first inversion: "Al brengt...").'
+        },
+        {
+          id: 'conc-d-4', kind: 'concession-drill', prompt: 'Correlative concession with "hoe... ook"',
+          skills: ['production', 'grammar'],
+          concessionData: {
+            triggerType: 'hoe-ook-correlative',
+            premiseA: 'De onderhandelingen tussen de partijen verliepen uiterst moeizaam.',
+            contrastB: 'De delegaties wisten uiteindelijk een bevredigend compromis te bereiken.',
+            connectorCue: 'hoe... ook',
+            structureFormula: 'Hoe + [adjectief/bijwoord] + [onderwerp] + [rest] + ook + [werkwoord], [hoofdzin]',
+            hint: 'Use "Hoe moeizaam de onderhandelingen ook verliepen, ..." with "ook" before the verb.'
+          },
+          target: 'Hoe moeizaam de onderhandelingen ook verliepen, de partijen wisten uiteindelijk een compromis te bereiken',
+          acceptedAnswers: [
+            'Hoe moeizaam de onderhandelingen ook verliepen, de partijen wisten uiteindelijk een compromis te bereiken',
+            'Hoe moeizaam de onderhandelingen ook verliepen, de delegaties wisten uiteindelijk een compromis te bereiken',
+            'Hoe moeizaam het ook verliep, de partijen wisten uiteindelijk een compromis te bereiken'
+          ],
+          explanation: 'The correlative frame "Hoe [adjectief] ... ook" requires placing "ook" before the subclause verb, followed by the main clause.'
+        },
+        {
+          id: 'conc-d-5', kind: 'concession-drill', prompt: 'Coordinate contrast with "weliswaar... maar"',
+          skills: ['production', 'grammar'],
+          concessionData: {
+            triggerType: 'weliswaar-maar',
+            premiseA: 'Het nieuwe softwarepakket is bijzonder krachtig en betrouwbaar.',
+            contrastB: 'De gebruikersinterface vergt nog enige gewenning bij het personeel.',
+            connectorCue: 'weliswaar... maar',
+            structureFormula: '[Hoofdzin met weliswaar in het midden], maar [contrasterende hoofdzin]',
+            hint: 'Place "weliswaar" after the finite verb in the first clause and connect with ", maar".'
+          },
+          target: 'Het nieuwe softwarepakket is weliswaar bijzonder krachtig, maar de interface vergt nog enige gewenning',
+          acceptedAnswers: [
+            'Het nieuwe softwarepakket is weliswaar bijzonder krachtig, maar de interface vergt nog enige gewenning',
+            'De software is weliswaar bijzonder krachtig, maar de interface vergt nog enige gewenning',
+            'Het pakket is weliswaar bijzonder krachtig, maar het systeem vergt nog enige gewenning'
+          ],
+          explanation: '"Weliswaar" qualifies the first clause ("is weliswaar bijzonder krachtig") while "maar" introduces the contrasting reality.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Real-World Concessions', kind: 'personalise',
+      intro: "Share an authentic professional or personal achievement that succeeded despite difficulties or opposing factors.",
+      exercises: [
+        {
+          id: 'conc-p-1', kind: 'personalise', prompt: 'Vertel over een situatie op je werk, in je studie of in je dagelijks leven waarin je ondanks een obstakel toch succesvol bent geweest (gebruik bijv. "hoewel", "ondanks (dat)", "al...", of "hoe... ook").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['hoewel', 'ondanks', 'uitdaging', 'bereiken', 'resultaat', 'doorzetten', 'oplossing'],
+          grammar: ['toegevende-verbanden', 'concessieve-voegwoorden']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

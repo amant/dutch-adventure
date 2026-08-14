@@ -381,6 +381,80 @@ function checkDoubleInfinitiveError(normalized: string) {
   return { found: false }
 }
 
+function checkConcessionError(normalized: string) {
+  // Check 1: 'ondanks' used with a subject pronoun without 'dat' or 'het feit dat'
+  // e.g. "ondanks hij ziek was", "ondanks we weinig tijd hadden", "ondanks ik"
+  const pronounAfterOndanks = /\bondanks\s+(hij|zij|ze|wij|we|ik|je|jij|jullie|u|men)\b/i
+  if (pronounAfterOndanks.test(normalized) && !normalized.includes('ondanks dat') && !normalized.includes('ondanks het feit dat')) {
+    return {
+      found: true,
+      message: `Use 'ondanks dat' (or 'ondanks het feit dat') when introducing a clause with a verb. 'Ondanks' alone is a preposition that only takes a noun phrase (e.g. 'ondanks zijn ziekte', 'ondanks de regen').`,
+      miniLesson: {
+        title: 'Ondanks (Preposition) vs Ondanks dat (Conjunction)',
+        content: 'In Dutch, "ondanks" is a preposition followed directly by a noun phrase. To connect a full clause containing a conjugated verb, you must use "ondanks dat" or "ondanks het feit dat".',
+        example: {
+          wrong: 'ondanks hij moe was, ging hij door',
+          right: 'ondanks dat hij moe was, ging hij door (or: ondanks zijn vermoeidheid)'
+        }
+      }
+    }
+  }
+
+  // Check 2: 'al' used concessively at the start without verb-first inversion
+  // e.g. "al het regent", "al we weinig tijd hebben" (without "ook al")
+  const startsWithAlPronoun = /^al\s+(het|hij|zij|ze|wij|we|ik|je|jij|jullie|u|de|het|een)\s+/i
+  if (startsWithAlPronoun.test(normalized.trim()) && !normalized.trim().startsWith('ook al')) {
+    return {
+      found: true,
+      message: `When starting a concessive sentence with 'al' (meaning "even though / even if"), you must use verb-first inversion (V1): 'Al [persoonsvorm] [onderwerp]...' (e.g. 'Al regent het...'). Alternatively, use 'ook al' for standard subclause order ('Ook al regent het...').`,
+      miniLesson: {
+        title: 'Concessive "Al": Verb-First Inversion',
+        content: 'When "al" is used concessively at the head of a sentence, the finite verb must precede the subject (inversion). "Ook al", conversely, acts as a subordinating conjunction with verb-final word order.',
+        example: {
+          wrong: 'Al het regent, we gaan wandelen',
+          right: 'Al regent het, we gaan wandelen (or: Ook al regent het...)'
+        }
+      }
+    }
+  }
+
+  // Check 3: Correlative 'hoe [adjectief] ...' missing 'ook'
+  // e.g. "hoe moeilijk het is", "hoe hard we werken", "hoe complex de situatie is"
+  const hoeAdjectiveMatch = /^hoe\s+(moeilijk|zwaar|complex|veel|weinig|hard|groot|duur|ingewikkeld|lastig|goed|slecht|dringend)\b/i
+  if (hoeAdjectiveMatch.test(normalized.trim()) && !normalized.includes('ook')) {
+    return {
+      found: true,
+      message: `The correlative concessive frame 'hoe [adjectief/bijwoord] ...' requires the particle 'ook' before the verb (e.g. 'Hoe moeilijk het ook is...', 'Hoeveel moeite het ook kost...').`,
+      miniLesson: {
+        title: 'Correlative Concession: "Hoe [adjectief] ... ook"',
+        content: 'To express "no matter how [difficult/challenging]" in Dutch, use the structure "Hoe + [adjectief/bijwoord] + [onderwerp] + [rest] + ook + [werkwoord]". The word "ook" is grammatically mandatory.',
+        example: {
+          wrong: 'Hoe moeilijk het is, we geven niet op',
+          right: 'Hoe moeilijk het ook is, we geven niet op'
+        }
+      }
+    }
+  }
+
+  // Check 4: 'weliswaar' missing 'maar'
+  if (normalized.includes('weliswaar') && !normalized.includes('maar')) {
+    return {
+      found: true,
+      message: `'Weliswaar' introduces a concession that must be balanced by 'maar' in the contrasting clause (e.g. 'Het voorstel is weliswaar duur, maar het levert veel op').`,
+      miniLesson: {
+        title: 'Correlative Contrast: "Weliswaar... maar"',
+        content: '"Weliswaar" acknowledges a limitation or caveat and must be paired with "maar" to introduce the decisive counterpoint.',
+        example: {
+          wrong: 'Het is weliswaar duur, het levert veel op',
+          right: 'Het is weliswaar duur, maar het levert veel op'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkInfinitiveClauseError(normalized: string) {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
   const separableVerbs: { full: string, prefix: string, stem: string }[] = [
@@ -1418,6 +1492,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Concession Drill Evaluation
+    if (exercise.kind === 'concession-drill' && exercise.concessionData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const concessionError = checkConcessionError(normalized)
+      if (concessionError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: concessionError.message,
+          miniLesson: concessionError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Concessive structures (hoewel, ondanks (dat), al + inversie, hoe... ook) require specific word order and connector combinations.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your concessive structure and word order are completely accurate.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the conjunction and word order in both the concessive clause and main clause.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure the connector matches the clause type (subclause SOV vs preposition with noun phrase vs verb-first inversion).'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the connector choice and grammatical structure.',
+          explanation: exercise.explanation || 'Combine the premises using the required concessive pattern.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1497,6 +1622,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: doubleInfError.message,
         miniLesson: doubleInfError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Concession & Contrast Check
+    const concessionError = checkConcessionError(normalized)
+    if (concessionError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: concessionError.message,
+        miniLesson: concessionError.miniLesson
       }
     }
 

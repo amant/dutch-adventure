@@ -99,6 +99,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Relative Clauses & Complex Antecedents**: Training for B2 learners to master relative clauses (*betrekkelijke bijzinnen*), choosing between *die*, *dat*, *wie*, *waar+prep*, and *wat*, while maintaining subordinate word order.
     - **Infinitive Clauses & "Te" Mastery**: Practice constructing complex infinitive clauses with *(om...) te*, inserting *te* inside separable verbs (*op te lossen*, *voor te bereiden*), and using semi-auxiliary verbs (*hoeven te*, *blijken te*, *schijnen te*).
     - **Verb Clusters & Double Infinitive (IPP)**: Training for B2 learners to master the Infinitivus Pro Participio rule across modals (*moeten, kunnen, willen*), causative *laten*, perception verbs (*zien, horen*), and instruction/help verbs (*leren, helpen*), maintaining precise verb cluster order in main clauses and subclauses.
+    - **Concessive Clauses & Contrast Mastery**: Training for B2 learners to formulate nuanced concessions and contrasts across subordinating conjunctions (*hoewel, ondanks dat*), prepositional noun phrases (*ondanks*), verb-first inversion (*al*), correlative frames (*hoe... ook*), and balanced coordination (*weliswaar... maar*).
 
 ## 5. Information Architecture
 
@@ -151,6 +152,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `RelativeClauseDrill.vue`: Interactive tool for embedding relative clauses, focusing on antecedent identification, prepositional pronouns (met wie vs waarmee), general references (wat), and verb-final word order.
     - `InfinitiveDrill.vue`: Interactive tool for constructing infinitive clauses, focusing on (om...) te word order, separable verb infixation (op te lossen), and semi-auxiliary verbs (hoeven te).
     - `DoubleInfinitiveDrill.vue`: Interactive tool for mastering verb clusters and the double infinitive rule (IPP), focusing on modals (moeten doen), causative laten (laten repareren), perception (horen aankomen), and instruction (leren programmeren).
+    - `ConcessionDrill.vue`: Interactive tool for mastering concessive clauses and contrast, focusing on hoewel, ondanks (dat), verb-first al inversion, correlative hoe... ook, and weliswaar... maar.
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
