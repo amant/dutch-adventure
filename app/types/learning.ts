@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill'
 
 export interface Exercise {
   id: string
@@ -269,6 +269,17 @@ export interface Exercise {
     }
     contextPrompt: string
     providedElements: string[]
+    structureFormula?: string
+    hint?: string
+  }
+  // For fixed prepositions & prepositional regimes (twijfelen aan, rekening houden met, bestand zijn tegen, zich neerleggen bij, bijdragen aan, etc.)
+  fixedPrepositionData?: {
+    collocationType: 'verb-preposition' | 'adjective-preposition' | 'noun-preposition' | 'abstract-regime'
+    governingHead: string
+    fixedPreposition: string
+    contextPrompt: string
+    commonTransferErrors?: string[]
+    meaningContext?: string
     structureFormula?: string
     hint?: string
   }

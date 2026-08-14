@@ -5066,7 +5066,357 @@ Opmerkelijk was dat de financieel directeur over de voorgestelde begrotingswijzi
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter]
+export const fixedPrepositionChapter: Chapter = {
+  slug: 'vaste-voorzetsels-regimes',
+  level: 'B2',
+  title: 'Fixed Prepositions & Prepositional Regimes',
+  capability: 'Master fixed Dutch prepositions governed by verbs, adjectives, and nouns with native precision, eliminating cross-linguistic preposition transfer errors.',
+  description: 'Master the subtle prepositional regimes of Dutch verbs, adjectives, and nouns (*vaste voorzetsels*), including *twijfelen aan*, *rekening houden met*, *bestand zijn tegen*, *zich neerleggen bij*, *bijdragen aan*, *voldoen aan*, *inspelen op*, *gepaard gaan met*, *voorzien in*, *opgewassen tegen*, and *behoefte aan*.',
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover',
+      title: 'The Logic of Dutch Prepositional Regimes',
+      kind: 'discover',
+      intro: 'Unlike English or German, Dutch verbs, adjectives, and nouns govern specific prepositions that cannot be translated literally. These fixed combinations are called "vaste voorzetsels".',
+      exercises: [
+        {
+          id: 'fixed-prep-ind-1',
+          kind: 'induction',
+          prompt: 'Observe how Dutch uses specific fixed prepositions where other languages use different prepositions:',
+          skills: ['grammar', 'reading'],
+          inductionData: {
+            examples: [
+              {
+                prompt: 'English: to doubt ABOUT something / German: zweifeln AN',
+                answer: 'Ik twijfel [aan (niet over)] zijn oprechtheid.'
+              },
+              {
+                prompt: 'English: to take into account / to allow FOR',
+                answer: 'Wij moeten rekening houden [met (niet voor)] onvoorziene vertragingen.'
+              },
+              {
+                prompt: 'English: to be resistant TO / withstand',
+                answer: 'Dit materiaal is bestand [tegen (niet voor)] extreme temperaturen.'
+              },
+              {
+                prompt: 'English: to resign oneself TO / accept a verdict',
+                answer: 'De directie legt zich neer [bij (niet aan)] de rechterlijke uitspraak.'
+              }
+            ],
+            ruleChallenge: 'Which prepositions are required for "twijfelen", "rekening houden", "bestand zijn", and "zich neerleggen"?',
+            options: [
+              { text: 'twijfelen aan, rekening houden met, bestand zijn tegen, zich neerleggen bij.', isCorrect: true },
+              { text: 'twijfelen over, rekening houden voor, bestand zijn voor, zich neerleggen aan.', isCorrect: false },
+              { text: 'twijfelen van, rekening houden om, bestand zijn op, zich neerleggen met.', isCorrect: false }
+            ]
+          },
+          explanation: 'Dutch prepositional regimes are fixed lexical collocations. Using literal translations from English (e.g., "twijfelen over", "rekening houden voor") is a very common B2 error.'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Prepositional Regimes in Professional Discourse',
+      kind: 'understand',
+      intro: 'Analyze an executive strategy briefing and identify how fixed prepositions govern relationships between actions, conditions, and outcomes.',
+      exercises: [
+        {
+          id: 'fixed-prep-und-1',
+          kind: 'reading',
+          prompt: 'Read the corporate restructuring excerpt and analyze the fixed preposition collocations.',
+          readingContent: `Tijdens de buitengewone aandeelhoudersvergadering benadrukte de CEO dat de voorgenomen reorganisatie onvermijdelijk gepaard gaat met (1) aanzienlijke structurele veranderingen. 
+
+Hoewel de vakbonden aanvankelijk fel protesteerden, hebben zij besloten zich neer te leggen bij (2) het bindende arbitragevoorstel. Het nieuwe beleidsplan voldoet namelijk volledig aan (3) de gestelde milieunormen en draagt actief bij aan (4) de langetermijnstabiliteit van de onderneming. 
+
+Bovendien moet het management flexibel inspelen op (5) de snelle technologische transities, aangezien de organisatie bestand moet zijn tegen (6) toekomstige marktschokken.`,
+          wordHints: {
+            'gepaard gaan met': { meaning: 'to be accompanied by / go hand in hand with', category: 'connector' },
+            'zich neerleggen bij': { meaning: 'to resign oneself to / accept', category: 'verb' },
+            'voldoen aan': { meaning: 'to satisfy / comply with', category: 'verb' },
+            'bijdragen aan': { meaning: 'to contribute to', category: 'verb' },
+            'inspelen op': { meaning: 'to respond / adapt / anticipate', category: 'verb' },
+            'bestand zijn tegen': { meaning: 'to withstand / resist', category: 'adjective' }
+          },
+          listeningQuestion: 'Which fixed preposition combination is used to express compliance with environmental standards?',
+          listeningOptions: [
+            { text: 'voldoen aan ("voldoet volledig aan de gestelde milieunormen")', isCorrect: true },
+            { text: 'voldoen in ("voldoet in de gestelde normen")', isCorrect: false },
+            { text: 'voldoen voor ("voldoet voor de normen")', isCorrect: false }
+          ],
+          explanation: 'In Dutch, the verb "voldoen" (to comply with / satisfy criteria) strictly governs the preposition "aan" ("voldoen aan eisen/normen").',
+          skills: ['reading', 'grammar']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Fixed Preposition Precision Drills',
+      kind: 'retrieve',
+      intro: 'Formulate accurate Dutch sentences using the required fixed prepositions, eliminating interference from other languages.',
+      exercises: [
+        {
+          id: 'fixed-prep-d-1',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Aan: "Twijfelen aan" (Doubt in facts or reliability)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'twijfelen',
+            fixedPreposition: 'aan',
+            contextPrompt: 'De onderzoekscommissie heeft sterke twijfels over de waarachtigheid van de gerapporteerde gegevens. Druk dit uit met "twijfelen aan".',
+            commonTransferErrors: ['twijfelen over (Anglicism)', 'twijfelen van'],
+            meaningContext: 'To doubt the truth, reliability, or integrity of something/someone.',
+            structureFormula: '[Onderwerp] + twijfelt + sterk + aan + [het lijdend object/de data]',
+            hint: 'Gebruik "twijfelt aan de betrouwbaarheid van de gerapporteerde data".'
+          },
+          target: 'De onderzoekscommissie twijfelt sterk aan de betrouwbaarheid van de gerapporteerde data',
+          acceptedAnswers: [
+            'De onderzoekscommissie twijfelt sterk aan de betrouwbaarheid van de gerapporteerde data',
+            'De commissie twijfelt aan de betrouwbaarheid van de data',
+            'De onderzoekscommissie twijfelt aan de betrouwbaarheid van de gerapporteerde gegevens',
+            'De commissie twijfelt sterk aan de betrouwbaarheid van de gegevens'
+          ],
+          explanation: 'When doubting facts, data, or integrity, Dutch strictly uses "twijfelen aan" (never "twijfelen over").'
+        },
+        {
+          id: 'fixed-prep-d-2',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Met: "Rekening houden met" (Account for variables / take into consideration)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'rekening houden',
+            fixedPreposition: 'met',
+            contextPrompt: 'Tijdens de projectplanning moeten we expliciet rekening houden met eventuele vertragingen in de levering.',
+            commonTransferErrors: ['rekening houden voor', 'rekening houden om', 'rekening houden over'],
+            meaningContext: 'To take into account / allow for potential circumstances or factors.',
+            structureFormula: '[Onderwerp] + moet + rekening houden + met + [de mogelijke vertragingen]',
+            hint: 'Gebruik "rekening houden met mogelijke vertragingen".'
+          },
+          target: 'Wij moeten tijdens de planning nadrukkelijk rekening houden met mogelijke vertragingen',
+          acceptedAnswers: [
+            'Wij moeten tijdens de planning nadrukkelijk rekening houden met mogelijke vertragingen',
+            'We moeten tijdens de planning rekening houden met mogelijke vertragingen',
+            'Wij moeten rekening houden met mogelijke vertragingen tijdens de planning',
+            'We moeten rekening houden met mogelijke vertragingen'
+          ],
+          explanation: '"Rekening houden" always governs the preposition "met" (to allow for / consider).'
+        },
+        {
+          id: 'fixed-prep-d-3',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Tegen: "Bestand zijn tegen" (Resist / withstand pressure or cyberattacks)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'adjective-preposition',
+            governingHead: 'bestand zijn',
+            fixedPreposition: 'tegen',
+            contextPrompt: 'De IT-afdeling garandeert dat de nieuwe softwarearchitectuur bestand is tegen grootschalige cyberaanvallen.',
+            commonTransferErrors: ['bestand zijn voor', 'bestand zijn aan', 'bestand zijn op'],
+            meaningContext: 'To be resistant to / resilient against external threats or adverse conditions.',
+            structureFormula: '[Onderwerp] + is + uitstekend + bestand + tegen + [de aanvallen]',
+            hint: 'Gebruik "is uitstekend bestand tegen zware cyberaanvallen".'
+          },
+          target: 'Het nieuwe softwaresysteem is uitstekend bestand tegen zware cyberaanvallen',
+          acceptedAnswers: [
+            'Het nieuwe softwaresysteem is uitstekend bestand tegen zware cyberaanvallen',
+            'Het nieuwe systeem is goed bestand tegen zware cyberaanvallen',
+            'De nieuwe software is uitstekend bestand tegen zware cyberaanvallen',
+            'Het softwaresysteem is bestand tegen zware cyberaanvallen'
+          ],
+          explanation: '"Bestand zijn" requires the preposition "tegen" (resistant against).'
+        },
+        {
+          id: 'fixed-prep-d-4',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Reflexive Verb + Bij: "Zich neerleggen bij" (Accept an inevitable decision or outcome)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'zich neerleggen',
+            fixedPreposition: 'bij',
+            contextPrompt: 'Het managementteam heeft besloten om de bindende uitspraak van de arbitragecommissie te accepteren.',
+            commonTransferErrors: ['neerleggen aan', 'neerleggen op', 'neerleggen voor'],
+            meaningContext: 'To reconcile oneself to / resign oneself to an unavoidable verdict or situation.',
+            structureFormula: '[Onderwerp] + heeft besloten + zich neer te leggen + bij + [de uitspraak]',
+            hint: 'Gebruik "zich neer te leggen bij de bindende uitspraak van de rechter".'
+          },
+          target: 'De directie heeft besloten zich neer te leggen bij de bindende uitspraak van de rechter',
+          acceptedAnswers: [
+            'De directie heeft besloten zich neer te leggen bij de bindende uitspraak van de rechter',
+            'De directie heeft besloten om zich neer te leggen bij de bindende uitspraak van de rechter',
+            'Het bestuur heeft besloten zich neer te leggen bij de bindende uitspraak van de rechter',
+            'De directie legt zich neer bij de bindende uitspraak van de rechter'
+          ],
+          explanation: '"Zich neerleggen bij" always takes "bij" (to accept/bow to a decision).'
+        },
+        {
+          id: 'fixed-prep-d-5',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Aan: "Bijdragen aan" (Contribute to an objective or reduction)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'bijdragen',
+            fixedPreposition: 'aan',
+            contextPrompt: 'De introductie van zonnepanelen helpt mee om de CO2-uitstoot van het bedrijf aanzienlijk te verlagen.',
+            commonTransferErrors: ['bijdragen naar', 'bijdragen voor', 'bijdragen tot (formal/archaic)'],
+            meaningContext: 'To contribute to a positive goal, outcome, or reduction.',
+            structureFormula: '[Onderwerp] + draagt + aanzienlijk + bij + aan + [het doel]',
+            hint: 'Gebruik "draagt aanzienlijk bij aan de verlaging van onze CO2-uitstoot".'
+          },
+          target: 'Deze duurzame innovatie draagt aanzienlijk bij aan de verlaging van onze CO2-uitstoot',
+          acceptedAnswers: [
+            'Deze duurzame innovatie draagt aanzienlijk bij aan de verlaging van onze CO2-uitstoot',
+            'Deze innovatie draagt aanzienlijk bij aan de vermindering van onze CO2-uitstoot',
+            'Dit project draagt aanzienlijk bij aan de verlaging van onze CO2-uitstoot',
+            'Deze duurzame innovatie draagt bij aan de verlaging van de CO2-uitstoot'
+          ],
+          explanation: 'In contemporary Dutch, "bijdragen" is paired with "aan" ("bijdragen aan iets").'
+        },
+        {
+          id: 'fixed-prep-d-6',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Aan: "Voldoen aan" (Comply with / satisfy strict standards)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'voldoen',
+            fixedPreposition: 'aan',
+            contextPrompt: 'Het nieuwe productontwerp beantwoordt aan alle Europese veiligheidseisen.',
+            commonTransferErrors: ['voldoen in', 'voldoen voor', 'voldoen op'],
+            meaningContext: 'To meet, satisfy, or comply with requirements, criteria, or expectations.',
+            structureFormula: '[Onderwerp] + voldoet + volledig + aan + [de eisen]',
+            hint: 'Gebruik "voldoet volledig aan alle strenge Europese veiligheidseisen".'
+          },
+          target: 'Het opgeleverde prototype voldoet volledig aan alle strenge Europese veiligheidseisen',
+          acceptedAnswers: [
+            'Het opgeleverde prototype voldoet volledig aan alle strenge Europese veiligheidseisen',
+            'Het prototype voldoet volledig aan alle strenge Europese veiligheidseisen',
+            'Het opgeleverde ontwerp voldoet volledig aan alle Europese veiligheidseisen',
+            'Het prototype voldoet aan alle strenge Europese veiligheidseisen'
+          ],
+          explanation: '"Voldoen aan" is the standard Dutch regime for complying with requirements or standards.'
+        },
+        {
+          id: 'fixed-prep-d-7',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Met: "Gepaard gaan met" (Accompanied by / associated with risks)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'gepaard gaan',
+            fixedPreposition: 'met',
+            contextPrompt: 'De geplande bedrijfstransitie brengt onvermijdelijk grote organisatorische uitdagingen met zich mee.',
+            commonTransferErrors: ['gepaard gaan in', 'gepaard gaan aan', 'gepaard gaan door'],
+            meaningContext: 'To be coupled with / accompanied by conditions or risks.',
+            structureFormula: '[Onderwerp] + gaat + onvermijdelijk + gepaard + met + [de uitdagingen]',
+            hint: 'Gebruik "gaat onvermijdelijk gepaard met aanzienlijke organisatorische uitdagingen".'
+          },
+          target: 'De geplande herstructurering gaat onvermijdelijk gepaard met aanzienlijke organisatorische uitdagingen',
+          acceptedAnswers: [
+            'De geplande herstructurering gaat onvermijdelijk gepaard met aanzienlijke organisatorische uitdagingen',
+            'De herstructurering gaat onvermijdelijk gepaard met aanzienlijke organisatorische uitdagingen',
+            'De geplande reorganisatie gaat onvermijdelijk gepaard met aanzienlijke organisatorische uitdagingen',
+            'De geplande herstructurering gaat gepaard met aanzienlijke organisatorische uitdagingen'
+          ],
+          explanation: '"Gepaard gaan met" is an essential B2 expression for describing accompanying phenomena.'
+        },
+        {
+          id: 'fixed-prep-d-8',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Verb + Op: "Inspelen op" (Anticipate / proactively adapt to changes)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'verb-preposition',
+            governingHead: 'inspelen',
+            fixedPreposition: 'op',
+            contextPrompt: 'Ons team moet proactief reageren op de veranderende behoeften van de consument.',
+            commonTransferErrors: ['inspelen in', 'inspelen aan', 'inspelen naar'],
+            meaningContext: 'To anticipate, respond to, and capitalize on trends or customer demands.',
+            structureFormula: '[Onderwerp] + moet + proactief + inspelen + op + [de behoeften]',
+            hint: 'Gebruik "proactief inspelen op de veranderende behoeften van de consument".'
+          },
+          target: 'Ons marketingteam moet proactief inspelen op de veranderende behoeften van de consument',
+          acceptedAnswers: [
+            'Ons marketingteam moet proactief inspelen op de veranderende behoeften van de consument',
+            'Het team moet proactief inspelen op de veranderende behoeften van de consument',
+            'Ons team moet proactief inspelen op de veranderende behoeften van de consument',
+            'Ons marketingteam moet inspelen op de veranderende behoeften van de consument'
+          ],
+          explanation: '"Inspelen op" takes the preposition "op" (to anticipate and respond to developments).'
+        },
+        {
+          id: 'fixed-prep-d-9',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Adjective + Tegen: "Opgewassen zijn tegen" (Equal to / capable of coping with demands)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'adjective-preposition',
+            governingHead: 'opgewassen zijn',
+            fixedPreposition: 'tegen',
+            contextPrompt: 'De jonge teamleider bleek uitstekend in staat om de zware werkdruk het hoofd te bieden.',
+            commonTransferErrors: ['opgewassen voor', 'opgewassen aan', 'opgewassen op'],
+            meaningContext: 'To be a match for / equal to high pressures, challenges, or adversaries.',
+            structureFormula: '[Onderwerp] + bleek + uitstekend + opgewassen + tegen + [de werkdruk]',
+            hint: 'Gebruik "bleek uitstekend opgewassen tegen de immense werkdruk".'
+          },
+          target: 'De jonge projectleider bleek uitstekend opgewassen tegen de immense werkdruk',
+          acceptedAnswers: [
+            'De jonge projectleider bleek uitstekend opgewassen tegen de immense werkdruk',
+            'De jonge teamleider bleek uitstekend opgewassen tegen de immense werkdruk',
+            'De projectleider bleek uitstekend opgewassen tegen de immense werkdruk',
+            'De jonge projectleider was uitstekend opgewassen tegen de immense werkdruk'
+          ],
+          explanation: '"Opgewassen zijn" requires the preposition "tegen" (to be equal to / up to a challenge).'
+        },
+        {
+          id: 'fixed-prep-d-10',
+          kind: 'fixed-preposition-drill',
+          prompt: 'Nouns + Prepositions: "Behoefte aan" & "Bezwaar tegen" (Need for & Objection to)',
+          skills: ['production', 'grammar'],
+          fixedPrepositionData: {
+            collocationType: 'noun-preposition',
+            governingHead: 'behoefte aan / bezwaar tegen',
+            fixedPreposition: 'aan / tegen',
+            contextPrompt: 'Er is een sterke noodzaak tot vernieuwing (behoefte aan) en niemand heeft een tegenwerping (bezwaar tegen) tegen het nieuwe plan.',
+            commonTransferErrors: ['behoefte voor', 'bezwaar op', 'bezwaar voor'],
+            meaningContext: 'Nouns governing fixed prepositions: "behoefte aan" (need for) and "bezwaar tegen" (objection against).',
+            structureFormula: 'Er bestaat [behoefte aan ...] en niemand heeft [bezwaar tegen ...]',
+            hint: 'Gebruik "behoefte aan vernieuwing" en "bezwaar tegen de voorgestelde koerswijziging".'
+          },
+          target: 'Er bestaat binnen de organisatie een dringende behoefte aan vernieuwing en niemand heeft bezwaar tegen de voorgestelde koerswijziging',
+          acceptedAnswers: [
+            'Er bestaat binnen de organisatie een dringende behoefte aan vernieuwing en niemand heeft bezwaar tegen de voorgestelde koerswijziging',
+            'Er is binnen de organisatie een dringende behoefte aan vernieuwing en niemand heeft bezwaar tegen de voorgestelde koerswijziging',
+            'Er is een dringende behoefte aan vernieuwing en niemand heeft bezwaar tegen de voorgestelde koerswijziging',
+            'Er bestaat een dringende behoefte aan vernieuwing en niemand heeft bezwaar tegen het plan'
+          ],
+          explanation: 'Nouns follow fixed preposition regimes: "behoefte" takes "aan", while "bezwaar" takes "tegen".'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Your Professional Regimes & Prepositional Mastery',
+      kind: 'personalise',
+      intro: 'Describe a project, regulation, or negotiation from your work, study, or daily life. Integrate at least two fixed preposition collocations (e.g. voldoen aan, inspelen op, rekening houden met, bijdragen aan, bestand tegen, behoefte aan).',
+      exercises: [
+        {
+          id: 'fixed-prep-p-1',
+          kind: 'personalise',
+          prompt: 'Beschrijf een situatie of uitdaging uit jouw werk, studie of dagelijks leven. Gebruik minstens twee vaste voorzetselcombinaties (bijv. voldoen aan, inspelen op, rekening houden met, bijdragen aan, zich neerleggen bij, bestand tegen, behoefte aan).',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['voldoen', 'inspelen', 'rekening houden', 'bijdragen', 'neerleggen', 'bestand', 'behoefte', 'bezwaar', 'verantwoordelijk', 'twijfelen'],
+          grammar: ['vaste-voorzetsels', 'voorzetselvoorwerp', 'werkwoordelijke-regimes']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

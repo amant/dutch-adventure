@@ -135,6 +135,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'causality-drill') skills.push('production', 'grammar')
   if (kind === 'prefix-verb-drill') skills.push('production', 'grammar')
   if (kind === 'midfield-drill') skills.push('production', 'grammar')
+  if (kind === 'fixed-preposition-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -437,6 +438,39 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         providedElements: ['Onderwerp', 'Tijd', 'Manier', 'Plaats'],
         structureFormula: '[Onderwerp] + [PV] + [Tijd] + [Manier] + [Plaats]',
         hint: 'Respecteer de volgorde: Tijd -> Manier -> Plaats.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'fixed-preposition-drill') {
+    const isAdj = key.includes('opgewassen') || key.includes('verantwoordelijk') || key.includes('trots') || key.includes('gehecht')
+    const isNoun = key.includes('behoefte') || key.includes('bezwaar') || key.includes('gebrek') || key.includes('toegang')
+    const prep = key.includes('twijfelen') || key.includes('bijdragen') || key.includes('voldoen') || key.includes('behoefte') ? 'aan'
+      : key.includes('rekening houden') || key.includes('gepaard gaan') || key.includes('bemoeien') ? 'met'
+      : key.includes('bestand') || key.includes('opgewassen') || key.includes('bezwaar') || key.includes('verzetten') ? 'tegen'
+      : key.includes('neerleggen') || key.includes('betrokken') ? 'bij'
+      : key.includes('inspelen') || key.includes('trots') || key.includes('vertrouwen') ? 'op'
+      : key.includes('voorzien') || key.includes('geïnteresseerd') ? 'in'
+      : key.includes('verantwoordelijk') || key.includes('geschikt') ? 'voor'
+      : 'aan'
+
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      fixedPrepositionData: {
+        collocationType: isAdj ? 'adjective-preposition' : isNoun ? 'noun-preposition' : 'verb-preposition',
+        governingHead: key,
+        fixedPreposition: prep,
+        contextPrompt: info.prompt,
+        commonTransferErrors: [`${key} over`, `${key} voor`],
+        structureFormula: `[Onderwerp] + [${key}] + ${prep} + [Object]`,
+        hint: `Combineer '${key}' met het vaste voorzetsel '${prep}'.`
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

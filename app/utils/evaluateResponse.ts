@@ -840,6 +840,209 @@ function checkCausalityError(normalized: string, relationType?: string) {
   return { found: false }
 }
 
+function checkFixedPrepositionRegimeError(
+  normalized: string,
+  fixedPrepositionData?: {
+    collocationType?: string
+    governingHead?: string
+    fixedPreposition?: string
+    commonTransferErrors?: string[]
+  }
+) {
+  // 1. If specific fixedPrepositionData is provided for the exercise:
+  if (fixedPrepositionData?.governingHead && fixedPrepositionData?.fixedPreposition) {
+    const head = fixedPrepositionData.governingHead.toLowerCase()
+    const rawPreps = fixedPrepositionData.fixedPreposition.toLowerCase()
+    const requiredPreps = rawPreps.split(/[\/,]/).map(p => p.trim()).filter(Boolean)
+
+    const headTokens = head.split(/[\s\/,]+/).filter(t => t.length > 2)
+    const hasHead = headTokens.some(tok => normalized.includes(tok.replace(/(en|t|d)$/, ''))) || normalized.includes(head)
+
+    if (hasHead) {
+      const words = normalized.split(/\s+/)
+      const hasAllRequiredPreps = requiredPreps.every(correctPrep => {
+        return words.includes(correctPrep) || 
+          normalized.includes(`${correctPrep} `) || 
+          normalized.includes(`er${correctPrep}`) || 
+          normalized.includes(`daar${correctPrep}`) || 
+          normalized.includes(`waar${correctPrep}`) ||
+          normalized.includes(`er ${correctPrep}`) ||
+          normalized.includes(`hier${correctPrep}`)
+      })
+
+      if (!hasAllRequiredPreps) {
+        const primaryPrep = requiredPreps[0]
+        const typicalPreps = ['over', 'voor', 'aan', 'in', 'op', 'met', 'tegen', 'bij', 'van', 'naar', 'tot', 'om'].filter(p => !requiredPreps.includes(p))
+        const usedWrong = typicalPreps.filter(p => words.includes(p))
+
+        if (usedWrong.length > 0) {
+          return {
+            found: true,
+            message: `Preposition error: '${fixedPrepositionData.governingHead}' strictly takes the fixed preposition '${fixedPrepositionData.fixedPreposition}', not '${usedWrong.join('/')}'.`,
+            miniLesson: {
+              title: `Vast Voorzetsel: ${fixedPrepositionData.governingHead} + ${fixedPrepositionData.fixedPreposition}`,
+              content: `In Dutch, "${fixedPrepositionData.governingHead}" governs the preposition "${fixedPrepositionData.fixedPreposition}". Avoid direct translation or language-transfer from English/German.`,
+              example: {
+                wrong: `${fixedPrepositionData.governingHead} ${usedWrong[0]} ...`,
+                right: `${fixedPrepositionData.governingHead} ${primaryPrep} ...`
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 2. Global catalogue of common B2 fixed preposition transfer errors
+  const rules = [
+    {
+      headRegex: /\b(twijfel|twijfelt|twijfelen|getwijfeld)\b/i,
+      wrongRegex: /\b(twijfel|twijfelt|twijfelen|getwijfeld)\b(?![^\.\,\;]*\baan\b)[^\.\,\;]*\b(over|in)\b/i,
+      correctPrep: 'aan',
+      headName: 'twijfelen',
+      wrongExample: 'Ik twijfel over zijn eerlijkheid.',
+      rightExample: 'Ik twijfel aan zijn eerlijkheid.',
+      explanation: 'When expressing doubt about facts, reliability, or truth, Dutch strictly uses "twijfelen aan". ("Twijfelen over" is only used colloquially when hesitating between two choices).'
+    },
+    {
+      headRegex: /\brekening\s+houd/i,
+      wrongRegex: /\brekening\s+(?:moeten\s+|kunnen\s+|zullen\s+)?houden?\b(?![^\.\,\;]*\bmet\b)[^\.\,\;]*\b(voor|om|over|aan)\b/i,
+      correctPrep: 'met',
+      headName: 'rekening houden',
+      wrongExample: 'Wij houden rekening voor vertragingen.',
+      rightExample: 'Wij houden rekening met vertragingen.',
+      explanation: '"Rekening houden" is always followed by "met" (to take into account / allow for).'
+    },
+    {
+      headRegex: /\b(bestand\s+(?:is|zijn|was|waren|wezen)|bestand)\b/i,
+      wrongRegex: /\bbestand\s+(?:is|zijn|was|waren)?\b(?![^\.\,\;]*\btegen\b)[^\.\,\;]*\b(voor|aan|op)\b/i,
+      correctPrep: 'tegen',
+      headName: 'bestand zijn',
+      wrongExample: 'Dit materiaal is bestand voor hoge temperaturen.',
+      rightExample: 'Dit materiaal is bestand tegen hoge temperaturen.',
+      explanation: '"Bestand zijn" (to resist / withstand) requires the preposition "tegen".'
+    },
+    {
+      headRegex: /\b(neerleggen|neergelegd|leg\s+\w+\s+neer|legt\s+\w+\s+neer)\b/i,
+      wrongRegex: /\b(neerleggen|neergelegd|neer)\b(?![^\.\,\;]*\bbij\b)[^\.\,\;]*\b(aan|op|voor|met)\b/i,
+      correctPrep: 'bij',
+      headName: 'zich neerleggen',
+      wrongExample: 'De werknemers leggen zich neer aan het besluit.',
+      rightExample: 'De werknemers leggen zich neer bij het besluit.',
+      explanation: '"Zich neerleggen bij" (to resign oneself to / accept an inevitable decision) always takes "bij".'
+    },
+    {
+      headRegex: /\b(bijdragen|bijdraagt|bijgedragen|draag\s+\w+\s+bij|draagt\s+\w+\s+bij)\b/i,
+      wrongRegex: /\b(bijdragen|bijdraagt|bijgedragen)\b(?![^\.\,\;]*\baan\b)[^\.\,\;]*\b(naar|voor|in)\b/i,
+      correctPrep: 'aan',
+      headName: 'bijdragen',
+      wrongExample: 'Dit project draagt bij voor onze doelstellingen.',
+      rightExample: 'Dit project draagt bij aan onze doelstellingen.',
+      explanation: '"Bijdragen" (to contribute) takes "aan" in Dutch (bijdragen aan een doel/oplossing).'
+    },
+    {
+      headRegex: /\b(voldoen|voldoet|voldaan)\b/i,
+      wrongRegex: /\b(voldoen|voldoet|voldaan)\b(?![^\.\,\;]*\baan\b)[^\.\,\;]*\b(in|op|voor|met)\b/i,
+      correctPrep: 'aan',
+      headName: 'voldoen',
+      wrongExample: 'Het voorstel voldoet voor alle eisen.',
+      rightExample: 'Het voorstel voldoet aan alle eisen.',
+      explanation: '"Voldoen aan" (to satisfy / comply with requirements or expectations) takes "aan".'
+    },
+    {
+      headRegex: /\b(gepaard\s+gaan|gepaard\s+gaat|gepaard\s+ging|gepaard\s+gegaan)\b/i,
+      wrongRegex: /\bgepaard\s+(?:gaat|gaan|ging|gegaan)\b(?![^\.\,\;]*\bmet\b)[^\.\,\;]*\b(in|aan|door|voor)\b/i,
+      correctPrep: 'met',
+      headName: 'gepaard gaan',
+      wrongExample: 'De verandering gaat gepaard in grote risico\'s.',
+      rightExample: 'De verandering gaat gepaard met grote risico\'s.',
+      explanation: '"Gepaard gaan met" (to be accompanied by / go hand in hand with) always takes "met".'
+    },
+    {
+      headRegex: /\b(inspelen|inspeelt|ingespeeld|speel\s+\w+\s+in|speelt\s+\w+\s+in)\b/i,
+      wrongRegex: /\b(inspelen|inspeelt|ingespeeld)\b(?![^\.\,\;]*\bop\b)[^\.\,\;]*\b(in|aan|naar|voor)\b/i,
+      correctPrep: 'op',
+      headName: 'inspelen',
+      wrongExample: 'Wij moeten inspelen naar de behoeften van de klant.',
+      rightExample: 'Wij moeten inspelen op de behoeften van de klant.',
+      explanation: '"Inspelen op" (to respond / anticipate / adapt to) takes "op".'
+    },
+    {
+      headRegex: /\b(voorzien|voorziet|voorziening)\b/i,
+      wrongRegex: /\b(voorzien|voorziet)\b(?![^\.\,\;]*\bin\b)[^\.\,\;]*\b(voor|met|aan)\s+(?:de\s+behoefte|het\s+onderhoud|de\s+kosten)\b/i,
+      correctPrep: 'in',
+      headName: 'voorzien',
+      wrongExample: 'De subsidie voorziet voor de kosten.',
+      rightExample: 'De subsidie voorziet in de kosten.',
+      explanation: '"Voorzien in" (to provide for / cover a need or cost) takes "in".'
+    },
+    {
+      headRegex: /\b(opgewassen)\b/i,
+      wrongRegex: /\bopgewassen\s+(?:is|zijn|was|waren)?\b(?![^\.\,\;]*\btegen\b)[^\.\,\;]*\b(voor|aan|op)\b/i,
+      correctPrep: 'tegen',
+      headName: 'opgewassen zijn',
+      wrongExample: 'Zij zijn niet opgewassen voor deze zware taak.',
+      rightExample: 'Zij zijn niet opgewassen tegen deze zware taak.',
+      explanation: '"Opgewassen zijn tegen" (to be equal to / up to a challenge or opponent) takes "tegen".'
+    },
+    {
+      headRegex: /\b(behoefte)\b/i,
+      wrongRegex: /\bbehoefte\b(?![^\.\,\;]*\baan\b)[^\.\,\;]*\b(voor|om|naar)\b/i,
+      correctPrep: 'aan',
+      headName: 'behoefte',
+      wrongExample: 'Er is een grote behoefte voor vernieuwing.',
+      rightExample: 'Er is een grote behoefte aan vernieuwing.',
+      explanation: '"Behoefte aan" (need for / desire for) is always followed by "aan".'
+    },
+    {
+      headRegex: /\b(bezwaar|bezwaren)\b/i,
+      wrongRegex: /\bbezwaar\b(?![^\.\,\;]*\btegen\b)[^\.\,\;]*\b(op|voor|aan)\b/i,
+      correctPrep: 'tegen',
+      headName: 'bezwaar',
+      wrongExample: 'Ik heb bezwaar op dit nieuwe beleid.',
+      rightExample: 'Ik heb bezwaar tegen dit nieuwe beleid.',
+      explanation: '"Bezwaar hebben tegen" / "bezwaar maken tegen" (to object to) requires "tegen".'
+    },
+    {
+      headRegex: /\b(verantwoordelijk)\b/i,
+      wrongRegex: /\bverantwoordelijk\b(?![^\.\,\;]*\bvoor\b)[^\.\,\;]*\b(over|aan|van)\b/i,
+      correctPrep: 'voor',
+      headName: 'verantwoordelijk',
+      wrongExample: 'Wie is verantwoordelijk over dit project?',
+      rightExample: 'Wie is verantwoordelijk voor dit project?',
+      explanation: '"Verantwoordelijk voor" (responsible for) takes "voor".'
+    },
+    {
+      headRegex: /\b(bemoeien|bemoeit|bemoeid|bemoei)\b/i,
+      wrongRegex: /\b(bemoeien|bemoeit|bemoeid|bemoei)\b(?![^\.\,\;]*\bmet\b)[^\.\,\;]*\b(over|om|aan|in)\b/i,
+      correctPrep: 'met',
+      headName: 'zich bemoeien',
+      wrongExample: 'Hij bemoeit zich over alles.',
+      rightExample: 'Hij bemoeit zich met alles.',
+      explanation: '"Zich bemoeien met" (to interfere with / mind someone\'s business) takes "met".'
+    }
+  ]
+
+  for (const rule of rules) {
+    if (rule.headRegex.test(normalized) && rule.wrongRegex.test(normalized) && !normalized.includes(rule.correctPrep)) {
+      return {
+        found: true,
+        message: `Fixed Preposition error: "${rule.headName}" is paired with "${rule.correctPrep}", not with the preposition you used.`,
+        miniLesson: {
+          title: `Vaste Voorzetsels: ${rule.headName} + ${rule.correctPrep}`,
+          content: rule.explanation,
+          example: {
+            wrong: rule.wrongExample,
+            right: rule.rightExample
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkMidfieldOrderError(
   normalized: string,
   midfieldData?: {
@@ -1725,7 +1928,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       message: '',
       target, 
       explanation: exercise.explanation, 
-      skills: [...exercise.skills], 
+      skills: [...(exercise.skills || [])], 
       vocabulary: exercise.vocabulary, 
       grammar: exercise.grammar,
       idioms: exercise.idioms,
@@ -2746,6 +2949,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       const target = normalizeAnswer(exercise.target || '')
       const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
 
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Perfect Dutch midfield word order and syntactic sequencing.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
       const midfieldError = checkMidfieldOrderError(normalized, exercise.midfieldData)
       if (midfieldError.found) {
         return {
@@ -2757,17 +2971,6 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
             natural: exercise.target || '',
             explanation: 'Remember the Dutch midfield hierarchy: Definite Object -> Tijd (Time) -> Manier (Manner) -> Negatie (Niet) -> Plaats (Place) -> Indefinite Object.'
           }
-        }
-      }
-
-      if (accepted.includes(normalized)) {
-        if (!base.skills.includes('production')) base.skills.push('production')
-        if (!base.skills.includes('grammar')) base.skills.push('grammar')
-        return {
-          ...base,
-          outcome: 'correct',
-          message: 'Uitstekend! Perfect Dutch midfield word order and syntactic sequencing.',
-          changeModifier: (base.changeModifier || 0) + 20
         }
       }
 
@@ -2788,6 +2991,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'Not quite. Reorder the constituents according to Dutch TMP and object placement rules.',
           explanation: exercise.explanation || 'Construct the sentence following: [Subject] + [Verb] + [Definite Object] + [Time] + [Manner] + [Niet] + [Place] + [Indefinite Object].'
+        }
+      }
+    }
+
+    // Fixed Prepositions & Prepositional Regimes Drill Evaluation
+    if (exercise.kind === 'fixed-preposition-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Perfect use of the fixed Dutch preposition and natural sentence structure.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const prepRegimeError = checkFixedPrepositionRegimeError(normalized, exercise.fixedPrepositionData)
+      if (prepRegimeError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: prepRegimeError.message,
+          miniLesson: prepRegimeError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `Remember the fixed preposition regime: '${exercise.fixedPrepositionData?.governingHead || 'het woord'}' takes '${exercise.fixedPrepositionData?.fixedPreposition || 'het vaste voorzetsel'}'.`
+          }
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: `Very close! Make sure to pair '${exercise.fixedPrepositionData?.governingHead || 'het woord'}' with '${exercise.fixedPrepositionData?.fixedPreposition || 'het vaste voorzetsel'}'.`,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || `Verify that you used '${exercise.fixedPrepositionData?.governingHead}' with '${exercise.fixedPrepositionData?.fixedPreposition}'.`
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the governing word, required fixed preposition, and word order.',
+          explanation: exercise.explanation || `Combine '${exercise.fixedPrepositionData?.governingHead}' with '${exercise.fixedPrepositionData?.fixedPreposition}'.`
         }
       }
     }
@@ -2933,6 +3187,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     const reflexiveError = checkReflexiveError(normalized)
     if (reflexiveError.found) {
       return { ...base, outcome: 'retry', message: reflexiveError.message, miniLesson: reflexiveError.miniLesson }
+    }
+
+    // Grammar Assistant: Fixed Preposition Regime Check
+    const prepRegimeAssistantError = checkFixedPrepositionRegimeError(normalized)
+    if (prepRegimeAssistantError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: prepRegimeAssistantError.message,
+        miniLesson: prepRegimeAssistantError.miniLesson
+      }
     }
 
     // Grammar Assistant: Fixed Preposition Check
