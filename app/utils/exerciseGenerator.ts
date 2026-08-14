@@ -26,6 +26,8 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'onderhandelen': { prompt: 'We need to negotiate the salary.', target: 'We moeten onderhandelen over het salaris.', explanation: 'Onderhandelen means to negotiate.' },
   'samenvatten': { prompt: 'Can you summarize the article?', target: 'Kun je het artikel samenvatten?', explanation: 'Samenvatten means to summarize.' },
   'overtuigen': { prompt: 'I want to convince you.', target: 'Ik wil je overtuigen.', explanation: 'Overtuigen means to convince.' },
+  'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
+  'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
   'zou': { prompt: 'I would like to go.', target: 'Ik zou graag gaan.', explanation: 'Use "zou" for hypothetical or polite requests.' },
 }
@@ -42,6 +44,25 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'flexibility') skills.push('production', 'automaticity')
   if (kind === 'conversation') skills.push('speaking', 'production')
   if (kind === 'speed-drill') skills.push('automaticity', 'production')
+  if (kind === 'reframing-drill') skills.push('production', 'pragmatic')
+
+  if (kind === 'reframing-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      reframingData: {
+        bluntSentence: `Direct version of ${key}`,
+        softeningElements: ['misschien', 'zou', 'eventueel'],
+        targetContext: 'Professional Meeting'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      correction: info.target,
+      explanation: info.explanation
+    }
+  }
 
   return {
     id: `smart-${type}-${key}-${kind}`,

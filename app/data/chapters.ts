@@ -2512,8 +2512,100 @@ export const erChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter]
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
+}
+
+export const diplomacyChapter: Chapter = {
+  slug: 'diplomatie-en-professionaliteit',
+  level: 'B2',
+  title: "Diplomacy & Professionalism",
+  capability: "Navigate delicate professional situations using 'soft' Dutch to maintain relationships.",
+  description: "Learn how to deliver bad news, disagree with a manager, or point out errors without being blunt.",
+  estimatedMinutes: 18,
+  stages: [
+    {
+      id: 'discover', title: 'The Power of Softeners', kind: 'discover',
+      intro: "In Dutch, we use specific words to distance ourselves from a direct statement. This is called 'verzachten'.",
+      exercises: [
+        {
+          id: 'soft-induction', kind: 'induction', prompt: 'Notice the difference',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Blunt', answer: 'Dat kan niet.' },
+              { prompt: 'Diplomatic', answer: 'Dat zou misschien niet helemaal mogelijk zijn.' }
+            ],
+            ruleChallenge: 'Which word makes the sentence hypothetical and therefore softer?',
+            options: [
+              { text: 'zou', isCorrect: true },
+              { text: 'niet', isCorrect: false },
+              { text: 'dat', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Identifying Softeners', kind: 'understand',
+      intro: "Look for words like 'eigenlijk', 'misschien', 'eventueel', and 'zou'.",
+      exercises: [
+        {
+          id: 'soft-id-1', kind: 'inference-challenge', prompt: 'What is the speaker actually saying?',
+          context: 'Het is misschien een goed idee om hier nog even naar te kijken.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'A colleague looks at your work and says: "Het is misschien een goed idee om hier nog even naar te kijken."',
+            options: [
+              { text: 'They think it is perfect as it is.', isCorrect: false, explanation: 'Incorrect. "Nog even naar kijken" implies changes are needed.' },
+              { text: 'They are suggesting you should change something.', isCorrect: true, explanation: 'Correct. This is a very common Dutch way to say "fix this".' },
+              { text: 'They are asking for your permission to look at it.', isCorrect: false, explanation: 'No, they have already looked and are giving feedback.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'reframe', title: 'The Reframe Challenge', kind: 'transform',
+      intro: "Now try to transform blunt statements into professional ones.",
+      exercises: [
+        {
+          id: 'reframe-1', kind: 'reframing-drill', prompt: 'Tell your manager the deadline is impossible.',
+          skills: ['production', 'pragmatic', 'grammar'],
+          reframingData: {
+            bluntSentence: 'De deadline is onmogelijk.',
+            softeningElements: ['misschien', 'zou', 'lastig', 'eventueel'],
+            targetContext: 'Meeting with Department Head'
+          },
+          correction: 'Het zou misschien lastig kunnen worden om de deadline te halen.',
+          explanation: "Using 'zou kunnen worden' and 'lastig' instead of 'onmogelijk' sounds much more professional."
+        },
+        {
+          id: 'reframe-2', kind: 'reframing-drill', prompt: 'Tell a colleague they made a mistake.',
+          skills: ['production', 'pragmatic', 'grammar'],
+          reframingData: {
+            bluntSentence: 'Je hebt een fout gemaakt.',
+            softeningElements: ['lijkt erop', 'klein', 'misschien', 'ingeslopen'],
+            targetContext: 'Peer Review'
+          },
+          correction: 'Het lijkt erop dat er misschien een klein foutje is ingeslopen.',
+          explanation: "Phrasing it as 'er is een foutje ingeslopen' (a mistake has crept in) removes the direct blame from the person."
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Diplomacy', kind: 'personalise',
+      intro: "Think of a time you had to be diplomatic at work. How would you say it in Dutch?",
+      exercises: [
+        {
+          id: 'dip-pers-1', kind: 'personalise', prompt: 'Hoe zou je op een vriendelijke manier zeggen dat je het niet eens bent met een voorstel?',
+          skills: ['production', 'speaking', 'pragmatic'],
+          vocabulary: ['voorstel', 'eens', 'mening'],
+          grammar: ['zou']
+        }
+      ]
+    }
+  ]
 }

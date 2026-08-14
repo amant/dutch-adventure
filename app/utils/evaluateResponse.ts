@@ -714,6 +714,35 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Reframing-Drill Evaluation
+    if (exercise.kind === 'reframing-drill' && exercise.reframingData) {
+      const softeners = exercise.reframingData.softeningElements || []
+      const usedSofteners = softeners.filter(s => normalized.includes(s.toLowerCase()))
+      
+      const pragmaticScore = Math.min(100, (usedSofteners.length / Math.max(1, softeners.length)) * 100)
+      
+      if (usedSofteners.length > 0) {
+        if (!base.skills.includes('pragmatic')) base.skills.push('pragmatic')
+        
+        return {
+          ...base,
+          outcome: pragmaticScore > 60 ? 'correct' : 'acceptable',
+          message: pragmaticScore > 60 
+            ? 'Excellent diplomacy! Your reframe sounds much more professional.' 
+            : 'Good effort, but you could add more softening markers to sound even more natural.',
+          pragmaticScore,
+          changeModifier: (base.changeModifier || 0) + (usedSofteners.length * 5)
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Your response still sounds a bit too direct for this context. Try using some of the suggested softeners.',
+          explanation: 'In professional Dutch, we often use words like "misschien", "zou", or "eventueel" to soften direct statements.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
