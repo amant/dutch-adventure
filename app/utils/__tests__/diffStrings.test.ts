@@ -17,4 +17,26 @@ describe('diffStrings', () => {
     const parts = diffStrings('Ik ga', 'ik ga')
     expect(parts.every(p => p.type === 'same')).toBe(true)
   })
+
+  it('handles an added word at the end', () => {
+    const parts = diffStrings('ik ga', 'ik ga naar huis')
+    expect(parts).toContainEqual({ value: 'naar', type: 'added' })
+    expect(parts).toContainEqual({ value: 'huis', type: 'added' })
+  })
+
+  it('handles a removed word at the end', () => {
+    const parts = diffStrings('ik ga naar huis', 'ik ga')
+    expect(parts).toContainEqual({ value: 'naar', type: 'removed' })
+    expect(parts).toContainEqual({ value: 'huis', type: 'removed' })
+  })
+
+  it('handles empty strings', () => {
+    const parts = diffStrings('ik ga', '')
+    expect(parts).toContainEqual({ value: 'ik', type: 'removed' })
+    expect(parts).toContainEqual({ value: 'ga', type: 'removed' })
+
+    const added = diffStrings('', 'ik ga')
+    expect(added).toContainEqual({ value: 'ik', type: 'added' })
+    expect(added).toContainEqual({ value: 'ga', type: 'added' })
+  })
 })

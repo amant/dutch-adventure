@@ -78,6 +78,24 @@ function editDistance(s1: string, s2: string): number {
   return costs[s2.length] ?? 0
 }
 
+const STOPWORDS = new Set([
+  'de', 'het', 'een', 'en', 'of', 'niet', 'te', 'om', 'er', 'is', 'zijn', 'was', 'waren',
+  'wordt', 'worden', 'heeft', 'hebben', 'had', 'heb', 'hebt', 'ik', 'je', 'jij', 'hij',
+  'zij', 'ze', 'we', 'wij', 'jullie', 'u', 'mijn', 'jouw', 'haar', 'ons', 'onze', 'hun',
+  'dat', 'dit', 'die', 'deze', 'met', 'van', 'aan', 'in', 'op', 'naar', 'voor', 'uit',
+  'bij', 'over', 'door', 'als', 'dan', 'nu', 'nog', 'al', 'maar', 'wel', 'ook', 'hier',
+  'daar', 'na', 'tot', 'zo', 'zoals', 'gisteren', 'vandaag', 'morgen'
+])
+
+function contentWords(text: string): string[] {
+  return text.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOPWORDS.has(w))
+}
+
+function sharesContentWords(a: string, b: string): boolean {
+  const words = new Set(contentWords(a))
+  return contentWords(b).some(w => words.has(w))
+}
+
 function checkInversionError(normalized: string): GrammarCheckResult {
   const adverbs = ['gisteren', 'vandaag', 'morgen', 'soms', 'meestal', 'nu', 'daarna', 'toen']
   const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
@@ -471,6 +489,38 @@ function checkConcessionError(normalized: string): GrammarCheckResult {
         example: {
           wrong: 'Het is weliswaar duur, het levert veel op',
           right: 'Het is weliswaar duur, maar het levert veel op'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
+function checkConcessionDrillError(normalized: string): GrammarCheckResult {
+  const conjunctions = ['hoewel', 'ofschoon']
+  const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie', 'u', 'men']
+  const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen', 'had', 'zou', 'moet', 'moeten', 'ga', 'gaat', 'gaan', 'was', 'waren']
+
+  for (const c of conjunctions) {
+    const words = normalized.split(' ')
+    const index = words.indexOf(c)
+    if (index !== -1 && index < words.length - 2) {
+      const nextWords = words.slice(index + 1)
+      const firstNext = nextWords[0]
+      const secondNext = nextWords[1]
+      if (firstNext && pronouns.includes(firstNext) && secondNext && commonVerbs.includes(secondNext)) {
+        return {
+          found: true,
+          message: `After '${c}', the finite verb moves to the end of the concessive clause.`,
+          miniLesson: {
+            title: 'Concessive Subclause: Verb-Final Word Order',
+            content: 'A clause introduced by "hoewel" or "ofschoon" is a subordinate clause: the conjugated verb goes to the very end.',
+            example: {
+              wrong: `... ${c} ik ${secondNext} honger.`,
+              right: `... ${c} ik honger ${secondNext}.`
+            }
+          }
         }
       }
     }
@@ -1918,7 +1968,7 @@ function checkTopicalisationError(
   }
 ): GrammarCheckResult {
   if (topicalisationData) {
-    const { focusType, frontedElement, resumptiveElement } = topicalisationData
+    const { focusType, frontedElement, resumptiveElement, baseSentence } = topicalisationData
 
     // 1. Infinitive fronting with dummy verb "doen"
     if (focusType === 'infinitive-fronting-doen') {
@@ -2002,6 +2052,25 @@ function checkTopicalisationError(
             example: {
               wrong: 'Als de situatie mocht verslechteren...',
               right: 'Mocht de situatie verslechteren, neem dan contact op.'
+            }
+          }
+        }
+      }
+    }
+
+    // 5. Object fronting with V2 inversion: answer still uses base (non-fronted) order
+    if (focusType === 'object-fronting-v2') {
+      const baseNorm = baseSentence ? normalizeAnswer(baseSentence) : ''
+      if (baseNorm && calculateSimilarity(normalized, baseNorm) > 0.8) {
+        return {
+          found: true,
+          message: 'For emphasis, front the object and apply subject-verb inversion (V2), e.g. "Dat boek lees ik."',
+          miniLesson: {
+            title: 'Object Fronting: V2 Inversion',
+            content: 'When the object is moved to the first position for focus, the finite verb stays in second position and the subject moves directly after it.',
+            example: {
+              wrong: 'Ik lees dat boek.',
+              right: 'Dat boek lees ik.'
             }
           }
         }
@@ -2397,10 +2466,10 @@ function calculatePragmaticScore(normalized: string, exercise: Exercise): { scor
   let feedback = ""
 
   // 1. Softeners (Politeness)
-  const softeners = ['graag', 'even', 'misschien', 'zou', 'mag', 'kunt', 'wil']
+  const softeners = ['graag', 'even', 'misschien', 'zou', 'mag', 'kunt']
   const hasSofteners = softeners.some(s => normalized.includes(s))
   if (hasSofteners) {
-    score += 15
+    score += 20
     feedback = "Nice use of softeners! It makes you sound more polite."
   }
 
@@ -2413,14 +2482,15 @@ function calculatePragmaticScore(normalized: string, exercise: Exercise): { scor
   }
 
   // 3. Stiff phrasing (Direct translation from English)
-  const stiffPhrases = [
-    { stiff: 'ik wil', better: 'ik zou graag ... willen' },
+  const stiffPhrases: { stiff: string, better: string, softenedBy?: string[] }[] = [
+    { stiff: 'ik wil', better: 'ik zou graag ... willen', softenedBy: ['graag', 'even', 'misschien', 'wel', 'eens', 'hoor', 'nou'] },
     { stiff: 'kan ik hebben', better: 'mag ik' },
     { stiff: 'ik ben goed', better: 'het gaat goed met mij' }
   ]
   
   for (const p of stiffPhrases) {
-    if (normalized.includes(p.stiff)) {
+    const softened = p.softenedBy?.some(s => normalized.includes(`${p.stiff} ${s}`))
+    if (normalized.includes(p.stiff) && !softened) {
       score -= 20
       feedback = `Technically correct, but '${p.stiff}' is a bit stiff. Try using '${p.better}' instead.`
       break
@@ -2798,8 +2868,8 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
 
     // Pronominal-Drill Evaluation
     if (exercise.kind === 'pronominal-drill' && exercise.pronominalData) {
-      const correct = exercise.target || ''
-      if (normalized === correct.toLowerCase()) {
+      const correct = normalizeAnswer(exercise.target || '')
+      if (normalized === correct) {
         if (!base.skills.includes('production')) base.skills.push('production')
         return {
           ...base,
@@ -2855,7 +2925,9 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     // Nominalisation Drill Evaluation
     if (exercise.kind === 'nominalisation-drill' && exercise.nominalisationData) {
       const target = normalizeAnswer(exercise.target || '')
-      const containsTargetNoun = normalized.includes(exercise.nominalisationData.targetNoun.toLowerCase())
+      const targetNoun = exercise.nominalisationData.targetNoun.toLowerCase()
+      const escapedTargetNoun = targetNoun.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const containsTargetNoun = new RegExp(`\\b${escapedTargetNoun}\\b`).test(normalized)
       
       if (normalized === target) {
         if (!base.skills.includes('production')) base.skills.push('production')
@@ -3165,6 +3237,20 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'acceptable',
           message: concessionError.message,
           miniLesson: concessionError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Concessive structures (hoewel, ondanks (dat), al + inversie, hoe... ook) require specific word order and connector combinations.'
+          }
+        }
+      }
+
+      const concessionDrillError = checkConcessionDrillError(normalized)
+      if (concessionDrillError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: concessionDrillError.message,
+          miniLesson: concessionDrillError.miniLesson,
           teacherCorrection: {
             natural: exercise.target || '',
             explanation: 'Concessive structures (hoewel, ondanks (dat), al + inversie, hoe... ook) require specific word order and connector combinations.'
@@ -3629,7 +3715,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
 
       const aspectError = checkAspectError(normalized, exercise.aspectData)
-      if (aspectError.found) {
+      if (aspectError.found && sharesContentWords(normalized, target)) {
         return {
           ...base,
           outcome: 'acceptable',
@@ -3681,7 +3767,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
 
       const modalError = checkModalParticleError(normalized, exercise.modalParticleData)
-      if (modalError.found) {
+      if (modalError.found && sharesContentWords(normalized, target)) {
         return {
           ...base,
           outcome: 'acceptable',
@@ -4035,9 +4121,11 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         return { ...base, outcome: 'retry', message: `Don't forget to use '${missing}' in your answer.` }
       }
 
-      if (normalized.length > 5) {
-        return { ...base, outcome: 'correct', message: 'Great job! You successfully used a different structure.' }
+      if (normalized.split(' ').filter(Boolean).length < 3) {
+        return { ...base, outcome: 'retry', message: 'Try to write a complete sentence to show real flexibility.' }
       }
+
+      return { ...base, outcome: 'correct', message: 'Great job! You successfully used a different structure.' }
     }
 
     // Final Challenge Evaluation
@@ -4089,6 +4177,11 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Free-form typed exercises (no expected answer): any substantive attempt counts
+    if (exercise.kind === 'typed' && accepted.length === 0 && normalized.length > 0) {
+      return { ...base, outcome: 'correct', message: 'That sounds good! Keep practicing.' }
+    }
+
     return { ...base, outcome: 'retry', message: 'Not quite. Check the word order or spelling and try again.', correction: exercise.correction }
   }
 
@@ -4096,11 +4189,13 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     
   // Add Pragmatic Analysis for correct/acceptable answers
   if (feedback.outcome !== 'retry') {
-    const pragmatics = calculatePragmaticScore(normalized, exercise)
-    feedback.pragmaticScore = pragmatics.score
-    feedback.pragmaticFeedback = pragmatics.feedback
-    if (pragmatics.score > 70 && !feedback.skills.includes('pragmatic')) {
-      feedback.skills.push('pragmatic')
+    if (feedback.pragmaticScore === undefined) {
+      const pragmatics = calculatePragmaticScore(normalized, exercise)
+      feedback.pragmaticScore = pragmatics.score
+      feedback.pragmaticFeedback = pragmatics.feedback
+      if (pragmatics.score > 70 && !feedback.skills.includes('pragmatic')) {
+        feedback.skills.push('pragmatic')
+      }
     }
 
     // Coherence Analysis

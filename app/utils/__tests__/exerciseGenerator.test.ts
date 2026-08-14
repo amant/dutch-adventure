@@ -69,6 +69,56 @@ describe('generateExercisesForConcept', () => {
     const ex = generateExercisesForConcept('wel degelijk', 'grammar', 'modal-particle-drill')
     expect(ex.modalParticleData?.pragmaticFunction).toBe('rebuttal-wel-degelijk')
   })
+
+  const drillKinds = [
+    'nominalisation-drill',
+    'passive-drill',
+    'reported-speech-drill',
+    'relative-clause-drill',
+    'infinitive-drill',
+    'double-infinitive-drill',
+    'concession-drill',
+    'participial-drill',
+    'correlative-drill',
+    'conditional-drill',
+    'causality-drill',
+    'prefix-verb-drill',
+    'midfield-drill',
+    'fixed-preposition-drill',
+    'pronominal-splitting-drill',
+    'aspect-drill',
+    'modal-particle-drill',
+    'topicalisation-drill',
+  ] as const
+
+  it.each(drillKinds)('generates an exercise for the %s kind', (kind) => {
+    const ex = generateExercisesForConcept('wonen', 'vocabulary', kind as any)
+
+    expect(ex.kind).toBe(kind)
+    expect(ex.id).toBe(`smart-vocabulary-wonen-${kind}`)
+    expect(ex.skills).toContain('production')
+  })
+
+  it('tags the drill-kind skills appropriately', () => {
+    expect(generateExercisesForConcept('wonen', 'vocabulary', 'nominalisation-drill').skills).toContain('grammar')
+    expect(generateExercisesForConcept('wonen', 'vocabulary', 'modal-particle-drill').skills).toEqual(
+      expect.arrayContaining(['pragmatic', 'grammar'])
+    )
+  })
+
+  it('handles the governing-verb variants for double infinitive drills', () => {
+    const laten = generateExercisesForConcept('laten fietsen', 'grammar', 'double-infinitive-drill')
+    expect(laten.doubleInfinitiveData?.governingVerb).toBe('laten')
+    expect(laten.doubleInfinitiveData?.governingType).toBe('causative-laten')
+
+    const leren = generateExercisesForConcept('leren fietsen', 'grammar', 'double-infinitive-drill')
+    expect(leren.doubleInfinitiveData?.governingVerb).toBe('leren')
+    expect(leren.doubleInfinitiveData?.governingType).toBe('instruction-leren-helpen')
+
+    const horen = generateExercisesForConcept('horen zingen', 'grammar', 'double-infinitive-drill')
+    expect(horen.doubleInfinitiveData?.governingVerb).toBe('horen')
+    expect(horen.doubleInfinitiveData?.governingType).toBe('perception')
+  })
 })
 
 describe('createSmartReviewChapter', () => {

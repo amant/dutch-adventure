@@ -1,5 +1,21 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import type { ConceptState } from '~/types/learning'
+
+const emptyState: ConceptState = {
+  recognition: 0,
+  meaning: 0,
+  production: 0,
+  automaticity: 0,
+  listening: 0,
+  speaking: 0,
+  spelling: 0,
+  pragmatic: 0,
+  coherence: 0,
+  idiomatic: 0,
+  encounters: 1,
+  successes: 1,
+}
 
 describe('useLearnerMemory', () => {
   beforeEach(() => {
@@ -158,6 +174,69 @@ describe('useLearnerMemory', () => {
     expect(memory.value.overall.grammar).toBe(0)
     expect(memory.value.vocabulary['fiets']).toBeDefined()
     expect(hydrated.value).toBe(true)
+  })
+
+  it('caps recent redlines at 10 and per-concept redline history at 5', () => {
+    const { memory, record } = useLearnerMemory()
+    for (let i = 0; i < 11; i++) {
+      record(['grammar'], 'retry', ['wonen'], ['omdat-clause'], ['klare taal'], 0, `Ik ging ${i}`, 'Hoe gaat het?', { correction: 'ik ging gisteren' })
+    }
+
+    expect(memory.value.recentRedlines).toHaveLength(10)
+    expect(memory.value.vocabulary['wonen']!.redlineHistory).toHaveLength(5)
+    expect(memory.value.grammar['omdat-clause']!.redlineHistory).toHaveLength(5)
+    expect(memory.value.idioms['klare taal']!.redlineHistory).toHaveLength(5)
+  })
+
+  it('caps response times at 10 and usage history at 5 entries', () => {
+    const { memory, record } = useLearnerMemory()
+    for (let i = 0; i < 11; i++) {
+      record(['production'], 'correct', ['wonen'], undefined, undefined, 0, `Ik woon ${i}`, 'Waar woon je?', undefined, 0.5)
+    }
+
+    expect(memory.value.vocabulary['wonen']!.responseTimes).toHaveLength(10)
+    expect(memory.value.vocabulary['wonen']!.usageHistory).toHaveLength(5)
+  })
+
+  it('getWeakConcepts also ranks grammar concepts', () => {
+    const { record, getWeakConcepts } = useLearnerMemory()
+    record(['production'], 'retry', ['wonen'], ['omdat-clause'])
+
+    const result = getWeakConcepts()
+    expect(result.grammar).toContain('omdat-clause')
+  })
+
+  it('getWeakConcepts sorts grammar by score then ratio', () => {
+    const { memory, getWeakConcepts } = useLearnerMemory()
+    // Two weak concepts with identical scores (ratio decides) and one strong one
+    memory.value.grammar['a-concept'] = { ...emptyState, production: 0, automaticity: 0 }
+    memory.value.grammar['b-concept'] = { ...emptyState, production: 0, automaticity: 0 }
+    memory.value.grammar['c-concept'] = { ...emptyState, production: 100, automaticity: 100 }
+
+    const result = getWeakConcepts()
+    expect(result.grammar[0]).toBe('a-concept')
+    expect(result.grammar[1]).toBe('b-concept')
+    expect(result.grammar).toContain('c-concept')
+  })
+
+  it('re-initializes recentRedlines when the field was cleared', () => {
+    const { memory, record } = useLearnerMemory()
+    memory.value.recentRedlines = undefined as any
+
+    record(['grammar'], 'retry', ['wonen'], undefined, undefined, 0, 'Ik ging', 'Hoe gaat het?', { correction: 'ik ging gisteren' })
+
+    expect(memory.value.recentRedlines).toHaveLength(1)
+  })
+
+  it('getFrontierConcepts includes grammar concepts and sorts by passive strength', () => {
+    const { record, getFrontierConcepts } = useLearnerMemory()
+    record(['recognition'], 'correct', ['wonen'], undefined, undefined, 60)
+    record(['recognition'], 'correct', undefined, ['omdat-clause'], undefined, 60)
+
+    const frontier = getFrontierConcepts()
+    expect(frontier.some(f => f.kind === 'vocabulary')).toBe(true)
+    expect(frontier.some(f => f.kind === 'grammar')).toBe(true)
+    expect(frontier[0]!.passive).toBeGreaterThanOrEqual(frontier[1]!.passive)
   })
 
   it('reset clears all memory', () => {
