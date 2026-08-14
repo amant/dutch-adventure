@@ -2760,7 +2760,80 @@ export const formalStyleChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter]
+export const passiveVoiceChapter: Chapter = {
+  slug: 'de-lijdende-vorm',
+  level: 'B2',
+  title: "The Passive Voice & Objectivity",
+  capability: "Use the passive voice to describe processes and sound more objective.",
+  description: "Learn when and how to use 'worden' and 'zijn' in passive constructions, including the impersonal 'Er-passive'.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Process vs Result', kind: 'discover',
+      intro: "Dutch uses 'worden' for a process in progress, and 'zijn' for the result.",
+      exercises: [
+        {
+          id: 'pass-ind-1', kind: 'induction', prompt: 'Notice the difference',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Active', answer: 'De man schildert de deur.' },
+              { prompt: 'Passive (Process)', answer: 'De deur wordt geschilderd.' },
+              { prompt: 'Passive (Result)', answer: 'De deur is geschilderd.' }
+            ],
+            ruleChallenge: 'Which auxiliary is used for a process happening now?',
+            options: [
+              { text: 'zijn', isCorrect: false },
+              { text: 'hebben', isCorrect: false },
+              { text: 'worden', isCorrect: true }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'drill', title: 'Passive Transformations', kind: 'transform',
+      intro: "Transform these active sentences into passive ones.",
+      exercises: [
+        {
+          id: 'pass-d-1', kind: 'passive-drill', prompt: 'Focus on the process',
+          skills: ['production', 'grammar'],
+          passiveData: {
+            activeSentence: 'De directie neemt morgen een besluit.',
+            focus: 'process',
+            agent: 'de directie'
+          },
+          target: 'Er wordt morgen een besluit genomen door de directie',
+          explanation: 'Use "wordt ... genomen" for the process.'
+        },
+        {
+          id: 'pass-d-2', kind: 'passive-drill', prompt: 'Use the impersonal "Er" passive',
+          skills: ['production', 'grammar'],
+          passiveData: {
+            activeSentence: 'Mensen praten veel over het nieuwe project.',
+            focus: 'er-passive'
+          },
+          target: 'Er wordt veel over het nieuwe project gepraat',
+          explanation: 'When the subject is general ("mensen"), start with "Er wordt".'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Reporting a Change', kind: 'personalise',
+      intro: "Describe a process at your work or school using the passive voice.",
+      exercises: [
+        {
+          id: 'pass-p-1', kind: 'personalise', prompt: 'Beschrijf iets dat momenteel op je werk wordt veranderd of verbeterd.',
+          skills: ['production', 'writing', 'pragmatic'],
+          vocabulary: ['verbeteren', 'organiseren', 'beslissen', 'uitvoeren'],
+          grammar: ['passive-voice']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

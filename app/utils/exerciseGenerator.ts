@@ -32,6 +32,9 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'nominalisation': { prompt: 'The prices are rising.', target: 'De stijging van de prijzen.', explanation: 'Transform the verb "stijgen" into the noun "stijging".' },
   'toename': { prompt: 'The number of people is increasing.', target: 'De toename van het aantal mensen.', explanation: 'Toename means increase.' },
   'uitbreiding': { prompt: 'The company is expanding.', target: 'De uitbreiding van het bedrijf.', explanation: 'Uitbreiding means expansion.' },
+  'passive-voice': { prompt: 'The project is being prepared.', target: 'Het project wordt voorbereid.', explanation: 'Use "worden" + past participle for the passive process.' },
+  'worden': { prompt: 'It is being done.', target: 'Het wordt gedaan.', explanation: 'Worden is the auxiliary for the passive voice.' },
+  'gepland': { prompt: 'The meeting is being planned.', target: 'De vergadering wordt gepland.', explanation: 'Gepland is the past participle of plannen.' },
   'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
   'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
@@ -53,6 +56,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'reframing-drill') skills.push('production', 'pragmatic')
   if (kind === 'pronominal-drill') skills.push('production', 'grammar')
   if (kind === 'nominalisation-drill') skills.push('production', 'grammar')
+  if (kind === 'passive-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -107,6 +111,23 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       nominalisationData: {
         verbalSentence: `De ${key} gebeurt nu.`,
         targetNoun: key
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'passive-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      passiveData: {
+        activeSentence: `Men ${key} het project.`,
+        focus: 'process'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

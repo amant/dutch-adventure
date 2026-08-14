@@ -735,6 +735,41 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Passive Drill Evaluation
+    if (exercise.kind === 'passive-drill' && exercise.passiveData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const containsDoor = normalized.includes(' door ')
+      const containsWorden = normalized.includes('wordt') || normalized.includes('worden') || normalized.includes('werd')
+      const containsZijn = normalized.includes(' is ') || normalized.includes(' zijn ') || normalized.includes(' was ')
+      
+      if (normalized === target) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent passive transformation! Your word order and auxiliary choice are perfect.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      } else if (exercise.passiveData.focus === 'er-passive' && !normalized.startsWith('er ')) {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'This impersonal construction should start with "Er".',
+          explanation: 'In Dutch, we use "Er wordt..." to focus on the action when there is no specific subject.'
+        }
+      } else if (exercise.passiveData.agent && !containsDoor) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Good passive structure, but you forgot to mention the agent (the "door" phrase).',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `The agent in a passive sentence is introduced by the preposition "door".`
+          }
+        }
+      }
+    }
+
     // Nominalisation Drill Evaluation
     if (exercise.kind === 'nominalisation-drill' && exercise.nominalisationData) {
       const target = normalizeAnswer(exercise.target || '')
