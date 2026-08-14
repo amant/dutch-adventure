@@ -3700,7 +3700,186 @@ export const concessionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter]
+export const participialChapter: Chapter = {
+  slug: 'deelwoordconstructies-gerundivum',
+  level: 'B2',
+  title: 'Participial Constructions & Gerundive Mastery',
+  capability: "Formulate concise, professional Dutch sentences using modal gerundives ('het te-deelwoord'), attributive participles, simultaneous 'al + deelwoord', and concise participial clauses.",
+  description: "Master the 5 core participial structures in B2 Dutch: modal participles of necessity ('de te nemen maatregelen', 'de op te lossen problemen'), attributive present and past participles ('de stijgende kosten', 'het gewijzigde beleid'), progressive simultaneous action ('al doende', 'al wandelend'), and concise formal clauses ('gelet op', 'gezien').",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Architecture of Dutch Participles', kind: 'discover',
+      intro: "Explore how Dutch uses participles to create concise, elegant, and high-level academic or professional formulations.",
+      exercises: [
+        {
+          id: 'part-ind-1', kind: 'induction', prompt: 'Compare the different participial and gerundive constructions in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Relative clause with modal verb "moeten"', answer: 'De maatregelen die we moeten nemen.' },
+              { prompt: 'Modal Participle / Gerundive (Te + Infinitief)', answer: 'De te nemen maatregelen.' },
+              { prompt: 'Separable Verb Gerundive (Infixation of "te")', answer: 'De op te lossen problemen.' },
+              { prompt: 'Attributive Present Participle (Continuous / Active)', answer: 'De snel stijgende kosten.' },
+              { prompt: 'Attributive Past Participle (Completed / Passive)', answer: 'Het goedgekeurde beleidsplan.' },
+              { prompt: 'Simultaneous Action with "Al" (While doing)', answer: 'Al doende leert men.' },
+              { prompt: 'Concise Participial Clause (Formal formula)', answer: 'Gelet op de recente ontwikkelingen, passen we de planning aan.' }
+            ],
+            ruleChallenge: 'How is the modal participle (gerundive) constructed in Dutch and what does it express?',
+            options: [
+              { text: 'It expresses a passive necessity or action to be completed ("that must/will be done") using: de/het + te + infinitive (+ e) + noun (e.g. "de te nemen maatregelen").', isCorrect: true },
+              { text: 'It expresses an action that has already finished in the past.', isCorrect: false },
+              { text: 'It can only be used with intransitive motion verbs.', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Professional Synthesis & Participial Inferences', kind: 'understand',
+      intro: "Analyze how policy advisors and technical experts use concise participial phrases in formal Dutch communications.",
+      exercises: [
+        {
+          id: 'part-inf-1', kind: 'inference-challenge', prompt: 'What is the advisory committee recommending?',
+          context: 'Gelet op de aanhoudende krapte op de arbeidsmarkt en de te verwachten loonstijgingen, adviseert de commissie om de voorgestelde investeringen te faseren.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'A senior economic advisor summarizes a national labor market evaluation.',
+            options: [
+              { text: 'Phase the planned investments over time due to tight labor supply and anticipated wage growth.', isCorrect: true, explanation: 'Correct. "Gelet op [labor shortage] en de te verwachten loonstijgingen [expected wage increases], adviseert de commissie om de voorgestelde investeringen te faseren [phase/spread out]."' },
+              { text: 'Immediately halt all investment projects permanently.', isCorrect: false, explanation: 'Incorrect. "Faseren" means staging or phasing over time, not cancelling.' },
+              { text: 'Hire more workers immediately regardless of wage levels.', isCorrect: false, explanation: 'Incorrect. The labor shortage is acknowledged as a constraint.' }
+            ]
+          }
+        },
+        {
+          id: 'part-inf-2', kind: 'inference-challenge', prompt: 'How did the development team arrive at the breakthrough?',
+          context: 'Al doende ontdekten de ingenieurs dat het nieuw ontwikkelde algoritme aanzienlijk sneller presteerde dan het oorspronkelijk geteste model.',
+          skills: ['recognition', 'grammar'],
+          inferenceData: {
+            scenario: 'A Dutch technology review explains an AI team\'s optimization breakthrough.',
+            options: [
+              { text: 'Through active experimentation and practical hands-on implementation ("al doende").', isCorrect: true, explanation: 'Correct. "Al doende" is an idiomatic Dutch participial phrase meaning "in the course of doing / through hands-on practice".' },
+              { text: 'By reviewing competitors\' public documentation.', isCorrect: false, explanation: 'Incorrect. The text specifies "Al doende" (through their own execution).' },
+              { text: 'Through a purely theoretical proof without any coding.', isCorrect: false, explanation: 'Incorrect. "Al doende" explicitly implies practical work.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Participial & Gerundive Production Drills', kind: 'transform',
+      intro: "Transform full descriptive clauses into concise, native-like Dutch participial and gerundive constructions.",
+      exercises: [
+        {
+          id: 'part-d-1', kind: 'participial-drill', prompt: 'Modal Participle (Gerundive): Passive necessity',
+          skills: ['production', 'grammar'],
+          participialData: {
+            triggerType: 'gerundive-modal',
+            baseClause: 'De maatregelen die het kabinet de komende maanden moet nemen.',
+            participleCue: 'te nemen',
+            structureFormula: 'de/het + te + infinitief (+ e) + zelfstandig naamwoord',
+            hint: 'Transform "die we moeten nemen" into "de te nemen maatregelen".'
+          },
+          target: 'de te nemen maatregelen',
+          acceptedAnswers: [
+            'de te nemen maatregelen',
+            'de door het kabinet te nemen maatregelen',
+            'de komende maanden te nemen maatregelen'
+          ],
+          explanation: 'The gerundive "de te nemen maatregelen" conveys passive necessity ("the measures to be taken / that must be taken").'
+        },
+        {
+          id: 'part-d-2', kind: 'participial-drill', prompt: 'Separable Verb Gerundive: Infixation of "te"',
+          skills: ['production', 'grammar'],
+          participialData: {
+            triggerType: 'gerundive-modal',
+            baseClause: 'De complexe vraagstukken die het team gezamenlijk moet oplossen.',
+            participleCue: 'op te lossen',
+            structureFormula: 'de/het + [prefix] + te + [stam + en] (+ e) + zelfstandig naamwoord',
+            hint: 'Insert "te" inside the separable verb "oplossen": "de op te lossen vraagstukken".'
+          },
+          target: 'de op te lossen vraagstukken',
+          acceptedAnswers: [
+            'de op te lossen vraagstukken',
+            'de gezamenlijk op te lossen vraagstukken',
+            'de door het team op te lossen vraagstukken',
+            'de op te lossen complexe vraagstukken'
+          ],
+          explanation: 'With separable verbs, "te" is inserted between the prefix and the stem ("op te lossen"), forming "de op te lossen vraagstukken".'
+        },
+        {
+          id: 'part-d-3', kind: 'participial-drill', prompt: 'Attributive Present Participle (Continuous / Active)',
+          skills: ['production', 'grammar'],
+          participialData: {
+            triggerType: 'present-participle-attr',
+            baseClause: 'De spanningen op de energiemarkt die nog steeds toenemen.',
+            participleCue: 'toenemende',
+            structureFormula: 'de/het + [infinitief + d + e] + zelfstandig naamwoord',
+            hint: 'Transform "die toenemen" into the inflected present participle "de toenemende spanningen".'
+          },
+          target: 'de toenemende spanningen',
+          acceptedAnswers: [
+            'de toenemende spanningen',
+            'de toenemende spanningen op de energiemarkt',
+            'de nog steeds toenemende spanningen'
+          ],
+          explanation: 'The present participle is formed with infinitive + d + e ("toenemende"), functioning as an inflected attributive adjective.'
+        },
+        {
+          id: 'part-d-4', kind: 'participial-drill', prompt: 'Simultaneous action with "Al + Tegenwoordig Deelwoord"',
+          skills: ['production', 'grammar'],
+          participialData: {
+            triggerType: 'al-participle-simultaneous',
+            baseClause: 'Terwijl zij door de grachten van Utrecht wandelde, bedacht de onderzoekster een innovatieve hypothese.',
+            participleCue: 'Al wandelend',
+            structureFormula: 'Al + [tegenwoordig deelwoord] + [rest], [persoonsvorm + onderwerp + rest]',
+            hint: 'Start with "Al wandelend door de grachten van Utrecht bedacht de onderzoekster..."'
+          },
+          target: 'Al wandelend door de grachten van Utrecht bedacht de onderzoekster een innovatieve hypothese',
+          acceptedAnswers: [
+            'Al wandelend door de grachten van Utrecht bedacht de onderzoekster een innovatieve hypothese',
+            'Al wandelend door de grachten van Utrecht bedacht zij een innovatieve hypothese',
+            'Al wandelend door de grachten bedacht de onderzoekster een innovatieve hypothese'
+          ],
+          explanation: '"Al wandelend..." creates an elegant simultaneous participial construction expressing action and manner.'
+        },
+        {
+          id: 'part-d-5', kind: 'participial-drill', prompt: 'Concise Participial Clause with "Gelet op"',
+          skills: ['production', 'grammar'],
+          participialData: {
+            triggerType: 'concise-clause',
+            baseClause: 'Omdat we letten op de recente macro-economische ontwikkelingen, passen we de prognoses aan.',
+            participleCue: 'Gelet op',
+            structureFormula: 'Gelet op + [zelfstandig naamwoord / nominale groep], [persoonsvorm + onderwerp + rest]',
+            hint: 'Use the concise participial phrase "Gelet op de recente macro-economische ontwikkelingen passen we..."'
+          },
+          target: 'Gelet op de recente macro-economische ontwikkelingen passen we de prognoses aan',
+          acceptedAnswers: [
+            'Gelet op de recente macro-economische ontwikkelingen passen we de prognoses aan',
+            'Gelet op de recente ontwikkelingen passen we de prognoses aan',
+            'Gelet op de macro-economische ontwikkelingen passen we de prognoses aan'
+          ],
+          explanation: '"Gelet op [noun phrase]" is a formal B2 concise participial formula that replaces clunky subordinate clauses.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Professional Participial Synthesis', kind: 'personalise',
+      intro: "Formulate an authentic professional or academic observation using gerundives and participial constructions.",
+      exercises: [
+        {
+          id: 'part-p-1', kind: 'personalise', prompt: 'Beschrijf een actuele uitdaging, project of beleidskwestie in jouw werk of studie met behulp van een modaal deelwoord (bijv. "de te nemen stappen", "het op te lossen probleem") of een beknopte deelwoordconstructie (bijv. "Gelet op...", "Gezien...", "Al doende...").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['maatregelen', 'ontwikkelingen', 'vraagstukken', 'gelet op', 'gezien', 'toenemend', 'uitvoeren'],
+          grammar: ['deelwoordconstructies', 'het-te-deelwoord']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

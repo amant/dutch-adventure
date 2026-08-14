@@ -455,6 +455,88 @@ function checkConcessionError(normalized: string) {
   return { found: false }
 }
 
+function checkParticipialError(normalized: string) {
+  // Check 1: Separable verbs with te in front of whole word instead of infix
+  // e.g. "de te oplossen problemen", "het te uitvoeren plan", "de te voorbereiden presentatie"
+  const separableGerundiveRegex = /\b(de|het|een)\s+te\s+(oplossen|uitvoeren|aanpakken|voorbereiden|doorvoeren|indienen|afhandelen|samenstellen|invoeren|aannemen|aanvragen|opbellen|doorgeven|inleveren|uitstellen|overleggen|afstemmen)\b/i
+  const matchSep = normalized.match(separableGerundiveRegex)
+  if (matchSep) {
+    const wrongWord = matchSep[2]
+    return {
+      found: true,
+      message: `With separable verbs in gerundive (te-infinitive) constructions, insert 'te' between the prefix and the stem (e.g. 'de op te lossen problemen', NOT 'de te ${wrongWord} problemen').`,
+      miniLesson: {
+        title: 'Gerundive: Separable Verb Infixation',
+        content: 'When forming the modal participle (gerundive) with a separable verb, the particle "te" must be placed between the separable prefix and the verb: [prefix] + te + [verb stem + en].',
+        example: {
+          wrong: `de te ${wrongWord} kwesties`,
+          right: `de ${wrongWord.slice(0, wrongWord.length > 8 ? 3 : 2)} te ... kwesties`
+        }
+      }
+    }
+  }
+
+  // Check 2: Missing '-e' on attributive present participles before de/het/plural nouns
+  // e.g. "de stijgend kosten", "de toenemend invloed", "de dalend omzet", "de groeiend vraag"
+  const uninflectedPresentParticiple = /\b(de|het)\s+(stijgend|toenemend|afnemend|dalend|groeiend|blijvend|beslissend|veranderend|dreigend|overheersend)\s+([a-z]+)\b/i
+  const matchPres = normalized.match(uninflectedPresentParticiple)
+  if (matchPres) {
+    const art = matchPres[1]
+    const part = matchPres[2]
+    const noun = matchPres[3]
+    return {
+      found: true,
+      message: `Attributive present participles used before nouns require the adjectival ending '-e': '${art} ${part}e ${noun}' (not '${part}').`,
+      miniLesson: {
+        title: 'Attributive Participle Inflection (-e)',
+        content: 'Present participles (infinitive + -d) functioning as adjectives before nouns follow standard Dutch adjective inflection rules and almost always take an "-e" ending when preceded by "de" or "het".',
+        example: {
+          wrong: `${art} ${part} ${noun}`,
+          right: `${art} ${part}e ${noun}`
+        }
+      }
+    }
+  }
+
+  // Check 3: Missing 'al' in simultaneous present participle constructions
+  // e.g. starting with "wandelend door het park dacht hij", "doende leert men" (without "al")
+  const missingAlRegex = /^(wandelend|lezend|fietsend|pratend|rijdend|doende|zoekend|luisterend)\b/i
+  if (missingAlRegex.test(normalized.trim())) {
+    const verbPart = normalized.trim().split(/\s+/)[0]
+    return {
+      found: true,
+      message: `In Dutch, simultaneous actions or manner expressed with a present participle are idiomatic when preceded by 'al' (e.g. 'Al ${verbPart}...').`,
+      miniLesson: {
+        title: 'Simultaneous Participle with "Al"',
+        content: 'To express simultaneous action or progressive manner ("while walking / in doing so"), native Dutch pairs the present participle with "al" at the start of the clause (e.g. "Al doende leert men", "Al wandelend bedacht zij een oplossing").',
+        example: {
+          wrong: `${verbPart} door het park dacht hij na`,
+          right: `Al ${verbPart} door het park dacht hij na`
+        }
+      }
+    }
+  }
+
+  // Check 4: Preposition errors with concise participial formulas (Gelet op / Gezien)
+  const geletPrepError = /\bgelet\s+(aan|naar|voor|over|bij)\b/i
+  if (geletPrepError.test(normalized)) {
+    return {
+      found: true,
+      message: `The fixed participial expression is 'Gelet op...' (meaning "In view of / Considering"), not 'gelet aan' or 'gelet naar'.`,
+      miniLesson: {
+        title: 'Fixed Participial Prepositions: Gelet op',
+        content: '"Gelet op" is a standard formal Dutch participial expression that always requires the preposition "op".',
+        example: {
+          wrong: 'Gelet aan de recente ontwikkelingen',
+          right: 'Gelet op de recente ontwikkelingen'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkInfinitiveClauseError(normalized: string) {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
   const separableVerbs: { full: string, prefix: string, stem: string }[] = [
@@ -1543,6 +1625,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Participial Drill Evaluation
+    if (exercise.kind === 'participial-drill' && exercise.participialData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const participialError = checkParticipialError(normalized)
+      if (participialError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: participialError.message,
+          miniLesson: participialError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Participial structures (het te-deelwoord, attributieve deelwoorden, al + deelwoord, beknopte zinnen) require precise inflection and prefix placement.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your participial construction and grammatical structure are completely accurate.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the participle ending, particle placement, or word order.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure the participle (te + inf, present/past participle with -e, or concise clause) matches the required construction.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the participial formation and grammatical structure.',
+          explanation: exercise.explanation || 'Transform the base clause using the required participial formula.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1633,6 +1766,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: concessionError.message,
         miniLesson: concessionError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Participial & Gerundive Check
+    const participialError = checkParticipialError(normalized)
+    if (participialError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: participialError.message,
+        miniLesson: participialError.miniLesson
       }
     }
 

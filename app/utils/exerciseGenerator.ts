@@ -66,6 +66,12 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'ondanks dat': { prompt: 'Despite the fact that it was late, we worked on.', target: 'Ondanks dat het laat was, werkten we door.', explanation: '"Ondanks dat" is a conjunction introducing a subclause.' },
   'weliswaar': { prompt: 'The plan is ambitious, but feasible.', target: 'Het plan is weliswaar ambitieus, maar haalbaar.', explanation: '"Weliswaar" is paired with "maar" for balanced contrast.' },
   'hoe ook': { prompt: 'No matter how difficult it is, we keep going.', target: 'Hoe moeilijk het ook is, we gaan door.', explanation: 'Use "hoe + [adj] + ... + ook" for correlative concessions.' },
+  'deelwoordconstructies': { prompt: 'The measures to be taken.', target: 'De te nemen maatregelen.', explanation: 'Use the gerundive "te nemen" for passive necessity.' },
+  'het-te-deelwoord': { prompt: 'The problems to be solved.', target: 'De op te lossen problemen.', explanation: 'Insert "te" between the separable prefix and stem.' },
+  'te nemen': { prompt: 'The measures that must be taken.', target: 'De te nemen maatregelen.', explanation: 'The gerundive indicates necessity or future action.' },
+  'gelet op': { prompt: 'Considering the recent developments.', target: 'Gelet op de recente ontwikkelingen.', explanation: '"Gelet op" is a formal concise participial clause.' },
+  'al doende': { prompt: 'Practice makes perfect (while doing one learns).', target: 'Al doende leert men.', explanation: '"Al doende" expresses learning through hands-on practice.' },
+  'toenemend': { prompt: 'The increasing costs.', target: 'De toenemende kosten.', explanation: 'Present participle inflected with "-e".' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -89,6 +95,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'infinitive-drill') skills.push('production', 'grammar')
   if (kind === 'double-infinitive-drill') skills.push('production', 'grammar')
   if (kind === 'concession-drill') skills.push('production', 'grammar')
+  if (kind === 'participial-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -259,6 +266,26 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         connectorCue: key,
         structureFormula: 'Toegevende structuur met correcte woordvolgorde',
         hint: 'Combine the statements with accurate conjunctions and word order.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'participial-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      participialData: {
+        triggerType: key.includes('op te lossen') || key.includes('het-te-deelwoord') || key.includes('te nemen') ? 'gerundive-modal' : key.includes('toenemend') ? 'present-participle-attr' : key.includes('al') ? 'al-participle-simultaneous' : 'concise-clause',
+        baseClause: `De situatie met betrekking tot ${key}.`,
+        participleCue: key,
+        structureFormula: 'Deelwoordconstructie met correcte verbuiging en positie',
+        hint: 'Use the concise participial form.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
