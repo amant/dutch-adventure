@@ -26,6 +26,9 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'onderhandelen': { prompt: 'We need to negotiate the salary.', target: 'We moeten onderhandelen over het salaris.', explanation: 'Onderhandelen means to negotiate.' },
   'samenvatten': { prompt: 'Can you summarize the article?', target: 'Kun je het artikel samenvatten?', explanation: 'Samenvatten means to summarize.' },
   'overtuigen': { prompt: 'I want to convince you.', target: 'Ik wil je overtuigen.', explanation: 'Overtuigen means to convince.' },
+  'pronominal-adverbs': { prompt: 'I am thinking about it.', target: 'Ik denk eraan.', explanation: 'Merge "er" + "aan" for "about it".' },
+  'ermee': { prompt: 'I am working with it.', target: 'Ik ben ermee bezig.', explanation: 'Met + het becomes ermee.' },
+  'daarom': { prompt: 'That is why I am here.', target: 'Daarom ben ik hier.', explanation: 'Om + dat becomes daarom.' },
   'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
   'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
@@ -45,6 +48,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'conversation') skills.push('speaking', 'production')
   if (kind === 'speed-drill') skills.push('automaticity', 'production')
   if (kind === 'reframing-drill') skills.push('production', 'pragmatic')
+  if (kind === 'pronominal-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -60,6 +64,32 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       correction: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'pronominal-drill') {
+    const prepMap: Record<string, string> = {
+      'ermee': 'met',
+      'erop': 'op',
+      'eraan': 'aan',
+      'daarvoor': 'voor',
+      'daarmee': 'met'
+    }
+    const prep = prepMap[key] || 'op'
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      pronominalData: {
+        sentence: info.target,
+        preposition: prep,
+        object: key.startsWith('d') ? 'dat' : 'het'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: key,
       explanation: info.explanation
     }
   }

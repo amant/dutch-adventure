@@ -714,6 +714,27 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Pronominal-Drill Evaluation
+    if (exercise.kind === 'pronominal-drill' && exercise.pronominalData) {
+      const correct = exercise.target || ''
+      if (normalized === correct.toLowerCase()) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Perfect combination! You successfully merged the preposition and the reference word.',
+          changeModifier: (base.changeModifier || 0) + 15
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'That combination is not quite right.',
+          explanation: exercise.explanation || `In Dutch, we merge "${exercise.pronominalData.preposition}" and "${exercise.pronominalData.object}" into "${correct}".`
+        }
+      }
+    }
+
     // Reframing-Drill Evaluation
     if (exercise.kind === 'reframing-drill' && exercise.reframingData) {
       const softeners = exercise.reframingData.softeningElements || []

@@ -2512,12 +2512,6 @@ export const erChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter]
-
-export function getChapter(slug: string) {
-  return chapters.find((chapter) => chapter.slug === slug)
-}
-
 export const diplomacyChapter: Chapter = {
   slug: 'diplomatie-en-professionaliteit',
   level: 'B2',
@@ -2608,4 +2602,95 @@ export const diplomacyChapter: Chapter = {
       ]
     }
   ]
+}
+
+export const connectionChapter: Chapter = {
+  slug: 'ideeen-verbinden',
+  level: 'B1',
+  title: "Connecting Objects & Ideas",
+  capability: "Use pronominal adverbs to speak fluidly and avoid repeating nouns.",
+  description: "Master the merge of prepositions and references like 'ermee', 'daarvoor', and 'waarnaar'.",
+  estimatedMinutes: 15,
+  stages: [
+    {
+      id: 'discover', title: 'The Pronominal Merge', kind: 'discover',
+      intro: "In Dutch, we don't like saying 'preposition + it/that'. We merge them into one word.",
+      exercises: [
+        {
+          id: 'pro-ind-1', kind: 'induction', prompt: 'Notice the pattern',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Blunt', answer: 'Ik praat met het.' },
+              { prompt: 'Natural', answer: 'Ik praat ermee.' }
+            ],
+            ruleChallenge: 'What happens to "met" when it merges with "er"?',
+            options: [
+              { text: 'It stays the same', isCorrect: false },
+              { text: 'It changes to "mee"', isCorrect: true },
+              { text: 'It disappears', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'drill', title: 'Build the Connection', kind: 'transform',
+      intro: "Try merging these common combinations.",
+      exercises: [
+        {
+          id: 'pro-d-1', kind: 'pronominal-drill', prompt: 'Combine "op" and "het".',
+          skills: ['production', 'grammar'],
+          pronominalData: {
+            sentence: 'Ik wacht op het.',
+            preposition: 'op',
+            object: 'het'
+          },
+          target: 'erop',
+          explanation: 'Op + het becomes erop.'
+        },
+        {
+          id: 'pro-d-2', kind: 'pronominal-drill', prompt: 'Combine "met" and "dat".',
+          skills: ['production', 'grammar'],
+          pronominalData: {
+            sentence: 'Ik ben klaar met dat.',
+            preposition: 'met',
+            object: 'dat'
+          },
+          target: 'daarmee',
+          explanation: 'Met + dat becomes daarmee (met shifts to mee).'
+        }
+      ]
+    },
+    {
+      id: 'retrieve', title: 'Relative Connections', kind: 'retrieve',
+      intro: "Use 'waar' to connect two sentences.",
+      exercises: [
+        {
+          id: 'pro-r-1', kind: 'typed', prompt: 'The book I am waiting for... (Het boek ... ik op wacht)',
+          skills: ['production', 'grammar'],
+          target: 'waarop',
+          explanation: 'Use "waarop" to relate to the book.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Connections', kind: 'personalise',
+      intro: "Think of something you are working on or waiting for. Use a pronominal adverb.",
+      exercises: [
+        {
+          id: 'pro-p-1', kind: 'personalise', prompt: 'Waar ben je op dit moment mee bezig? (Gebruik "ermee" of "daarmee")',
+          skills: ['production', 'speaking', 'grammar'],
+          vocabulary: ['bezig', 'project', 'werk'],
+          grammar: ['pronominal-adverbs']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter]
+
+export function getChapter(slug: string) {
+  return chapters.find((chapter) => chapter.slug === slug)
 }

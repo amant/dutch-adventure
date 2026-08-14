@@ -91,6 +91,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Summarisation Mastery**: Learners are challenged to synthesize complex Dutch articles into concise summaries, explicitly identifying and expressing required key points.
     - **Structural Precision (Er & Position)**: B2 mastery of the word "er" and its four functions (Locative, Partitive, Prepositional, Subjective), combined with native-like use of position verbs (*staan, liggen, zitten, hangen*).
     - **Diplomatic Reframing & Strategic Competence**: B2 learners are trained to reframe blunt or direct statements into professional, empathetic Dutch using "softeners" (*zou, misschien, eigenlijk*) and indirect structures to maintain social relationships.
+    - **Pronominal Adverb Mastery**: Practice merging prepositions with reference words (*er, hier, daar, waar*) to create essential Dutch connectors like *ermee, waarop,* and *daarnaar*, a critical bridge to B2-level cohesion.
 
 ## 5. Information Architecture
 
@@ -136,6 +137,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `CohesionDrill.vue`: Tool for reordering scrambled sentences to practice logical flow and cohesion.
     - `SummaryChallenge.vue`: Interactive component for synthesizing articles into concise summaries with key point verification.
     - `ErPositionDrill.vue`: Specialized component for identifying 'er' functions and correctly using position verbs.
+    - `PronominalDrill.vue`: Interactive tool for merging prepositions and reference words to master pronominal adverbs.
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
