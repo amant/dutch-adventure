@@ -29,8 +29,8 @@ const startTimer = () => {
   }
 }
 
-watch([() => session.value?.exercise.value?.id, feedback], () => {
-  if (session.value?.exercise.value && !feedback.value) {
+watch([() => session?.value?.exerscise?.value?.id, feedback], () => {
+  if (session.value?.exercise?.value && !feedback.value) {
     startTimer()
   } else {
     clearInterval(timerInterval)
@@ -106,14 +106,14 @@ function next() {
 
 <template>
   <div v-if="session">
-    <section v-if="session.state.value.completed" class="card completion">
+    <h3>Smart Review</h3>
+    <section v-if="session.state?.value?.completed" class="card completion">
       <div class="eyebrow">Smart Review complete</div>
       <h1>You strengthened your foundations.</h1>
       <p class="muted">These weak concepts have been moved further into your long-term memory.</p>
       <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
     </section>
-    
-    <section v-else-if="session.stage.value && session.exercise.value" class="session">
+    <section v-else-if="session.stage?.value && session.exercise?.value" class="session">
       <div class="session-head">
         <span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span>
         <div v-if="timeLeft !== null" class="timer" :class="{ urgent: timeLeft < 5 }">
