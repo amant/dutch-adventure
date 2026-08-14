@@ -61,7 +61,7 @@ const allGoalsMet = computed(() => {
 function next() { feedback.value = undefined; session.advance() }
 </script>
 <template>
-  <section v-if="session.state.value.completed" class="card completion">
+  <section v-if="session?.state?.value?.completed" class="card completion">
     <div class="eyebrow">Loop complete</div>
     <h1>You practised a real capability.</h1>
     <p class="muted">You worked on {{ chapter.capability }} Your next review item is the same pattern in a fresh context.</p>
@@ -78,7 +78,7 @@ function next() { feedback.value = undefined; session.advance() }
       <NuxtLink class="button secondary" to="/">Back to Home</NuxtLink>
     </div>
   </section>
-  <section v-else-if="session.stage.value && session.exercise.value" class="session">
+  <section v-else-if="session?.stage?.value && session?.exercise?.value" class="session">
     <div class="session-head">
       <span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span>
       <div v-if="timeLeft !== null" class="timer" :class="{ urgent: timeLeft < 5 }">

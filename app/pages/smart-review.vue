@@ -7,7 +7,10 @@ const { getWeakConcepts, getFrontierConcepts, hydrate, memory } = useLearnerMemo
 const route = useRoute()
 
 const chapter = ref<any>(null)
-const session = ref<any>(null)
+// Must be a shallowRef: ref() would wrap the session object in reactive(),
+// which unwraps the nested state/stage/exercise refs and breaks
+// `session.stage?.value` access in the template.
+const session = shallowRef<any>(null)
 const feedback = ref<any>()
 
 const timeLeft = ref<number | null>(null)
