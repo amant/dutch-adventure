@@ -8,6 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -17,8 +19,11 @@
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "^4.1.0",
+    "happy-dom": "^20.11.2",
     "sass": "^1.89.2",
     "typescript": "^5.8.3",
+    "vitest": "^4.1.10",
     "vue-tsc": "^2.2.12"
   },
   "engines": {
