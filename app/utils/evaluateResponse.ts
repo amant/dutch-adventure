@@ -1501,6 +1501,259 @@ function checkPrefixVerbError(
   return { found: false }
 }
 
+function checkPronominalSplittingError(
+  normalized: string,
+  pronominalSplittingData?: {
+    rWord?: string
+    preposition?: string
+    combinedForm?: string
+    clauseType?: string
+    splittingStatus?: string
+  }
+) {
+  // 1. If explicit pronominalSplittingData is provided:
+  if (pronominalSplittingData?.rWord && pronominalSplittingData?.preposition) {
+    const rWord = pronominalSplittingData.rWord.toLowerCase()
+    const prep = pronominalSplittingData.preposition.toLowerCase()
+    const combined = (pronominalSplittingData.combinedForm || `${rWord}${prep}`).toLowerCase().replace(/\s+/g, '')
+
+    // Check if learner kept the unsplit combined form in a clause where splitting was requested
+    if (normalized.includes(combined)) {
+      return {
+        found: true,
+        message: `In natural Dutch spoken register and standard word order, separate '${rWord}' and '${prep}'. Place '${rWord}' early in the clause and '${prep}' right before the verbal group or predicate.`,
+        miniLesson: {
+          title: 'Splitsing van het Voornaamwoordelijk Bijwoord',
+          content: `In Dutch, pronominal adverbs like "${rWord} + ${prep}" are systematically split in natural communication. The R-word sits near the front/subject, and the stranded preposition sits at the end of the midfield right before the verb cluster.`,
+          example: {
+            wrong: `... ${combined} ...`,
+            right: `... ${rWord} ... ${prep} [werkwoord]`
+          }
+        }
+      }
+    }
+
+    // Check if preposition was placed right next to finite verb before the midfield (e.g. "Ik praat over er" or "Ik denk aan daar")
+    const transferPattern = new RegExp(`\\b${prep}\\s+(?:er|hier|daar|waar|het|dat)\\b`, 'i')
+    if (transferPattern.test(normalized)) {
+      return {
+        found: true,
+        message: `In Dutch, you cannot combine prepositions directly with inanimate pronouns (e.g. "${prep} het" / "${prep} dat" is ungrammatical). Use the split R-form: "${rWord} ... ${prep}".`,
+        miniLesson: {
+          title: 'Geen Voorzetsel + Het/Dat bij Zaken',
+          content: `Prepositions cannot take "het" or "dat" for inanimate objects. They must convert to R-words (er/hier/daar/waar) and split naturally across the midfield.`,
+          example: {
+            wrong: `... ${prep} het/dat ...`,
+            right: `... ${rWord} ... ${prep} ...`
+          }
+        }
+      }
+    }
+  }
+
+  // 2. Global check for common unsplit pronominal adverbs in spoken-style drills
+  const commonUnsplit = [
+    { combined: 'erover', r: 'er', p: 'over' },
+    { combined: 'ernaar', r: 'er', p: 'naar' },
+    { combined: 'eraan', r: 'er', p: 'aan' },
+    { combined: 'ermee', r: 'er', p: 'mee' },
+    { combined: 'erin', r: 'er', p: 'in' },
+    { combined: 'ervoor', r: 'er', p: 'voor' },
+    { combined: 'ertegen', r: 'er', p: 'tegen' },
+    { combined: 'erop', r: 'er', p: 'op' },
+    { combined: 'waarover', r: 'waar', p: 'over' },
+    { combined: 'waarnaar', r: 'waar', p: 'naar' },
+    { combined: 'waaraan', r: 'waar', p: 'aan' },
+    { combined: 'waarmee', r: 'waar', p: 'mee' },
+    { combined: 'waarop', r: 'waar', p: 'op' }
+  ]
+
+  for (const item of commonUnsplit) {
+    if (normalized.startsWith(`${item.combined} `) && !normalized.includes(` ${item.p} `)) {
+      // Starting questions with "waarnaar..." or "waarover..."
+      if (item.r === 'waar') {
+        return {
+          found: true,
+          message: `While "${item.combined}" is accepted in formal written Dutch, starting questions with "${item.r} ... ${item.p}?" sounds much more natural and spontaneous.`,
+          miniLesson: {
+            title: 'Vraagzinnen met Waar... [Voorzetsel]?',
+            content: `In everyday Dutch questions, split "${item.combined}" into "${item.r} ... ${item.p}?": place "${item.r}" at the start and "${item.p}" immediately before the final verb or sentence end.`,
+            example: {
+              wrong: `${item.combined} denk je?`,
+              right: `${item.r} denk je aan?`
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
+function checkAspectError(
+  normalized: string,
+  aspectData?: {
+    aspectCategory?: string
+    postureOrAspectVerb?: string
+    infinitiveAction?: string
+    clauseType?: string
+  }
+) {
+  // 1. If explicit aspectData is provided:
+  if (aspectData) {
+    const { aspectCategory, postureOrAspectVerb } = aspectData
+
+    // Posture durative missing 'te' (e.g. "zit studeren", "staat wachten", "ligt slapen", "loopt ijsberen")
+    if (aspectCategory === 'posture-durative') {
+      if (/\b(zit|zit|zitten|zat|zaten|staat|staan|stond|stonden|ligt|liggen|lag|lagen|loopt|lopen|liep|liepen|hangt|hangen|hing|hingen)\s+(?:[a-z\s]+)?(lezen|werken|studeren|kijken|wachten|denken|praten|slapen|ijsberen|luisteren)\b/i.test(normalized)) {
+        if (!normalized.includes(' te ') && !normalized.includes('aan het')) {
+          return {
+            found: true,
+            message: 'Posture verbs expressing durative action (zitten, staan, liggen, lopen, hangen) must be followed by "te + infinitief" (e.g. "zit te studeren", "staat te wachten").',
+            miniLesson: {
+              title: 'Houdingswerkwoorden + Te + Infinitief',
+              content: 'When using posture verbs to describe an ongoing state or activity, Dutch always requires the particle "te" before the main infinitive.',
+              example: {
+                wrong: 'Hij zit de jaarcijfers bestuderen.',
+                right: 'Hij zit de jaarcijfers te bestuderen.'
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Dynamic progressive "aan het ... zijn" errors
+    if (aspectCategory === 'progressive-aan-het') {
+      if (normalized.includes('aan het')) {
+        // Check if user conjugated the verb after "aan het" instead of using infinitive
+        if (/\baan het\s+(werkt|studeert|leest|kijkt|doet|maakt|bouwt|organiseert|upgrade|upgradet)\b/i.test(normalized)) {
+          return {
+            found: true,
+            message: 'In the progressive construction "aan het ... zijn", the verb after "aan het" MUST remain an infinitive (ending in -en, e.g. "aan het werken", "aan het upgraden").',
+            miniLesson: {
+              title: 'Aan het + Infinitief (Geen vervoeging)',
+              content: 'The progressive structure is: [vorm van zijn] + [object/bepaling] + aan het + [onvervoegde infinitief]. Never conjugate the verb after "aan het".',
+              example: {
+                wrong: 'Zij zijn de server aan het upgradet.',
+                right: 'Zij zijn de server aan het upgraden.'
+              }
+            }
+          }
+        }
+      } else if (!normalized.includes('bezig met') && !normalized.includes('zit te') && !normalized.includes('staat te')) {
+        return {
+          found: true,
+          message: 'Express this continuous ongoing action using the Dutch progressive construction "aan het + infinitief zijn" (e.g. "zijn momenteel het netwerk aan het upgraden").',
+          miniLesson: {
+            title: 'Dynamisch Continu Aspect: Aan het + Infinitief zijn',
+            content: '"Aan het + infinitief zijn" is the standard Dutch equivalent of the English continuous "-ing" form for dynamic activities.',
+            example: {
+              wrong: 'Zij upgraden nu het netwerk.',
+              right: 'Zij zijn nu het netwerk aan het upgraden.'
+            }
+          }
+        }
+      }
+    }
+
+    // Imminent action "op het punt staan om te"
+    if (aspectCategory === 'imminent-op-het-punt') {
+      if (normalized.includes('op het punt') || normalized.includes('het punt')) {
+        if (!normalized.includes(' te ') && !normalized.includes('om te')) {
+          return {
+            found: true,
+            message: '"Op het punt staan" must be followed by "(om) ... te + infinitief" (e.g. "staat op het punt om de bijeenkomst te openen").',
+            miniLesson: {
+              title: 'Op het punt staan om te + infinitief',
+              content: '"Op het punt staan om te + inf" expresses an event that is about to occur immediately. "Om... te" is standard before the infinitive.',
+              example: {
+                wrong: 'De voorzitter staat op het punt de bijeenkomst openen.',
+                right: 'De voorzitter staat op het punt om de bijeenkomst te openen.'
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Customary/Habitual aspect "plegen te"
+    if (aspectCategory === 'customary-plegen') {
+      if (normalized.includes('pleegt') || normalized.includes('plegen') || normalized.includes('plachten')) {
+        if (!normalized.includes(' te ')) {
+          return {
+            found: true,
+            message: 'The formal aspectual verb "plegen" (to be accustomed / habitually do) strictly takes "te + infinitief" (e.g. "pleegt te vergaderen").',
+            miniLesson: {
+              title: 'Plegen te + Infinitief (Gewoonte-aspect)',
+              content: '"Plegen te + infinitief" is a formal B2/C1 construction signifying habitual action (Dutch "de gewoonte hebben om te"). Always include "te".',
+              example: {
+                wrong: 'De raad pleegt tweemaal per jaar vergaderen.',
+                right: 'De raad pleegt tweemaal per jaar te vergaderen.'
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Prospective threat or promise "dreigen te" / "beloven te"
+    if (aspectCategory === 'prospective-dreigen-beloven') {
+      if ((normalized.includes('dreigt') || normalized.includes('dreigen') || normalized.includes('belooft') || normalized.includes('beloven')) && !normalized.includes(' te ')) {
+        return {
+          found: true,
+          message: '"Dreigen" (impending danger) and "beloven" (promising prospect) require "te + infinitief" when used aspectually (e.g. "dreigt te mislukken", "belooft te worden").',
+          miniLesson: {
+            title: 'Dreigen te / Beloven te + Infinitief',
+            content: 'When "dreigen" or "beloven" indicate an impending outcome rather than literal speech, they must be constructed with "te + infinitief".',
+            example: {
+              wrong: 'De onderhandelingen dreigen mislukken.',
+              right: 'De onderhandelingen dreigen te mislukken.'
+            }
+          }
+        }
+      }
+    }
+
+    // Perfect tense IPP with posture verbs: "heeft zitten kijken" (NOT "heeft gezeten te kijken"!)
+    if (aspectCategory === 'perfect-posture-ipp' || postureOrAspectVerb?.includes('zitten') || postureOrAspectVerb?.includes('staan') || postureOrAspectVerb?.includes('liggen') || postureOrAspectVerb?.includes('lopen')) {
+      if (/\b(heeft|hebben|had|hadden)\s+(?:[a-z\s]+)?(gezeten|gestaan|gelegen|gelopen)\s+te\s+[a-z]+/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'IPP Rule (Infinitivus Pro Participio): In the perfect tense, posture verbs that combine with another verb become an INFINITIVE, not a participle, and "te" is dropped: "heeft zitten kijken" (NEVER "heeft gezeten te kijken").',
+          miniLesson: {
+            title: 'IPP bij Houdingswerkwoorden: Heeft zitten kijken',
+            content: 'When posture verbs (zitten, staan, liggen, lopen) govern another infinitive in the perfect tense, they undergo IPP (Double Infinitive). The posture participle (gezeten) turns into an infinitive (zitten) and "te" is omitted.',
+            example: {
+              wrong: 'Hij heeft de hele ochtend gezeten te kijken.',
+              right: 'Hij heeft de hele ochtend zitten kijken.'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 2. Global check for posture verbs in perfect tense without IPP
+  if (/\b(heeft|hebben|had|hadden)\s+(?:[a-z\s]+)?(gezeten|gestaan|gelegen|gelopen)\s+te\s+(kijken|wachten|lezen|studeren|slapen|werken|praten)\b/i.test(normalized)) {
+    return {
+      found: true,
+      message: 'Double Infinitive Rule (IPP): Use the infinitive without "te" in the perfect tense: "heeft zitten kijken" (not "heeft gezeten te kijken").',
+      miniLesson: {
+        title: 'IPP met Houdingswerkwoorden',
+        content: 'Posture verbs drop "ge-" and "te" in the perfect tense when combined with another infinitive: heeft + [zitten/staan/liggen/lopen] + [infinitief].',
+        example: {
+          wrong: 'Hij heeft uren gestaan te wachten.',
+          right: 'Hij heeft uren staan wachten.'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkCorrelativeError(normalized: string) {
   // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
   if (normalized.includes('niet alleen')) {
@@ -3042,6 +3295,108 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'Not quite. Check the governing word, required fixed preposition, and word order.',
           explanation: exercise.explanation || `Combine '${exercise.fixedPrepositionData?.governingHead}' with '${exercise.fixedPrepositionData?.fixedPreposition}'.`
+        }
+      }
+    }
+
+    // Pronominal Adverb Splitting Drill Evaluation
+    if (exercise.kind === 'pronominal-splitting-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Perfect natural pronominal adverb splitting and word order.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const splittingError = checkPronominalSplittingError(normalized, exercise.pronominalSplittingData)
+      if (splittingError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: splittingError.message,
+          miniLesson: splittingError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `Split '${exercise.pronominalSplittingData?.rWord || 'er'}' and '${exercise.pronominalSplittingData?.preposition || 'voorzetsel'}': place '${exercise.pronominalSplittingData?.rWord || 'er'}' early and '${exercise.pronominalSplittingData?.preposition || 'voorzetsel'}' before the verb cluster.`
+          }
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the position of the R-word and the stranded preposition.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Place the R-word early in the clause and the stranded preposition immediately before the verb group.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Separate the R-word from the preposition and follow Dutch midfield word order.',
+          explanation: exercise.explanation || `Construct the sentence splitting '${exercise.pronominalSplittingData?.rWord || 'het R-woord'}' and '${exercise.pronominalSplittingData?.preposition || 'het voorzetsel'}'.`
+        }
+      }
+    }
+
+    // Aspectual Verbs & Durative Constructions Drill Evaluation
+    if (exercise.kind === 'aspect-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Flawless use of Dutch aspectual syntax and durative verb constructions.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const aspectError = checkAspectError(normalized, exercise.aspectData)
+      if (aspectError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: aspectError.message,
+          miniLesson: aspectError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `Use the correct aspectual construction: '${exercise.aspectData?.postureOrAspectVerb || 'het aspectuele werkwoord'}' + '${exercise.aspectData?.infinitiveAction || 'infinitief'}'.`
+          }
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Make sure the posture/aspect verb and infinitive structure are correctly formed.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || `Verify the aspectual construction: '${exercise.aspectData?.postureOrAspectVerb}'.`
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the aspectual verb, preposition/particle ("te" / "aan het"), and infinitive form.',
+          explanation: exercise.explanation || `Construct the sentence with '${exercise.aspectData?.postureOrAspectVerb}'.`
         }
       }
     }

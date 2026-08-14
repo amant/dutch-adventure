@@ -136,6 +136,8 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'prefix-verb-drill') skills.push('production', 'grammar')
   if (kind === 'midfield-drill') skills.push('production', 'grammar')
   if (kind === 'fixed-preposition-drill') skills.push('production', 'grammar')
+  if (kind === 'pronominal-splitting-drill') skills.push('production', 'grammar')
+  if (kind === 'aspect-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -471,6 +473,59 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         commonTransferErrors: [`${key} over`, `${key} voor`],
         structureFormula: `[Onderwerp] + [${key}] + ${prep} + [Object]`,
         hint: `Combineer '${key}' met het vaste voorzetsel '${prep}'.`
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'pronominal-splitting-drill') {
+    const rWord = key.startsWith('d') ? 'daar' : key.startsWith('w') ? 'waar' : key.startsWith('h') ? 'hier' : 'er'
+    const prep = key.includes('over') ? 'over' : key.includes('aan') ? 'aan' : key.includes('mee') ? 'mee' : key.includes('naar') ? 'naar' : 'in'
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      pronominalSplittingData: {
+        rWord: rWord as any,
+        preposition: prep,
+        combinedForm: `${rWord}${prep}`,
+        clauseType: 'main-clause',
+        contextPrompt: info.prompt,
+        providedElements: [rWord, prep, 'het onderwerp'],
+        structureFormula: `[Onderwerp] + [PV] + ${rWord} + [Middenveld] + ${prep} + [Werkwoord(en)]`,
+        splittingStatus: 'natural-split-preferred',
+        hint: `Plaats '${rWord}' vroeg in de zin en zet '${prep}' vlak vóór het werkwoord.`
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'aspect-drill') {
+    const isAanHet = key.includes('aan het')
+    const isOpHetPunt = key.includes('op het punt')
+    const isPlegen = key.includes('plegen')
+    const isDreigen = key.includes('dreigen') || key.includes('beloven')
+
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      aspectData: {
+        aspectCategory: isAanHet ? 'progressive-aan-het' : isOpHetPunt ? 'imminent-op-het-punt' : isPlegen ? 'customary-plegen' : isDreigen ? 'prospective-dreigen-beloven' : 'posture-durative',
+        postureOrAspectVerb: key,
+        infinitiveAction: 'uitvoeren',
+        contextPrompt: info.prompt,
+        clauseType: 'main-clause',
+        structureFormula: isAanHet ? '[Onderwerp] + [zijn] + [Middenveld] + aan het + [infinitief]' : `[Onderwerp] + [${key}] + [Middenveld] + te + [infinitief]`,
+        hint: `Gebruik de juiste aspectuele constructie met '${key}'.`
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

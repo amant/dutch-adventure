@@ -5416,7 +5416,627 @@ Bovendien moet het management flexibel inspelen op (5) de snelle technologische 
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter]
+export const pronominalSplittingChapter: Chapter = {
+  slug: 'pronominale-adverbia-splitsing',
+  level: 'B2',
+  title: 'Pronominal Adverb Splitting & Word Order',
+  capability: 'Split pronominal adverbs (er... over, waar... naar, daar... aan, hier... mee, nergens... in) naturally across main clauses and subclauses, positioning the preposition directly before the verbal cluster.',
+  description: 'Master the natural splitting of Dutch pronominal adverbs (*splitsing van voornaamwoordelijke bijwoorden*). Learn how Dutch speakers separate the R-word (*er / hier / daar / waar / nergens / overal / ergens*) from the stranded preposition, when splitting is mandatory or natural, and how to place the preposition directly before the final verbal group or predicate.',
+  estimatedMinutes: 16,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Pronominal Adverb Splitting Architecture',
+      kind: 'discover',
+      intro: 'When prepositions combine with inanimate reference words ("het", "dit", "dat", "wat"), Dutch converts them into R-words (*er, hier, daar, waar, nergens, overal, ergens*). In natural, standard spoken Dutch, these pronominal adverbs are systematically SPLIT across the midfield.',
+      exercises: [
+        {
+          id: 'pronominal-split-info-1',
+          kind: 'info',
+          prompt: 'Split vs. Unsplit Pronominal Adverbs in Dutch',
+          context: `1. Main Clause (Gespleten vorm = natuurlijk & spontaan):
+• Ongesplitst (formeel/boekentaal): "Ik heb DAAROVER met mijn leidinggevende gesproken."
+• Gespleten (natuurlijk Nederlands): "Ik heb DAAR gisteren met mijn leidinggevende OVER gesproken."
+
+2. Questions (Vraagzinnen met Waar...?):
+• Ongesplitst (formeel/stijf): "WAARNAAR kijk je?"
+• Gespleten (spreektaal & standaard): "WAAR kijk je nu eigenlijk NAAR?"
+
+3. Subclauses (Bijzin woordvolgorde):
+• Ongesplitst: "...dat wij HIERMEE direct moeten beginnen."
+• Gespleten: "...dat wij HIER morgen in alle rust MEE moeten beginnen."
+
+4. Indefinite Pronominal Adverbs (Nergens / Overal / Ergens):
+• "Zij hebben NERGENS meer vertrouwen IN." (Not: "nergensin")
+• "We hebben OVERAL grondig NAAR gezocht." (Not: "overalnaar")`,
+          skills: ['recognition', 'grammar']
+        },
+        {
+          id: 'pronominal-split-induct-1',
+          kind: 'induction',
+          prompt: 'Discover the Syntactic Landing Site of the Stranded Preposition',
+          inductionData: {
+            examples: [
+              { prompt: 'Main clause: Ik heb [er] gisteren met veel plezier [aan] gewerkt.', answer: '"er" is early in midfield; "aan" stands immediately before the verb "gewerkt".' },
+              { prompt: 'Question: [Waar] heb je dat interessante boek [over] gelezen?', answer: '"waar" starts the question; "over" stands right before participle "gelezen".' },
+              { prompt: 'Subclause: ...omdat we [daar] tijdens de vergadering [op] moeten inspelen.', answer: '"daar" follows the subject; "op" stands immediately before verb cluster "moeten inspelen".' }
+            ],
+            ruleChallenge: 'Where does the stranded preposition ("over", "aan", "op", "naar", "mee") land when a pronominal adverb is split in Dutch?',
+            options: [
+              { text: 'Directly before the final verbal cluster (or nominal predicate) at the end of the midfield.', isCorrect: true },
+              { text: 'Immediately after the finite verb in second position (V2).', isCorrect: false },
+              { text: 'At the very start of the sentence before the subject.', isCorrect: false },
+              { text: 'Glued directly after the first noun object in the sentence.', isCorrect: false }
+            ]
+          },
+          skills: ['analysis', 'grammar'],
+          explanation: 'When split, the R-word (*er/hier/daar/waar/nergens*) appears early in the clause, while the stranded preposition stays attached right before the verbal cluster (or nominal predicate) at the end of the midfield.'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Contextual Scenario: Strategic Executive Discussion',
+      kind: 'understand',
+      intro: 'Observe how two senior project directors, Sanne and Daan, naturally weave split pronominal adverbs through complex corporate deliberations.',
+      exercises: [
+        {
+          id: 'pronominal-split-dialogue-1',
+          kind: 'reading',
+          prompt: 'Notice the distribution of R-words and stranded prepositions in authentic debate',
+          readingContent: `Sanne: "Daan, heb jij al nagedacht over de voorgestelde reorganisatie van de IT-infrastructuur? We moeten ER morgen tijdens het overleg met de directie echt OVER beslissen."
+
+Daan: "Zeker. Ik heb ER gisteren uitgebreid met onze hoofdontwikkelaar OVER gesproken. Hij maakt zich grote zorgen over de datamigratie. DAAR kunnen we nu simpelweg niet meer OMHEEN."
+
+Sanne: "WAAR maakt hij zich dan precies de meeste zorgen OVER? Gaat het om de beveiliging of om de compatibiliteit met de bestaande systemen?"
+
+Daan: "Vooral om de compatibiliteit. Hij vreest dat we HIER over een halfjaar gigantisch MEE in de problemen komen als we nu overhaast handelen. We moeten ERGENS een veilige tussenoplossing VOOR zien te vinden."
+
+Sanne: "Ik begrijp het volkomen. De aandeelhouders hebben momenteel NERGENS zoveel geduld VOOR als voor gegarandeerde stabiliteit. Laten we DAAR dan direct een gedetailleerd voorstel VOOR uitwerken."`,
+          skills: ['reading', 'grammar', 'pragmatic'],
+          wordHints: {
+            'erover': { meaning: 'about it / discussing that topic', category: 'pronominal-adverb' },
+            'daar omheen': { meaning: 'around that / avoid dealing with that reality', category: 'idiomatic' },
+            'mee in de problemen komen': { meaning: 'run into serious trouble with that', category: 'collocation' },
+            'ergens voor': { meaning: 'for something / a solution to something', category: 'indefinite-pronominal' }
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Pronominal Splitting Production Drills',
+      kind: 'transform',
+      intro: 'Construct natural Dutch sentences by properly separating the R-word from the preposition and positioning each element in its correct syntactic slot.',
+      exercises: [
+        {
+          id: 'pronominal-split-d-1',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Er + Over: Split "erover" in a main clause with time and conversation partner',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'er',
+            preposition: 'over',
+            combinedForm: 'erover',
+            clauseType: 'main-clause',
+            contextPrompt: 'Ik heb gisteren een gesprek gevoerd met mijn leidinggevende over dit belangrijke onderwerp.',
+            providedElements: ['Ik', 'heb', 'er', 'gisteren', 'met mijn leidinggevende', 'over', 'gesproken'],
+            structureFormula: 'Ik + heb + er + [Tijd] + [Gesprekspartner] + over + gesproken',
+            splittingStatus: 'natural-split-preferred',
+            hint: 'Plaats "er" vroeg in de zin na de persoonsvorm, en zet "over" vlak vóór het voltooid deelwoord "gesproken".'
+          },
+          target: 'Ik heb er gisteren uitgebreid met mijn leidinggevende over gesproken',
+          acceptedAnswers: [
+            'Ik heb er gisteren uitgebreid met mijn leidinggevende over gesproken',
+            'Ik heb er gisteren met mijn leidinggevende over gesproken',
+            'Ik heb er gisteren met mijn leidinggevende uitgebreid over gesproken',
+            'Gisteren heb ik er uitgebreid met mijn leidinggevende over gesproken'
+          ],
+          explanation: 'In spoken and natural Dutch, "er" and "over" are split: "Ik heb er [middenveld] over gesproken".'
+        },
+        {
+          id: 'pronominal-split-d-2',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Waar + Naar: Split "waarnaar" in a spontaneous Dutch question',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'waar',
+            preposition: 'naar',
+            combinedForm: 'waarnaar',
+            clauseType: 'question-waar',
+            contextPrompt: 'Je ziet een collega intensief zoeken in de bedrijfsdatabase en vraagt wat hij zoekt.',
+            providedElements: ['Waar', 'ben', 'je', 'op dit moment', 'eigenlijk', 'naar', 'op zoek'],
+            structureFormula: 'Waar + [persoonsvorm] + [onderwerp] + [modale bepaling] + naar + [predicaat / werkwoord]?',
+            splittingStatus: 'natural-split-preferred',
+            hint: 'Begin de vraag met "Waar" en zet "naar" vlak vóór het vaste predicaat "op zoek".'
+          },
+          target: 'Waar ben je op dit moment eigenlijk naar op zoek',
+          acceptedAnswers: [
+            'Waar ben je op dit moment eigenlijk naar op zoek',
+            'Waar ben je op dit moment naar op zoek',
+            'Waar zoek je op dit moment eigenlijk naar',
+            'Waar ben je eigenlijk naar op zoek'
+          ],
+          explanation: '"Waar ... naar op zoek?" is far more idiomatic and natural than the formal "Waarnaar ben je op zoek?".'
+        },
+        {
+          id: 'pronominal-split-d-3',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Daar + Aan: Fronted topic for emphasis with negation and modal verb',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'daar',
+            preposition: 'aan',
+            combinedForm: 'daaraan',
+            clauseType: 'fronted-topic',
+            contextPrompt: 'Het management kan helaas geen enkele verandering meer aanbrengen in deze situatie.',
+            providedElements: ['Daar', 'kan', 'het management', 'nu', 'helaas', 'niets meer', 'aan', 'veranderen'],
+            structureFormula: 'Daar + kan + [Onderwerp] + [Tijd] + [Negatie/Modaal] + aan + veranderen',
+            splittingStatus: 'mandatory-split',
+            hint: 'Zet "Daar" vooraan voor nadruk, gevolgd door persoonsvorm en onderwerp, en plaats "aan" vlak vóór het infinitief "veranderen".'
+          },
+          target: 'Daar kan het management nu helaas niets meer aan veranderen',
+          acceptedAnswers: [
+            'Daar kan het management nu helaas niets meer aan veranderen',
+            'Daar kan de directie nu helaas niets meer aan veranderen',
+            'Daar kunnen we nu helaas niets meer aan veranderen',
+            'Daar kan het management helaas niets meer aan veranderen'
+          ],
+          explanation: 'Topicalizing "Daar" at the start of the clause separates it from "aan", which lands right before the main verb.'
+        },
+        {
+          id: 'pronominal-split-d-4',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Hier + Mee: Split "hiermee" in a subordinate clause (dat-constructie)',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'hier',
+            preposition: 'mee',
+            combinedForm: 'hiermee',
+            clauseType: 'subclause',
+            contextPrompt: 'De projectleider stelt voor dat het team morgen direct begint met dit projectplan.',
+            providedElements: ['dat', 'wij', 'hier', 'morgen', 'tijdens het overleg', 'direct', 'mee', 'aan de slag moeten gaan'],
+            structureFormula: '... dat + [Onderwerp] + hier + [TMP-bepalingen] + mee + [werkwoordcluster]',
+            splittingStatus: 'natural-split-preferred',
+            hint: 'Plaats "hier" direct na het onderwerp "wij/we", en zet "mee" vlak vóór het werkwoordelijke gezegde "aan de slag moeten gaan".'
+          },
+          target: 'De projectleider stelt voor dat we hier morgen tijdens het overleg direct mee aan de slag gaan',
+          acceptedAnswers: [
+            'De projectleider stelt voor dat we hier morgen tijdens het overleg direct mee aan de slag gaan',
+            'De projectleider stelt voor dat we hier morgen direct mee aan de slag gaan',
+            'De projectleider stelt voor dat wij hier morgen tijdens het overleg direct mee aan de slag gaan',
+            'De projectleider stelt voor dat we hier morgen tijdens de vergadering direct mee aan de slag gaan'
+          ],
+          explanation: 'In subordinate clauses, "hier" stays close to the subject while "mee" migrates to the pre-verbal cluster position.'
+        },
+        {
+          id: 'pronominal-split-d-5',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Nergens + In: Indefinite pronominal adverb splitting with trust/confidence',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'nergens',
+            preposition: 'in',
+            combinedForm: 'nergensin',
+            clauseType: 'main-clause',
+            contextPrompt: 'De verontruste aandeelhouders hebben na het schandaal geen enkel vertrouwen meer in het bestuur.',
+            providedElements: ['De aandeelhouders', 'hebben', 'momenteel', 'nergens', 'meer', 'vertrouwen', 'in'],
+            structureFormula: '[Onderwerp] + hebben + [Tijd] + nergens + meer + [Zelfstandig Naamwoord] + in',
+            splittingStatus: 'mandatory-split',
+            hint: 'Splits "nergens" en "in": "hebben nergens meer vertrouwen in".'
+          },
+          target: 'De bezorgde aandeelhouders hebben momenteel nergens meer vertrouwen in',
+          acceptedAnswers: [
+            'De bezorgde aandeelhouders hebben momenteel nergens meer vertrouwen in',
+            'De aandeelhouders hebben momenteel nergens meer vertrouwen in',
+            'De bezorgde aandeelhouders hebben nergens meer vertrouwen in',
+            'De aandeelhouders hebben nu nergens meer vertrouwen in'
+          ],
+          explanation: '"Nergens" and "in" must be split: indefinite pronominal adverbs with "vertrouwen hebben in" separate naturally.'
+        },
+        {
+          id: 'pronominal-split-d-6',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Ergens + Over: Indefinite pronominal adverb in a subclause with modal verbs',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'ergens',
+            preposition: 'over',
+            combinedForm: 'ergensover',
+            clauseType: 'subclause',
+            contextPrompt: 'We zoeken een rustige vergaderruimte omdat we over een vertrouwelijk onderwerp moeten overleggen.',
+            providedElements: ['omdat', 'we', 'ergens', 'in alle rust', 'over', 'moeten kunnen overleggen'],
+            structureFormula: '... omdat + we + ergens + in alle rust + over + [moeten kunnen overleggen]',
+            splittingStatus: 'natural-split-preferred',
+            hint: 'Plaats "ergens" na "we", voeg de manierbepaling toe, en zet "over" direct vóór de werkwoordgroep.'
+          },
+          target: 'We zoeken een vergaderruimte omdat we ergens in alle rust over moeten kunnen overleggen',
+          acceptedAnswers: [
+            'We zoeken een vergaderruimte omdat we ergens in alle rust over moeten kunnen overleggen',
+            'We zoeken een rustige ruimte omdat we ergens in alle rust over moeten kunnen overleggen',
+            'We zoeken een vergaderruimte omdat we ergens rustig over moeten kunnen overleggen',
+            'We zoeken een kantoor omdat we ergens in alle rust over moeten kunnen overleggen'
+          ],
+          explanation: '"Ergens ... over overleggen" splits smoothly inside a subordinate clause before the three-verb final cluster.'
+        },
+        {
+          id: 'pronominal-split-d-7',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Overal + Naar: Universal pronominal adverb with past participle in perfect tense',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'overal',
+            preposition: 'naar',
+            combinedForm: 'overalnaar',
+            clauseType: 'main-clause',
+            contextPrompt: 'Het rechercheteam heeft op alle mogelijke plekken gezocht naar de ontbrekende documenten.',
+            providedElements: ['Het onderzoeksteam', 'heeft', 'gisteren', 'overal', 'grondig', 'naar', 'gezocht'],
+            structureFormula: '[Onderwerp] + heeft + [Tijd] + overal + [Manier] + naar + gezocht',
+            splittingStatus: 'mandatory-split',
+            hint: 'Plaats "overal" in het middenveld, gevolgd door "grondig", en zet "naar" direct vóór "gezocht".'
+          },
+          target: 'Het onderzoeksteam heeft gisteren overal grondig naar gezocht',
+          acceptedAnswers: [
+            'Het onderzoeksteam heeft gisteren overal grondig naar gezocht',
+            'Het rechercheteam heeft gisteren overal grondig naar gezocht',
+            'Het team heeft gisteren overal grondig naar gezocht',
+            'Het onderzoeksteam heeft overal grondig naar gezocht'
+          ],
+          explanation: '"Overal" and "naar" split across the midfield: "overal grondig naar gezocht".'
+        },
+        {
+          id: 'pronominal-split-d-8',
+          kind: 'pronominal-splitting-drill',
+          prompt: 'Er + Tegen: Complex subclause with strong negation and prepositional object',
+          skills: ['production', 'grammar'],
+          pronominalSplittingData: {
+            rWord: 'er',
+            preposition: 'tegen',
+            combinedForm: 'ertegen',
+            clauseType: 'subclause',
+            contextPrompt: 'De medewerkers protesteren fel omdat ze niet bestand zijn tegen de aanhoudende stress.',
+            providedElements: ['aangezien', 'de betrokken medewerkers', 'er', 'absoluut niet', 'tegen', 'kunnen'],
+            structureFormula: '... aangezien + [Onderwerp] + er + absoluut niet + tegen + kunnen',
+            splittingStatus: 'natural-split-preferred',
+            hint: 'Plaats "er" na het onderwerp, zet de ontkenning "absoluut niet" ertussen, en sluit af met "tegen kunnen".'
+          },
+          target: 'De medewerkers protesteren aangezien ze er absoluut niet tegen kunnen',
+          acceptedAnswers: [
+            'De medewerkers protesteren aangezien ze er absoluut niet tegen kunnen',
+            'De medewerkers protesteren aangezien de betrokken medewerkers er absoluut niet tegen kunnen',
+            'De werknemers protesteren aangezien ze er absoluut niet tegen kunnen',
+            'De medewerkers maken bezwaar aangezien ze er absoluut niet tegen kunnen'
+          ],
+          explanation: 'In subclauses with negation: "...aangezien ze er (R-word) absoluut niet (Negation) tegen (Preposition) kunnen (Verb)".'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Pronominal Fluency in Spontaneous Expression',
+      kind: 'personalise',
+      intro: 'Apply split pronominal adverbs in your own communicative scenarios. Formulate an authentic opinion, question, or workplace update.',
+      exercises: [
+        {
+          id: 'pronominal-split-p-1',
+          kind: 'personalise',
+          prompt: 'Beschrijf een actueel project of dilemma uit jouw studie, werk of dagelijks leven. Gebruik minstens twee gespleten voornaamwoordelijke bijwoorden (bijv. "er ... over spreken", "waar ... naar zoeken", "daar ... aan twijfelen", "hier ... mee beginnen", "nergens ... in geloven").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['erover', 'waarnaar', 'daaraan', 'hiermee', 'nergens in', 'overal naar', 'ergens voor'],
+          grammar: ['voornaamwoordelijk-bijwoord', 'splitsing', 'middenveld-syntaxis']
+        }
+      ]
+    }
+  ]
+}
+
+export const aspectualChapter: Chapter = {
+  slug: 'aspectuele-werkwoorden-duurconstructies',
+  level: 'B2',
+  title: 'Aspectual Verbs, Posture Verbs & Progressive Aspect',
+  capability: 'Express nuanced continuous duration, physical posture aspect (zitten/staan/liggen/lopen te), dynamic progressive (aan het + inf), imminent action (op het punt staan om te), customary habit (plegen te), and prospective developments (dreigen/beloven te).',
+  description: 'Master the expressive aspectual system of Dutch: physical posture verbs (*zitten / staan / liggen / lopen / hangen te + infinitief*), dynamic progressive (*aan het + infinitief zijn*), imminent events (*op het punt staan om te*), formal customary aspect (*plegen te*), prospective danger/promise (*dreigen te / beloven te*), and the crucial Double Infinitive (IPP) rule in perfect tenses (*heeft zitten kijken*).',
+  estimatedMinutes: 16,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Aspectual Syntax & Durative Paradigms',
+      kind: 'discover',
+      intro: 'Unlike English which relies primarily on "-ing" forms, Dutch uses a rich, highly specific spectrum of aspectual constructions to indicate posture, duration, imminence, habit, and prospective outcome.',
+      exercises: [
+        {
+          id: 'aspect-info-1',
+          kind: 'info',
+          prompt: 'The Spectrum of Dutch Aspectual Constructions',
+          context: `1. Posture Durative Verbs (Houdingswerkwoorden + te + inf):
+• "Zitten te + inf": De analist ZIT de rapporten TE bestuderen (at desk/table).
+• "Staan te + inf": De reizigers STAAN op de bus TE wachten (upright).
+• "Liggen te + inf": De patiënt LIGT in bed TE slapen (horizontal).
+• "Lopen te + inf": Hij LOOPT zenuwachtig TE ijsberen (moving around / colloquial durative).
+
+2. Dynamic Progressive (Aan het + inf zijn):
+• "Zijn aan het + inf": Wij ZIJN momenteel het computersysteem AAN HET upgraden.
+
+3. Imminent Action (Op het punt staan om te):
+• "Op het punt staan om te + inf": De minister STAAT OP HET PUNT OM het akkoord TE ondertekenen.
+
+4. Formal Customary / Habitual Aspect (Plegen te):
+• "Plegen te + inf": Het bestuur PLEEGT jaarlijks in juli TE vergaderen.
+
+5. Prospective Threat or Promise (Dreigen te / Beloven te):
+• "Dreigen te + inf": De onderhandelingen DREIGEN volledig TE mislukken.
+• "Beloven te + inf": Het project BELOOFT een groot succes TE worden.
+
+6. The IPP Rule in Perfect Tenses (Double Infinitive):
+• Posture verbs turn into INFINITIVES in the perfect tense: "Hij heeft uren ZITTEN KIJKEN" (NEVER: "heeft gezeten te kijken"!).`,
+          skills: ['recognition', 'grammar']
+        },
+        {
+          id: 'aspect-induct-1',
+          kind: 'induction',
+          prompt: 'Discover the IPP Rule and Particle Use in Aspectual Constructions',
+          inductionData: {
+            examples: [
+              { prompt: 'Present: Zij zit rustig een boek te lezen.', answer: 'Requires "te" before the main infinitive "lezen".' },
+              { prompt: 'Progressive: Wij zijn de code aan het testen.', answer: '"aan het" is followed by an uninflected infinitive "testen".' },
+              { prompt: 'Perfect tense: Hij heeft de hele ochtend naar het scherm zitten kijken.', answer: '"zitten" is used as an infinitive (IPP) and "te" is dropped.' }
+            ],
+            ruleChallenge: 'What happens to posture verbs (*zitten, staan, liggen, lopen*) when transformed into the perfect tense (voltooide tijd) with another verb?',
+            options: [
+              { text: 'They undergo the IPP rule (double infinitive): the posture participle becomes an infinitive and "te" is omitted (e.g. "heeft zitten kijken").', isCorrect: true },
+              { text: 'They keep the past participle form and add "te" (e.g. "heeft gezeten te kijken").', isCorrect: false },
+              { text: 'They must always be replaced by "aan het zijn geweest".', isCorrect: false },
+              { text: 'They become passive participles with "worden".', isCorrect: false }
+            ]
+          },
+          skills: ['analysis', 'grammar'],
+          explanation: 'In the perfect tense, Dutch posture verbs trigger the Infinitivus Pro Participio (IPP) rule: "heeft zitten/staan/liggen/lopen + [infinitief]", omitting "te".'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Contextual Scenario: Rotterdam Port Operations Center',
+      kind: 'understand',
+      intro: 'Analyze how an incident commander coordinates logistics during a storm, employing aspectual verbs to convey real-time status, impending risks, and procedures.',
+      exercises: [
+        {
+          id: 'aspect-scenario-1',
+          kind: 'reading',
+          prompt: 'Identify the nuanced aspectual functions in situational coordination',
+          readingContent: `Hoofdverkeersleider: "Team, we hebben een crisissituatie in havenbekken 4. Hoe staat het ervoor met de waterkering?"
+
+Technicus: "Onze monteurs STAAN momenteel in de vrieskou TE sleutelen aan de hydraulische sluizen. Het waterpeil stijgt razendsnel en de kade DREIGT binnen een halfuur OVER TE LOPEN."
+
+Hoofdverkeersleider: "En hoe zit het met de nooddiensten en pompen?"
+
+Technicus: "Het brandweerkorps IS al ruim twee uur met man en macht water AAN HET wegpompen. De hoofdofficier STAAT OP HET PUNT OM evacuatieprotocol B in gang TE zetten."
+
+Hoofdverkeersleider: "Goed. De havenautoriteit PLEEGT bij dit soort waterstanden direct de scheepvaart stil TE leggen. Onze data-analist heeft de hele nacht de getijdenmodellen ZITTEN BEREKENEN en zijn prognose BELOOFT weinig goeds TE voorspellen als we niet onmiddellijk handelen."`,
+          skills: ['reading', 'grammar', 'pragmatic'],
+          wordHints: {
+            'staan te sleutelen': { meaning: 'standing outside actively repairing machinery', category: 'posture-durative' },
+            'dreigt over te lopen': { meaning: 'is at imminent risk of overflowing / flooding', category: 'prospective-threat' },
+            'aan het wegpompen': { meaning: 'continuously pumping away water', category: 'progressive' },
+            'op het punt staan om te': { meaning: 'about to initiate at any second', category: 'imminent-aspect' },
+            'pleegt stil te leggen': { meaning: 'customarily / by standard procedure halts', category: 'customary-aspect' },
+            'zitten berekenen': { meaning: 'spent hours sitting calculating (IPP perfect tense)', category: 'ipp-aspect' }
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Aspectual Production Drills',
+      kind: 'transform',
+      intro: 'Produce precise sentences using posture verbs, progressive structures, imminent actions, customary patterns, prospective verbs, and perfect IPP constructions.',
+      exercises: [
+        {
+          id: 'aspect-d-1',
+          kind: 'aspect-drill',
+          prompt: 'Posture Durative (Zitten te): Desk-bound intense analysis',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'posture-durative',
+            postureOrAspectVerb: 'zitten te',
+            infinitiveAction: 'bestuderen',
+            contextPrompt: 'De financieel directeur zit geconcentreerd aan zijn bureau en analyseert de kwartaalcijfers grondig.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + zit + [Middenveld] + te + bestuderen',
+            hint: 'Gebruik "zit de kwartaalcijfers aandachtig te bestuderen".'
+          },
+          target: 'De financieel directeur zit de kwartaalcijfers aandachtig te bestuderen',
+          acceptedAnswers: [
+            'De financieel directeur zit de kwartaalcijfers aandachtig te bestuderen',
+            'De directeur zit de kwartaalcijfers aandachtig te bestuderen',
+            'De financieel directeur zit de kwartaalcijfers geconcentreerd te bestuderen',
+            'De financieel directeur zit de cijfers aandachtig te bestuderen'
+          ],
+          explanation: '"Zitten te + infinitief" is the natural Dutch construction for prolonged activities carried out in a seated position.'
+        },
+        {
+          id: 'aspect-d-2',
+          kind: 'aspect-drill',
+          prompt: 'Posture Durative (Staan te): Upright waiting in cold conditions',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'posture-durative',
+            postureOrAspectVerb: 'staan te',
+            infinitiveAction: 'wachten',
+            contextPrompt: 'De gefrustreerde reizigers bevinden zich al ruim een halfuur rechtop op het koude perron.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + staan + [Tijd] + [Plaats] + te + wachten',
+            hint: 'Gebruik "staan al ruim een halfuur in de kou op het perron te wachten".'
+          },
+          target: 'De reizigers staan al ruim een halfuur op het koude perron te wachten',
+          acceptedAnswers: [
+            'De reizigers staan al ruim een halfuur op het koude perron te wachten',
+            'De reizigers staan al ruim een half uur op het koude perron te wachten',
+            'De gefrustreerde reizigers staan al ruim een halfuur op het koude perron te wachten',
+            'De reizigers staan al een halfuur op het koude perron te wachten'
+          ],
+          explanation: '"Staan te + infinitief" denotes an ongoing action performed while standing upright.'
+        },
+        {
+          id: 'aspect-d-3',
+          kind: 'aspect-drill',
+          prompt: 'Dynamic Progressive (Aan het + inf zijn): Dynamic ongoing system task',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'progressive-aan-het',
+            postureOrAspectVerb: 'aan het ... zijn',
+            infinitiveAction: 'upgraden',
+            contextPrompt: 'Onze IT-specialisten voeren momenteel een complete vernieuwing uit van de serverbeveiliging.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + zijn + [Tijd] + [Object] + aan het + upgraden',
+            hint: 'Gebruik "zijn momenteel de serverbeveiliging grondig aan het upgraden".'
+          },
+          target: 'Onze IT-specialisten zijn momenteel de serverbeveiliging grondig aan het upgraden',
+          acceptedAnswers: [
+            'Onze IT-specialisten zijn momenteel de serverbeveiliging grondig aan het upgraden',
+            'Onze IT-specialisten zijn momenteel de serverbeveiliging aan het upgraden',
+            'Het IT-team is momenteel de serverbeveiliging grondig aan het upgraden',
+            'Onze specialisten zijn momenteel de serverbeveiliging aan het upgraden'
+          ],
+          explanation: '"Aan het + infinitief zijn" expresses active dynamic progression without implying a specific body posture.'
+        },
+        {
+          id: 'aspect-d-4',
+          kind: 'aspect-drill',
+          prompt: 'Imminent Action (Op het punt staan om te): Impending event at any second',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'imminent-op-het-punt',
+            postureOrAspectVerb: 'op het punt staan om te',
+            infinitiveAction: 'openen',
+            contextPrompt: 'De minister-president heeft de zaal betreden en zal over enkele seconden de persconferentie beginnen.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + staat op het punt om + [Object] + te + openen',
+            hint: 'Gebruik "staat op het punt om de persconferentie te openen".'
+          },
+          target: 'De minister-president staat op het punt om de persconferentie te openen',
+          acceptedAnswers: [
+            'De minister-president staat op het punt om de persconferentie te openen',
+            'De premier staat op het punt om de persconferentie te openen',
+            'De minister-president staat op het punt de persconferentie te openen',
+            'De minister-president staat op het punt om de persconferentie te beginnen'
+          ],
+          explanation: '"Op het punt staan om te + inf" is the idiomatic Dutch way to describe an imminent occurrence.'
+        },
+        {
+          id: 'aspect-d-5',
+          kind: 'aspect-drill',
+          prompt: 'Customary / Habitual Aspect (Plegen te): Formal recurring governance habit',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'customary-plegen',
+            postureOrAspectVerb: 'plegen te',
+            infinitiveAction: 'vergaderen',
+            contextPrompt: 'Het is de vaste traditie en gewoonte van de raad van commissarissen om tweemaal per jaar in besloten kring bijeen te komen.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + pleegt + [Frequentie] + [Manier] + te + vergaderen',
+            hint: 'Gebruik "pleegt tweemaal per jaar in besloten kring te vergaderen".'
+          },
+          target: 'De raad van commissarissen pleegt tweemaal per jaar in besloten kring te vergaderen',
+          acceptedAnswers: [
+            'De raad van commissarissen pleegt tweemaal per jaar in besloten kring te vergaderen',
+            'De raad van bestuur pleegt tweemaal per jaar in besloten kring te vergaderen',
+            'De commissarissen plegen tweemaal per jaar in besloten kring te vergaderen',
+            'De raad van commissarissen pleegt twee keer per jaar in besloten kring te vergaderen'
+          ],
+          explanation: '"Plegen te + infinitief" expresses formal habitual aspect ("the habit / established practice of doing").'
+        },
+        {
+          id: 'aspect-d-6',
+          kind: 'aspect-drill',
+          prompt: 'Prospective Threat (Dreigen te): Impending danger or failure',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'prospective-dreigen-beloven',
+            postureOrAspectVerb: 'dreigen te',
+            infinitiveAction: 'mislukken',
+            contextPrompt: 'Als gevolg van het wederzijdse wantrouwen dreigt de onderhandeling volledig in het water te vallen.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + dreigen + [Oorzaak] + volledig + te + mislukken',
+            hint: 'Gebruik "dreigen door het gebrek aan vertrouwen volledig te mislukken".'
+          },
+          target: 'De onderhandelingen dreigen door het gebrek aan vertrouwen volledig te mislukken',
+          acceptedAnswers: [
+            'De onderhandelingen dreigen door het gebrek aan vertrouwen volledig te mislukken',
+            'De vastgelopen onderhandelingen dreigen door het gebrek aan vertrouwen volledig te mislukken',
+            'De onderhandelingen dreigen door een gebrek aan vertrouwen volledig te mislukken',
+            'De gesprekken dreigen door het gebrek aan vertrouwen volledig te mislukken'
+          ],
+          explanation: '"Dreigen te + infinitief" expresses an impending negative outcome or risk.'
+        },
+        {
+          id: 'aspect-d-7',
+          kind: 'aspect-drill',
+          prompt: 'Prospective Promise (Beloven te): Promising positive future outlook',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'prospective-dreigen-beloven',
+            postureOrAspectVerb: 'beloven te',
+            infinitiveAction: 'verlagen',
+            contextPrompt: 'De revolutionaire zonneceltechnologie toont veelbelovende indicaties dat de energiekosten flink omlaag zullen gaan.',
+            clauseType: 'main-clause',
+            structureFormula: '[Onderwerp] + belooft + [Object] + aanzienlijk + te + verlagen',
+            hint: 'Gebruik "belooft de energiekosten aanzienlijk te verlagen".'
+          },
+          target: 'De nieuwe technologie belooft de energiekosten aanzienlijk te verlagen',
+          acceptedAnswers: [
+            'De nieuwe technologie belooft de energiekosten aanzienlijk te verlagen',
+            'De innovatieve technologie belooft de energiekosten aanzienlijk te verlagen',
+            'De nieuwe duurzame technologie belooft de energiekosten aanzienlijk te verlagen',
+            'De nieuwe technologie belooft de totale energiekosten aanzienlijk te verlagen'
+          ],
+          explanation: '"Beloven te + infinitief" conveys a promising and optimistic prospective outcome.'
+        },
+        {
+          id: 'aspect-d-8',
+          kind: 'aspect-drill',
+          prompt: 'Posture Verb in Perfect Tense with IPP (Double Infinitive)',
+          skills: ['production', 'grammar'],
+          aspectData: {
+            aspectCategory: 'perfect-posture-ipp',
+            postureOrAspectVerb: 'heeft zitten kijken',
+            infinitiveAction: 'kijken',
+            contextPrompt: 'De rechercheur heeft de afgelopen nacht urenlang achter het computerscherm naar de camerabeelden gekeken.',
+            clauseType: 'perfect-tense-ipp',
+            structureFormula: '[Onderwerp] + heeft + [Tijd] + [Voorzetselvoorwerp] + zitten + kijken',
+            hint: 'Pas de IPP-regel toe: gebruik "heeft zitten kijken" (geen "gezeten" en geen "te").'
+          },
+          target: 'De rechercheur heeft de hele nacht naar de camerabeelden zitten kijken',
+          acceptedAnswers: [
+            'De rechercheur heeft de hele nacht naar de camerabeelden zitten kijken',
+            'De rechercheur heeft de hele nacht naar de videobeelden zitten kijken',
+            'De rechercheur heeft urenlang naar de camerabeelden zitten kijken',
+            'De rechercheur heeft de hele nacht aandachtig naar de camerabeelden zitten kijken'
+          ],
+          explanation: 'Crucial Dutch IPP rule: In perfect tenses, posture verbs drop "ge-" and "te", appearing as double infinitives: "heeft zitten kijken".'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Aspectual Nuance in Your Everyday Communication',
+      kind: 'personalise',
+      intro: 'Narrate a situation from your day or professional routine with vivid aspectual nuance.',
+      exercises: [
+        {
+          id: 'aspect-p-1',
+          kind: 'personalise',
+          prompt: 'Beschrijf wat jij of je team vandaag of deze week hebben gedaan of van plan zijn te doen. Gebruik minstens twee aspectuele constructies (bijv. "zitten/staan te + inf", "aan het + inf zijn", "op het punt staan om te", "heeft zitten/staan + inf", "dreigen te / beloven te").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['zitten te', 'staan te', 'liggen te', 'aan het', 'op het punt staan', 'plegen te', 'dreigen te', 'beloven te'],
+          grammar: ['aspectuele-werkwoorden', 'duurconstructies', 'ipp-regel', 'houdingswerkwoorden']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

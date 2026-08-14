@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill' | 'pronominal-splitting-drill' | 'aspect-drill'
 
 export interface Exercise {
   id: string
@@ -280,6 +280,28 @@ export interface Exercise {
     contextPrompt: string
     commonTransferErrors?: string[]
     meaningContext?: string
+    structureFormula?: string
+    hint?: string
+  }
+  // For pronominal adverb splitting & syntactic word order (er... over, waar... naar, daar... aan, hier... mee, nergens... in)
+  pronominalSplittingData?: {
+    rWord: 'er' | 'hier' | 'daar' | 'waar' | 'nergens' | 'overal' | 'ergens'
+    preposition: string
+    combinedForm: string
+    clauseType: 'main-clause' | 'subclause' | 'question-waar' | 'fronted-topic'
+    contextPrompt: string
+    providedElements?: string[]
+    structureFormula?: string
+    splittingStatus: 'natural-split-preferred' | 'formal-unsplit-allowed' | 'mandatory-split'
+    hint?: string
+  }
+  // For aspectual verbs, posture verbs & progressive durative constructions (zitten/staan/liggen/lopen te, aan het... zijn, op het punt staan om te, plegen te, dreigen te)
+  aspectData?: {
+    aspectCategory: 'posture-durative' | 'progressive-aan-het' | 'imminent-op-het-punt' | 'customary-plegen' | 'prospective-dreigen-beloven' | 'perfect-posture-ipp'
+    postureOrAspectVerb: string
+    infinitiveAction: string
+    contextPrompt: string
+    clauseType?: 'main-clause' | 'subclause' | 'perfect-tense-ipp'
     structureFormula?: string
     hint?: string
   }
