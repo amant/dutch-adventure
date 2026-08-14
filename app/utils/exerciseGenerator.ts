@@ -138,6 +138,8 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'fixed-preposition-drill') skills.push('production', 'grammar')
   if (kind === 'pronominal-splitting-drill') skills.push('production', 'grammar')
   if (kind === 'aspect-drill') skills.push('production', 'grammar')
+  if (kind === 'modal-particle-drill') skills.push('production', 'pragmatic', 'grammar')
+  if (kind === 'topicalisation-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -526,6 +528,58 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         clauseType: 'main-clause',
         structureFormula: isAanHet ? '[Onderwerp] + [zijn] + [Middenveld] + aan het + [infinitief]' : `[Onderwerp] + [${key}] + [Middenveld] + te + [infinitief]`,
         hint: `Gebruik de juiste aspectuele constructie met '${key}'.`
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'modal-particle-drill') {
+    const isWelDegelijk = key.includes('wel degelijk')
+    const isNouEenmaal = key.includes('nou eenmaal') || key.includes('nu eenmaal')
+    const isTochMaar = key.includes('toch maar')
+    const isImmers = key.includes('immers')
+
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      modalParticleData: {
+        particleCluster: key,
+        pragmaticFunction: isWelDegelijk ? 'rebuttal-wel-degelijk' : isNouEenmaal ? 'inevitability-nou-eenmaal' : isTochMaar ? 'concession-toch-maar' : isImmers ? 'shared-premise-immers' : 'tactful-urgency-toch-maar-eens',
+        stiffOriginalSentence: `Letterlijke zin zonder ${key}`,
+        contextPrompt: info.prompt,
+        structureFormula: `[Onderwerp] + [PV] + ${key} + [Middenveld] + [Werkwoord(en)]`,
+        syntacticSlotHint: `Plaats '${key}' direct na de persoonsvorm of het persoonlijk voornaamwoord in het binnenste middenveld.`,
+        hint: `Integreer '${key}' op de juiste positie in het middenveld.`
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'topicalisation-drill') {
+    const isDoen = key.includes('doen') || key.includes('twijfelen') || key.includes('weten')
+    const isMocht = key.startsWith('mocht')
+    const isCleft = key.startsWith('het is') || key.startsWith('het was')
+
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      topicalisationData: {
+        focusType: isDoen ? 'infinitive-fronting-doen' : isMocht ? 'inverted-conditional-mocht' : isCleft ? 'cleft-het-is-dat' : 'object-fronting-v2',
+        frontedElement: key,
+        baseSentence: info.target,
+        contextPrompt: info.prompt,
+        structureFormula: isDoen ? `${key} + doe/doet + [Onderwerp] + niet` : `${key} + [PV] + [Onderwerp] + ...`,
+        hint: `Begin de zin met '${key}' en pas strikte inversie (V2) toe.`
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

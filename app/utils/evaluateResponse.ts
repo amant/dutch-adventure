@@ -1754,6 +1754,240 @@ function checkAspectError(
   return { found: false }
 }
 
+function checkModalParticleError(
+  normalized: string,
+  modalParticleData?: {
+    particleCluster?: string
+    pragmaticFunction?: string
+    stiffOriginalSentence?: string
+  }
+) {
+  if (modalParticleData) {
+    const { particleCluster, pragmaticFunction } = modalParticleData
+
+    // 1. Check for specific cluster requirements
+    if (particleCluster) {
+      const clusterNormalized = normalizeAnswer(particleCluster)
+      const clusterWords = clusterNormalized.split(' ')
+
+      const missingWords = clusterWords.filter(w => !normalized.includes(w))
+      if (missingWords.length > 0) {
+        if (pragmaticFunction === 'rebuttal-wel-degelijk') {
+          return {
+            found: true,
+            message: 'To strongly refute skepticism or assert undeniable truth, use the emphatic cluster "wel degelijk" rather than just a plain "wel" or no particle.',
+            miniLesson: {
+              title: 'Weerlegging: Wel Degelijk',
+              content: '"Wel degelijk" forcefully confirms a fact that was questioned, doubted, or denied. It sits in the midfield after the finite verb.',
+              example: {
+                wrong: 'Het team heeft aan de eisen voldaan.',
+                right: 'Het team heeft wel degelijk aan de eisen voldaan.'
+              }
+            }
+          }
+        }
+
+        if (pragmaticFunction === 'inevitability-nou-eenmaal') {
+          return {
+            found: true,
+            message: 'To express an inescapable fact of life or reality with natural Dutch flavor, incorporate "nou eenmaal" (or "nu eenmaal").',
+            miniLesson: {
+              title: 'Onvermijdelijkheid: Nou Eenmaal',
+              content: '"Nou eenmaal" indicates that a situation cannot be altered and must be accepted ("that\'s just how it is"). Place it in the midfield.',
+              example: {
+                wrong: 'De markt verandert altijd.',
+                right: 'De markt verandert nou eenmaal altijd.'
+              }
+            }
+          }
+        }
+
+        if (pragmaticFunction === 'concession-toch-maar' || pragmaticFunction === 'advisory-caution-maar-beter') {
+          return {
+            found: true,
+            message: `Include the particle cluster "${particleCluster}" to convey thoughtful reconsideration or prudent advice.`,
+            miniLesson: {
+              title: 'Pragmatische Schakering: Toch Maar / Maar Beter',
+              content: '"Toch maar" signals a change of mind upon reflection; "maar beter" expresses strong, sensible advice.',
+              example: {
+                wrong: 'We kunnen het uitstellen.',
+                right: 'We kunnen het toch maar beter uitstellen.'
+              }
+            }
+          }
+        }
+
+        if (pragmaticFunction === 'tactful-urgency-toch-maar-eens' || pragmaticFunction === 'softened-inquiry-eens-even') {
+          return {
+            found: true,
+            message: `Use the layered modal cluster "${particleCluster}" to make your suggestion or request sound tactful and native-like.`,
+            miniLesson: {
+              title: 'Gestapelde Partikels: Toch Maar Eens Even',
+              content: 'Stacking modal particles softens directives and turns blunt commands into collaborative Dutch suggestions.',
+              example: {
+                wrong: 'We moeten over de begroting praten.',
+                right: 'We moeten toch maar eens even over de begroting praten.'
+              }
+            }
+          }
+        }
+
+        if (pragmaticFunction === 'reluctant-alternative-dan-maar') {
+          return {
+            found: true,
+            message: 'Use "dan maar" to convey pragmatic resignation—settling for an alternative when the ideal option is unavailable.',
+            miniLesson: {
+              title: 'Berusting in Alternatief: Dan Maar',
+              content: '"Dan maar" indicates settling for the next best thing without enthusiasm.',
+              example: {
+                wrong: 'Dan kiezen we voor optie B.',
+                right: 'Dan kiezen we dan maar voor optie B.'
+              }
+            }
+          }
+        }
+
+        if (pragmaticFunction === 'shared-premise-immers') {
+          return {
+            found: true,
+            message: 'Use "immers" (after the finite verb or subject) to introduce a shared explanatory fact that both speakers know.',
+            miniLesson: {
+              title: 'Gedeelde Kennis: Immers in het Middenveld',
+              content: '"Immers" means "after all / as you know". In standard Dutch, it usually sits in the midfield, not at the absolute start.',
+              example: {
+                wrong: 'Immers het is belangrijk.',
+                right: 'Het is immers belangrijk.'
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Misplaced particle at the beginning of clause before subject/verb
+    if (/^(toch maar|nou eenmaal|wel degelijk|maar beter)\s+[a-z]+/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'Modal particles belong in the inner midfield (after the finite verb / subject pronoun), not fronted at the beginning of the clause.',
+        miniLesson: {
+          title: 'Positie van Modale Partikels in het Middenveld',
+          content: 'Modal particles (wel, toch, maar, eens, even, nou) sit in the midfield immediately after the subject pronoun or finite verb.',
+          example: {
+            wrong: 'Toch maar we moeten het uitstellen.',
+            right: 'We moeten het toch maar uitstellen.'
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
+function checkTopicalisationError(
+  normalized: string,
+  topicalisationData?: {
+    focusType?: string
+    frontedElement?: string
+    baseSentence?: string
+    resumptiveElement?: string
+  }
+) {
+  if (topicalisationData) {
+    const { focusType, frontedElement, resumptiveElement } = topicalisationData
+
+    // 1. Infinitive fronting with dummy verb "doen"
+    if (focusType === 'infinitive-fronting-doen') {
+      if (!normalized.includes(' doe ') && !normalized.includes(' doet ') && !normalized.includes(' doen ') && !normalized.includes(' deed ') && !normalized.includes(' deden ')) {
+        return {
+          found: true,
+          message: 'When fronting a bare infinitive for topicalisation/emphasis (e.g. "Twijfelen..."), Dutch requires the dummy auxiliary verb "doen" in V2 position (e.g. "Twijfelen doe ik niet").',
+          miniLesson: {
+            title: 'Topicalisatie van de Infinitief met Hulpwerkwoord Doen',
+            content: 'When an infinitive verb is fronted to the first position of the clause for emphatic contrast, Dutch uses a conjugated form of "doen" in second position.',
+            example: {
+              wrong: 'Twijfelen ik niet aan hem.',
+              right: 'Twijfelen doe ik niet aan hem.'
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Left-dislocation missing resumptive pronoun (die/dat/hem/haar)
+    if (focusType === 'left-dislocation-resumptive' && resumptiveElement) {
+      if (!normalized.includes(` ${resumptiveElement} `) && !normalized.includes(`, ${resumptiveElement} `)) {
+        return {
+          found: true,
+          message: `In left-dislocation (links-verplaatsing), the fronted topic must be picked up inside the core clause by a resumptive pronoun ("${resumptiveElement}").`,
+          miniLesson: {
+            title: 'Linkerdislocatie met Resumptief Pronomen',
+            content: 'A left-dislocated topic sits outside the clause frame and is resumed immediately inside the clause by a demonstrative/personal pronoun (die, dat, hem).',
+            example: {
+              wrong: 'Die nieuwe maatregel, we moeten invoeren.',
+              right: `Die nieuwe maatregel, ${resumptiveElement} moeten we invoeren.`
+            }
+          }
+        }
+      }
+    }
+
+    // 3. Cleft focus constructions ("Het is... dat/die")
+    if (focusType === 'cleft-het-is-dat' || focusType === 'cleft-het-is-die') {
+      const isDie = focusType === 'cleft-het-is-die'
+      const expectedRel = isDie ? 'die' : 'dat'
+      if (!normalized.includes('het is') && !normalized.includes('het was')) {
+        return {
+          found: true,
+          message: 'Construct a cleft focus sentence starting with "Het is..." or "Het was..." followed by the focused element and the relative connector.',
+          miniLesson: {
+            title: 'Cleft-Focusconstructies (Het is... dat/die)',
+            content: 'Cleft sentences isolate the key constituent for maximum contrastive focus: "Het is [Focus Element] + dat/die + [rest van de zin]".',
+            example: {
+              wrong: 'Door die innovatie zijn we gegroeid.',
+              right: 'Het is juist door die innovatie dat we zijn gegroeid.'
+            }
+          }
+        }
+      }
+      if (!normalized.includes(` ${expectedRel} `)) {
+        return {
+          found: true,
+          message: `In this cleft focus construction, connect the focused clause using "${expectedRel}".`,
+          miniLesson: {
+            title: `Cleft Connector: ${expectedRel}`,
+            content: `Use "die" for persons / de-words in subject position, and "dat" for adverbial/prepositional focus or het-words.`,
+            example: {
+              wrong: `Het is ... wat ...`,
+              right: `Het is ... ${expectedRel} ...`
+            }
+          }
+        }
+      }
+    }
+
+    // 4. Inverted conditional with "Mocht..."
+    if (focusType === 'inverted-conditional-mocht') {
+      if (!normalized.startsWith('mocht ') && !normalized.startsWith('mochten ')) {
+        return {
+          found: true,
+          message: 'Begin the conditional clause with the inverted auxiliary "Mocht..." (without "als") to create a formal, elevated condition.',
+          miniLesson: {
+            title: 'Conditiezinnen met Mocht (Zonder Als)',
+            content: '"Mocht [onderwerp] ... [infinitief]" expresses a hypothetical or precautionary condition with initial verb inversion.',
+            example: {
+              wrong: 'Als de situatie mocht verslechteren...',
+              right: 'Mocht de situatie verslechteren, neem dan contact op.'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkCorrelativeError(normalized: string) {
   // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
   if (normalized.includes('niet alleen')) {
@@ -3397,6 +3631,109 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'Not quite. Check the aspectual verb, preposition/particle ("te" / "aan het"), and infinitive form.',
           explanation: exercise.explanation || `Construct the sentence with '${exercise.aspectData?.postureOrAspectVerb}'.`
+        }
+      }
+    }
+
+    // Modal Particles & Pragmatic Shading Drill Evaluation
+    if (exercise.kind === 'modal-particle-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('pragmatic')) base.skills.push('pragmatic')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Perfect integration of Dutch modal particles with authentic pragmatic nuance and correct midfield placement.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const modalError = checkModalParticleError(normalized, exercise.modalParticleData)
+      if (modalError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: modalError.message,
+          miniLesson: modalError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `Include the particle cluster '${exercise.modalParticleData?.particleCluster || 'modale partikels'}' in the inner midfield.`
+          }
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Make sure the modal particles are in their natural position directly after pronouns/finite verbs in the midfield.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || `Ensure '${exercise.modalParticleData?.particleCluster}' is placed correctly in the midfield.`
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Formulate the sentence with the required modal particles in their natural midfield slot.',
+          explanation: exercise.explanation || `Integrate '${exercise.modalParticleData?.particleCluster}' into the sentence.`
+        }
+      }
+    }
+
+    // Focus Fronting & Topicalisation Drill Evaluation
+    if (exercise.kind === 'topicalisation-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Flawless execution of Dutch focus fronting, topicalisation, and emphatic word order.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const topError = checkTopicalisationError(normalized, exercise.topicalisationData)
+      if (topError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: topError.message,
+          miniLesson: topError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `Apply the focus construction with fronted element '${exercise.topicalisationData?.frontedElement || 'focuselement'}'.`
+          }
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the fronted focus element, subject-verb inversion (V2), and resumptive pronouns.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || `Verify the focus construction starting with '${exercise.topicalisationData?.frontedElement}'.`
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the fronted element, auxiliary verb (e.g. doen), or inverted word order.',
+          explanation: exercise.explanation || `Construct the emphatic sentence starting with '${exercise.topicalisationData?.frontedElement}'.`
         }
       }
     }

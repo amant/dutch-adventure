@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill' | 'pronominal-splitting-drill' | 'aspect-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill' | 'pronominal-splitting-drill' | 'aspect-drill' | 'modal-particle-drill' | 'topicalisation-drill'
 
 export interface Exercise {
   id: string
@@ -302,6 +302,26 @@ export interface Exercise {
     infinitiveAction: string
     contextPrompt: string
     clauseType?: 'main-clause' | 'subclause' | 'perfect-tense-ipp'
+    structureFormula?: string
+    hint?: string
+  }
+  // For modal particle combinations & pragmatic shading (toch maar eens, nou eenmaal, wel degelijk, dan maar, eens even, maar beter, immers, eigenlijk)
+  modalParticleData?: {
+    particleCluster: string
+    pragmaticFunction: 'rebuttal-wel-degelijk' | 'inevitability-nou-eenmaal' | 'concession-toch-maar' | 'tactful-urgency-toch-maar-eens' | 'reluctant-alternative-dan-maar' | 'shared-premise-immers' | 'softened-inquiry-eens-even' | 'advisory-caution-maar-beter'
+    stiffOriginalSentence: string
+    contextPrompt: string
+    structureFormula?: string
+    syntacticSlotHint?: string
+    hint?: string
+  }
+  // For focus fronting, topicalisation & emphatic inversion (object fronting, infinitive with doen, participle fronting, left dislocation with resumptive pronouns, cleft sentences)
+  topicalisationData?: {
+    focusType: 'object-fronting-v2' | 'infinitive-fronting-doen' | 'participle-fronting' | 'left-dislocation-resumptive' | 'cleft-het-is-dat' | 'cleft-het-is-die' | 'inverted-conditional-mocht'
+    frontedElement: string
+    baseSentence: string
+    resumptiveElement?: string
+    contextPrompt: string
     structureFormula?: string
     hint?: string
   }

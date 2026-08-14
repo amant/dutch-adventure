@@ -6036,7 +6036,613 @@ Hoofdverkeersleider: "Goed. De havenautoriteit PLEEGT bij dit soort waterstanden
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter]
+export const modalParticlesChapter: Chapter = {
+  slug: 'modale-partikels-schakering',
+  level: 'B2',
+  title: 'Modal Particle Combinations & Pragmatic Shading',
+  capability: 'Layer and position Dutch modal particles (wel, toch, maar, eens, even, nou, immers, clusters like toch maar eens, nou eenmaal, wel degelijk, dan maar, eens even, maar beter) in the inner midfield to express stance, reassurance, conviction, and pragmatic naturalness.',
+  description: 'Master the pragmatic soul of Dutch discourse: modal particles and shading (*schakeringspartikels*). Learn how native speakers convey subtle stance, soften directives, assert undeniable facts against doubt (*wel degelijk*), concede inevitable realities (*nou eenmaal*), adapt plans prudently (*toch maar / maar beter*), and suggest actions tactfully (*toch maar eens even*) within the inner midfield.',
+  estimatedMinutes: 16,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Modal Particle Systems & Syntactic Placement',
+      kind: 'discover',
+      intro: 'In Dutch, modal particles (*schakeringspartikels*) are essential for sounding authentic, cooperative, and nuanced. Without them, statements often sound overly blunt, dry, or aggressive.',
+      exercises: [
+        {
+          id: 'modal-part-info-1',
+          kind: 'info',
+          prompt: 'The Core Modal Particle Matrix & Stacking Rules',
+          context: `1. Rebuttal & Firm Assertion (Wel vs. Wel degelijk):
+• "Hij heeft WEL gelijk." (Affirmation / contrary to belief)
+• "Het team heeft WEL DEGELIJK aan alle eisen voldaan." (Forceful confirmation against skepticism)
+
+2. Inescapable Reality & Resignation (Nou eenmaal / Nu eenmaal):
+• "In het zakenleven lopen de zaken NOU EENMAAL niet altijd volgens plan." (That is simply how things are)
+
+3. Prudent Reconsideration & Concession (Toch maar / Maar beter):
+• "We kunnen de vergadering TOCH MAAR BETER uitstellen." (After reflection, this is the wiser course)
+
+4. Softened Directives & Polite Inquiry (Eens / Even / Eens even):
+• "Zou je daar vanmiddag EENS EVEN naar willen kijken?" (Turns a demand into a polite collaborative ask)
+
+5. Tactful Urgency & Collective Action (Toch maar eens / Toch maar eens even):
+• "We moeten HIER TOCH MAAR EENS EVEN over praten." (Stacked particles: tactful yet resolute prompt)
+
+6. Reluctant Alternative (Dan maar):
+• "Als de trein niet rijdt, gaan we DAN MAAR met de auto." (Accepting the next best option)
+
+7. Shared Background Knowledge (Immers):
+• "We moeten zorgvuldig zijn; het is IMMERS een complex dossier." (As you and I both know)
+
+8. Midfield Position:
+Modal particles belong in the INNER MIDFIELD: immediately after the finite verb / subject pronoun, and BEFORE adverbials of time, manner, place, and objects!`,
+          skills: ['recognition', 'grammar', 'pragmatic']
+        },
+        {
+          id: 'modal-part-induct-1',
+          kind: 'induction',
+          prompt: 'Discover the Syntactic Slot and Pragmatic Function of Modal Particle Clusters',
+          inductionData: {
+            examples: [
+              { prompt: 'Direct/Blunt: "We moeten over het budget praten."', answer: 'Sounds like an ultimatum or strict command.' },
+              { prompt: 'Pragmatic Dutch: "We moeten hier [toch maar eens even] over praten."', answer: 'Stacked cluster softens the tone, making it cooperative yet urgent.' },
+              { prompt: 'Midfield Placement: "De directie heeft [wel degelijk] rekening gehouden met de risico\'s."', answer: 'Particle cluster sits directly after finite auxiliary "heeft", before object "rekening".' }
+            ],
+            ruleChallenge: 'Where do modal particle clusters (e.g. "toch maar eens", "wel degelijk", "nou eenmaal") sit in a Dutch clause?',
+            options: [
+              { text: 'In the inner midfield, directly after the finite verb or subject pronoun, before adverbials and objects.', isCorrect: true },
+              { text: 'Always at the very end of the clause after the final infinitive.', isCorrect: false },
+              { text: 'At the very beginning of the sentence before the subject.', isCorrect: false },
+              { text: 'Attached directly to the direct object noun phrase.', isCorrect: false }
+            ]
+          },
+          skills: ['analysis', 'grammar', 'pragmatic'],
+          explanation: 'Modal particles occupy the inner midfield right after the finite verb/subject pronoun, injecting tone, attitude, and nuance into the entire clause.'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Contextual Scenario: Strategic Executive Alignment',
+      kind: 'understand',
+      intro: 'Observe how two senior directors, Merel and Bram, navigate a delicate timeline negotiation using modal particles to express firmness, tactical softness, and realism.',
+      exercises: [
+        {
+          id: 'modal-part-scenario-1',
+          kind: 'reading',
+          prompt: 'Analyze the pragmatic shading in authentic professional negotiation',
+          readingContent: `Merel: "Bram, de aandeelhouders maken zich zorgen over de vertraging van de productlancering. Ze beweren dat we de marktsituatie hebben onderschat."
+
+Bram: "Dat is niet terecht. Onze analisten hebben de marktontwikkelingen WEL DEGELIJK nauwkeurig in kaart gebracht. Maar door de onverwachte chiptekorten kunnen we NOU EENMAAL niet sneller leveren."
+
+Merel: "Ik begrijp het dilemma. Toch moeten we naar buiten toe helder communiceren. Zou jij vanmiddag EENS EVEN een beknopte toelichting voor de pers kunnen opstellen?"
+
+Bram: "Zeker. Maar gezien de onrust op de beurs kunnen we de presentatie TOCH MAAR BETER met een week vervroegen. Laten we DAAR TOCH MAAR EENS EVEN goed over overleggen."
+
+Merel: "Eens. Als de voorzitter vandaag niet kan aanschuiven, hakken wij met z'n tweeën DAN MAAR de knoop door. Het betreft IMMERS een kwestie van acuut reputatiemanagement."`,
+          skills: ['reading', 'grammar', 'pragmatic'],
+          wordHints: {
+            'wel degelijk': { meaning: 'most definitely / absolutely in contrast to skepticism', category: 'modal-particle' },
+            'nou eenmaal': { meaning: 'simply an unavoidable reality', category: 'modal-particle' },
+            'eens even': { meaning: 'just take a quick polite look / examine', category: 'modal-particle' },
+            'toch maar beter': { meaning: 'prudently better after reconsideration', category: 'modal-particle' },
+            'toch maar eens even': { meaning: 'tactfully yet firmly address now', category: 'modal-particle' },
+            'dan maar': { meaning: 'settle for that alternative in the meantime', category: 'modal-particle' },
+            'immers': { meaning: 'after all / as we both know', category: 'modal-particle' }
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Modal Particle Production Drills',
+      kind: 'transform',
+      intro: 'Produce natural Dutch sentences by weaving modal particle clusters into their proper syntactic slots in the midfield.',
+      exercises: [
+        {
+          id: 'modal-p-d1',
+          kind: 'modal-particle-drill',
+          prompt: 'Rebuttal & Confident Confirmation (Wel degelijk): Defending compliance',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'wel degelijk',
+            pragmaticFunction: 'rebuttal-wel-degelijk',
+            stiffOriginalSentence: 'Het management heeft rekening gehouden met de bezwaren.',
+            contextPrompt: 'Een auditor beweert dat de bezwaren van het personeel zijn genegeerd. Reageer met krachtige bevestiging dat hier wel degelijk terdege rekening mee is gehouden.',
+            structureFormula: '[Onderwerp] + heeft + wel degelijk + [Voorzetselvoorwerp/Object] + [Deelwoord]',
+            syntacticSlotHint: 'Plaats "wel degelijk" direct na het hulpwerkwoord "heeft".',
+            hint: 'Gebruik "heeft wel degelijk rekening gehouden met de bezwaren van de medewerkers".'
+          },
+          target: 'Het management heeft wel degelijk rekening gehouden met de bezwaren van het personeel',
+          acceptedAnswers: [
+            'Het management heeft wel degelijk rekening gehouden met de bezwaren van het personeel',
+            'Het management heeft wel degelijk rekening gehouden met de bezwaren van de medewerkers',
+            'De directie heeft wel degelijk rekening gehouden met de bezwaren van het personeel',
+            'Wij hebben wel degelijk rekening gehouden met de bezwaren van het personeel'
+          ],
+          explanation: '"Wel degelijk" confirms an undeniable fact against doubt or denial, situated directly in the inner midfield.'
+        },
+        {
+          id: 'modal-p-d2',
+          kind: 'modal-particle-drill',
+          prompt: 'Inescapable Reality / Resignation (Nou eenmaal): Market volatility',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'nou eenmaal',
+            pragmaticFunction: 'inevitability-nou-eenmaal',
+            stiffOriginalSentence: 'In een dynamische markt veranderen de omstandigheden voortdurend.',
+            contextPrompt: 'Verklaar waarom een strategie moet worden aangepast: in een concurrerende markt veranderen economische omstandigheden nu eenmaal onvermijdelijk.',
+            structureFormula: '[Aanloop] + veranderen + [Onderwerp] + nou eenmaal + [Bijwoord]',
+            syntacticSlotHint: 'Plaats "nou eenmaal" na het onderwerp in de geïnverteerde hoofdzin.',
+            hint: 'Gebruik "veranderen de omstandigheden nou eenmaal voortdurend".'
+          },
+          target: 'In een dynamische markt veranderen de economische omstandigheden nou eenmaal voortdurend',
+          acceptedAnswers: [
+            'In een dynamische markt veranderen de economische omstandigheden nou eenmaal voortdurend',
+            'In een concurrerende markt veranderen de omstandigheden nou eenmaal voortdurend',
+            'In een dynamische economie veranderen de omstandigheden nou eenmaal voortdurend',
+            'In een dynamische markt veranderen de omstandigheden nu eenmaal voortdurend'
+          ],
+          explanation: '"Nou eenmaal" (or "nu eenmaal") introduces the pragmatic recognition that a reality is unchangeable.'
+        },
+        {
+          id: 'modal-p-d3',
+          kind: 'modal-particle-drill',
+          prompt: 'Concession & Prudent Change of Plan (Toch maar): Safety precaution',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'toch maar beter',
+            pragmaticFunction: 'concession-toch-maar',
+            stiffOriginalSentence: 'Gezien de hevige storm moeten we het buitenevenement annuleren.',
+            contextPrompt: 'Na het zien van de weerswaarschuwing besluit het organisatiecomité na rijp beraad dat het toch maar beter is om het evenement te verplaatsen.',
+            structureFormula: '[Aanloop] + kunnen + we + [Object] + toch maar beter + [Werkwoord]',
+            syntacticSlotHint: 'Plaats "toch maar beter" in het middenveld vóór het hoofdwerkwoord.',
+            hint: 'Gebruik "kunnen we het evenement toch maar beter verplaatsen".'
+          },
+          target: 'Gezien de hevige storm kunnen we het buitenevenement toch maar beter verplaatsen',
+          acceptedAnswers: [
+            'Gezien de hevige storm kunnen we het buitenevenement toch maar beter verplaatsen',
+            'Gezien de hevige storm kunnen we het evenement toch maar beter verplaatsen',
+            'Gezien de storm kunnen we het buitenevenement toch maar beter verplaatsen',
+            'Gezien de slechte weersverwachting kunnen we het evenement toch maar beter verplaatsen'
+          ],
+          explanation: '"Toch maar (beter)" signals a thoughtful adjustment of initial intentions towards the wiser decision.'
+        },
+        {
+          id: 'modal-p-d4',
+          kind: 'modal-particle-drill',
+          prompt: 'Tactful Recommendation & Action (Toch maar eens even): Budget review',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'toch maar eens even',
+            pragmaticFunction: 'tactful-urgency-toch-maar-eens',
+            stiffOriginalSentence: 'We moeten over de herverdeling van het budget praten.',
+            contextPrompt: 'Stel op een collegiale maar doelgerichte wijze voor dat het team vandaag toch maar eens even de tijd moet nemen om het projectbudget te herzien.',
+            structureFormula: 'We + moeten + hier + toch maar eens even + [Voorzetselvoorwerp] + over + praten',
+            syntacticSlotHint: 'Plaats de cluster "toch maar eens even" na "moeten we" of "moeten we hier".',
+            hint: 'Gebruik "moeten hier toch maar eens even over praten" of "moeten toch maar eens even over de begroting praten".'
+          },
+          target: 'We moeten toch maar eens even over de herverdeling van het budget praten',
+          acceptedAnswers: [
+            'We moeten toch maar eens even over de herverdeling van het budget praten',
+            'We moeten hier toch maar eens even over de herverdeling van het budget praten',
+            'We moeten toch maar eens even over het budget praten',
+            'Wij moeten toch maar eens even over de herverdeling van de middelen praten'
+          ],
+          explanation: '"Toch maar eens even" layers concession (toch), prudence (maar), occasion (eens), and brevity (even) to make an urgent prompt sound collaborative.'
+        },
+        {
+          id: 'modal-p-d5',
+          kind: 'modal-particle-drill',
+          prompt: 'Reluctant Acceptance of Alternative (Dan maar): Moving online',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'dan maar',
+            pragmaticFunction: 'reluctant-alternative-dan-maar',
+            stiffOriginalSentence: 'Als de conferentiezaal bezet is, houden we de bijeenkomst online.',
+            contextPrompt: 'De gewenste vergaderzaal is niet beschikbaar. Schik je in de situatie en stel voor de bijeenkomst dan maar digitaal te organiseren.',
+            structureFormula: '[Bijzin met als] + houden + we + de bijeenkomst + dan maar + online',
+            syntacticSlotHint: 'Plaats "dan maar" in het middenveld na het lijdend voorwerp.',
+            hint: 'Gebruik "houden we de bijeenkomst dan maar online".'
+          },
+          target: 'Als de conferentiezaal bezet is, houden we de bijeenkomst dan maar online',
+          acceptedAnswers: [
+            'Als de conferentiezaal bezet is, houden we de bijeenkomst dan maar online',
+            'Als de zaal bezet is, houden we de vergadering dan maar online',
+            'Als de conferentieruimte bezet is, houden we de bijeenkomst dan maar online',
+            'Als de zaal niet beschikbaar is, houden we de bijeenkomst dan maar online'
+          ],
+          explanation: '"Dan maar" expresses practical resignation when accepting the second-choice solution.'
+        },
+        {
+          id: 'modal-p-d6',
+          kind: 'modal-particle-drill',
+          prompt: 'Shared Obvious Premise / Knowledge (Immers): Confidential data',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'immers',
+            pragmaticFunction: 'shared-premise-immers',
+            stiffOriginalSentence: 'We moeten discreet handelen omdat het vertrouwelijke data betreft.',
+            contextPrompt: 'Herinner een teamlid eraan dat voorzichtigheid geboden is; het betreft immers strikt vertrouwelijke patiëntgegevens.',
+            structureFormula: 'We + moeten + discreet handelen; + het + betreft + immers + [Object]',
+            syntacticSlotHint: 'Plaats "immers" direct na de persoonsvorm "betreft" in de tweede hoofdzin.',
+            hint: 'Gebruik "het betreft immers zeer gevoelige bedrijfsinformatie" of "vertrouwelijke gegevens".'
+          },
+          target: 'We moeten discreet handelen; het betreft immers zeer gevoelige bedrijfsinformatie',
+          acceptedAnswers: [
+            'We moeten discreet handelen; het betreft immers zeer gevoelige bedrijfsinformatie',
+            'We moeten uiterst discreet handelen; het betreft immers zeer gevoelige bedrijfsinformatie',
+            'We moeten voorzichtig zijn; het betreft immers vertrouwelijke informatie',
+            'We moeten discreet handelen, het betreft immers gevoelige bedrijfsinformatie'
+          ],
+          explanation: '"Immers" situates the explanation as an established, mutually known fact ("after all / as you know").'
+        },
+        {
+          id: 'modal-p-d7',
+          kind: 'modal-particle-drill',
+          prompt: 'Softened Polite Request (Eens even): Document review',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'eens even',
+            pragmaticFunction: 'softened-inquiry-eens-even',
+            stiffOriginalSentence: 'Wil je naar mijn conceptverslag kijken?',
+            contextPrompt: 'Vraag een drukke leidinggevende beleefd of hij of zij vanmiddag even snel een blik op jouw conceptrapport kan werpen.',
+            structureFormula: 'Zou + je + vanmiddag + eens even + naar + [Object] + willen + kijken?',
+            syntacticSlotHint: 'Plaats "eens even" na de tijdsbepaling "vanmiddag" en vóór het voorzetselvoorwerp.',
+            hint: 'Gebruik "Zou je vanmiddag eens even naar mijn conceptverslag willen kijken?".'
+          },
+          target: 'Zou je vanmiddag eens even naar mijn conceptverslag willen kijken',
+          acceptedAnswers: [
+            'Zou je vanmiddag eens even naar mijn conceptverslag willen kijken',
+            'Zou je vanmiddag eens even naar mijn conceptverslag willen kijken?',
+            'Zou je vanmiddag eens even naar mijn rapport willen kijken',
+            'Kun je vanmiddag eens even naar mijn conceptverslag kijken'
+          ],
+          explanation: '"Eens even" minimizes the perceived burden on the listener, creating a considerate and professional Dutch request.'
+        },
+        {
+          id: 'modal-p-d8',
+          kind: 'modal-particle-drill',
+          prompt: 'Strong Advisory Prudence (Maar beter): Sensitive communication',
+          skills: ['production', 'pragmatic', 'grammar'],
+          modalParticleData: {
+            particleCluster: 'maar beter',
+            pragmaticFunction: 'advisory-caution-maar-beter',
+            stiffOriginalSentence: 'Verstuur die boze e-mail niet.',
+            contextPrompt: 'Adviseer een geëmotioneerde collega dat hij of zij die gevoelige reactie nu maar beter niet direct kan versturen.',
+            structureFormula: 'Je + kunt + die gevoelige reactie + nu + maar beter + niet + direct + versturen',
+            syntacticSlotHint: 'Plaats "maar beter" vóór de negatie "niet" in het middenveld.',
+            hint: 'Gebruik "kun je nu maar beter niet direct versturen".'
+          },
+          target: 'Je kunt die gevoelige reactie nu maar beter niet direct versturen',
+          acceptedAnswers: [
+            'Je kunt die gevoelige reactie nu maar beter niet direct versturen',
+            'Je kunt die e-mail nu maar beter niet direct versturen',
+            'Je kunt die emotionele reactie nu maar beter niet direct versturen',
+            'Je kunt die gevoelige e-mail nu maar beter niet meteen versturen'
+          ],
+          explanation: '"Maar beter" combines the softening effect of "maar" with the comparative wisdom of "beter" to deliver sound caution.'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Pragmatic Nuance in Your Professional Communication',
+      kind: 'personalise',
+      intro: 'Describe a complex, delicate, or unexpected situation from your work, study, or daily life, weaving at least two modal particle clusters into your Dutch response.',
+      exercises: [
+        {
+          id: 'modal-p-pers-1',
+          kind: 'personalise',
+          prompt: 'Beschrijf een recente uitdaging, meningsverschil of planwijziging uit jouw studie of werk. Gebruik minstens twee modale partikelcombinaties (bijv. "wel degelijk", "nou eenmaal", "toch maar beter", "toch maar eens even", "dan maar", "immers", "eens even").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['wel degelijk', 'nou eenmaal', 'toch maar', 'eens even', 'dan maar', 'immers', 'maar beter'],
+          grammar: ['modale-partikels', 'schakeringspartikels', 'middenveld-volgorde', 'pragmatische-competentie']
+        }
+      ]
+    }
+  ]
+}
+
+export const topicalisationChapter: Chapter = {
+  slug: 'topicalisatie-en-focus',
+  level: 'B2',
+  title: 'Focus Fronting, Topicalisation & Emphatic Inversion',
+  capability: 'Structure Dutch sentences dynamically using focus fronting (direct/indirect objects), infinitive topicalisation with auxiliary doen, participle fronting, left-dislocation with resumptive pronouns, cleft focus constructions, and inverted conditional mocht.',
+  description: 'Master Dutch information packaging and focus syntax (*topicalisatie en focusconstructies*). Move beyond basic SVO word order by fronting key constituents for dramatic or contrastive emphasis, employing dummy auxiliary *doen* with fronted infinitives, maintaining strict V2 inversion, utilizing resumptive pronouns (*die / dat*), and building cleft focus sentences (*het is... dat/die*).',
+  estimatedMinutes: 16,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Focus Architecture & Syntactic Inversion',
+      kind: 'discover',
+      intro: 'Dutch syntax allows remarkable flexibility to highlight specific information. By moving constituents to the first position (topicalisation) or using left-dislocation and clefts, speakers signal contrast, priority, and focus.',
+      exercises: [
+        {
+          id: 'topical-info-1',
+          kind: 'info',
+          prompt: 'The Six Core Dutch Focus & Topicalisation Paradigms',
+          context: `1. Object Fronting & Strict V2 Inversion:
+• Neutraal: "We hebben DAT rapport gisteren unaniem goedgekeurd."
+• Focus op object: "DÁT rapport hebben we gisteren unaniem goedgekeurd." (Verb in position 2, subject in 3)
+
+2. Infinitive Fronting with Dummy Auxiliary "Doen":
+• Neutraal: "Ik twijfel niet aan zijn integriteit."
+• Emfatische focus op handeling: "TWIJFELEN DOE ik geen seconde aan zijn integriteit!"
+
+3. Participle Fronting for Contrast:
+• "GELEZEN heeft de commissie het voorstel wel, maar GOEDGEKEURD nog niet." (Highlighting incomplete stages)
+
+4. Left-Dislocation with Resumptive Pronouns (Links-verplaatsing):
+• "Die nieuwe veiligheidsrichtlijnen, DIE moeten we vanaf morgen strikt handhaven." (Noun phrase outside clause frame + resumptive pronoun "die/dat")
+
+5. Cleft Focus Sentences (Het is... dat / die):
+• Adverbial/Causal focus: "Het is JUIST door die innovatie DAT we marktleider zijn geworden."
+• Personal subject focus: "Het was ONZE DIRECTEUR DIE het initiatief nam."
+
+6. Inverted Conditional Focus with "Mocht" (Zonder "als"):
+• "MOCHT de situatie veranderen, laat het ons dan direct weten." (Elevated stylistic condition)`,
+          skills: ['recognition', 'grammar']
+        },
+        {
+          id: 'topical-induct-1',
+          kind: 'induction',
+          prompt: 'Discover the Dummy Auxiliary Rule in Infinitive Topicalisation',
+          inductionData: {
+            examples: [
+              { prompt: 'Neutrale zin: "Ik weet het antwoord niet zeker."', answer: 'Standard verb position.' },
+              { prompt: 'Infinitive fronted: "[Weten] [doe] ik het niet zeker, maar vermoeden wel."', answer: 'Fronting the bare infinitive "Weten" triggers the dummy auxiliary "doe" in V2 position.' },
+              { prompt: 'Participle fronted: "[Gezien] [heb] ik hem vandaag niet."', answer: 'Participle fronting uses the normal auxiliary "heb" without "doen".' }
+            ],
+            ruleChallenge: 'What happens when a bare infinitive verb is fronted to the start of a main clause for contrastive focus in Dutch?',
+            options: [
+              { text: 'It triggers the conjugated dummy auxiliary verb "doen" in second position (e.g. "Weten doe ik het niet").', isCorrect: true },
+              { text: 'The finite verb simply precedes the subject without any auxiliary.', isCorrect: false },
+              { text: 'The sentence must switch to a passive voice construction with "worden".', isCorrect: false },
+              { text: 'The infinitive must be preceded by "om te".', isCorrect: false }
+            ]
+          },
+          skills: ['analysis', 'grammar'],
+          explanation: 'Topicalizing a bare infinitive requires the supportive dummy auxiliary verb "doen" in second position: "[Infinitief] + doe/doet/doen + [onderwerp]...".'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Contextual Scenario: Municipal Council Urban Hearing',
+      kind: 'understand',
+      intro: 'Analyze how Alderman Visser and Chief Architect Lindeman use emphatic topicalisation, left-dislocation, and cleft focus in a spirited public hearing on city expansion.',
+      exercises: [
+        {
+          id: 'topical-scenario-1',
+          kind: 'reading',
+          prompt: 'Identify the sophisticated focus fronting and emphatic structures in debate',
+          readingContent: `Wethouder Visser: "Geachte commissieleden, we staan voor een ingrijpende beslissing over de herinrichting van het stationsgebied. DÁT ambitieuze project hebben we gisteren uitvoerig met alle wijkraden besproken."
+
+Architect Lindeman: "Zeker, wethouder. En TWIJFELEN DOE ik geen moment aan het maatschappelijk belang van deze transformatie. Maar die historische gevels aan de noordzijde, DIE mogen we simpelweg niet slopen."
+
+Wethouder Visser: "GEZIEN hebben we die architectonische bezwaren zeker, maar ONOPLOSBAAR zijn ze allerminst. Het is JUIST door een slimme combinatie van restauratie en nieuwbouw DAT we beide doelen kunnen verenigen."
+
+Architect Lindeman: "Dat klinkt veelbelovend. Maar het was ONZE ERFGOEDCOMMISSIE DIE terecht waarschuwde voor overhaaste besluitvorming. MOCHT het budget ontoereikend blijken, laten we dan nu alvast een faseringsplan vastleggen."`,
+          skills: ['reading', 'grammar', 'pragmatic'],
+          wordHints: {
+            'dát project hebben we': { meaning: 'direct object fronted for topical prominence', category: 'topicalisation' },
+            'twijfelen doe ik': { meaning: 'infinitive fronting with dummy auxiliary doen', category: 'topicalisation' },
+            'die gevels, die mogen we': { meaning: 'left-dislocation with resumptive pronoun die', category: 'left-dislocation' },
+            'het is juist door... dat': { meaning: 'cleft sentence focusing on the causal means', category: 'cleft-sentence' },
+            'mocht het budget ontoereikend blijken': { meaning: 'inverted conditional clause without als', category: 'inversion' }
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Focus & Topicalisation Production Drills',
+      kind: 'transform',
+      intro: 'Formulate emphatic sentences applying object fronting, infinitive topicalisation with doen, participle contrast, resumptive pronouns, cleft frames, and inverted conditionals.',
+      exercises: [
+        {
+          id: 'topical-d1',
+          kind: 'topicalisation-drill',
+          prompt: 'Direct Object Fronting with V2 Inversion: Crucial policy report',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'object-fronting-v2',
+            frontedElement: 'Dát cruciale beleidsrapport',
+            baseSentence: 'We hebben dat cruciale beleidsrapport gisteren unaniem goedgekeurd.',
+            contextPrompt: 'Benadruk het lijdend voorwerp door "Dát cruciale beleidsrapport" vooraan te plaatsen en pas strikte V2 inversie toe.',
+            structureFormula: 'Dát cruciale beleidsrapport + hebben + we + [Tijd] + [Manier] + goedgekeurd',
+            hint: 'Plaats het hulpwerkwoord "hebben" direct na het vooropgezette lijdend voorwerp.'
+          },
+          target: 'Dát cruciale beleidsrapport hebben we gisteren unaniem goedgekeurd',
+          acceptedAnswers: [
+            'Dát cruciale beleidsrapport hebben we gisteren unaniem goedgekeurd',
+            'Dat cruciale beleidsrapport hebben we gisteren unaniem goedgekeurd',
+            'Dat belangrijke beleidsrapport hebben we gisteren unaniem goedgekeurd',
+            'Dát beleidsrapport hebben we gisteren unaniem goedgekeurd'
+          ],
+          explanation: 'Fronting the direct object for emphasis requires the finite verb in second position (V2), followed immediately by the subject.'
+        },
+        {
+          id: 'topical-d2',
+          kind: 'topicalisation-drill',
+          prompt: 'Infinitive Fronting with Auxiliary Doen: Emphatic trust',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'infinitive-fronting-doen',
+            frontedElement: 'Twijfelen',
+            baseSentence: 'Ik twijfel geen moment aan de deskundigheid van ons team.',
+            contextPrompt: 'Zet de handeling "Twijfelen" krachtig voorop met het hulpwerkwoord "doen" om te benadrukken dat twijfel uitgesloten is.',
+            structureFormula: 'Twijfelen + doe + ik + [Bepaling] + aan + [Object]',
+            hint: 'Gebruik "Twijfelen doe ik geen moment aan de deskundigheid van ons team".'
+          },
+          target: 'Twijfelen doe ik geen moment aan de deskundigheid van ons team',
+          acceptedAnswers: [
+            'Twijfelen doe ik geen moment aan de deskundigheid van ons team',
+            'Twijfelen doe ik geen seconde aan de deskundigheid van ons team',
+            'Twijfelen doe ik absoluut niet aan de deskundigheid van ons team',
+            'Twijfelen doe ik niet aan de deskundigheid van ons team'
+          ],
+          explanation: 'Topicalizing a bare infinitive requires the dummy auxiliary verb "doen" in V2 position ("Twijfelen doe ik...").'
+        },
+        {
+          id: 'topical-d3',
+          kind: 'topicalisation-drill',
+          prompt: 'Participle Fronting for Contrast: Read but not yet approved',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'participle-fronting',
+            frontedElement: 'Gelezen',
+            baseSentence: 'De directie heeft het document wel gelezen, maar nog niet goedgekeurd.',
+            contextPrompt: 'Plaats het voltooid deelwoord "Gelezen" vooraan om een scherp contrast te schetsen tussen wat wel en wat nog niet is gebeurd.',
+            structureFormula: 'Gelezen + heeft + [Onderwerp] + het document + wel, + maar + goedgekeurd + nog niet',
+            hint: 'Gebruik "Gelezen heeft de directie het document wel, maar goedgekeurd nog niet".'
+          },
+          target: 'Gelezen heeft de directie het document wel, maar goedgekeurd nog niet',
+          acceptedAnswers: [
+            'Gelezen heeft de directie het document wel, maar goedgekeurd nog niet',
+            'Gelezen heeft het bestuur het document wel, maar goedgekeurd nog niet',
+            'Gelezen heeft de directie het rapport wel, maar goedgekeurd nog niet',
+            'Gelezen heeft de commissie het document wel, maar goedgekeurd nog niet'
+          ],
+          explanation: 'Fronting the past participle creates dramatic contrast, triggering subject-verb inversion with the auxiliary "heeft".'
+        },
+        {
+          id: 'topical-d4',
+          kind: 'topicalisation-drill',
+          prompt: 'Left-Dislocation with Resumptive Pronoun "Die": Safety protocols',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'left-dislocation-resumptive',
+            frontedElement: 'Die nieuwe veiligheidsprotocollen',
+            resumptiveElement: 'die',
+            baseSentence: 'We moeten die nieuwe veiligheidsprotocollen vanaf morgen strikt handhaven.',
+            contextPrompt: 'Isoleer "Die nieuwe veiligheidsprotocollen" buiten de hoofdzin (linkerdislocatie) en neem dit element in de zin op met het resumptieve pronomen "die".',
+            structureFormula: 'Die nieuwe veiligheidsprotocollen, + die + moeten + we + [Tijd] + [Manier] + handhaven',
+            hint: 'Gebruik "Die nieuwe veiligheidsprotocollen, die moeten we vanaf morgen strikt handhaven".'
+          },
+          target: 'Die nieuwe veiligheidsprotocollen, die moeten we vanaf morgen strikt handhaven',
+          acceptedAnswers: [
+            'Die nieuwe veiligheidsprotocollen, die moeten we vanaf morgen strikt handhaven',
+            'Die nieuwe veiligheidsprotocollen, die moeten we vanaf morgen strikt naleven',
+            'Die nieuwe veiligheidsprotocollen die moeten we vanaf morgen strikt handhaven',
+            'Die nieuwe protocollen, die moeten we vanaf morgen strikt handhaven'
+          ],
+          explanation: 'Left-dislocation introduces a topic outside the core clause boundary and resumes it with "die" inside the clause.'
+        },
+        {
+          id: 'topical-d5',
+          kind: 'topicalisation-drill',
+          prompt: 'Left-Dislocation with Resumptive Pronoun "Dat": Legal conflict',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'left-dislocation-resumptive',
+            frontedElement: 'Dat complexe juridische conflict',
+            resumptiveElement: 'dat',
+            baseSentence: 'We lossen dat complexe juridische conflict buiten de rechtszaal op.',
+            contextPrompt: 'Isoleer het onzijdige (het-)onderwerp "Dat complexe juridische conflict" via linkerdislocatie en hervat met "dat".',
+            structureFormula: 'Dat complexe juridische conflict, + dat + lossen + we + buiten de rechtszaal + op',
+            hint: 'Gebruik "Dat complexe juridische conflict, dat lossen we buiten de rechtszaal op".'
+          },
+          target: 'Dat complexe juridische conflict, dat lossen we buiten de rechtszaal op',
+          acceptedAnswers: [
+            'Dat complexe juridische conflict, dat lossen we buiten de rechtszaal op',
+            'Dat ingewikkelde juridische conflict, dat lossen we buiten de rechtszaal op',
+            'Dat complexe juridische conflict dat lossen we buiten de rechtszaal op',
+            'Dat juridische conflict, dat lossen we buiten de rechtszaal op'
+          ],
+          explanation: 'For neuter noun phrases (het-woorden), the resumptive pronoun in left-dislocation is "dat".'
+        },
+        {
+          id: 'topical-d6',
+          kind: 'topicalisation-drill',
+          prompt: 'Cleft Focus Construction (Het is juist... dat): Causal market leadership',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'cleft-het-is-dat',
+            frontedElement: 'Het is juist door die technologische innovatie',
+            baseSentence: 'Het bedrijf is juist door die technologische innovatie marktleider geworden.',
+            contextPrompt: 'Construeer een cleft-focuszin met "Het is juist door... dat" om de technologische innovatie als dé doorslaggevende oorzaak te isoleren.',
+            structureFormula: 'Het is juist door [Oorzaak] + dat + het bedrijf + marktleider + is + geworden',
+            hint: 'Gebruik "Het is juist door die technologische innovatie dat het bedrijf marktleider is geworden".'
+          },
+          target: 'Het is juist door die technologische innovatie dat het bedrijf marktleider is geworden',
+          acceptedAnswers: [
+            'Het is juist door die technologische innovatie dat het bedrijf marktleider is geworden',
+            'Het is juist door die technologische innovaties dat het bedrijf marktleider is geworden',
+            'Het is door die technologische innovatie dat de onderneming marktleider is geworden',
+            'Het is juist dankzij die technologische innovatie dat het bedrijf marktleider is geworden'
+          ],
+          explanation: 'Cleft sentences ("Het is [X] dat...") focus exclusively on the highlighted constituent, triggering subordinate word order in the relative clause.'
+        },
+        {
+          id: 'topical-d7',
+          kind: 'topicalisation-drill',
+          prompt: 'Cleft Focus Construction (Het is... die): Key discoverer',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'cleft-het-is-die',
+            frontedElement: 'Het was onze senior onderzoeker',
+            baseSentence: 'Onze senior onderzoeker ontdekte de doorslaggevende fout in de berekening.',
+            contextPrompt: 'Creëer een persoonsgerichte cleft-constructie met "Het was... die" om de specifieke onderzoeker te complimenteren.',
+            structureFormula: 'Het was [Persoon] + die + [Object] + [Deelwoord/PV]',
+            hint: 'Gebruik "Het was onze senior onderzoeker die de doorslaggevende fout in de berekening ontdekte".'
+          },
+          target: 'Het was onze senior onderzoeker die de doorslaggevende fout in de berekening ontdekte',
+          acceptedAnswers: [
+            'Het was onze senior onderzoeker die de doorslaggevende fout in de berekening ontdekte',
+            'Het was onze hoofdonderzoeker die de doorslaggevende fout in de berekening ontdekte',
+            'Het is onze senior onderzoeker die de doorslaggevende fout in de berekening ontdekte',
+            'Het was de senior onderzoeker die de doorslaggevende fout in de berekening ontdekte'
+          ],
+          explanation: 'When clefting a human subject, Dutch uses the relative pronoun "die", followed by verb-final subordinate word order.'
+        },
+        {
+          id: 'topical-d8',
+          kind: 'topicalisation-drill',
+          prompt: 'Inverted Conditional Focus (Mocht...): Precautionary notification',
+          skills: ['production', 'grammar'],
+          topicalisationData: {
+            focusType: 'inverted-conditional-mocht',
+            frontedElement: 'Mocht er onverhoopt vertraging optreden',
+            baseSentence: 'Als er onverhoopt vertraging mocht optreden, stel de cliënten dan direct op de hoogte.',
+            contextPrompt: 'Formuleer een formele voorzorgsinstructie door de voorwaardelijke bijzin te beginnen met het geïnverteerde hulpwerkwoord "Mocht...".',
+            structureFormula: 'Mocht + er + onverhoopt + vertraging + optreden, + stel + [Object] + dan + onmiddellijk + op de hoogte',
+            hint: 'Gebruik "Mocht er onverhoopt vertraging optreden, stel de cliënten dan onmiddellijk op de hoogte".'
+          },
+          target: 'Mocht er onverhoopt vertraging optreden, stel de cliënten dan onmiddellijk op de hoogte',
+          acceptedAnswers: [
+            'Mocht er onverhoopt vertraging optreden, stel de cliënten dan onmiddellijk op de hoogte',
+            'Mocht er onverhoopt vertraging optreden, stel de klanten dan direct op de hoogte',
+            'Mocht er vertraging optreden, stel de cliënten dan onmiddellijk op de hoogte',
+            'Mochten er onverhoopt vertragingen optreden, stel de cliënten dan onmiddellijk op de hoogte'
+          ],
+          explanation: '"Mocht [onderwerp] ... [infinitief]" produces an inverted conditional clause without "als", common in formal and professional Dutch.'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Emphatic Focus & Discourse Structuring in Your Real Life',
+      kind: 'personalise',
+      intro: 'Express a strong professional opinion, vision, or argument using focus fronting, left-dislocation with resumptive pronouns, or cleft focus constructions.',
+      exercises: [
+        {
+          id: 'topical-pers-1',
+          kind: 'personalise',
+          prompt: 'Formuleer een krachtig standpunt over een actuele kwestie, innovatie of beleidsregel uit jouw vakgebied of leefomgeving. Gebruik minstens twee focusconstructies (bijv. vooropplaatsing van een lijdend voorwerp met V2 inversie, "Twijfelen/Weten doe ik...", linkerdislocatie met "die/dat", of een cleftzin met "Het is juist... dat/die").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['twijfelen doe ik', 'dát', 'die', 'dat', 'het is juist dat', 'het was die', 'mocht'],
+          grammar: ['topicalisatie', 'focusconstructies', 'v2-inversie', 'cleft-zinnen', 'linkerdislocatie', 'resumptief-pronomen']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter, modalParticlesChapter, topicalisationChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
