@@ -29,6 +29,9 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'pronominal-adverbs': { prompt: 'I am thinking about it.', target: 'Ik denk eraan.', explanation: 'Merge "er" + "aan" for "about it".' },
   'ermee': { prompt: 'I am working with it.', target: 'Ik ben ermee bezig.', explanation: 'Met + het becomes ermee.' },
   'daarom': { prompt: 'That is why I am here.', target: 'Daarom ben ik hier.', explanation: 'Om + dat becomes daarom.' },
+  'nominalisation': { prompt: 'The prices are rising.', target: 'De stijging van de prijzen.', explanation: 'Transform the verb "stijgen" into the noun "stijging".' },
+  'toename': { prompt: 'The number of people is increasing.', target: 'De toename van het aantal mensen.', explanation: 'Toename means increase.' },
+  'uitbreiding': { prompt: 'The company is expanding.', target: 'De uitbreiding van het bedrijf.', explanation: 'Uitbreiding means expansion.' },
   'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
   'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
@@ -49,6 +52,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'speed-drill') skills.push('automaticity', 'production')
   if (kind === 'reframing-drill') skills.push('production', 'pragmatic')
   if (kind === 'pronominal-drill') skills.push('production', 'grammar')
+  if (kind === 'nominalisation-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -90,6 +94,23 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: key,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'nominalisation-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      nominalisationData: {
+        verbalSentence: `De ${key} gebeurt nu.`,
+        targetNoun: key
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
       explanation: info.explanation
     }
   }

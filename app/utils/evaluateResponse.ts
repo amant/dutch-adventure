@@ -735,6 +735,39 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Nominalisation Drill Evaluation
+    if (exercise.kind === 'nominalisation-drill' && exercise.nominalisationData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const containsTargetNoun = normalized.includes(exercise.nominalisationData.targetNoun.toLowerCase())
+      
+      if (normalized === target) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent formal phrasing! You successfully transformed the verbal expression.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      } else if (containsTargetNoun) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Good start. You used the target noun, but the sentence structure could be more formal.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: `The formal version usually starts with the nominalised subject: "De ${exercise.nominalisationData.targetNoun} van..."`
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Try to use the noun-based version to sound more formal.',
+          explanation: `In formal Dutch, we often use "${exercise.nominalisationData.targetNoun}" instead of the verbal form.`
+        }
+      }
+    }
+
     // Reframing-Drill Evaluation
     if (exercise.kind === 'reframing-drill' && exercise.reframingData) {
       const softeners = exercise.reframingData.softeningElements || []

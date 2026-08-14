@@ -2689,7 +2689,78 @@ export const connectionChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter]
+export const formalStyleChapter: Chapter = {
+  slug: 'formeel-nederlands-en-nominalisatie',
+  level: 'B2',
+  title: "Formal Style & Nominalisation",
+  capability: "Transform informal verbal expressions into professional noun-based constructions.",
+  description: "Learn to sound more academic and professional by using nominalisations and the passive voice.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Verbal vs Nominal', kind: 'discover',
+      intro: "In formal Dutch, we often prefer nouns over verbs to sound more objective.",
+      exercises: [
+        {
+          id: 'nom-ind-1', kind: 'induction', prompt: 'Notice the shift',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Verbal (B1)', answer: 'Omdat de prijzen stijgen...' },
+              { prompt: 'Nominal (B2)', answer: 'Door de stijging van de prijzen...' }
+            ],
+            ruleChallenge: 'Which word is the nominalisation of "stijgen"?',
+            options: [
+              { text: 'stijgend', isCorrect: false },
+              { text: 'de stijging', isCorrect: true },
+              { text: 'gestegen', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'drill', title: 'Transform to Formal', kind: 'transform',
+      intro: "Rewrite these sentences using a nominal construction.",
+      exercises: [
+        {
+          id: 'nom-d-1', kind: 'nominalisation-drill', prompt: 'Nominalise "de prijzen stijgen"',
+          skills: ['production', 'grammar'],
+          nominalisationData: {
+            verbalSentence: 'De prijzen stijgen snel.',
+            targetNoun: 'stijging'
+          },
+          target: 'De snelle stijging van de prijzen',
+          explanation: 'Use "De [adjective] stijging van [noun]" to formalise the thought.'
+        },
+        {
+          id: 'nom-d-2', kind: 'nominalisation-drill', prompt: 'Nominalise "het bedrijf breidt uit"',
+          skills: ['production', 'grammar'],
+          nominalisationData: {
+            verbalSentence: 'Het bedrijf breidt internationaal uit.',
+            targetNoun: 'uitbreiding'
+          },
+          target: 'De internationale uitbreiding van het bedrijf',
+          explanation: 'Uitbreiden becomes "de uitbreiding".'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Professional Report', kind: 'personalise',
+      intro: "Write a short formal observation about a trend in your work or study.",
+      exercises: [
+        {
+          id: 'nom-p-1', kind: 'personalise', prompt: 'Beschrijf een recente verandering op je werk in formele taal (gebruik nominalisatie).',
+          skills: ['production', 'writing', 'pragmatic'],
+          vocabulary: ['ontwikkeling', 'verandering', 'toename', 'afname'],
+          grammar: ['nominalisation']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
