@@ -4503,7 +4503,259 @@ export const causalityChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter]
+export const prefixVerbChapter: Chapter = {
+  slug: 'scheidbare-onscheidbare-werkwoorden',
+  level: 'B2',
+  title: 'Separable vs Inseparable Prefix Verbs',
+  capability: "Master stress-dependent prefix verbs (voorkomen, ondergaan, overleggen, doorlopen, achterhalen) with accurate splitting, participle formation, and 'te' placement.",
+  description: "Master the subtle yet crucial distinction between separable and inseparable compound verbs in B2 Dutch: stressed prefixes ('vóórkomen', 'óndergaan', 'óverleggen', 'dóórlopen') that split in main clauses and take 'ge-'/'te' infixation, versus unstressed prefixes ('voorkómen', 'ondergáán', 'overléggen', 'doorlópen', 'achterhálen', 'doorbréken') that never split and take no 'ge-'.",
+  estimatedMinutes: 22,
+  stages: [
+    {
+      id: 'discover', title: 'The Law of Stress & Split: Prefix Verbs', kind: 'discover',
+      intro: "Discover how a single shift in stress transforms the meaning, conjugation, participle formation, and syntax of Dutch compound verbs.",
+      exercises: [
+        {
+          id: 'prefix-ind-1', kind: 'induction', prompt: 'Compare separable and inseparable prefix verbs in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'voorkómen (inseparable = prevent)', answer: 'De specialist voorkomt een ernstige medische complicatie.' },
+              { prompt: 'vóórkomen (separable = occur / happen)', answer: 'Dit soort technische storingen komt gelukkig zelden voor.' },
+              { prompt: 'overléggen (inseparable = deliberate / consult)', answer: 'De minister heeft vanochtend met de commissie overlegd.' },
+              { prompt: 'óverleggen (separable = submit documents)', answer: 'De sollicitant is verplicht om zijn getuigschrift over te leggen.' },
+              { prompt: 'ondergáán (inseparable = undergo / endure)', answer: 'Het bedrijf heeft een ingrijpende reorganisatie ondergaan.' },
+              { prompt: 'óndergaan (separable = sun setting / sink)', answer: 'De zon gaat vanavond om acht uur schitterend onder.' },
+              { prompt: 'achterhálen (inseparable = trace / find out)', answer: 'De politie doet onderzoek om de ware toedracht te achterhalen.' },
+              { prompt: 'doorbréken (inseparable = break deadlock)', answer: 'De bemiddelaar doorbreekt de langdurige impasse tussen partijen.' }
+            ],
+            ruleChallenge: 'How do stress patterns determine the grammatical behavior of Dutch prefix verbs?',
+            options: [
+              { text: 'When the prefix is stressed, the verb is separable (splits in main clauses, inserts "ge-" in participles and "te" in infinitives). When the stem is stressed, the verb is inseparable (never splits, no "ge-", "te" precedes the whole verb).', isCorrect: true },
+              { text: 'All prefix verbs in Dutch are separable in the present tense and inseparable in the past tense.', isCorrect: false },
+              { text: 'Separable verbs only exist with the prefix "over-", while "voor-" is always inseparable.', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Executive Debrief: Legal, Medical & Corporate Precision', kind: 'understand',
+      intro: "Analyze how a corporate legal counsel and operations director communicate risks, document submissions, negotiations, and prevention in an official compliance review.",
+      exercises: [
+        {
+          id: 'prefix-inf-1', kind: 'inference-challenge', prompt: 'Analyze prefix verbs and semantic distinctions in the legal counsel report',
+          skills: ['reading', 'pragmatic'],
+          inferenceData: {
+            text: 'Tijdens de aandeelhoudersvergadering lichtte de hoofdjurist toe: "Ons complianceteam voorkomt proactief juridische risico\'s door alle contracten vooraf te screenen. Mocht er desalniettemin een geschil vóórkomen, dan overleggen we direct met externe experts. Om boetes te vermijden, zijn alle leveranciers verplicht om hun certificaten tijdig over te leggen. Het afgelopen jaar heeft onze onderneming een omvangrijke audit ondergaan, waarbij we het complete veiligheidsprotocol hebben doorlopen. Dankzij dit strenge beleid heeft het management de negatieve trend definitief doorbroken."',
+            question: 'How does the legal counsel utilize separable and inseparable verbs to convey precise administrative actions?',
+            options: [
+              { text: 'The counsel uses "voorkomt" (inseparable) for preventing risks, "vóórkomen" (separable) for issues arising, "overleggen" (inseparable) for consulting experts, "over te leggen" (separable) for submitting certificates, "ondergaan" (inseparable) for undergoing an audit, "doorlopen" (inseparable) for completing protocols, and "doorbroken" (inseparable) for breaking the trend.', isCorrect: true, feedback: 'Uitstekend! Every verb is conjugated according to its specific stress pattern and semantic meaning.' },
+              { text: 'The counsel claims that the company refused to submit any documents to the auditors.', isCorrect: false, feedback: 'Suppliers were required to submit certificates ("over te leggen").' },
+              { text: 'The counsel states that the company failed its safety audit.', isCorrect: false, feedback: 'The company completed the entire protocol ("heeft doorlopen") and broke the negative trend ("heeft doorbroken").' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Separable vs Inseparable Drills', kind: 'transform',
+      intro: "Conjugate Dutch prefix verbs in present main clauses, perfect tenses, and infinitive constructions according to their stress patterns and meanings.",
+      exercises: [
+        {
+          id: 'prefix-d-1', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Voorkómen (To Prevent / Beletten)',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'voorkomen',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'voor·kó·men (onscheidbaar)',
+            meaningDefinition: 'voorkómen = beletten, verhinderen (to prevent / avert)',
+            targetStructure: 'present-main',
+            contextPrompt: 'De medisch specialist grijpt direct in om een ernstige fout tijdens de ingreep te vermijden. Schrijf een hoofdzin in de tegenwoordige tijd met "voorkomen".',
+            structureFormula: '[Onderwerp] + [vorm van voorkomen] + [lijdend voorwerp]',
+            hint: 'Formulate: "De specialist voorkomt een ernstige medische fout."'
+          },
+          target: 'De specialist voorkomt een ernstige medische fout',
+          acceptedAnswers: [
+            'De specialist voorkomt een ernstige medische fout',
+            'De arts voorkomt een ernstige medische fout',
+            'De specialist voorkomt een ernstige fout',
+            'De arts voorkomt een medische fout'
+          ],
+          explanation: '"Voorkómen" (prevent) has stress on "-komen" and is inseparable. It never splits in a main clause: "De arts voorkomt de fout" (not "komt... voor").'
+        },
+        {
+          id: 'prefix-d-2', kind: 'prefix-verb-drill', prompt: 'Separable Verb: Vóórkomen (To Occur / Gebeuren / Plaatsvinden)',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'voorkomen',
+            stressPattern: 'separable-stressed-prefix',
+            stressedForm: 'vóór·ko·men (scheidbaar)',
+            meaningDefinition: 'vóórkomen = gebeuren, zich voordoen, lijken (to occur / happen)',
+            targetStructure: 'present-main',
+            contextPrompt: 'Dit type technische storing gebeurt gelukkig uiterst zelden in het beveiligde datacenter. Vervoeg "vóórkomen" in een hoofdzin in de tegenwoordige tijd.',
+            structureFormula: '[Onderwerp] + [komt] + [bepalingen] + [voor]',
+            hint: 'Formulate: "Dit type storing komt gelukkig zelden voor."'
+          },
+          target: 'Dit type technische storing komt gelukkig zelden voor',
+          acceptedAnswers: [
+            'Dit type technische storing komt gelukkig zelden voor',
+            'Dit soort technische storingen komt gelukkig zelden voor',
+            'Deze technische storing komt zelden voor',
+            'Dit type storing komt gelukkig zelden voor in het datacenter'
+          ],
+          explanation: '"Vóórkomen" (occur) has stress on "vóór-" and is separable. It splits in main clauses: finite verb in position 2, "voor" at the clause end.'
+        },
+        {
+          id: 'prefix-d-3', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Overléggen (To Consult / Beraadslagen) in Perfect Tense',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'overleggen',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'over·lég·gen (onscheidbaar)',
+            meaningDefinition: 'overléggen = beraadslagen, overleg plegen (to consult / discuss)',
+            targetStructure: 'perfect-tense',
+            contextPrompt: 'De minister heeft vanochtend langdurig beraadslaagd en overleg gevoerd met de voltallige vakbondsdelegatie. Vervoeg "overleggen" in de voltooide tijd.',
+            structureFormula: '[Onderwerp] + heeft + [met bepaling] + overlegd',
+            hint: 'Formulate: "De minister heeft vanochtend met de vakbonden overlegd."'
+          },
+          target: 'De minister heeft vanochtend met de vakbonden overlegd',
+          acceptedAnswers: [
+            'De minister heeft vanochtend met de vakbonden overlegd',
+            'De minister heeft met de vakbonden overlegd',
+            'De minister heeft vanmorgen met de vakbond overlegd',
+            'De minister heeft vanochtend uitgebreid met de vakbonden overlegd'
+          ],
+          explanation: '"Overléggen" (consult) is inseparable. Its past participle is formed without "ge-": "heeft overlegd" (unlike separable "overgelegd" for submitting papers).'
+        },
+        {
+          id: 'prefix-d-4', kind: 'prefix-verb-drill', prompt: 'Separable Verb: Óverleggen (To Submit Documents) with (Om...) Te',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'overleggen',
+            stressPattern: 'separable-stressed-prefix',
+            stressedForm: 'óver·leg·gen (scheidbaar)',
+            meaningDefinition: 'óverleggen = bewijsstukken tonen, overhandigen (to submit proof / documents)',
+            targetStructure: 'infinitive-te',
+            contextPrompt: 'De sollicitant heeft de wettelijke plicht om een geldig getuigschrift te overhandigen aan de werkgever. Gebruik "om... over te leggen".',
+            structureFormula: '[Onderwerp] is verplicht om + [document] over te leggen',
+            hint: 'Formulate: "De sollicitant is verplicht om een geldig getuigschrift over te leggen."'
+          },
+          target: 'De sollicitant is verplicht om een geldig getuigschrift over te leggen',
+          acceptedAnswers: [
+            'De sollicitant is verplicht om een geldig getuigschrift over te leggen',
+            'De sollicitant is verplicht om een geldig legitimatiebewijs over te leggen',
+            'De kandidaat is verplicht om een geldig diploma over te leggen',
+            'U bent verplicht om een geldig document over te leggen'
+          ],
+          explanation: '"Óverleggen" (to produce/submit documents) is separable. In an infinitive clause with "te", "te" is inserted between the prefix and stem: "over te leggen".'
+        },
+        {
+          id: 'prefix-d-5', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Ondergáán (To Undergo / Doorstaan) in Perfect Tense',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'ondergaan',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'on·der·gáán (onscheidbaar)',
+            meaningDefinition: 'ondergáán = meemaken, doorstaan (to undergo / endure)',
+            targetStructure: 'perfect-tense',
+            contextPrompt: 'Het bedrijf heeft het afgelopen jaar een grootschalige en ingrijpende reorganisatie doorstaan. Vervoeg "ondergaan" in de voltooide tijd.',
+            structureFormula: '[Onderwerp] + heeft + [lijdend voorwerp] + ondergaan',
+            hint: 'Formulate: "Het bedrijf heeft een ingrijpende reorganisatie ondergaan."'
+          },
+          target: 'Het bedrijf heeft een ingrijpende reorganisatie ondergaan',
+          acceptedAnswers: [
+            'Het bedrijf heeft een ingrijpende reorganisatie ondergaan',
+            'Het concern heeft een grote herstructurering ondergaan',
+            'Het bedrijf heeft een grote reorganisatie ondergaan',
+            'De organisatie heeft een herstructurering ondergaan'
+          ],
+          explanation: '"Ondergáán" (undergo) is inseparable, taking auxiliary "hebben" and no "ge-" in the participle ("heeft ondergaan"). Separable "óndergaan" (setting sun) uses "zijn" and "ondergegaan".'
+        },
+        {
+          id: 'prefix-d-6', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Achterhálen (To Trace / Discover) with (Om...) Te',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'achterhalen',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'ach·ter·há·len (onscheidbaar)',
+            meaningDefinition: 'achterhálen = opsporen, de waarheid ontdekken (to trace / find out)',
+            targetStructure: 'infinitive-te',
+            contextPrompt: 'Het onderzoeksteam doet grondig sporenonderzoek om de precieze toedracht van het incident te ontdekken. Gebruik "om... te achterhalen".',
+            structureFormula: '[Onderwerp] doet onderzoek om + [object] te achterhalen',
+            hint: 'Formulate: "Het team doet onderzoek om de precieze toedracht te achterhalen."'
+          },
+          target: 'Het team doet onderzoek om de precieze toedracht te achterhalen',
+          acceptedAnswers: [
+            'Het team doet onderzoek om de precieze toedracht te achterhalen',
+            'Het team doet onderzoek om de precieze oorzaak te achterhalen',
+            'De recherche probeert de waarheid te achterhalen',
+            'Het is belangrijk om de precieze oorzaak te achterhalen'
+          ],
+          explanation: '"Achterhálen" (trace/discover) is strictly inseparable. In infinitive clauses, "te" precedes the entire verb: "om de toedracht te achterhalen" (never "achter te halen").'
+        },
+        {
+          id: 'prefix-d-7', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Doorbréken (To Break Deadlock / Impasse)',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'doorbreken',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'door·bré·ken (onscheidbaar)',
+            meaningDefinition: 'doorbréken = een impasse of taboe beëindigen (to break through a deadlock)',
+            targetStructure: 'present-main',
+            contextPrompt: 'De onafhankelijke bemiddelaar maakt een einde aan de slepende impasse tussen directie en werknemers. Vervoeg "doorbreken" in de hoofdzin.',
+            structureFormula: '[Onderwerp] + [doorbreekt] + [lijdend voorwerp]',
+            hint: 'Formulate: "De bemiddelaar doorbreekt de langdurige impasse."'
+          },
+          target: 'De bemiddelaar doorbreekt de langdurige impasse',
+          acceptedAnswers: [
+            'De bemiddelaar doorbreekt de langdurige impasse',
+            'De bemiddelaar doorbreekt de impasse tussen beide partijen',
+            'De bemiddelaar doorbreekt de impasse',
+            'De voorzitter doorbreekt de impasse'
+          ],
+          explanation: 'Figurative "doorbréken" (deadlock/impasse) is inseparable and does not split: "De bemiddelaar doorbreekt de impasse" (unlike physical "dóórbreken", e.g. "De dijk breekt door").'
+        },
+        {
+          id: 'prefix-d-8', kind: 'prefix-verb-drill', prompt: 'Inseparable Verb: Doorlópen (To Complete a Process / Curriculum) with (Om...) Te',
+          skills: ['production', 'grammar'],
+          prefixVerbData: {
+            verb: 'doorlopen',
+            stressPattern: 'inseparable-stressed-stem',
+            stressedForm: 'door·ló·pen (onscheidbaar)',
+            meaningDefinition: 'doorlópen = een opleiding of proces van begin tot eind voltooien (to complete)',
+            targetStructure: 'infinitive-te',
+            contextPrompt: 'Nieuwe medewerkers zijn contractueel verplicht om het complete inwerktraject van begin tot eind af te ronden. Gebruik "om... te doorlopen".',
+            structureFormula: '[Onderwerp] is verplicht om + [traject] te doorlopen',
+            hint: 'Formulate: "Nieuwe medewerkers zijn verplicht om het complete inwerktraject te doorlopen."'
+          },
+          target: 'Nieuwe medewerkers zijn verplicht om het complete inwerktraject te doorlopen',
+          acceptedAnswers: [
+            'Nieuwe medewerkers zijn verplicht om het complete inwerktraject te doorlopen',
+            'Nieuwe medewerkers zijn verplicht om het inwerktraject te doorlopen',
+            'Medewerkers zijn verplicht om de training te doorlopen',
+            'Het is verplicht om het complete leertraject te doorlopen'
+          ],
+          explanation: '"Doorlópen" (complete education/process) is inseparable: "om het traject te doorlopen". Separable "dóórlopen" (continue walking) would be "door te lopen".'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Professional Agility & Precision', kind: 'personalise',
+      intro: "Describe a situation in your work, study, or daily life where you had to prevent a problem (voorkómen), consult colleagues (overléggen), submit documents (óverleggen), undergo a transition (ondergáán), or complete a process (doorlópen).",
+      exercises: [
+        {
+          id: 'prefix-p-1', kind: 'personalise', prompt: 'Beschrijf een situatie uit jouw werk of studie waarin je een fout moest voorkómen, documenten moest óverleggen, een proces moest doorlópen, of met iemand moest overléggen. Let goed op de scheidbaarheid en vervoeging van het werkwoord.',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['voorkomen', 'overleggen', 'ondergaan', 'doorlopen', 'achterhalen', 'doorbreken', 'onderhandelen', 'reorganisatie', 'getuigschrift', 'impasse'],
+          grammar: ['scheidbare-werkwoorden', 'onscheidbare-werkwoorden', 'klemtoon-betekenis', 'deelwoordvorming', 'te-infinitief']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

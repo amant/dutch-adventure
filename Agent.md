@@ -104,6 +104,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Correlative Connectors & Balanced Discourse**: Training for B2 learners to master parallel correlative structures (*zowel... als*, *niet alleen... maar ook*, *noch... noch*, *hetzij... hetzij*, *enerzijds... anderzijds*, *hoe... des te*), ensuring syntactic parallelism and accurate verb placement.
     - **Conditionals & Restrictive Clauses**: Training for B2 learners to formulate precise conditions, exceptions, contractual stipulations, and restrictive qualifications using B2 connectors (*mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...*), mastering subclause verb-final word order and inverted conditional clauses without *als*.
     - **Causal, Consecutive & Final Relations**: Training for B2 learners to master the matrix of causality, distinction between involuntary cause (*doordat*) and reasoned motivation (*aangezien, omdat*), negative blame (*te wijten aan*) versus positive credit (*te danken aan, dankzij*), relative consequence (*waardoor*), extreme degree (*dermate... dat*), and formal purpose (*opdat, teneinde... te*).
+    - **Separable vs Inseparable Prefix Verbs & Stress Semantics**: Training for B2 learners to master compound verbs with identical spelling but contrasting stress and meaning (*vóórkomen* vs *voorkómen*, *óndergaan* vs *ondergáán*, *óverleggen* vs *overléggen*, *dóórlopen* vs *doorlópen*, *achterhálen*, *doorbréken*), mastering main-clause splitting, participle formation without/with *ge-*, auxiliary selection (*hebben* vs *zijn*), and *te* placement in infinitive constructions.
 
 ## 5. Information Architecture
 
@@ -161,6 +162,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `CorrelativeDrill.vue`: Interactive tool for mastering Dutch correlative conjunctions and balanced discourse (zowel... als, niet alleen... maar ook, noch... noch, hetzij... hetzij, enerzijds... anderzijds, hoe... des te).
     - `ConditionalDrill.vue`: Interactive tool for mastering Dutch conditional and restrictive structures (mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...).
     - `CausalityDrill.vue`: Interactive tool for mastering Dutch causal, consecutive, and final structures (doordat, aangezien, te wijten aan, te danken aan, waardoor, dermate... dat, opdat, teneinde... te).
+    - `PrefixVerbDrill.vue`: Interactive tool for mastering Dutch separable vs inseparable prefix verbs, stress semantics, splitting behavior, participle formation (ge-), auxiliary selection, and te placement.
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.

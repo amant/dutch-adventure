@@ -94,6 +94,14 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'dermate dat': { prompt: 'Costs rose so rapidly that management had to intervene.', target: 'De kosten stegen dermate snel dat de directie moest ingrijpen.', explanation: 'Use "dermate [adj/adv] dat" to express an extreme degree and consequence.' },
   'opdat': { prompt: 'Protocols were tightened so that accidents can be prevented.', target: 'Protocollen zijn aangescherpt, opdat incidenten voorkomen kunnen worden.', explanation: '"Opdat" introduces a formal subordinate clause of purpose.' },
   'teneinde te': { prompt: 'We restructured processes in order to guarantee quality.', target: 'We herzien de processen, teneinde de kwaliteit te waarborgen.', explanation: '"Teneinde... te" is a high-register formal purpose infinitive.' },
+  'scheidbare-werkwoorden': { prompt: 'This issue occurs very rarely in practice.', target: 'Dit probleem komt zelden voor in de praktijk.', explanation: 'Separable "vóórkomen" (occur) splits in main clauses.' },
+  'onscheidbare-werkwoorden': { prompt: 'The specialist prevents a medical error.', target: 'De specialist voorkomt een medische fout.', explanation: 'Inseparable "voorkómen" (prevent) never splits in main clauses.' },
+  'voorkomen': { prompt: 'The doctor prevents a complication.', target: 'De arts voorkomt een complicatie.', explanation: '"Voorkómen" (prevent) is inseparable and takes no "ge-" in the participle.' },
+  'overleggen': { prompt: 'The minister consulted with the union.', target: 'De minister heeft met de vakbond overlegd.', explanation: '"Overléggen" (consult) is inseparable, forming participle "overlegd".' },
+  'ondergaan': { prompt: 'The company underwent a restructuring.', target: 'Het bedrijf heeft een herstructurering ondergaan.', explanation: '"Ondergáán" (undergo) is inseparable, forming participle "ondergaan".' },
+  'achterhalen': { prompt: 'The police are trying to trace the truth.', target: 'De politie probeert de toedracht te achterhalen.', explanation: '"Achterhálen" is strictly inseparable, taking "te" before the whole verb.' },
+  'doorbreken': { prompt: 'The mediator broke the deadlock.', target: 'De bemiddelaar heeft de impasse doorbroken.', explanation: '"Doorbréken" (break deadlock) is inseparable, forming "doorbroken".' },
+  'doorlopen': { prompt: 'Employees must complete the training.', target: 'Medewerkers moeten het complete traject doorlopen.', explanation: '"Doorlópen" (complete education/process) is inseparable.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -373,6 +381,30 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         connectorCue: key,
         structureFormula: 'Oorzakelijk, consecutief of doelgericht verband met correcte zinsstructuur',
         hint: 'Combine both premises using the specified causal/consecutive connector.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'prefix-verb-drill') {
+    const isSeparable = key.includes('scheidbare') || key === 'vóórkomen' || key === 'óndergaan' || key === 'óverleggen'
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      prefixVerbData: {
+        verb: key.replace(/^(vóór|voor|onder|ónder|over|óver|door|dóór|achter|om)/, '$1'),
+        stressPattern: isSeparable ? 'separable-stressed-prefix' : 'inseparable-stressed-stem',
+        stressedForm: isSeparable ? `${key} (scheidbaar)` : `${key} (onscheidbaar)`,
+        meaningDefinition: `Oefen de juiste vervoeging en scheidbaarheid van ${key}.`,
+        targetStructure: 'present-main',
+        contextPrompt: info.prompt,
+        structureFormula: isSeparable ? '[Onderwerp] + [vorm] + [rest] + [voorvoegsel]' : '[Onderwerp] + [samengesteld werkwoord] + [rest]',
+        hint: isSeparable ? 'Het werkwoord splitst in de hoofdzin.' : 'Het werkwoord is onscheidbaar en splitst nooit.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

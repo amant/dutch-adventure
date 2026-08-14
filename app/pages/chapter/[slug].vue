@@ -225,6 +225,15 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'prefix-verb-drill'" class="renderer">
+        <PrefixVerbDrill
+          :exercise="session.exercise.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'reframing-drill'" class="renderer">
         <ReframingDrill
           :exercise="session.exercise.value"

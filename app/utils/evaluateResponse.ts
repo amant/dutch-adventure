@@ -840,6 +840,303 @@ function checkCausalityError(normalized: string, relationType?: string) {
   return { found: false }
 }
 
+function checkPrefixVerbError(
+  normalized: string,
+  prefixVerbData?: {
+    verb: string
+    stressPattern: 'separable-stressed-prefix' | 'inseparable-stressed-stem'
+    stressedForm: string
+    meaningDefinition: string
+    targetStructure: 'present-main' | 'present-subclause' | 'perfect-tense' | 'infinitive-te'
+  }
+) {
+  if (!prefixVerbData) return { found: false }
+  const { verb, stressPattern, targetStructure } = prefixVerbData
+
+  // 1. Inseparable verb erroneously split in main clause present tense
+  if (stressPattern === 'inseparable-stressed-stem' && targetStructure === 'present-main') {
+    // E.g., voorkómen -> "komt ... voor", ondergáán -> "gaat ... onder", overléggen -> "legt ... over", achterhálen -> "haalt ... achter", doorbréken -> "breekt ... door"
+    if (verb === 'voorkomen' && /\bkomt?\b.*\bvoor\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "prevent" (voorkómen), the verb is inseparable (stress on -komen). It never splits in a main clause: "De arts voorkomt complicaties" (not "komt... voor").',
+        miniLesson: {
+          title: 'Voorkómen (Inseparable) vs Vóórkomen (Separable)',
+          content: 'Voorkómen (stress on stem) means to prevent and is inseparable. Vóórkomen (stress on prefix) means to occur or appear in court and splits in main clauses.',
+          example: {
+            wrong: 'De specialist komt een ernstige fout voor.',
+            right: 'De specialist voorkomt een ernstige fout.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'ondergaan' && /\bgaat?\b.*\bonder\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "undergo / endure" (ondergáán), the verb is inseparable. It never splits: "De patiënt ondergaat een behandeling" (not "gaat... onder").',
+        miniLesson: {
+          title: 'Ondergáán (Inseparable: Undergo) vs Óndergaan (Separable: Set)',
+          content: 'Ondergáán (inseparable) means to endure or undergo. Óndergaan (separable) is used for the sun setting or sinking.',
+          example: {
+            wrong: 'De patiënt gaat een zware operatie onder.',
+            right: 'De patiënt ondergaat een zware operatie.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'overleggen' && /\blegt?\b.*\bover\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "deliberate / consult" (overléggen), the verb is inseparable. It does not split: "De manager overlegt met het team" (not "legt... over").',
+        miniLesson: {
+          title: 'Overléggen (Consult) vs Óverleggen (Submit Proof)',
+          content: 'Overléggen (inseparable) means to discuss or deliberate. Óverleggen (separable) means to present or submit documents.',
+          example: {
+            wrong: 'De manager legt met de commissie over.',
+            right: 'De manager overlegt met de commissie.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'doorbreken' && /\bbreekt?\b.*\bdoor\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the figurative meaning of "break through a deadlock / taboo" (doorbréken), the verb is inseparable. It does not split: "De bemiddelaar doorbreekt de impasse" (not "breekt... door").',
+        miniLesson: {
+          title: 'Doorbréken (Break Deadlock) vs Dóórbreken (Break Physically)',
+          content: 'Doorbréken (inseparable) is figurative (deadlock, taboo). Dóórbreken (separable) is physical (a dam bursting, sun breaking through clouds).',
+          example: {
+            wrong: 'Het team breekt de impasse door.',
+            right: 'Het team doorbreekt de impasse.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'achterhalen' && /\bhaalt?\b.*\bachter\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: '"Achterhalen" (to find out / trace) is strictly inseparable in modern Dutch. It never splits: "De politie achterhaalt de waarheid" (not "haalt... achter").',
+        miniLesson: {
+          title: 'Achterhálen (Inseparable)',
+          content: 'Achterhálen (stress on -halen) is inseparable. Never split it into "haalt... achter".',
+          example: {
+            wrong: 'De recherche haalt de identiteit achter.',
+            right: 'De recherche achterhaalt de identiteit.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'doorlopen' && /\bloopt?\b.*\bdoor\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "complete a curriculum / training" (doorlópen), the verb is inseparable: "De student doorloopt alle fasen" (not "loopt... door").',
+        miniLesson: {
+          title: 'Doorlópen (Complete) vs Dóórlopen (Keep Walking)',
+          content: 'Doorlópen (inseparable) means completing a process or education. Dóórlopen (separable) means continuing to walk without stopping.',
+          example: {
+            wrong: 'De cursist loopt het hele traject door.',
+            right: 'De cursist doorloopt het hele traject.'
+          }
+        }
+      }
+    }
+  }
+
+  // 2. Separable verb failed to split in main clause present tense
+  if (stressPattern === 'separable-stressed-prefix' && targetStructure === 'present-main') {
+    if (verb === 'voorkomen' && /\bvoorkomt\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "occur / happen" (vóórkomen), the verb is separable and must split in a main clause: "Dit incident komt zelden voor" (not "voorkomt").',
+        miniLesson: {
+          title: 'Vóórkomen (Separable: Occur)',
+          content: 'When vóórkomen means to occur, happen, or appear in court, it splits in main clauses: "Het komt regelmatig voor".',
+          example: {
+            wrong: 'Dit probleem voorkomt regelmatig in de praktijk.',
+            right: 'Dit probleem komt regelmatig voor in de praktijk.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'overleggen' && /\boverlegt\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'In the meaning of "present / submit documents" (óverleggen), the verb is separable and must split: "De kandidaat legt zijn diploma over" (not "overlegt").',
+        miniLesson: {
+          title: 'Óverleggen (Separable: Submit Documents)',
+          content: 'When óverleggen means submitting certificates or proof, it splits in main clauses: "Hij legt zijn papieren over".',
+          example: {
+            wrong: 'De sollicitant overlegt een geldig paspoort.',
+            right: 'De sollicitant legt een geldig paspoort over.'
+          }
+        }
+      }
+    }
+
+    if (verb === 'ondergaan' && /\bondergaat\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'When describing the sun setting (óndergaan), the verb is separable and must split: "De zon gaat om acht uur onder" (not "ondergaat").',
+        miniLesson: {
+          title: 'Óndergaan (Separable: Sun Setting)',
+          content: 'Óndergaan (separable) splits in main clauses: "De zon gaat prachtig onder".',
+          example: {
+            wrong: 'De zon ondergaat langzaam aan de horizon.',
+            right: 'De zon gaat langzaam onder aan de horizon.'
+          }
+        }
+      }
+    }
+  }
+
+  // 3. Participle formation errors in Perfect Tense
+  if (targetStructure === 'perfect-tense') {
+    // Inseparable participle with wrong "ge-" prefix
+    if (stressPattern === 'inseparable-stressed-stem') {
+      if (/\b(achtergehaald|ondergegaan|doorgebroken|omgevat)\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'Inseparable prefix verbs do NOT get "ge-" in the past participle: "heeft achterhaald", "heeft ondergaan", "heeft doorbroken", "heeft omvat".',
+          miniLesson: {
+            title: 'No "Ge-" in Inseparable Participles',
+            content: 'Verbs with unstressed prefixes (voorkómen, achterhálen, ondergáán, doorbréken) form their past participle without "ge-".',
+            example: {
+              wrong: 'De politie heeft de waarheid achtergehaald.',
+              right: 'De politie heeft de waarheid achterhaald.'
+            }
+          }
+        }
+      }
+
+      if (verb === 'voorkomen' && /\bvoorgekomen\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'For "prevent" (voorkómen), the past participle is "heeft voorkomen" (no "ge-"). "Voorgekomen" is the participle of separable "vóórkomen" (occurred).',
+          miniLesson: {
+            title: 'Voorkomen (Prevented) vs Voorgekomen (Occurred)',
+            content: 'Voorkómen (prevent) -> heeft voorkomen. Vóórkomen (occur) -> is voorgekomen.',
+            example: {
+              wrong: 'De directie heeft een crisis voorgekomen.',
+              right: 'De directie heeft een crisis voorkomen.'
+            }
+          }
+        }
+      }
+
+      if (verb === 'overleggen' && /\bovergelegd\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'For "consulted / deliberated" (overléggen), the participle is "overlegd" (no "ge-"). "Overgelegd" is for submitting documents.',
+          miniLesson: {
+            title: 'Overlegd (Deliberated) vs Overgelegd (Submitted)',
+            content: 'Overléggen (consult) -> heeft overlegd. Óverleggen (submit proof) -> heeft overgelegd.',
+            example: {
+              wrong: 'De minister heeft met de bonden overgelegd.',
+              right: 'De minister heeft met de bonden overlegd.'
+            }
+          }
+        }
+      }
+
+      // Auxiliary error: using "zijn" instead of "hebben" for inseparable transitive actions
+      if (verb === 'voorkomen' && /\b(is|zijn)\s+.*voorkomen\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'To prevent something (voorkómen) takes the auxiliary "hebben": "heeft een ramp voorkomen" (not "is voorkomen").',
+          miniLesson: {
+            title: 'Auxiliary with Voorkómen',
+            content: 'Transitive voorkómen (prevent) uses "hebben". Intransitive vóórkomen (occur) uses "zijn".',
+            example: {
+              wrong: 'Het management is een crisis voorkomen.',
+              right: 'Het management heeft een crisis voorkomen.'
+            }
+          }
+        }
+      }
+    }
+
+    // Separable participle missing "ge-" or with wrong auxiliary
+    if (stressPattern === 'separable-stressed-prefix') {
+      if (verb === 'voorkomen' && /\bheeft\s+.*voorgekomen\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'Intransitive "vóórkomen" (to occur / happen) takes the auxiliary "zijn": "Dit incident is vaker voorgekomen" (not "heeft").',
+          miniLesson: {
+            title: 'Auxiliary with Vóórkomen (Occur)',
+            content: 'Vóórkomen in the sense of happening takes "zijn" (is voorgekomen).',
+            example: {
+              wrong: 'Dit probleem heeft al eerder voorgekomen.',
+              right: 'Dit probleem is al eerder voorgekomen.'
+            }
+          }
+        }
+      }
+
+      if (verb === 'ondergaan' && /\bheeft\s+.*ondergegaan\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'The sun setting (óndergaan) takes the auxiliary "zijn": "De zon is al ondergegaan" (not "heeft").',
+          miniLesson: {
+            title: 'Auxiliary with Óndergaan (Sun Setting)',
+            content: 'Óndergaan (setting) is an intransitive state change and uses "zijn".',
+            example: {
+              wrong: 'De zon heeft al ondergegaan.',
+              right: 'De zon is al ondergegaan.'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 4. "Te" Placement in Infinitive Clauses
+  if (targetStructure === 'infinitive-te') {
+    // Inseparable verb with "te" erroneously inserted inside prefix
+    if (stressPattern === 'inseparable-stressed-stem') {
+      if (/\b(voor te komen|achter te halen|onder te gaan|over te leggen|door te lopen|door te breken)\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'For inseparable verbs, "te" is placed BEFORE the entire verb: "om een ramp te voorkomen", "om de oorzaak te achterhalen" (never inserted between prefix and stem).',
+          miniLesson: {
+            title: 'Te + Inseparable Verb (No Infixation)',
+            content: 'Inseparable verbs are treated as single atomic words. Place "te" directly in front of the verb (e.g. "te voorkomen", "te achterhalen").',
+            example: {
+              wrong: 'om de fout voor te komen',
+              right: 'om de fout te voorkomen'
+            }
+          }
+        }
+      }
+    }
+
+    // Separable verb with "te" outside prefix
+    if (stressPattern === 'separable-stressed-prefix') {
+      if (/\bom\s+te\s+(overleggen|voorkomen)\b/i.test(normalized)) {
+        return {
+          found: true,
+          message: 'For separable verbs, "te" is inserted BETWEEN the prefix and the stem: "over te leggen", "voor te komen".',
+          miniLesson: {
+            title: 'Te + Separable Verb (Infixation)',
+            content: 'Separable verbs split around "te": [voorvoegsel] + te + [stam] (e.g. "over te leggen", "voor te komen").',
+            example: {
+              wrong: 'verplicht om te overleggen',
+              right: 'verplicht om over te leggen'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkCorrelativeError(normalized: string) {
   // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
   if (normalized.includes('niet alleen')) {
@@ -2228,6 +2525,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'Not quite. Check the causal/consecutive connector and grammatical structure.',
           explanation: exercise.explanation || 'Combine the premise and consequence/purpose using the specified connector structure.'
+        }
+      }
+    }
+
+    // Separable vs. Inseparable Prefix Verb Drill Evaluation
+    if (exercise.kind === 'prefix-verb-drill' && exercise.prefixVerbData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const prefixError = checkPrefixVerbError(normalized, exercise.prefixVerbData)
+      if (prefixError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: prefixError.message,
+          miniLesson: prefixError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Remember: stressed prefixes (vóórkomen, óndergaan, óverleggen) split in main clauses and take "ge-" between prefix and stem, while unstressed prefixes (voorkómen, achterhálen, ondergáán, doorbréken) never split and do not take "ge-".'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Correct prefix verb conjugation, split behavior, and stress-semantics applied.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check whether the prefix should split, the participle form (with or without "ge-"), or "te" placement.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Verify whether this prefix verb is separable or inseparable in this context.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the prefix verb conjugation and split rules.',
+          explanation: exercise.explanation || 'Conjugate the prefix verb according to its stress pattern and target structure.'
         }
       }
     }
