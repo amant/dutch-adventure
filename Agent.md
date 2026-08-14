@@ -95,6 +95,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Formal Style & Nominalisation**: Training for B2+ learners to transform informal verbal sentences into professional, noun-based constructions (e.g., "De prijzen stijgen" -> "De stijging van de prijzen"), a key feature of academic and professional Dutch.
     - **Passive Voice Mastery**: Specialized training for B2 learners to master the passive voice (*lijdende vorm*), focusing on the distinction between process (*worden*) and result (*zijn*), and the unique Dutch impersonal "Er-passive" construction.
     - **Hypotheticals & Unreal Conditions**: Practice expressing wishes, regrets, and hypothetical present and past scenarios using *had, was, zou* and *zou zijn/hebben*, a key B2 strategic and linguistic capability.
+    - **Reported Speech & Indirect Discourse**: Training for B2 learners to accurately report statements, questions, and instructions from meetings or conversations using *dat*, *of*, and correct subclause word order.
 
 ## 5. Information Architecture
 
@@ -143,6 +144,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `PronominalDrill.vue`: Interactive tool for merging prepositions and reference words to master pronominal adverbs.
     - `NominalisationDrill.vue`: Specialized component for transforming verbal sentences into formal noun-based constructions.
     - `PassiveDrill.vue`: Interactive tool for active-to-passive transformations, focusing on process, result, and impersonal constructions.
+    - `ReportedSpeechDrill.vue`: Interactive tool for direct-to-indirect speech transformations, focusing on statement embedding, indirect questions, and subclause verb order.
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.

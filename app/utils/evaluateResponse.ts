@@ -171,6 +171,30 @@ function checkConditionalError(normalized: string) {
   return { found: false }
 }
 
+function checkIndirectQuestionError(normalized: string) {
+  const phrases = [
+    'vroeg als', 'vroegen als', 'vraagt als', 'vragen als',
+    'wilde weten als', 'wil weten als', 'benieuwd als', 'onzeker als'
+  ]
+  const foundPhrase = phrases.find(p => normalized.includes(p))
+  if (foundPhrase) {
+    const verb = foundPhrase.split(' ')[0]
+    return {
+      found: true,
+      message: `In Dutch, indirect questions use 'of' (if/whether), not 'als'.`,
+      miniLesson: {
+        title: 'Indirect Questions (Of vs Als)',
+        content: 'When reporting a yes/no question (e.g. "He asked if..."), Dutch always uses "of". "Als" is only used for conditional clauses (if/when something happens).',
+        example: {
+          wrong: `${verb} als ik kwam`,
+          right: `${verb} of ik kwam`
+        }
+      }
+    }
+  }
+  return { found: false }
+}
+
 function checkSubordinateClauseError(normalized: string, conjunction: string) {
   const words = normalized.split(' ')
   const index = words.indexOf(conjunction)
@@ -872,6 +896,71 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Reported Speech Drill Evaluation
+    if (exercise.kind === 'reported-speech-drill' && exercise.reportedSpeechData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+      
+      const indirectQuestionErr = checkIndirectQuestionError(normalized)
+      if (indirectQuestionErr.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: indirectQuestionErr.message,
+          miniLesson: indirectQuestionErr.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Remember to use "of" instead of "als" when embedding a yes/no question.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Excellent reporting! Your conjunction, pronoun shift, and subclause word order are spotless.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      // Check for SVO inside dat/of clause (verbs not at the end)
+      const subclauseErrDat = checkSubordinateClauseError(normalized, 'dat')
+      const subclauseErrOf = checkSubordinateClauseError(normalized, 'of')
+      if (subclauseErrDat.found || subclauseErrOf.found) {
+        const err = subclauseErrDat.found ? subclauseErrDat : subclauseErrOf
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'In reported speech, all verbs must go to the end of the embedded subclause.',
+          explanation: err.message,
+          miniLesson: err.miniLesson
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Notice the exact word order or pronoun in the target reporting.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Make sure the verbs are placed together at the end of the clause.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check how the quote transforms into an indirect clause.',
+          explanation: exercise.explanation || 'Start with the reporting clause, use "dat" or "of", and move verbs to the end.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -907,6 +996,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: conditionalError.message,
         miniLesson: conditionalError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Indirect Question Check (of vs als)
+    const indirectQuestionError = checkIndirectQuestionError(normalized)
+    if (indirectQuestionError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: indirectQuestionError.message,
+        miniLesson: indirectQuestionError.miniLesson
       }
     }
 

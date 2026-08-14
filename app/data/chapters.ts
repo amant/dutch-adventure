@@ -2901,7 +2901,134 @@ export const hypotheticalChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter]
+export const reportedSpeechChapter: Chapter = {
+  slug: 'indirecte-rede',
+  level: 'B2',
+  title: "Reported Speech & Indirect Discourse",
+  capability: "Accurately report what colleagues, clients, or news sources stated or asked.",
+  description: "Master indirect speech (indirecte rede) in Dutch: embedding statements with 'dat', yes/no questions with 'of', and moving verbs to the end of the clause.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Direct vs Indirect', kind: 'discover',
+      intro: "When reporting someone else's words in Dutch, the sentence transforms into a subclause.",
+      exercises: [
+        {
+          id: 'rep-ind-1', kind: 'induction', prompt: 'Notice the word order',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Direct', answer: 'De manager zegt: "Ik heb nu geen tijd."' },
+              { prompt: 'Indirect', answer: 'De manager zegt dat hij nu geen tijd heeft.' }
+            ],
+            ruleChallenge: 'What happens to the verb "heeft" when transformed into reported speech with "dat"?',
+            options: [
+              { text: 'It moves to the end of the subclause', isCorrect: true },
+              { text: 'It stays in second position', isCorrect: false },
+              { text: 'It turns into an infinitive', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Interpreting Reports', kind: 'understand',
+      intro: "Look at how indirect questions and statements communicate nuance in professional settings.",
+      exercises: [
+        {
+          id: 'rep-inf-1', kind: 'inference-challenge', prompt: 'What is the client requesting?',
+          context: 'De klant vroeg of we de deadline eventueel met twee dagen konden verschuiven.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'In an email, a team lead writes: "De klant vroeg of we de deadline eventueel met twee dagen konden verschuiven."',
+            options: [
+              { text: 'The client is exploring the possibility of a two-day extension.', isCorrect: true, explanation: 'Correct. "Vroeg of... eventueel konden" is a polite indirect question.' },
+              { text: 'The client definitely canceled the deadline.', isCorrect: false, explanation: 'Incorrect. They are only asking if it can be postponed.' },
+              { text: 'The client demanded an immediate delivery.', isCorrect: false, explanation: 'Incorrect. "Vroeg of" reports a question, not a demand.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Reporting Statements & Questions', kind: 'transform',
+      intro: "Transform these direct statements and questions into professional reported speech.",
+      exercises: [
+        {
+          id: 'rep-d-1', kind: 'reported-speech-drill', prompt: 'Report the statement to your team',
+          skills: ['production', 'grammar'],
+          reportedSpeechData: {
+            directQuote: 'Het project loopt volgens schema.',
+            speaker: 'De directeur',
+            reportingClause: 'De directeur liet weten dat...',
+            quoteType: 'statement',
+            hint: 'Verbs move to the end after "dat".'
+          },
+          target: 'De directeur liet weten dat het project volgens schema loopt',
+          acceptedAnswers: [
+            'De directeur liet weten dat het project volgens schema liep',
+            'dat het project volgens schema loopt',
+            'dat het project volgens schema liep'
+          ],
+          explanation: 'In indirect speech with "dat", the conjugated verb "loopt" moves to the end of the clause.'
+        },
+        {
+          id: 'rep-d-2', kind: 'reported-speech-drill', prompt: 'Report the question asked during the meeting',
+          skills: ['production', 'grammar'],
+          reportedSpeechData: {
+            directQuote: 'Is er al een besluit genomen?',
+            speaker: 'De klant',
+            reportingClause: 'De klant vroeg...',
+            quoteType: 'question',
+            hint: 'Use "of" for yes/no questions, not "als".'
+          },
+          target: 'De klant vroeg of er al een besluit genomen is',
+          acceptedAnswers: [
+            'De klant vroeg of er al een besluit is genomen',
+            'De klant vroeg of er al een besluit genomen was',
+            'De klant vroeg of er al een besluit was genomen',
+            'of er al een besluit genomen is',
+            'of er al een besluit is genomen'
+          ],
+          explanation: 'For yes/no questions, use "of" and place all verbs ("genomen is" / "is genomen") at the end.'
+        },
+        {
+          id: 'rep-d-3', kind: 'reported-speech-drill', prompt: 'Report what the client wants to know',
+          skills: ['production', 'grammar'],
+          reportedSpeechData: {
+            directQuote: 'Wanneer kunnen we de offerte verwachten?',
+            speaker: 'De opdrachtgever',
+            reportingClause: 'De opdrachtgever vraagt...',
+            quoteType: 'question',
+            hint: 'Keep the question word "wanneer" as the conjunction.'
+          },
+          target: 'De opdrachtgever vraagt wanneer ze de offerte kunnen verwachten',
+          acceptedAnswers: [
+            'De opdrachtgever vraagt wanneer we de offerte kunnen verwachten',
+            'De opdrachtgever vraagt wanneer zij de offerte kunnen verwachten',
+            'wanneer ze de offerte kunnen verwachten',
+            'wanneer we de offerte kunnen verwachten'
+          ],
+          explanation: 'When reporting a question with a question word ("wanneer"), the question word introduces the subclause and verbs go to the end.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Meeting Summary', kind: 'personalise',
+      intro: "Report something a colleague or manager said in a recent meeting or chat.",
+      exercises: [
+        {
+          id: 'rep-p-1', kind: 'personalise', prompt: 'Wat heeft een collega of vriend onlangs tegen je gezegd? Rapporteer het met "Hij/Zij zei dat..." of "Hij/Zij vroeg of...".',
+          skills: ['production', 'speaking', 'pragmatic'],
+          vocabulary: ['beweren', 'aangeven', 'vragen', 'vertellen'],
+          grammar: ['indirecte-rede']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

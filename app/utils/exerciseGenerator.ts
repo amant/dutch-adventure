@@ -42,6 +42,10 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
   'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
+  'indirecte-rede': { prompt: 'He said that he was coming.', target: 'Hij zei dat hij kwam.', explanation: 'In indirect speech with "dat", the verb moves to the end.' },
+  'beweren': { prompt: 'They claim that it is true.', target: 'Ze beweren dat het waar is.', explanation: 'Beweren means to claim or assert.' },
+  'aangeven': { prompt: 'She indicated that she agreed.', target: 'Zij gaf aan dat ze het ermee eens was.', explanation: 'Aangeven means to indicate or state.' },
+  'vragen of': { prompt: 'He asked whether we were ready.', target: 'Hij vroeg of we klaar waren.', explanation: 'Use "of" for indirect questions.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -60,6 +64,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'pronominal-drill') skills.push('production', 'grammar')
   if (kind === 'nominalisation-drill') skills.push('production', 'grammar')
   if (kind === 'passive-drill') skills.push('production', 'grammar')
+  if (kind === 'reported-speech-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -131,6 +136,25 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       passiveData: {
         activeSentence: `Men ${key} het project.`,
         focus: 'process'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'reported-speech-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      reportedSpeechData: {
+        directQuote: `Ik zal ${key}.`,
+        speaker: 'De collega',
+        reportingClause: 'De collega zei dat...',
+        quoteType: 'statement'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
