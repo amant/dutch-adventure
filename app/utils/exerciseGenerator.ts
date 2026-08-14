@@ -72,6 +72,12 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'gelet op': { prompt: 'Considering the recent developments.', target: 'Gelet op de recente ontwikkelingen.', explanation: '"Gelet op" is a formal concise participial clause.' },
   'al doende': { prompt: 'Practice makes perfect (while doing one learns).', target: 'Al doende leert men.', explanation: '"Al doende" expresses learning through hands-on practice.' },
   'toenemend': { prompt: 'The increasing costs.', target: 'De toenemende kosten.', explanation: 'Present participle inflected with "-e".' },
+  'correlatieve-voegwoorden': { prompt: 'Both the team and the management agree.', target: 'Zowel het team als de directie is akkoord.', explanation: 'Use "zowel ... als ..." for parallel coordination.' },
+  'zowel als': { prompt: 'Both the plan and the budget are approved.', target: 'Zowel het plan als het budget is goedgekeurd.', explanation: 'Use "zowel ... als ..." for parallel elements.' },
+  'niet alleen maar ook': { prompt: 'Not only are costs rising, but revenue is also dropping.', target: 'Niet alleen stijgen de kosten, maar ook de omzet daalt.', explanation: 'Fronting "niet alleen" triggers inversion, paired with "maar ook".' },
+  'noch noch': { prompt: 'Neither the manager nor the advisors knew about it.', target: 'Noch de manager, noch de adviseurs wisten ervan.', explanation: 'Noch ... noch carries negative meaning without extra "niet".' },
+  'enerzijds anderzijds': { prompt: 'On the one hand it brings opportunities, on the other hand risks.', target: 'Enerzijds biedt het kansen, anderzijds brengt het risico\'s met zich mee.', explanation: 'Enerzijds and anderzijds trigger subject-verb inversion.' },
+  'hoe des te': { prompt: 'The sooner we start, the faster we finish.', target: 'Hoe eerder we beginnen, des te sneller zijn we klaar.', explanation: 'Use "hoe + [comp], des te + [comp]" for proportional comparison.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -96,6 +102,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'double-infinitive-drill') skills.push('production', 'grammar')
   if (kind === 'concession-drill') skills.push('production', 'grammar')
   if (kind === 'participial-drill') skills.push('production', 'grammar')
+  if (kind === 'correlative-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -286,6 +293,27 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         participleCue: key,
         structureFormula: 'Deelwoordconstructie met correcte verbuiging en positie',
         hint: 'Use the concise participial form.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'correlative-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      correlativeData: {
+        pairType: key.includes('niet alleen') ? 'niet-alleen-maar-ook' : key.includes('noch') ? 'noch-noch' : key.includes('enerzijds') ? 'enerzijds-anderzijds' : key.includes('hoe') ? 'hoe-des-te' : 'zowel-als',
+        premiseA: `Eerste aspect van ${key}.`,
+        premiseB: `Tweede aspect van ${key}.`,
+        pairCue: key,
+        structureFormula: 'Correlatieve balansstructuur met parallelle woordvolgorde',
+        hint: 'Balance both parts using the correlative pair.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

@@ -3879,7 +3879,201 @@ export const participialChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter]
+export const correlativeChapter: Chapter = {
+  slug: 'correlatieve-voegwoorden-balans',
+  level: 'B2',
+  title: 'Correlative Connectors & Balanced Structures',
+  capability: "Formulate sophisticated, balanced Dutch sentences using correlative conjunction pairs and parallel syntax (zowel... als, niet alleen... maar ook, noch... noch, hetzij... hetzij, enerzijds... anderzijds, hoe... des te).",
+  description: "Master the 6 core correlative balance patterns in B2 Dutch: cumulative addition ('zowel... als'), emphatic additive focus ('niet alleen... maar ook'), negative coordination ('noch... noch'), formal disjunctive choice ('hetzij... hetzij'), balanced contrast with inversion ('enerzijds... anderzijds'), and proportional comparative clauses ('hoe... des te').",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Architecture of Correlative Balance', kind: 'discover',
+      intro: "Explore how Dutch pairs correlative conjunctions to structure nuanced arguments, emphasize parallel ideas, and balance contrasting perspectives.",
+      exercises: [
+        {
+          id: 'corr-ind-1', kind: 'induction', prompt: 'Compare the different correlative conjunction pairs in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Cumulative parallel coordination (Both ... and ...)', answer: 'Zowel het team als de directie steunt het voorstel.' },
+              { prompt: 'Emphatic additive focus (Not only ... but also ...)', answer: 'Niet alleen dalen de kosten, maar ook de kwaliteit verbetert aanzienlijk.' },
+              { prompt: 'Negative coordination (Neither ... nor ...)', answer: 'Noch de manager, noch de adviseurs hadden dit scenario voorzien.' },
+              { prompt: 'Formal binary choice (Either ... or ...)', answer: 'We lossen dit op, hetzij via bemiddeling, hetzij via een juridische procedure.' },
+              { prompt: 'Contrastive balance with inversion (On the one hand ... on the other hand ...)', answer: 'Enerzijds begrijp ik uw bezwaar, anderzijds moeten we ons aan de deadlines houden.' },
+              { prompt: 'Proportional comparison (The more ... the better ...)', answer: 'Hoe eerder we beginnen, des te sneller boeken we resultaat.' }
+            ],
+            ruleChallenge: 'What is a key syntactic rule when using correlative conjunctions like "niet alleen ... maar ook" and "enerzijds ... anderzijds" in Dutch?',
+            options: [
+              { text: 'They require parallel syntactic structures, and when adverbs like "enerzijds/anderzijds" or "niet alleen" front a clause, they trigger subject-verb inversion in that clause.', isCorrect: true },
+              { text: 'All correlative conjunctions push the verb to the absolute end of the sentence like "omdat".', isCorrect: false },
+              { text: '"Noch ... noch" must always be accompanied by "niet" or "geen".', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Correlative Precision in Strategic Discourse', kind: 'understand',
+      intro: "Examine how native Dutch professionals use correlatives to maintain objective balance, present trade-offs, and elevate communicative register.",
+      exercises: [
+        {
+          id: 'corr-inf-1', kind: 'inference-challenge', prompt: 'Analyze the tone and communicative intent of the correlative statement',
+          skills: ['reading', 'pragmatic'],
+          inferenceData: {
+            text: 'Tijdens de aandeelhoudersvergadering verklaarde de CFO: "Enerzijds biedt de overname van de buitenlandse concurrent ons directe toegang tot nieuwe groeimarkten, maar anderzijds brengt de integratie aanzienlijke operationele en culturele risico\'s met zich mee. We moeten derhalve niet alleen scherp sturen op kostenbesparing, maar ook de medewerkerstevredenheid nauwlettend monitoren."',
+            question: 'How does the speaker frame the strategic situation through correlative markers?',
+            options: [
+              { text: 'The speaker constructs a balanced, mature risk-reward analysis using "enerzijds... anderzijds" for nuance and "niet alleen... maar ook" to mandate dual focus on both finances and people.', isCorrect: true, feedback: 'Uitstekend! Correlatives allow leaders to weigh trade-offs and enforce multidimensional priorities simultaneously.' },
+              { text: 'The speaker rejects the acquisition outright because the risks outweigh any possible market gain.', isCorrect: false, feedback: '"Enerzijds... anderzijds" acknowledges the valid positive opportunities while noting risks.' },
+              { text: 'The speaker is strictly concerned with cost-cutting and ignores internal staff relations.', isCorrect: false, feedback: 'The phrase "niet alleen... maar ook" explicitly elevates employee satisfaction to an equal priority.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Correlative Fusion & Production Drills', kind: 'transform',
+      intro: "Combine separate statements into tightly structured, balanced Dutch correlative sentences.",
+      exercises: [
+        {
+          id: 'corr-d-1', kind: 'correlative-drill', prompt: 'Parallel Coordination: Zowel ... als ...',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'zowel-als',
+            premiseA: 'Het verhogen van de operationele productiviteit is een prioriteit voor de organisatie.',
+            premiseB: 'Het waarborgen van het welzijn van de medewerkers is eveneens een prioriteit.',
+            pairCue: 'zowel ... als ...',
+            structureFormula: 'Zowel [element A] als [element B] + [persoonsvorm + rest]',
+            hint: 'Combine into: "Zowel de productiviteit verhogen als het welzijn waarborgen..." or "Zowel de productiviteit als het welzijn..."'
+          },
+          target: 'Zowel de productiviteit als het welzijn van de medewerkers staat hoog op de agenda',
+          acceptedAnswers: [
+            'Zowel de productiviteit als het welzijn van de medewerkers staat hoog op de agenda',
+            'Zowel de productiviteit als het welzijn van de medewerkers is een prioriteit',
+            'Zowel de operationele productiviteit als het welzijn van de medewerkers is een prioriteit voor de organisatie',
+            'Zowel het verhogen van de productiviteit als het waarborgen van het welzijn is een prioriteit'
+          ],
+          explanation: '"Zowel ... als ..." coordinates two parallel elements cleanly without repeating redundant phrasing.'
+        },
+        {
+          id: 'corr-d-2', kind: 'correlative-drill', prompt: 'Emphatic Additive Focus: Niet alleen ... maar ook ...',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'niet-alleen-maar-ook',
+            premiseA: 'De operationele kosten stijgen de laatste kwartalen alarmerend snel.',
+            premiseB: 'De totale omzet blijft daarnaast ook ver achter bij de prognose.',
+            pairCue: 'niet alleen ... maar ook ...',
+            structureFormula: 'Niet alleen + [persoonsvorm + onderwerp], maar ook + [onderwerp + persoonsvorm / rest]',
+            hint: 'Start with fronted inversion: "Niet alleen stijgen de operationele kosten snel, maar ook de omzet blijft achter."'
+          },
+          target: 'Niet alleen stijgen de operationele kosten snel, maar ook de omzet blijft achter',
+          acceptedAnswers: [
+            'Niet alleen stijgen de operationele kosten snel, maar ook de omzet blijft achter',
+            'Niet alleen stijgen de operationele kosten, maar ook de omzet blijft achter bij de prognose',
+            'Niet alleen stijgen de kosten, maar ook de omzet blijft achter',
+            'Niet alleen stijgen de operationele kosten, maar ook de omzet daalt'
+          ],
+          explanation: 'Fronting "Niet alleen" causes subject-verb inversion ("stijgen de kosten"), paired with "maar ook" in the second clause.'
+        },
+        {
+          id: 'corr-d-3', kind: 'correlative-drill', prompt: 'Negative Coordination: Noch ... noch ... (No double negation)',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'noch-noch',
+            premiseA: 'De afdelingsmanager was niet op de hoogte van de plotselinge beleidswijziging.',
+            premiseB: 'De overige directieleden waren evenmin op de hoogte van de wijziging.',
+            pairCue: 'noch ... noch ...',
+            structureFormula: 'Noch [element A], noch [element B] + [persoonsvorm + rest] (geen niet/geen!)',
+            hint: 'Start with "Noch de afdelingsmanager, noch de directieleden waren op de hoogte van de beleidswijziging."'
+          },
+          target: 'Noch de afdelingsmanager, noch de directieleden waren op de hoogte van de beleidswijziging',
+          acceptedAnswers: [
+            'Noch de afdelingsmanager, noch de directieleden waren op de hoogte van de beleidswijziging',
+            'Noch de manager, noch de directieleden waren op de hoogte van de beleidswijziging',
+            'Noch de afdelingsmanager, noch de directieleden was op de hoogte van de beleidswijziging',
+            'Noch de manager, noch de directie was op de hoogte van de wijziging'
+          ],
+          explanation: '"Noch ... noch ..." coordinates two negative premises without adding extraneous negative words ("niet", "geen").'
+        },
+        {
+          id: 'corr-d-4', kind: 'correlative-drill', prompt: 'Formal Binary Alternatives: Hetzij ... hetzij ...',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'hetzij-hetzij',
+            premiseA: 'We kunnen het contract aanpassen via een formeel schriftelijk addendum.',
+            premiseB: 'Als alternatief kunnen we een geheel nieuw raamcontract opstellen.',
+            pairCue: 'hetzij ... hetzij ...',
+            structureFormula: '[Hoofdzin], hetzij [optie A], hetzij [optie B]',
+            hint: 'Combine into: "We passen het contract aan, hetzij via een addendum, hetzij via een nieuw raamcontract."'
+          },
+          target: 'We passen het contract aan, hetzij via een addendum, hetzij via een nieuw raamcontract',
+          acceptedAnswers: [
+            'We passen het contract aan, hetzij via een addendum, hetzij via een nieuw raamcontract',
+            'We passen het contract aan, hetzij via een schriftelijk addendum, hetzij via een nieuw contract',
+            'We kunnen het contract aanpassen, hetzij via een addendum, hetzij via een nieuw raamcontract',
+            'Het contract wordt aangepast, hetzij via een addendum, hetzij via een nieuw raamcontract'
+          ],
+          explanation: '"Hetzij ... hetzij ..." is a formal B2 disjunctive correlative formula that presents clear, balanced alternatives.'
+        },
+        {
+          id: 'corr-d-5', kind: 'correlative-drill', prompt: 'Balanced Contrast with Inversion: Enerzijds ... anderzijds ...',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'enerzijds-anderzijds',
+            premiseA: 'Artificiële intelligentie biedt ongekende kansen voor efficiëntie en procesoptimalisatie.',
+            premiseB: 'AI brengt tegelijkertijd aanzienlijke privacy- en beveiligingsrisico\'s met zich mee.',
+            pairCue: 'enerzijds ... anderzijds ...',
+            structureFormula: 'Enerzijds [inversie], anderzijds [inversie]',
+            hint: 'Use inversion in both clauses: "Enerzijds biedt AI grote kansen, anderzijds brengt het serieuze risico\'s met zich mee."'
+          },
+          target: 'Enerzijds biedt AI grote kansen, anderzijds brengt het serieuze risico\'s met zich mee',
+          acceptedAnswers: [
+            'Enerzijds biedt AI grote kansen, anderzijds brengt het serieuze risico\'s met zich mee',
+            'Enerzijds biedt kunstmatige intelligentie grote kansen, anderzijds brengt het serieuze risicos met zich mee',
+            'Enerzijds biedt AI kansen voor efficiëntie, anderzijds brengt het aanzienlijke risico\'s met zich mee',
+            'Enerzijds biedt AI ongekende kansen, anderzijds brengt het grote risico\'s met zich mee'
+          ],
+          explanation: '"Enerzijds" and "anderzijds" front the respective clauses, triggering subject-verb inversion ("biedt AI", "brengt het").'
+        },
+        {
+          id: 'corr-d-6', kind: 'correlative-drill', prompt: 'Proportional Comparison: Hoe ... des te / hoe ...',
+          skills: ['production', 'grammar'],
+          correlativeData: {
+            pairType: 'hoe-des-te',
+            premiseA: 'We bereiden het projectvoorstel grondig voor (in toenemende mate).',
+            premiseB: 'De kans op definitieve goedkeuring door het bestuur wordt groter.',
+            pairCue: 'hoe ... des te ...',
+            structureFormula: 'Hoe + [comparatief] + [bijzin SOV], des te + [comparatief] + [persoonsvorm + onderwerp + rest]',
+            hint: 'Formulate: "Hoe grondiger we het voorstel voorbereiden, des te groter de kans op goedkeuring is."'
+          },
+          target: 'Hoe grondiger we het voorstel voorbereiden, des te groter de kans op goedkeuring is',
+          acceptedAnswers: [
+            'Hoe grondiger we het voorstel voorbereiden, des te groter de kans op goedkeuring is',
+            'Hoe grondiger we het voorstel voorbereiden, des te groter is de kans op goedkeuring',
+            'Hoe grondiger we het projectvoorstel voorbereiden, des te groter de kans op goedkeuring is',
+            'Hoe beter we het voorstel voorbereiden, des te groter de kans op goedkeuring is'
+          ],
+          explanation: '"Hoe [comparative] [subclause], des te [comparative] [main clause]" models proportional correlation with precision.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Balanced Discourse Synthesis', kind: 'personalise',
+      intro: "Formulate a balanced professional opinion or strategic evaluation from your own work or academic experience using correlatives.",
+      exercises: [
+        {
+          id: 'corr-p-1', kind: 'personalise', prompt: 'Formuleer een afgewogen standpunt over een actueel dilemma of verandering in jouw vakgebied met behulp van een correlatief paar (bijv. "enerzijds... anderzijds...", "niet alleen... maar ook...", "zowel... als...", of "hoe... des te...").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['enerzijds', 'anderzijds', 'zowel', 'als', 'niet alleen', 'maar ook', 'des te', 'ontwikkelingen', 'kansen', 'risico\'s'],
+          grammar: ['correlatieve-voegwoorden', 'balansstructuren', 'inversie']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

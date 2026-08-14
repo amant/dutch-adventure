@@ -537,6 +537,106 @@ function checkParticipialError(normalized: string) {
   return { found: false }
 }
 
+function checkCorrelativeError(normalized: string) {
+  // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
+  if (normalized.includes('niet alleen')) {
+    if (!normalized.includes('maar ook') && !normalized.includes('maar tevens') && !normalized.includes('maar eveneens')) {
+      return {
+        found: true,
+        message: 'The correlative construction is "niet alleen ... maar ook ..." (not only ... but also ...). Don\'t forget "ook" in the second clause.',
+        miniLesson: {
+          title: 'Correlative Focus: Niet Alleen ... Maar Ook',
+          content: 'In Dutch, "niet alleen" must pair with "maar ook" to form a complete additive correlative structure.',
+          example: {
+            wrong: 'niet alleen de kosten stijgen, maar de kwaliteit daalt',
+            right: 'niet alleen stijgen de kosten, maar ook de kwaliteit daalt'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 2: "noch ... noch" double negation (e.g. "noch niet", "noch ... niet", "noch ... geen")
+  if (normalized.includes('noch')) {
+    const doubleNegationRegex = /\b(niet|geen|geeneens|nooit|niks)\b/i
+    if (doubleNegationRegex.test(normalized)) {
+      return {
+        found: true,
+        message: '"Noch ... noch ..." already carries negative meaning ("neither ... nor ..."). Do not add extra negation words like "niet" or "geen" to a noch-construction.',
+        miniLesson: {
+          title: 'Negative Correlative: Noch ... Noch (No Double Negation)',
+          content: '"Noch ... noch ..." translates to "neither ... nor ...". Because "noch" is inherently negative, adding "niet" or "geen" produces an ungrammatical double negation in Dutch.',
+          example: {
+            wrong: 'noch de manager niet, noch de directie was aanwezig',
+            right: 'noch de manager, noch de directie was aanwezig'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 3: "zowel ... en ..." (Anglicism from "both ... and ...") instead of "zowel ... als ..."
+  if (normalized.includes('zowel') && !normalized.includes('als')) {
+    return {
+      found: true,
+      message: 'In Dutch, the correlative pair is "zowel ... als ..." (not "zowel ... en ...").',
+      miniLesson: {
+        title: 'Parallel Coordination: Zowel ... Als',
+        content: 'Unlike English "both ... and ...", Dutch strictly requires "zowel ... als ..." for parallel coordination.',
+        example: {
+          wrong: 'zowel het team en de directie',
+          right: 'zowel het team als de directie'
+        }
+      }
+    }
+  }
+
+  // Check 4: Proportional comparison "hoe ... des te / hoe ..." missing comparative or des te/hoe
+  if (normalized.startsWith('hoe ') || normalized.includes(' hoe ')) {
+    const hasDesTe = normalized.includes('des te') || normalized.includes('deste')
+    const hasSecondHoe = (normalized.match(/\bhoe\b/g) || []).length >= 2
+    if (!hasDesTe && !hasSecondHoe) {
+      const comparativeIndicators = /\b(meer|minder|langer|korter|sneller|beter|hoger|lager|vroeger|later|harder|sterker|groter|kleiner)\b/
+      if (comparativeIndicators.test(normalized)) {
+        return {
+          found: true,
+          message: 'In proportional comparisons starting with "hoe ...", pair it with "des te ..." or a second "hoe ..." in the main clause (e.g. "Hoe meer we oefenen, des te beter we spreken").',
+          miniLesson: {
+            title: 'Proportional Comparison: Hoe ... Des te / Hoe ...',
+            content: 'Proportional comparison expresses an increasing correlation using "Hoe + [comparative] + [subclause], des te / hoe + [comparative] + [verb + subject]".',
+            example: {
+              wrong: 'Hoe meer we oefenen, we spreken beter',
+              right: 'Hoe meer we oefenen, des te beter we spreken'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Check 5: "enerzijds ... anderzijds" missing inversion in the second clause
+  const anderzijdsNoInversion = /\banderzijds\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\s+([a-z]+)\b/i
+  const matchAnderzijds = normalized.match(anderzijdsNoInversion)
+  if (matchAnderzijds) {
+    const subject = matchAnderzijds[1]
+    const nextWord = matchAnderzijds[2]
+    return {
+      found: true,
+      message: `When 'anderzijds' (or 'enerzijds') begins a clause, it occupies the first position and triggers subject-verb inversion (e.g. 'Anderzijds moeten we...', NOT 'Anderzijds we moeten...').`,
+      miniLesson: {
+        title: 'Contrastive Adverbs: Inversion after "Anderzijds"',
+        content: '"Enerzijds" and "anderzijds" are adverbs. When placed at the start of a clause, standard Dutch word order requires subject-verb inversion (V1 + S).',
+        example: {
+          wrong: `anderzijds ${subject} ${nextWord}`,
+          right: `anderzijds ${nextWord} ${subject}`
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkInfinitiveClauseError(normalized: string) {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
   const separableVerbs: { full: string, prefix: string, stem: string }[] = [
@@ -1676,6 +1776,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Correlative Drill Evaluation
+    if (exercise.kind === 'correlative-drill' && exercise.correlativeData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const correlativeError = checkCorrelativeError(normalized)
+      if (correlativeError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: correlativeError.message,
+          miniLesson: correlativeError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Correlative structures (zowel... als, niet alleen... maar ook, noch... noch, hetzij... hetzij, enerzijds... anderzijds, hoe... des te) require balanced partners and accurate word order.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your correlative sentence is perfectly balanced and grammatically flawless.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the correlative partner, comma placement, or clause word order.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure both parts of the correlative frame are correctly balanced and placed.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the correlative frame and grammatical structure.',
+          explanation: exercise.explanation || 'Combine both premises using the required correlative conjunction pair.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1777,6 +1928,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: participialError.message,
         miniLesson: participialError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Correlative Connectors Check
+    const correlativeError = checkCorrelativeError(normalized)
+    if (correlativeError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: correlativeError.message,
+        miniLesson: correlativeError.miniLesson
       }
     }
 

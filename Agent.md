@@ -101,6 +101,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Verb Clusters & Double Infinitive (IPP)**: Training for B2 learners to master the Infinitivus Pro Participio rule across modals (*moeten, kunnen, willen*), causative *laten*, perception verbs (*zien, horen*), and instruction/help verbs (*leren, helpen*), maintaining precise verb cluster order in main clauses and subclauses.
     - **Concessive Clauses & Contrast Mastery**: Training for B2 learners to formulate nuanced concessions and contrasts across subordinating conjunctions (*hoewel, ondanks dat*), prepositional noun phrases (*ondanks*), verb-first inversion (*al*), correlative frames (*hoe... ook*), and balanced coordination (*weliswaar... maar*).
     - **Participial Constructions & Gerundive Mastery**: Training for B2 learners to formulate concise, high-level sentences using modal gerundives (*de te nemen maatregelen*, *de op te lossen problemen*), inflected attributive participles (*de toenemende druk*, *het goedgekeurde beleid*), progressive simultaneous actions (*al doende*, *al wandelend*), and concise formal clauses (*gelet op*, *gezien*).
+    - **Correlative Connectors & Balanced Discourse**: Training for B2 learners to master parallel correlative structures (*zowel... als*, *niet alleen... maar ook*, *noch... noch*, *hetzij... hetzij*, *enerzijds... anderzijds*, *hoe... des te*), ensuring syntactic parallelism and accurate verb placement.
 
 ## 5. Information Architecture
 
@@ -155,6 +156,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - `DoubleInfinitiveDrill.vue`: Interactive tool for mastering verb clusters and the double infinitive rule (IPP), focusing on modals (moeten doen), causative laten (laten repareren), perception (horen aankomen), and instruction (leren programmeren).
     - `ConcessionDrill.vue`: Interactive tool for mastering concessive clauses and contrast, focusing on hoewel, ondanks (dat), verb-first al inversion, correlative hoe... ook, and weliswaar... maar.
     - `ParticipialDrill.vue`: Interactive tool for mastering Dutch participial constructions and gerundives, focusing on modal gerundives (de te nemen maatregelen, de op te lossen problemen), inflected attributive participles (de toenemende kosten, het gewijzigde beleid), simultaneous al (al doende, al wandelend), and concise formal clauses (gelet op, gezien).
+    - `CorrelativeDrill.vue`: Interactive tool for mastering Dutch correlative conjunctions and balanced discourse (zowel... als, niet alleen... maar ook, noch... noch, hetzij... hetzij, enerzijds... anderzijds, hoe... des te).
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.
