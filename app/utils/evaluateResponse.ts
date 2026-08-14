@@ -537,6 +537,309 @@ function checkParticipialError(normalized: string) {
   return { found: false }
 }
 
+function checkConditionalRestrictiveError(normalized: string, conditionType?: string) {
+  // Check 1: "mits" vs "tenzij" confusion
+  if (conditionType === 'mits' && normalized.includes('tenzij')) {
+    return {
+      found: true,
+      message: 'In this context, use "mits" (on condition that / provided that), not "tenzij" (unless / except if).',
+      miniLesson: {
+        title: 'Mits vs Tenzij (Condition vs Exception)',
+        content: '"Mits" introduces a necessary condition that MUST be met ("alleen als" / provided that). "Tenzij" introduces an exception ("behalve als" / unless).',
+        example: {
+          wrong: 'We gaan akkoord, tenzij de kosten binnen budget blijven.',
+          right: 'We gaan akkoord, mits de kosten binnen het budget blijven.'
+        }
+      }
+    }
+  }
+
+  if (conditionType === 'tenzij' && normalized.includes('mits')) {
+    return {
+      found: true,
+      message: 'In this context, use "tenzij" (unless / except if), not "mits" (provided that / only if).',
+      miniLesson: {
+        title: 'Tenzij vs Mits (Exception vs Condition)',
+        content: '"Tenzij" expresses an exception ("behalve als" / unless). "Mits" means provided that ("alleen als").',
+        example: {
+          wrong: 'De vergadering gaat door, mits de voorzitter ziek is.',
+          right: 'De vergadering gaat door, tenzij de voorzitter ziek is.'
+        }
+      }
+    }
+  }
+
+  // Check 2: "op voorwaarde" missing "dat"
+  const opVoorwaardeMissingDat = /\bop\s+voorwaarde\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit|[a-z]+)\b/i
+  if (opVoorwaardeMissingDat.test(normalized) && !normalized.includes('op voorwaarde dat')) {
+    return {
+      found: true,
+      message: 'The formal Dutch conjunction phrase requires "dat": "op voorwaarde dat...".',
+      miniLesson: {
+        title: 'Formal Condition: Op Voorwaarde Dat',
+        content: 'When connecting clauses in formal Dutch, use "op voorwaarde dat" followed by subclause verb-final word order.',
+        example: {
+          wrong: 'op voorwaarde we de targets halen',
+          right: 'op voorwaarde dat we de targets halen'
+        }
+      }
+    }
+  }
+
+  // Check 3: "gesteld" or "aangenomen" missing "dat"
+  const gesteldMissingDat = /\b(gesteld|aangenomen)\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\b/i
+  if (gesteldMissingDat.test(normalized) && !normalized.includes('gesteld dat') && !normalized.includes('aangenomen dat')) {
+    return {
+      found: true,
+      message: 'Hypothetical premise markers in formal Dutch require "dat": "gesteld dat..." or "aangenomen dat...".',
+      miniLesson: {
+        title: 'Hypothetical Premises: Gesteld Dat / Aangenomen Dat',
+        content: 'To introduce a formal hypothetical scenario (Suppose that...), Dutch uses "gesteld dat" or "aangenomen dat" with subclause verb-final word order.',
+        example: {
+          wrong: 'gesteld we verliezen de klant, moeten we bezuinigen',
+          right: 'gesteld dat we de klant verliezen, dan moeten we bezuinigen'
+        }
+      }
+    }
+  }
+
+  // Check 4: Redundant "als" + "mocht(en)"
+  if (normalized.includes('als') && (normalized.includes('mocht') || normalized.includes('mochten'))) {
+    return {
+      found: true,
+      message: '"Mocht(en)" already triggers an inverted conditional structure replacing "als". Do not combine "als" and "mocht".',
+      miniLesson: {
+        title: 'Mocht... (Conditional Inversion without "Als")',
+        content: 'In formal Dutch, fronting "Mocht(en) [onderwerp]..." functions as a conditional clause without needing "als".',
+        example: {
+          wrong: 'Als u nog vragen mocht hebben, bel ons dan.',
+          right: 'Mocht u nog vragen hebben, bel ons dan.'
+        }
+      }
+    }
+  }
+
+  // Check 5: "voor zover als" (Anglicism from "as far as")
+  if (normalized.includes('voor zover als')) {
+    return {
+      found: true,
+      message: 'In Dutch, say "voor zover" (not "voor zover als").',
+      miniLesson: {
+        title: 'Restrictive Clause: Voor Zover',
+        content: 'Avoid literal translations of English "as far as". Dutch uses "voor zover" with subclause verb-final word order.',
+        example: {
+          wrong: 'voor zover als ik het dossier ken',
+          right: 'voor zover ik het dossier ken'
+        }
+      }
+    }
+  }
+
+  // Check 6: "tenzij" double negation
+  if (normalized.includes('tenzij') && conditionType === 'tenzij') {
+    const tenzijDoubleNegation = /\btenzij\s+.*\b(niet|geen|nooit)\b/i
+    if (tenzijDoubleNegation.test(normalized)) {
+      return {
+        found: true,
+        message: '"Tenzij" already means "unless / except if" (behalve als). Adding "niet" or "geen" creates an unintended double negative.',
+        miniLesson: {
+          title: 'Tenzij: Avoid Double Negation',
+          content: 'Because "tenzij" already states a negative exception, adding "niet" reverses the meaning.',
+          example: {
+            wrong: 'De vergadering gaat door, tenzij er geen bezwaar is.',
+            right: 'De vergadering gaat door, tenzij er bezwaar is.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 7: Subclause word order after "mits" or "tenzij"
+  const subclauseVerbNonFinal = /\b(mits|tenzij|voor zover|op voorwaarde dat|gesteld dat)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|gaat|gaan)\s+(een|de|het|ons|onze|geen|veel|weinig|binnen|aan|in|op|voor|over|tegen|tot|direct|altijd|snel|nog)\b/i
+  if (subclauseVerbNonFinal.test(normalized)) {
+    return {
+      found: true,
+      message: 'Subordinating conjunctions like "mits", "tenzij", "op voorwaarde dat", and "voor zover" require all verbs at the end of the clause.',
+      miniLesson: {
+        title: 'Subclause Verb-Final Order in Conditionals',
+        content: 'Conditional and restrictive conjunctions introduce subordinate clauses (SOV). Place the finite verb at the very end.',
+        example: {
+          wrong: 'mits het budget blijft binnen de perken',
+          right: 'mits het budget binnen de perken blijft'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
+function checkCausalityError(normalized: string, relationType?: string) {
+  // Check 1: "doordat" vs "omdat" (Involuntary physical/external cause vs voluntary motivation/reason)
+  if (relationType === 'doordat-oorzaak') {
+    if (normalized.includes('omdat') || normalized.includes(' want ')) {
+      return {
+        found: true,
+        message: 'In formal and B2 Dutch, use "doordat" for involuntary causes, physical facts, or external events (not "omdat" or "want", which express human motivations or conscious reasons).',
+        miniLesson: {
+          title: 'Doordat vs Omdat (Oorzaak vs Reden)',
+          content: 'Use "doordat" when something happens due to an external cause or natural force without human choice. Use "omdat" when a person makes a conscious decision based on a reason.',
+          example: {
+            wrong: 'Het treinverkeer lag stil omdat de bliksem was ingeslagen.',
+            right: 'Het treinverkeer lag stil doordat de bliksem was ingeslagen.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 2: "aangezien" vs "doordat" (Conscious reasoned justification vs physical cause)
+  if (relationType === 'aangezien-reden') {
+    if (normalized.includes('doordat')) {
+      return {
+        found: true,
+        message: 'Use "aangezien" (or "omdat") for conscious motivations and established premises, not "doordat" (which is reserved for involuntary physical causes).',
+        miniLesson: {
+          title: 'Aangezien (Reden) vs Doordat (Oorzaak)',
+          content: 'Use "aangezien" for reasoned decisions and formal justifications ("since/as"). "Doordat" is reserved for physical or involuntary causes.',
+          example: {
+            wrong: 'Doordat we willen besparen, sluiten we de vestiging.',
+            right: 'Aangezien we willen besparen, sluiten we de vestiging.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 3: "dankzij" or "te danken aan" used for negative outcomes/faults
+  if (relationType === 'te-wijten-aan' || relationType === 'doordat-oorzaak') {
+    if (normalized.includes('dankzij') || normalized.includes('te danken aan')) {
+      return {
+        found: true,
+        message: 'In Dutch, "dankzij" and "te danken aan" are strictly used for positive or fortunate outcomes. For negative causes or faults, use "te wijten aan" (due to / to blame on) or "door/wegens".',
+        miniLesson: {
+          title: 'Te Wijten Aan vs Dankzij / Te Danken Aan',
+          content: 'Use "te wijten aan" when blaming a negative outcome or fault. Use "dankzij" or "te danken aan" exclusively for positive achievements and fortunate circumstances.',
+          example: {
+            wrong: 'De vertraging was te danken aan een computerstoring.',
+            right: 'De vertraging was te wijten aan een computerstoring.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 4: "te wijten aan" used for positive accomplishments
+  if (relationType === 'te-danken-aan') {
+    if (normalized.includes('te wijten aan')) {
+      return {
+        found: true,
+        message: 'Use "te danken aan" or "dankzij" for positive successes and merits, not "te wijten aan" (which is for faults and negative outcomes).',
+        miniLesson: {
+          title: 'Te Danken Aan (Positive Merit)',
+          content: 'In formal Dutch, "te danken aan" attributes success or credit to a positive factor, while "te wijten aan" assigns blame.',
+          example: {
+            wrong: 'De omzetgroei is te wijten aan de inzet van het team.',
+            right: 'De omzetgroei is te danken aan de inzet van het team.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 5: "waardoor" vs "zodat" / "opdat" (Involuntary consequence vs deliberate purpose)
+  if (relationType === 'waardoor-gevolg') {
+    if (normalized.includes('zodat') || normalized.includes('opdat')) {
+      return {
+        found: true,
+        message: 'Use "waardoor" (as a result of which) for an involuntary consequence or objective outcome. "Zodat" and "opdat" imply a deliberate purpose or planned intent.',
+        miniLesson: {
+          title: 'Waardoor (Gevolg) vs Zodat/Opdat (Doel/Opzet)',
+          content: 'Use "waardoor" to connect an involuntary consequence of an event. Use "zodat" or "opdat" when an action is deliberately taken to achieve a specific goal.',
+          example: {
+            wrong: 'De server crashte, zodat alle bestanden verloren gingen.',
+            right: 'De server crashte, waardoor alle bestanden verloren gingen.'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 6: "teneinde" missing "te" or with finite verb
+  if (relationType === 'teneinde-te' || normalized.includes('teneinde')) {
+    if (normalized.includes('teneinde') && !normalized.includes(' te ') && !normalized.includes(' om ')) {
+      return {
+        found: true,
+        message: 'The formal connector "teneinde" requires an infinitive clause with "te": "teneinde [object] te [infinitief]".',
+        miniLesson: {
+          title: 'Teneinde... Te (Formal Infinitive of Purpose)',
+          content: 'In formal and legal Dutch, "teneinde" acts like "om... te" and must be paired with "te + infinitief" at the end of the clause.',
+          example: {
+            wrong: 'teneinde de kwaliteit waarborgen we',
+            right: 'teneinde de kwaliteit te waarborgen'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 7: "dermate" missing "dat"
+  if (relationType === 'dermate-dat' || normalized.includes('dermate')) {
+    if (normalized.includes('dermate') && !normalized.includes('dat')) {
+      return {
+        found: true,
+        message: 'The correlative degree structure requires "dat": "dermate [adjectief/adverbium] dat...".',
+        miniLesson: {
+          title: 'Dermate... Dat (Degree & Consequence)',
+          content: 'Use "dermate [intensiteit] dat [bijzin]" to express an outcome resulting from a specific high degree or magnitude.',
+          example: {
+            wrong: 'De vraag steeg dermate snel we konden niet leveren',
+            right: 'De vraag steeg dermate snel dat we niet konden leveren'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 8: "opdat" subclause word order (verbs must be final)
+  if (normalized.includes('opdat')) {
+    const opdatVerbNonFinal = /\bopdat\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|zal|zullen)\s+([a-z]+)\b/i
+    if (opdatVerbNonFinal.test(normalized)) {
+      return {
+        found: true,
+        message: 'Clauses introduced by "opdat" are formal subordinate clauses and require verb-final (SOV) word order.',
+        miniLesson: {
+          title: 'Subclause Verb-Final Order after "Opdat"',
+          content: '"Opdat" is a subordinating conjunction of purpose. Place all auxiliary and main verbs at the very end of the subclause.',
+          example: {
+            wrong: 'opdat we kunnen incidenten voorkomen',
+            right: 'opdat we incidenten kunnen voorkomen'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 9: "doordat" / "waardoor" / "aangezien" subclause word order
+  const subclauseVerbNonFinalCausality = /\b(doordat|waardoor|aangezien|vermits)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|ging|gingen|viel|vielen|stond|stonden|lag|lagen)\s+([a-z]+)\b/i
+  if (subclauseVerbNonFinalCausality.test(normalized)) {
+    return {
+      found: true,
+      message: 'Conjunctions like "doordat", "waardoor", and "aangezien" introduce subordinate clauses and require verb-final (SOV) word order.',
+      miniLesson: {
+        title: 'Subclause Word Order in Causal & Consecutive Clauses',
+        content: '"Doordat", "waardoor", and "aangezien" are subordinating conjunctions. The finite verb must be positioned at the end of the clause.',
+        example: {
+          wrong: 'doordat de stroom viel plotseling uit',
+          right: 'doordat de stroom plotseling uitviel'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkCorrelativeError(normalized: string) {
   // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
   if (normalized.includes('niet alleen')) {
@@ -1827,6 +2130,108 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Conditional & Restrictive Drill Evaluation
+    if (exercise.kind === 'conditional-drill' && exercise.conditionalData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const condError = checkConditionalRestrictiveError(normalized, exercise.conditionalData.conditionType)
+      if (condError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: condError.message,
+          miniLesson: condError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Conditional and restrictive structures (mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...) require precise conjunctions and verb-final subclause order.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your conditional/restrictive sentence is syntactically accurate and natural.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the conjunction choice, word order, or clause inversion.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure the condition or restriction is accurately expressed with subordinate verb placement.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the conditional conjunction and grammatical structure.',
+          explanation: exercise.explanation || 'Combine the main clause and condition using the required conditional construction.'
+        }
+      }
+    }
+
+    // Causal, Consecutive & Final Drill Evaluation
+    if (exercise.kind === 'causality-drill' && exercise.causalityData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const causError = checkCausalityError(normalized, exercise.causalityData.relationType)
+      if (causError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: causError.message,
+          miniLesson: causError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Causal, consecutive, and purpose structures (doordat, aangezien, te wijten aan, te danken aan, waardoor, dermate... dat, opdat, teneinde... te) require precise connectors and subclause word order.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your causal/consecutive sentence is syntactically accurate and logically coherent.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check connector selection, subclause verb-final placement, or prepositional structures.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure the cause, consequence, or purpose is formulated with accurate Dutch syntax.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the causal/consecutive connector and grammatical structure.',
+          explanation: exercise.explanation || 'Combine the premise and consequence/purpose using the specified connector structure.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1939,6 +2344,28 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: correlativeError.message,
         miniLesson: correlativeError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Conditional & Restrictive Check
+    const conditionalRestrictiveError = checkConditionalRestrictiveError(normalized)
+    if (conditionalRestrictiveError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: conditionalRestrictiveError.message,
+        miniLesson: conditionalRestrictiveError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Causal, Consecutive & Final Check
+    const causalityAssistantError = checkCausalityError(normalized)
+    if (causalityAssistantError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: causalityAssistantError.message,
+        miniLesson: causalityAssistantError.miniLesson
       }
     }
 

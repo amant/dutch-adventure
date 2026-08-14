@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill'
 
 export interface Exercise {
   id: string
@@ -223,6 +223,24 @@ export interface Exercise {
     premiseA: string
     premiseB: string
     pairCue?: string
+    structureFormula?: string
+    hint?: string
+  }
+  // For conditional & restrictive clauses (mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...)
+  conditionalData?: {
+    conditionType: 'mits' | 'tenzij' | 'op-voorwaarde-dat' | 'gesteld-dat' | 'voor-zover' | 'mocht-inversion'
+    mainPremise: string
+    conditionPremise: string
+    connectorCue?: string
+    structureFormula?: string
+    hint?: string
+  }
+  // For causal, consecutive & final relations (doordat, aangezien, te wijten aan, te danken aan, waardoor, dermate... dat, opdat, teneinde... te)
+  causalityData?: {
+    relationType: 'doordat-oorzaak' | 'aangezien-reden' | 'te-wijten-aan' | 'te-danken-aan' | 'waardoor-gevolg' | 'dermate-dat' | 'opdat-doel' | 'teneinde-te'
+    premiseOrCause: string
+    resultOrAction: string
+    connectorCue?: string
     structureFormula?: string
     hint?: string
   }

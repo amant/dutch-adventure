@@ -78,6 +78,22 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'noch noch': { prompt: 'Neither the manager nor the advisors knew about it.', target: 'Noch de manager, noch de adviseurs wisten ervan.', explanation: 'Noch ... noch carries negative meaning without extra "niet".' },
   'enerzijds anderzijds': { prompt: 'On the one hand it brings opportunities, on the other hand risks.', target: 'Enerzijds biedt het kansen, anderzijds brengt het risico\'s met zich mee.', explanation: 'Enerzijds and anderzijds trigger subject-verb inversion.' },
   'hoe des te': { prompt: 'The sooner we start, the faster we finish.', target: 'Hoe eerder we beginnen, des te sneller zijn we klaar.', explanation: 'Use "hoe + [comp], des te + [comp]" for proportional comparison.' },
+  'voorwaardelijke-verbanden': { prompt: 'We agree, provided that the costs remain within budget.', target: 'We gaan akkoord, mits de kosten binnen het budget blijven.', explanation: 'Use "mits" with subclause verb-final word order for strict prerequisites.' },
+  'mits': { prompt: 'Provided that the budget allows it.', target: 'Mits het budget het toelaat.', explanation: '"Mits" means provided that / only if ("alleen als").' },
+  'tenzij': { prompt: 'The meeting goes ahead unless the manager is ill.', target: 'De vergadering gaat door, tenzij de manager ziek is.', explanation: '"Tenzij" means unless / except if ("behalve als").' },
+  'op voorwaarde dat': { prompt: 'On condition that the targets are met.', target: 'Op voorwaarde dat de doelen worden behaald.', explanation: '"Op voorwaarde dat" introduces formal contractual conditions.' },
+  'gesteld dat': { prompt: 'Suppose that inflation rises further.', target: 'Gesteld dat de inflatie verder oploopt.', explanation: '"Gesteld dat" introduces hypothetical premises.' },
+  'voor zover': { prompt: 'As far as I know, everything is in order.', target: 'Voor zover ik weet, is alles in orde.', explanation: '"Voor zover" introduces restrictive qualifications.' },
+  'mocht': { prompt: 'Should you have any questions, please contact us.', target: 'Mocht u vragen hebben, neem dan contact op.', explanation: '"Mocht(en)" triggers inverted conditional clauses without "als".' },
+  'oorzakelijke-verbanden': { prompt: 'The train service stopped because a tree fell on the tracks.', target: 'Doordat de boom op het spoor viel, lag het treinverkeer stil.', explanation: 'Use "doordat" with subclause verb-final order for involuntary physical causes.' },
+  'doordat': { prompt: 'Because the power went out, the servers stopped.', target: 'Doordat de stroom uitviel, stopten de servers.', explanation: '"Doordat" is strictly used for involuntary causes and physical events.' },
+  'aangezien': { prompt: 'Since the deadline has passed, we cannot process the application.', target: 'Aangezien de termijn is verstreken, kunnen we de aanvraag niet behandelen.', explanation: '"Aangezien" introduces a formal reasoned justification or premise.' },
+  'te wijten aan': { prompt: 'The delay is due to a software error.', target: 'De vertraging is te wijten aan een softwarefout.', explanation: '"Te wijten aan" assigns causal blame for negative outcomes or faults.' },
+  'te danken aan': { prompt: 'The success is thanks to the dedication of the team.', target: 'Het succes is te danken aan de inzet van het team.', explanation: '"Te danken aan" (or dankzij) expresses positive merit and attribution.' },
+  'waardoor': { prompt: 'The supplier went bankrupt, as a result of which production was halted.', target: 'De leverancier ging failliet, waardoor de productie stillag.', explanation: '"Waardoor" introduces a relative subclause expressing an objective consequence.' },
+  'dermate dat': { prompt: 'Costs rose so rapidly that management had to intervene.', target: 'De kosten stegen dermate snel dat de directie moest ingrijpen.', explanation: 'Use "dermate [adj/adv] dat" to express an extreme degree and consequence.' },
+  'opdat': { prompt: 'Protocols were tightened so that accidents can be prevented.', target: 'Protocollen zijn aangescherpt, opdat incidenten voorkomen kunnen worden.', explanation: '"Opdat" introduces a formal subordinate clause of purpose.' },
+  'teneinde te': { prompt: 'We restructured processes in order to guarantee quality.', target: 'We herzien de processen, teneinde de kwaliteit te waarborgen.', explanation: '"Teneinde... te" is a high-register formal purpose infinitive.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -103,6 +119,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'concession-drill') skills.push('production', 'grammar')
   if (kind === 'participial-drill') skills.push('production', 'grammar')
   if (kind === 'correlative-drill') skills.push('production', 'grammar')
+  if (kind === 'conditional-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -314,6 +331,48 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         pairCue: key,
         structureFormula: 'Correlatieve balansstructuur met parallelle woordvolgorde',
         hint: 'Balance both parts using the correlative pair.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'conditional-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      conditionalData: {
+        conditionType: key.includes('tenzij') ? 'tenzij' : key.includes('op voorwaarde') ? 'op-voorwaarde-dat' : key.includes('gesteld') ? 'gesteld-dat' : key.includes('voor zover') ? 'voor-zover' : key.includes('mocht') ? 'mocht-inversion' : 'mits',
+        mainPremise: `De hoofdgebeurtenis met betrekking tot ${key}.`,
+        conditionPremise: `De specifieke voorwaarde of restrictie (${key}).`,
+        connectorCue: key,
+        structureFormula: 'Voorwaardelijke constructie met correcte bijzin-woordvolgorde',
+        hint: 'Combine both clauses with appropriate conditional conjunction and subordinate verb order.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'causality-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      causalityData: {
+        relationType: key.includes('aangezien') ? 'aangezien-reden' : key.includes('te wijten aan') ? 'te-wijten-aan' : key.includes('te danken aan') ? 'te-danken-aan' : key.includes('waardoor') ? 'waardoor-gevolg' : key.includes('dermate') ? 'dermate-dat' : key.includes('opdat') ? 'opdat-doel' : key.includes('teneinde') ? 'teneinde-te' : 'doordat-oorzaak',
+        premiseOrCause: `De situatie of oorzakelijke factor met betrekking tot ${key}.`,
+        resultOrAction: `Het gevolg of de doelgerichte actie (${key}).`,
+        connectorCue: key,
+        structureFormula: 'Oorzakelijk, consecutief of doelgericht verband met correcte zinsstructuur',
+        hint: 'Combine both premises using the specified causal/consecutive connector.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

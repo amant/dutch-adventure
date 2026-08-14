@@ -102,6 +102,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Concessive Clauses & Contrast Mastery**: Training for B2 learners to formulate nuanced concessions and contrasts across subordinating conjunctions (*hoewel, ondanks dat*), prepositional noun phrases (*ondanks*), verb-first inversion (*al*), correlative frames (*hoe... ook*), and balanced coordination (*weliswaar... maar*).
     - **Participial Constructions & Gerundive Mastery**: Training for B2 learners to formulate concise, high-level sentences using modal gerundives (*de te nemen maatregelen*, *de op te lossen problemen*), inflected attributive participles (*de toenemende druk*, *het goedgekeurde beleid*), progressive simultaneous actions (*al doende*, *al wandelend*), and concise formal clauses (*gelet op*, *gezien*).
     - **Correlative Connectors & Balanced Discourse**: Training for B2 learners to master parallel correlative structures (*zowel... als*, *niet alleen... maar ook*, *noch... noch*, *hetzij... hetzij*, *enerzijds... anderzijds*, *hoe... des te*), ensuring syntactic parallelism and accurate verb placement.
+    - **Conditionals & Restrictive Clauses**: Training for B2 learners to formulate precise conditions, exceptions, contractual stipulations, and restrictive qualifications using B2 connectors (*mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...*), mastering subclause verb-final word order and inverted conditional clauses without *als*.
+    - **Causal, Consecutive & Final Relations**: Training for B2 learners to master the matrix of causality, distinction between involuntary cause (*doordat*) and reasoned motivation (*aangezien, omdat*), negative blame (*te wijten aan*) versus positive credit (*te danken aan, dankzij*), relative consequence (*waardoor*), extreme degree (*dermate... dat*), and formal purpose (*opdat, teneinde... te*).
 
 ## 5. Information Architecture
 
@@ -157,6 +159,8 @@ The AI in this app is not just a chatbot; it's a coach.
     - `ConcessionDrill.vue`: Interactive tool for mastering concessive clauses and contrast, focusing on hoewel, ondanks (dat), verb-first al inversion, correlative hoe... ook, and weliswaar... maar.
     - `ParticipialDrill.vue`: Interactive tool for mastering Dutch participial constructions and gerundives, focusing on modal gerundives (de te nemen maatregelen, de op te lossen problemen), inflected attributive participles (de toenemende kosten, het gewijzigde beleid), simultaneous al (al doende, al wandelend), and concise formal clauses (gelet op, gezien).
     - `CorrelativeDrill.vue`: Interactive tool for mastering Dutch correlative conjunctions and balanced discourse (zowel... als, niet alleen... maar ook, noch... noch, hetzij... hetzij, enerzijds... anderzijds, hoe... des te).
+    - `ConditionalDrill.vue`: Interactive tool for mastering Dutch conditional and restrictive structures (mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...).
+    - `CausalityDrill.vue`: Interactive tool for mastering Dutch causal, consecutive, and final structures (doordat, aangezien, te wijten aan, te danken aan, waardoor, dermate... dat, opdat, teneinde... te).
     - `ReframingDrill.vue`: Strategic tool for transforming blunt statements into diplomatic, professional Dutch.
     - `InferenceChallenge.vue`: Component for identifying implied meaning and subtle understatements.
     - `PragmaticIndicator.vue`: Visualizes the naturalness score of a response.

@@ -4073,7 +4073,437 @@ export const correlativeChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter]
+export const conditionalChapter: Chapter = {
+  slug: 'voorwaardelijke-beperkende-verbanden',
+  level: 'B2',
+  title: 'Conditionals & Restrictive Clauses',
+  capability: "Formulate precise conditions, exceptions, contractual stipulations, and restrictive qualifications using B2 connectors (mits, tenzij, op voorwaarde dat, gesteld dat, voor zover, mocht...).",
+  description: "Master the 6 core conditional and restrictive structures in professional and academic Dutch: strict prerequisite ('mits'), exception clauses ('tenzij'), formal contractual conditions ('op voorwaarde dat'), hypothetical premises ('gesteld dat'), restrictive scope ('voor zover'), and inverted conditional clauses ('mocht...').",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Architecture of Conditions & Restrictions', kind: 'discover',
+      intro: "Discover how advanced Dutch specifies prerequisites, exceptions, hypothetical premises, and restrictive limits with syntactic precision.",
+      exercises: [
+        {
+          id: 'cond-ind-1', kind: 'induction', prompt: 'Compare the different conditional and restrictive markers in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Strict prerequisite (Only if / Provided that)', answer: 'We gaan akkoord met het voorstel, mits de kosten binnen het budget blijven.' },
+              { prompt: 'Exception / Exemption (Unless / Except if)', answer: 'De vergadering gaat door, tenzij de voorzitter plotseling verhinderd is.' },
+              { prompt: 'Formal contractual condition (On condition that)', answer: 'De subsidie wordt verleend, op voorwaarde dat het project vóór december wordt afgerond.' },
+              { prompt: 'Hypothetical premise (Suppose that / Assuming that)', answer: 'Gesteld dat de inflatie verder oploopt, dan moeten we onze tarieven herzien.' },
+              { prompt: 'Restrictive limitation (As far as / To the extent that)', answer: 'Voor zover ik kan nagaan, voldoet de aanvraag aan alle formele eisen.' },
+              { prompt: 'Conditional inversion without "als" (Should / If it happens that)', answer: 'Mocht u nog aanvullende vragen hebben, neem dan gerust contact op.' }
+            ],
+            ruleChallenge: 'What is the primary syntactic rule for conditional conjunctions like "mits", "tenzij", "op voorwaarde dat", and "voor zover"?',
+            options: [
+              { text: 'They introduce subordinate clauses and require verb-final (SOV) word order.', isCorrect: true },
+              { text: 'They always cause verb-second word order like "dus" and "daarom".', isCorrect: false },
+              { text: '"Mits" and "tenzij" mean the same thing and are freely interchangeable.', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Conditions & Boundaries in Strategic Negotiation', kind: 'understand',
+      intro: "Examine how professionals set hard boundaries, contract prerequisites, and contingencies in negotiations.",
+      exercises: [
+        {
+          id: 'cond-inf-1', kind: 'inference-challenge', prompt: 'Analyze the legal commitments and contingencies in the statement',
+          skills: ['reading', 'pragmatic'],
+          inferenceData: {
+            text: 'Tijdens de contractonderhandelingen stelde de bedrijfsjurist: "Wij stemmen in met de voorgestelde leveringstermijnen, mits de softwareleverancier de uptime van 99,9% schriftelijk garandeert. Tenzij er vóór vrijdag een bindend SLA-document wordt ondertekend, behouden wij ons het recht voor om de overeenkomst eenzijdig te ontbinden. Mocht er overmacht optreden, dan treden partijen binnen 48 uur in overleg."',
+            question: 'How does the lawyer structure the commitments using conditional markers?',
+            options: [
+              { text: 'The lawyer sets a strict prerequisite with "mits" (uptime guarantee), establishes a binding dealbreaker with "tenzij" (signed SLA), and provides a contingency process with "mocht" for force majeure.', isCorrect: true, feedback: 'Uitstekend! "Mits" creates a prerequisite, "tenzij" marks an exception/cancellation clause, and "mocht" handles contingency.' },
+              { text: 'The lawyer terminates the contract immediately and refuses to negotiate further.', isCorrect: false, feedback: 'The lawyer sets clear conditions under which the contract remains valid.' },
+              { text: 'The lawyer assumes that uptime guarantees are unnecessary if force majeure occurs.', isCorrect: false, feedback: 'Both conditions are strictly separated and formally defined.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Conditional & Restrictive Precision Drills', kind: 'transform',
+      intro: "Combine premises into precise Dutch conditional and restrictive sentences.",
+      exercises: [
+        {
+          id: 'cond-d-1', kind: 'conditional-drill', prompt: 'Strict Prerequisite: Mits (Provided that / Only if)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'mits',
+            mainPremise: 'Het management keurt het investeringsvoorstel voor de nieuwe apparatuur goed.',
+            conditionPremise: 'De terugverdientijd blijft strikt binnen drie jaar (noodzakelijke voorwaarde).',
+            connectorCue: 'mits',
+            structureFormula: '[Hoofdzin], mits + [onderwerp + rest + persoonsvorm]',
+            hint: 'Combine into: "Het management keurt het voorstel goed, mits de terugverdientijd binnen drie jaar blijft."'
+          },
+          target: 'Het management keurt het voorstel goed, mits de terugverdientijd binnen drie jaar blijft',
+          acceptedAnswers: [
+            'Het management keurt het voorstel goed, mits de terugverdientijd binnen drie jaar blijft',
+            'Het management keurt het investeringsvoorstel goed, mits de terugverdientijd binnen drie jaar blijft',
+            'Het management keurt het voorstel goed mits de terugverdientijd binnen drie jaar blijft',
+            'Het investeringsvoorstel wordt goedgekeurd, mits de terugverdientijd binnen drie jaar blijft'
+          ],
+          explanation: '"Mits" introduces a necessary condition ("alleen als") and moves the finite verb "blijft" to the end of the subclause.'
+        },
+        {
+          id: 'cond-d-2', kind: 'conditional-drill', prompt: 'Exception Clause: Tenzij (Unless / Except if)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'tenzij',
+            mainPremise: 'Het nieuwe hybride werkbeleid treedt per 1 september officieel in werking.',
+            conditionPremise: 'De ondernemingsraad tekent vóór die datum formeel bezwaar aan (uitzonderingsgeval).',
+            connectorCue: 'tenzij',
+            structureFormula: '[Hoofdzin], tenzij + [onderwerp + rest + persoonsvorm] (geen dubbele ontkenning!)',
+            hint: 'Formulate: "Het nieuwe beleid treedt in werking, tenzij de ondernemingsraad bezwaar aantekent."'
+          },
+          target: 'Het nieuwe beleid treedt in werking, tenzij de ondernemingsraad formeel bezwaar aantekent',
+          acceptedAnswers: [
+            'Het nieuwe beleid treedt in werking, tenzij de ondernemingsraad formeel bezwaar aantekent',
+            'Het nieuwe hybride werkbeleid treedt in werking, tenzij de ondernemingsraad formeel bezwaar aantekent',
+            'Het nieuwe werkbeleid treedt in werking, tenzij de ondernemingsraad bezwaar aantekent',
+            'Het beleid treedt in werking, tenzij de ondernemingsraad bezwaar aantekent'
+          ],
+          explanation: '"Tenzij" means "behalve als" (unless). The subclause takes SOV verb-final order ("bezwaar aantekent") without extra negation words.'
+        },
+        {
+          id: 'cond-d-3', kind: 'conditional-drill', prompt: 'Contractual Stipulation: Op voorwaarde dat (On condition that)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'op-voorwaarde-dat',
+            mainPremise: 'De provincie verstrekt de toegezegde innovatiesubsidie aan het consortium.',
+            conditionPremise: 'Het consortium behaalt de afgesproken duurzaamheidsdoelen vóór het einde van het jaar.',
+            connectorCue: 'op voorwaarde dat',
+            structureFormula: '[Hoofdzin], op voorwaarde dat + [onderwerp + rest + persoonsvorm]',
+            hint: 'Combine into: "De provincie verstrekt de subsidie, op voorwaarde dat het consortium de doelen behaalt."'
+          },
+          target: 'De provincie verstrekt de subsidie, op voorwaarde dat het consortium de doelen behaalt',
+          acceptedAnswers: [
+            'De provincie verstrekt de subsidie, op voorwaarde dat het consortium de doelen behaalt',
+            'De provincie verstrekt de innovatiesubsidie, op voorwaarde dat het consortium de duurzaamheidsdoelen behaalt',
+            'De provincie verstrekt de subsidie op voorwaarde dat het consortium de doelen behaalt',
+            'De subsidie wordt verstrekt, op voorwaarde dat het consortium de duurzaamheidsdoelen behaalt'
+          ],
+          explanation: '"Op voorwaarde dat" introduces a formal contractual condition with subclause word order ("de doelen behaalt").'
+        },
+        {
+          id: 'cond-d-4', kind: 'conditional-drill', prompt: 'Hypothetical Premise: Gesteld dat / Aangenomen dat (Suppose that)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'gesteld-dat',
+            mainPremise: 'We moeten onze operationele begroting en personeelsplanning grondig herzien.',
+            conditionPremise: 'De energiekosten stijgen de komende wintermaanden nog verder (hypothetische aanname).',
+            connectorCue: 'gesteld dat',
+            structureFormula: 'Gesteld dat + [onderwerp + rest + persoonsvorm], dan [persoonsvorm + onderwerp + rest]',
+            hint: 'Start with: "Gesteld dat de energiekosten verder stijgen, dan moeten we onze begroting herzien."'
+          },
+          target: 'Gesteld dat de energiekosten verder stijgen, dan moeten we onze begroting herzien',
+          acceptedAnswers: [
+            'Gesteld dat de energiekosten verder stijgen, dan moeten we onze begroting herzien',
+            'Gesteld dat de energiekosten verder stijgen, moeten we onze begroting herzien',
+            'Gesteld dat de energiekosten stijgen, dan moeten we de begroting herzien',
+            'Aangenomen dat de energiekosten verder stijgen, dan moeten we onze begroting herzien'
+          ],
+          explanation: '"Gesteld dat" fronts the hypothetical premise with subclause word order ("verder stijgen"), followed by an inverted main clause ("dan moeten we").'
+        },
+        {
+          id: 'cond-d-5', kind: 'conditional-drill', prompt: 'Restrictive Qualification: Voor zover (As far as / Insofar as)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'voor-zover',
+            mainPremise: 'Voldoet het ingediende projectvoorstel aan alle formele criteria van de subsidiegever.',
+            conditionPremise: 'Ik kan dit op basis van de huidige gegevens en documentatie beoordelen (beperkende reikwijdte).',
+            connectorCue: 'voor zover',
+            structureFormula: 'Voor zover + [onderwerp + rest + persoonsvorm], [persoonsvorm + onderwerp + rest]',
+            hint: 'Formulate: "Voor zover ik kan beoordelen, voldoet het voorstel aan alle criteria."'
+          },
+          target: 'Voor zover ik kan beoordelen, voldoet het voorstel aan alle criteria',
+          acceptedAnswers: [
+            'Voor zover ik kan beoordelen, voldoet het voorstel aan alle criteria',
+            'Voor zover ik kan beoordelen, voldoet het projectvoorstel aan alle criteria',
+            'Voor zover ik het kan beoordelen, voldoet het projectvoorstel aan alle formele criteria',
+            'Voor zover wij kunnen beoordelen, voldoet het voorstel aan alle criteria'
+          ],
+          explanation: '"Voor zover" establishes a restrictive boundary ("as far as"). The subclause places verbs at the end ("kan beoordelen"), triggering inversion in the main clause ("voldoet het voorstel").'
+        },
+        {
+          id: 'cond-d-6', kind: 'conditional-drill', prompt: 'Conditional Inversion: Mocht(en)... (Should you / If it happens that)',
+          skills: ['production', 'grammar'],
+          conditionalData: {
+            conditionType: 'mocht-inversion',
+            mainPremise: 'Neem dan direct contact op met onze technische ondersteuningsdienst.',
+            conditionPremise: 'U constateert na de software-update onverwachte technische complicaties.',
+            connectorCue: 'mocht(en) + inversie',
+            structureFormula: 'Mocht(en) + [onderwerp + rest + infinitief], [persoonsvorm + onderwerp + rest]',
+            hint: 'Start with: "Mocht u complicaties constateren, neem dan direct contact op met de klantenservice."'
+          },
+          target: 'Mocht u complicaties constateren, neem dan direct contact op met de ondersteuningsdienst',
+          acceptedAnswers: [
+            'Mocht u complicaties constateren, neem dan direct contact op met de ondersteuningsdienst',
+            'Mocht u complicaties constateren, neem dan direct contact op met de technische ondersteuningsdienst',
+            'Mocht u technische complicaties constateren, neem dan contact op met de ondersteuningsdienst',
+            'Mocht u problemen ondervinden, neem dan direct contact op met de ondersteuningsdienst'
+          ],
+          explanation: '"Mocht(en)" replaces "als" in high-register formal Dutch, fronting the auxiliary verb and triggering main clause inversion with "dan".'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Professional Terms & Boundary Setting', kind: 'personalise',
+      intro: "Formulate a professional prerequisite, exception, or restrictive boundary from your own work or academic domain using conditional connectors.",
+      exercises: [
+        {
+          id: 'cond-p-1', kind: 'personalise', prompt: 'Beschrijf een belangrijke voorwaarde, uitzondering of restrictie in jouw werk of studie met behulp van "mits", "tenzij", "op voorwaarde dat", "voor zover", of "mocht".',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['mits', 'tenzij', 'op voorwaarde dat', 'gesteld dat', 'voor zover', 'mocht', 'akkoord', 'overeenkomst', 'voorwaarde', 'beperking'],
+          grammar: ['voorwaardelijke-verbanden', 'beperkende-verbanden', 'bijzin-woordvolgorde', 'inversie']
+        }
+      ]
+    }
+  ]
+}
+
+export const causalityChapter: Chapter = {
+  slug: 'oorzaak-gevolg-doel',
+  level: 'B2',
+  title: 'Causal, Consecutive & Final Relations',
+  capability: "Express nuanced causes (doordat, aangezien), negative/positive attributions (te wijten aan, te danken aan), consecutive results (waardoor, dermate... dat), and formal purpose (opdat, teneinde te).",
+  description: "Master the 8 core causal, consecutive, and final structures in professional and academic Dutch: involuntary cause ('doordat'), formal reasoned justification ('aangezien'), negative causal attribution ('te wijten aan'), positive merit ('te danken aan' / 'dankzij'), relative consequence ('waardoor'), intensified degree & result ('dermate... dat'), formal purpose subclause ('opdat'), and formal purpose infinitive ('teneinde... te').",
+  estimatedMinutes: 22,
+  stages: [
+    {
+      id: 'discover', title: 'The Matrix of Cause, Consequence & Purpose', kind: 'discover',
+      intro: "Discover how advanced Dutch distinguishes involuntary physical causes, conscious motivations, positive versus negative attributions, objective consequences, and formal expressions of purpose.",
+      exercises: [
+        {
+          id: 'caus-ind-1', kind: 'induction', prompt: 'Compare the causal, consecutive, and final connectors in Dutch',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Involuntary physical cause (Doordat)', answer: 'Doordat de stroom plotseling uitviel, stopten alle productielijnen.' },
+              { prompt: 'Formal reasoned premise (Aangezien)', answer: 'Aangezien de inschrijvingstermijn is verstreken, kunnen we geen aanvragen meer accepteren.' },
+              { prompt: 'Negative causal blame (Te wijten aan)', answer: 'De vertraging van het project is grotendeels te wijten aan leveringsproblemen.' },
+              { prompt: 'Positive merit / credit (Te danken aan / Dankzij)', answer: 'Het behalen van de omzetdoelen is te danken aan de enorme inzet van het salesteam.' },
+              { prompt: 'Relative consecutive consequence (Waardoor)', answer: 'De leverancier ging failliet, waardoor de fabricage wekenlang stillag.' },
+              { prompt: 'Intensified degree & consequence (Dermate... dat)', answer: 'De grondstofprijzen stegen dermate snel dat de marges onder zware druk kwamen.' },
+              { prompt: 'Formal subclause purpose (Opdat)', answer: 'De veiligheidsprotocollen zijn aangescherpt, opdat incidenten in de toekomst voorkomen kunnen worden.' },
+              { prompt: 'Formal infinitive purpose (Teneinde... te)', answer: 'We hebben de procedures herzien, teneinde de operationele efficiëntie te waarborgen.' }
+            ],
+            ruleChallenge: 'What is the critical distinction between "doordat" and "omdat / aangezien" in standard Dutch?',
+            options: [
+              { text: '"Doordat" expresses an involuntary cause or external physical factor, whereas "omdat" and "aangezien" express conscious human reasons or motivations.', isCorrect: true },
+              { text: '"Doordat" and "omdat" mean exactly the same thing and can be swapped without any stylistic difference.', isCorrect: false },
+              { text: '"Doordat" always requires verb-second word order like "dus".', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Executive Analysis of Crisis & Strategy', kind: 'understand',
+      intro: "Examine how a CEO and director of operations communicate causes, attributions, consequences, and strategic purposes in an annual board briefing.",
+      exercises: [
+        {
+          id: 'caus-inf-1', kind: 'inference-challenge', prompt: 'Analyze causal attributions and strategic goals in the management report',
+          skills: ['reading', 'pragmatic'],
+          inferenceData: {
+            text: 'In het jaarverslag rapporteerde de Raad van Bestuur: "Doordat een zware storm de hoofdcentrale beschadigde, ondervond ons datacentrum een tijdelijke stroomonderbreking. Hoewel de initiële downtime te wijten was aan een falende noodaggregaat, is het snelle herstel binnen drie uur te danken aan de doortastende inzet van ons technische team. Aangezien digitale continuïteit cruciaal is voor onze cliënten, hebben we een nieuw redundantiesysteem geïnstalleerd, waardoor toekomstige storingen direct opgevangen worden. Wij hebben deze maatregelen met spoed doorgevoerd, opdat onze operationele betrouwbaarheid ten alle tijden gegarandeerd blijft."',
+            question: 'How does management delineate causes, merits, and strategic intent using these connectors?',
+            options: [
+              { text: 'Management clearly attributes the physical trigger to "doordat", blames the generator failure with "te wijten aan", credits the engineers with "te danken aan", explains the consequence with "waardoor", and states the overarching goal with "opdat".', isCorrect: true, feedback: 'Uitstekend! Every connector is used with exact semantic and pragmatic precision.' },
+              { text: 'Management claims that the technical team caused the power outage.', isCorrect: false, feedback: 'The power outage was triggered by the storm ("doordat") and failure of the generator ("te wijten aan").' },
+              { text: 'Management views the new redundancy system as an unnecessary cost.', isCorrect: false, feedback: 'Management installed it specifically to prevent future downtime ("opdat").' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Causal, Consecutive & Final Drills', kind: 'transform',
+      intro: "Combine premises into precise Dutch sentences using advanced causal, consecutive, and final connectors.",
+      exercises: [
+        {
+          id: 'caus-d-1', kind: 'causality-drill', prompt: 'Involuntary Cause: Doordat (External Cause / Physical Fact)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'doordat-oorzaak',
+            premiseOrCause: 'De zware najaarsstorm zorgde voor omgewaaide bomen op het spoor (externe oorzaak).',
+            resultOrAction: 'Het treinverkeer tussen Utrecht en Amsterdam lag urenlang volledig stil.',
+            connectorCue: 'doordat',
+            structureFormula: 'Doordat + [onderwerp + rest + persoonsvorm], [persoonsvorm + onderwerp + rest]',
+            hint: 'Start with: "Doordat de storm voor omgewaaide bomen zorgde, lag het treinverkeer stil."'
+          },
+          target: 'Doordat de storm voor omgewaaide bomen zorgde, lag het treinverkeer urenlang stil',
+          acceptedAnswers: [
+            'Doordat de storm voor omgewaaide bomen zorgde, lag het treinverkeer urenlang stil',
+            'Doordat de zware storm voor omgewaaide bomen zorgde, lag het treinverkeer stil',
+            'Doordat de storm voor omgewaaide bomen op het spoor zorgde, lag het treinverkeer urenlang stil',
+            'Het treinverkeer lag urenlang stil, doordat de storm voor omgewaaide bomen zorgde'
+          ],
+          explanation: '"Doordat" is strictly used for involuntary causes and physical events without human intention, placing verbs at the end of the subclause ("zorgde").'
+        },
+        {
+          id: 'caus-d-2', kind: 'causality-drill', prompt: 'Formal Reasoned Justification: Aangezien (Since / As / Given that)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'aangezien-reden',
+            premiseOrCause: 'De wettelijke aanvraagtermijn voor de vergunning is gisteren officieel verstreken (vaststaand motief).',
+            resultOrAction: 'De gemeente kan uw dossier helaas niet meer inhoudelijk in behandeling nemen.',
+            connectorCue: 'aangezien',
+            structureFormula: 'Aangezien + [onderwerp + rest + persoonsvorm], [persoonsvorm + onderwerp + rest]',
+            hint: 'Formulate: "Aangezien de termijn is verstreken, kan de gemeente het dossier niet meer behandelen."'
+          },
+          target: 'Aangezien de wettelijke termijn is verstreken, kan de gemeente de aanvraag niet meer in behandeling nemen',
+          acceptedAnswers: [
+            'Aangezien de wettelijke termijn is verstreken, kan de gemeente de aanvraag niet meer in behandeling nemen',
+            'Aangezien de termijn is verstreken, kan de gemeente de aanvraag niet meer in behandeling nemen',
+            'Aangezien de aanvraagtermijn is verstreken, kan de gemeente het dossier niet meer in behandeling nemen',
+            'Aangezien de termijn is verstreken, kunnen we de aanvraag niet meer behandelen'
+          ],
+          explanation: '"Aangezien" introduces an established reasoned premise in formal Dutch, placing the auxiliary/participle cluster at the subclause end ("is verstreken").'
+        },
+        {
+          id: 'caus-d-3', kind: 'causality-drill', prompt: 'Negative Causal Attribution: Te wijten aan (Due to / Blamed on)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'te-wijten-aan',
+            premiseOrCause: 'Een onvoorziene fout in de softwarecode leidde tot aanzienlijke vertraging.',
+            resultOrAction: 'De vertraging van de oplevering is grotendeels veroorzaakt door deze fout.',
+            connectorCue: 'te wijten aan',
+            structureFormula: '[Onderwerp / Gevolg] is [grotendeels] te wijten aan + [zelfstandig naamwoord / oorzaak]',
+            hint: 'Formulate: "De vertraging van het project is te wijten aan een fout in de software."'
+          },
+          target: 'De vertraging van het project is te wijten aan een softwarefout',
+          acceptedAnswers: [
+            'De vertraging van het project is te wijten aan een softwarefout',
+            'De vertraging van de oplevering is te wijten aan een fout in de software',
+            'De vertraging is grotendeels te wijten aan een softwarefout',
+            'De vertraging van het project is grotendeels te wijten aan een softwarefout'
+          ],
+          explanation: '"Te wijten aan" is exclusively used to assign blame for negative outcomes or failures (never use "dankzij" for errors or accidents).'
+        },
+        {
+          id: 'caus-d-4', kind: 'causality-drill', prompt: 'Positive Merit & Credit: Te danken aan / Dankzij (Thanks to / Credited to)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'te-danken-aan',
+            premiseOrCause: 'De niet-aflatende inzet en toewijding van het voltallige projectteam.',
+            resultOrAction: 'Het succesvol afronden van de complexe migratie binnen de gestelde deadline.',
+            connectorCue: 'te danken aan',
+            structureFormula: '[Positief resultaat] is te danken aan + [positieve factor / verdienste]',
+            hint: 'Formulate: "Het succes van de migratie is te danken aan de inzet van het team."'
+          },
+          target: 'Het succes van de migratie is te danken aan de inzet van het team',
+          acceptedAnswers: [
+            'Het succes van de migratie is te danken aan de inzet van het team',
+            'Het succes van het project is te danken aan de inzet van het team',
+            'Het succesvolle resultaat is te danken aan de toewijding van het team',
+            'De succesvolle migratie is te danken aan de enorme inzet van het team'
+          ],
+          explanation: '"Te danken aan" (and "dankzij") expresses positive attribution and gratitude for favorable accomplishments.'
+        },
+        {
+          id: 'caus-d-5', kind: 'causality-drill', prompt: 'Relative Consequence: Waardoor (As a result of which / Causing)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'waardoor-gevolg',
+            premiseOrCause: 'Onze belangrijkste chipleverancier in Azië werd getroffen door een faillissement.',
+            resultOrAction: 'De productie van onze nieuwste hardwareproducten kwam wekenlang volledig stil te liggen.',
+            connectorCue: 'waardoor',
+            structureFormula: '[Hoofdzin], waardoor + [onderwerp + rest + persoonsvorm]',
+            hint: 'Combine into: "De leverancier ging failliet, waardoor de productie wekenlang stil kwam te liggen."'
+          },
+          target: 'De leverancier ging failliet, waardoor de productie wekenlang stil kwam te liggen',
+          acceptedAnswers: [
+            'De leverancier ging failliet, waardoor de productie wekenlang stil kwam te liggen',
+            'De leverancier ging failliet, waardoor de productie wekenlang stil lag',
+            'De leverancier ging failliet, waardoor de productie van de hardware stil kwam te liggen',
+            'De hoofdleverancier ging failliet, waardoor de productie wekenlang stillag'
+          ],
+          explanation: '"Waardoor" is a relative consecutive subjunction expressing the direct consequence of the main clause, moving all verbs to the end.'
+        },
+        {
+          id: 'caus-d-6', kind: 'causality-drill', prompt: 'Degree & Consequence: Dermate... dat (To such an extent that)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'dermate-dat',
+            premiseOrCause: 'De operationele kosten van de productielijn stegen extreem snel in het derde kwartaal.',
+            resultOrAction: 'De directie moest direct ingrijpen met een acute wervingsstop.',
+            connectorCue: 'dermate... dat',
+            structureFormula: '[Onderwerp] [werkwoord] dermate [adverbium] dat + [onderwerp + rest + persoonsvorm]',
+            hint: 'Formulate: "De kosten stegen dermate snel dat de directie moest ingrijpen."'
+          },
+          target: 'De kosten stegen dermate snel dat de directie direct moest ingrijpen',
+          acceptedAnswers: [
+            'De kosten stegen dermate snel dat de directie direct moest ingrijpen',
+            'De operationele kosten stegen dermate snel dat de directie moest ingrijpen',
+            'De kosten stegen dermate snel dat de directie ingreep',
+            'De kosten stegen dermate sterk dat de directie direct moest ingrijpen'
+          ],
+          explanation: '"Dermate [adjectief/adverbium] dat..." expresses a consequential outcome driven by extreme degree, with verb-final word order in the dat-clause.'
+        },
+        {
+          id: 'caus-d-7', kind: 'causality-drill', prompt: 'Formal Purpose Clause: Opdat (So that / In order that)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'opdat-doel',
+            premiseOrCause: 'De Raad van Bestuur heeft strenge nalevings- en controlemaatregelen ingesteld.',
+            resultOrAction: 'Toekomstige compliancerisico’s en financiële sancties kunnen effectief voorkomen worden.',
+            connectorCue: 'opdat',
+            structureFormula: '[Hoofdzin], opdat + [onderwerp + rest + werkwoordcluster]',
+            hint: 'Combine into: "De directie heeft maatregelen ingesteld, opdat risico\'s voorkomen kunnen worden."'
+          },
+          target: 'De directie heeft maatregelen ingesteld, opdat risico\'s in de toekomst voorkomen kunnen worden',
+          acceptedAnswers: [
+            'De directie heeft maatregelen ingesteld, opdat risico\'s in de toekomst voorkomen kunnen worden',
+            'De directie heeft maatregelen ingesteld, opdat risico\'s voorkomen kunnen worden',
+            'Het bestuur heeft maatregelen ingesteld, opdat toekomstige risico\'s voorkomen kunnen worden',
+            'Er zijn maatregelen ingesteld, opdat risico\'s voorkomen kunnen worden'
+          ],
+          explanation: '"Opdat" introduces a formal subordinate clause of purpose ("met het doel dat"), requiring subordinate verb-final placement ("voorkomen kunnen worden").'
+        },
+        {
+          id: 'caus-d-8', kind: 'causality-drill', prompt: 'Formal Infinitive Purpose: Teneinde... te (In order to)',
+          skills: ['production', 'grammar'],
+          causalityData: {
+            relationType: 'teneinde-te',
+            premiseOrCause: 'De afdeling kwaliteitszorg herziet alle interne werkprocessen en richtlijnen.',
+            resultOrAction: 'De internationale ISO-veiligheidscertificering duurzaam waarborgen.',
+            connectorCue: 'teneinde... te',
+            structureFormula: '[Hoofdzin], teneinde + [lijdend voorwerp / bepalingen] te + [infinitief]',
+            hint: 'Formulate: "De afdeling herziet de processen, teneinde de certificering te waarborgen."'
+          },
+          target: 'De afdeling herziet de processen, teneinde de certificering duurzaam te waarborgen',
+          acceptedAnswers: [
+            'De afdeling herziet de processen, teneinde de certificering duurzaam te waarborgen',
+            'De afdeling herziet de processen, teneinde de certificering te waarborgen',
+            'De afdeling herziet de werkprocessen, teneinde de veiligheidscertificering te waarborgen',
+            'We herzien de processen, teneinde de certificering te waarborgen'
+          ],
+          explanation: '"Teneinde... te" is the high-register formal equivalent of "om... te", followed by an infinitive construction.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Professional Logic & Strategic Goals', kind: 'personalise',
+      intro: "Formulate a causal explanation, consequence, or purpose statement from your own professional or academic experience using these B2 connectors.",
+      exercises: [
+        {
+          id: 'caus-p-1', kind: 'personalise', prompt: 'Beschrijf een belangrijke oorzaak, gevolgtrekking of doelstelling in jouw werk of studie met behulp van "doordat", "aangezien", "te wijten aan", "te danken aan", "waardoor", "opdat", of "teneinde te".',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['doordat', 'aangezien', 'te wijten aan', 'te danken aan', 'waardoor', 'dermate dat', 'opdat', 'teneinde te', 'oorzaak', 'gevolg', 'doelstelling'],
+          grammar: ['oorzakelijke-verbanden', 'gevolgtrekking', 'doelgerichte-constructies', 'bijzin-woordvolgorde']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
