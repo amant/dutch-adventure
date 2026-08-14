@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { getChapter } from '~/data/chapters'
+import { usePirateGamification } from '~/composables/usePirateGamification'
+
 const route = useRoute()
 const chapter = getChapter(String(route.params.slug))
 if (!chapter) throw createError({ statusCode: 404, statusMessage: 'Chapter not found' })
 const session = useChapterSession(chapter)
+const { addBounty } = usePirateGamification()
 const feedback = ref<ReturnType<typeof session.submit>>()
 
 const timeLeft = ref<number | null>(null)
@@ -37,12 +40,14 @@ watch([() => session.exercise.value?.id, feedback], () => {
 onUnmounted(() => clearInterval(timerInterval))
 
 onMounted(session.hydrate)
+
 function submit(extraContext?: any) { 
   feedback.value = session.submit(undefined, { 
     timeLeft: timeLeft.value ?? undefined,
     ...extraContext
   }) 
 }
+
 const achievedGoalIds = ref<Set<string>>(new Set())
 watch(() => session.exercise.value?.id, () => achievedGoalIds.value.clear())
 watch(feedback, (f) => {
@@ -58,38 +63,58 @@ const allGoalsMet = computed(() => {
   return goals.every(g => achievedGoalIds.value.has(g.id))
 })
 
-function next() { feedback.value = undefined; session.advance() }
+function next() { 
+  feedback.value = undefined
+  session.advance()
+  if (session.state.value.completed) {
+    const reward = chapter?.isCapstone ? 5000000 : 500000
+    addBounty(reward)
+  }
+}
 </script>
 <template>
-  <section v-if="session.state.value.completed" class="card completion">
-    <div class="eyebrow">Loop complete</div>
-    <h1>You practised a real capability.</h1>
-    <p class="muted">You worked on {{ chapter.capability }} Your next review item is the same pattern in a fresh context.</p>
+  <section v-if="session.state.value.completed" class="card completion anime-card">
+    <div class="completion-header">
+      <ComicSoundBadge text="MISSIE VOLTOOID! 🏆" variant="gold" size="md" />
+    </div>
+    <h1 class="completion-title">Eiland Veroverd!</h1>
+    <p class="muted">
+      Geweldig gedaan, piraat! Je hebt de vaardigheid <strong>"{{ chapter.capability }}"</strong> met succes getraind.
+      Je premie is verhoogd!
+    </p>
+
+    <div class="bounty-reward-banner">
+      <span class="reward-tag">PREMIE VERDIEND:</span>
+      <span class="reward-val gold-text">+ ฿ {{ (chapter.isCapstone ? 5000000 : 500000).toLocaleString('nl-NL') }}</span>
+    </div>
     
-    <div v-if="chapter.relatedArticleSlug" class="related-article-cta">
-      <div class="eyebrow">Next step: Real Dutch</div>
-      <h3>Apply this in context</h3>
-      <p>We found an article that uses similar language. Try reading it to see these patterns "in the wild".</p>
-      <NuxtLink :to="`/reading/${chapter.relatedArticleSlug}`" class="button secondary">Read Related Article</NuxtLink>
+    <div v-if="chapter.relatedArticleSlug" class="related-article-cta anime-card">
+      <div class="eyebrow">VOLGENDE STAP: ECHT NEDERLANDS</div>
+      <h3>Pas dit toe in authentieke tekst</h3>
+      <p>We hebben een krantenartikel gevonden dat vergelijkbare structuren gebruikt op zee.</p>
+      <NuxtLink :to="`/reading/${chapter.relatedArticleSlug}`" class="anime-btn secondary">Lees Verwante Artikel</NuxtLink>
     </div>
 
     <div class="completion-actions">
-      <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
-      <NuxtLink class="button secondary" to="/">Back to Home</NuxtLink>
+      <NuxtLink class="anime-btn gold" to="/progress">Bekijk je Haki & Premie ⚡</NuxtLink>
+      <NuxtLink class="anime-btn secondary" to="/map">Terug naar de Zeekaart 🗺️</NuxtLink>
     </div>
   </section>
   <section v-else-if="session.stage.value && session.exercise.value" class="session">
     <div class="session-head">
-      <span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span>
+      <span class="eyebrow">Etappe {{ session.state.value.stageIndex + 1 }} van {{ chapter.stages.length }}</span>
       <div v-if="timeLeft !== null" class="timer" :class="{ urgent: timeLeft < 5 }">
         <span class="icon">⏱️</span> {{ timeLeft }}s
       </div>
-      <span>{{ session.stage.value.title }}</span>
+      <span class="stage-title-tag">{{ session.stage.value.title }}</span>
     </div>
     <div class="progress-track"><div :style="{ width: `${((session.state.value.stageIndex + 1) / chapter.stages.length) * 100}%` }" /></div>
-    <article class="card exercise">
-      <div class="eyebrow">{{ session.stage.value.kind }}</div>
-      <p class="muted">{{ session.stage.value.intro }}</p>
+    <article class="card exercise anime-card">
+      <div class="exercise-badge-row">
+        <span class="eyebrow">{{ session.stage.value.kind }}</span>
+        <span class="chapter-level-tag">{{ chapter.level }}</span>
+      </div>
+      <p class="muted stage-intro">{{ session.stage.value.intro }}</p>
       
       <div v-if="session.exercise.value.kind === 'induction'" class="renderer">
         <PatternInduction 
@@ -324,7 +349,7 @@ function next() { feedback.value = undefined; session.advance() }
           :disabled="!!feedback"
           @submit="submit"
         />
-        <button v-if="!feedback" class="button" @click="submit">Check flexibility</button>
+        <button v-if="!feedback" class="anime-btn gold" @click="submit">Controleer flexibiliteit</button>
       </div>
 
       <div v-else-if="session.exercise.value.kind === 'challenge'" class="renderer">
@@ -334,7 +359,7 @@ function next() { feedback.value = undefined; session.advance() }
           :disabled="!!feedback"
           @submit="submit"
         />
-        <button v-if="!feedback" class="button" @click="submit">Submit Final Mission</button>
+        <button v-if="!feedback" class="anime-btn red" @click="submit">Stuur Finale Missie In</button>
       </div>
 
       <div v-else-if="session.exercise.value.kind === 'speed-drill'" class="renderer">
@@ -417,21 +442,24 @@ function next() { feedback.value = undefined; session.advance() }
           <textarea v-model="session.response.value" :placeholder="session.exercise.value.placeholder" rows="4" autofocus />
           <div class="typed-actions">
             <VoiceInput @result="(t) => { session.response.value = t; submit({ isSpeaking: true }) }" />
-            <button class="button" type="submit">Check answer</button>
+            <button class="anime-btn red" type="submit">Controleer antwoord ⚔️</button>
           </div>
         </form>
         
-        <button v-else-if="!feedback" class="button" @click="next">I’m ready to continue</button>
+        <button v-else-if="!feedback" class="anime-btn gold" @click="next">Ik ben klaar om door te varen ⛵</button>
       </div>
 
-      <div v-if="feedback && (session.exercise.value.kind !== 'conversation' || allGoalsMet)" class="feedback" :class="feedback.outcome">
-        <strong>{{ feedback.outcome === 'retry' ? 'Try once more' : feedback.outcome === 'acceptable' ? 'That works' : 'Correct' }}</strong>
+      <div v-if="feedback && (session.exercise.value.kind !== 'conversation' || allGoalsMet)" class="feedback anime-card" :class="feedback.outcome">
+        <div class="feedback-heading-row">
+          <strong>{{ feedback.outcome === 'retry' ? 'Probeer nogmaals! ⚠️' : feedback.outcome === 'acceptable' ? 'Dat werkt! 👍' : 'Uitstekend! 💥' }}</strong>
+          <ComicSoundBadge v-if="feedback.outcome === 'correct'" text="DON!! 🎯" variant="gold" size="sm" />
+        </div>
         <p>{{ feedback.message }}</p>
-        <p v-if="feedback.target"><b>Useful answer:</b> {{ feedback.target }}</p>
+        <p v-if="feedback.target"><b>Natuurlijk antwoord:</b> {{ feedback.target }}</p>
         <p v-if="feedback.explanation" class="muted">{{ feedback.explanation }}</p>
         
-        <div v-if="feedback.miniLesson" class="mini-lesson card">
-          <div class="tag">60-second Lesson</div>
+        <div v-if="feedback.miniLesson" class="mini-lesson card anime-card">
+          <div class="tag">60-seconden Taalles</div>
           <h3>{{ feedback.miniLesson.title }}</h3>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="comparison">
@@ -446,9 +474,9 @@ function next() { feedback.value = undefined; session.advance() }
           :feedback="feedback.pragmaticFeedback" 
         />
 
-        <div v-if="feedback.teacherCorrection" class="teacher-correction card">
-          <div class="tag">Teacher's Tip</div>
-          <h3>A more natural way to say it:</h3>
+        <div v-if="feedback.teacherCorrection" class="teacher-correction card anime-card">
+          <div class="tag">Coach Tip</div>
+          <h3>Een meer natuurlijke manier:</h3>
           <TeacherRedline 
             :userAnswer="session.response.value" 
             :naturalCorrection="feedback.teacherCorrection.natural" 
@@ -457,58 +485,154 @@ function next() { feedback.value = undefined; session.advance() }
         </div>
 
         <div class="actions">
-          <button v-if="feedback.outcome !== 'retry'" class="button" @click="next">Continue</button>
-          <button v-else class="button secondary" @click="feedback = undefined">Retry</button>
+          <button v-if="feedback.outcome !== 'retry'" class="anime-btn gold" @click="next">Volgende Etappe ⛵</button>
+          <button v-else class="anime-btn secondary" @click="feedback = undefined">Opnieuw Proberen 🔄</button>
         </div>
       </div>
     </article>
   </section>
 </template>
-<style scoped>
-.session { max-width: 760px; margin: auto; }
-.session-head { display:flex; justify-content:space-between; color:#687873; margin-bottom:12px; align-items: baseline; }
-.timer { font-weight: 700; color: #176b5b; background: #e8f3ec; padding: 2px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
-.timer.urgent { color: #d06b3c; background: #fef1e8; animation: pulse 1s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-.progress-track { height:7px; background:#dfe7df; border-radius:9px; margin-bottom:32px; overflow: hidden; }
-.progress-track div { height:100%; background:#d06b3c; border-radius:9px; transition:width .3s; }
+<style lang="scss" scoped>
+.session { max-width: 840px; margin: auto; }
+.session-head { display:flex; justify-content:space-between; color: $ink-dark; margin-bottom:12px; align-items: baseline; }
+.timer { font-weight: 700; color: $anime-blue-deep; background: $anime-ice; border: 1px solid rgba(2, 132, 199, 0.3); padding: 3px 10px; border-radius: 6px; font-variant-numeric: tabular-nums; box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05); }
+.timer.urgent { color: white; background: $battle-red; animation: pulse 1s infinite; border-color: $battle-red-dark; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.progress-track { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 24px; overflow: hidden; }
+.progress-track div { height: 100%; background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%); border-radius: 4px; transition: width .3s; }
 
-.exercise h2 { font-size:36px; margin:24px 0; }
-.exercise pre { white-space:pre-wrap; font: 500 21px/1.7 'DM Sans',sans-serif; background:#f3f7f2; border-radius:14px; padding:20px; color: #176b5b; }
-.exercise textarea { width:100%; border:1px solid #cad6ce; border-radius:12px; padding:15px; font:inherit; resize:vertical; margin-bottom:14px; }
+.stage-title-tag {
+  font-family: $font-anime-title;
+  font-size: 14px;
+  font-weight: 800;
+  color: $anime-blue-deep;
+}
+
+.exercise-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .chapter-level-tag {
+    background: $anime-blue-deep;
+    color: white;
+    font-family: $font-anime-title;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+}
+
+.exercise {
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 28px;
+}
+
+.exercise h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin: 18px 0; color: $anime-navy; }
+.exercise pre { white-space: pre-wrap; font: 500 16px/1.7 $font-body; background: $anime-ice; border: 1px solid rgba(2, 132, 199, 0.2); border-radius: 8px; padding: 16px; color: $anime-navy; }
+.exercise textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; font: inherit; resize: vertical; margin-bottom: 14px; background: #ffffff; &:focus { outline: none; border-color: $anime-blue-primary; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); } }
 .typed-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
 
-.renderer { margin: 24px 0; }
-.default-renderer { margin: 24px 0; }
+.renderer { margin: 20px 0; }
+.default-renderer { margin: 20px 0; }
 
-.feedback { margin-top:24px; padding:24px; border-radius:16px; background:#e8f3ec; border: 1px solid #c8e1d3; }
-.feedback.retry { background:#fff0e7; border-color: #f7d8c5; }
-.feedback strong { font-size:22px; display: block; margin-bottom: 8px; }
-.feedback p { margin: 8px 0; font-size: 16px; line-height: 1.5; }
-.feedback .actions { margin-top: 20px; }
-.mini-lesson { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #cad6ce; text-align: left; }
-.mini-lesson h3, .teacher-correction h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
-.mini-lesson .tag, .teacher-correction .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
-.comparison { margin-top: 12px; background: #f8faf9; padding: 12px; border-radius: 8px; font-family: monospace; }
+.feedback { 
+  margin-top: 24px; 
+  padding: 20px; 
+  border-radius: $radius-anime-sm; 
+  background: #ffffff; 
+  border: 1px solid #e2e8f0;
+  box-shadow: $shadow-anime-sm;
 
-.teacher-correction { margin: 20px 0; padding: 16px; background: #fefce8; border: 1px solid #fef08a; text-align: left; }
-.natural-text { font-size: 19px; font-weight: 600; color: #854d0e; margin: 12px 0 !important; font-style: italic; }
-.wrong { color: #e53e3e; margin-bottom: 4px; }
-.right { color: #176b5b; }
+  &.retry { background: #fff5f5; border-color: rgba(239, 68, 68, 0.3); }
+  &.correct { background: #f0fdf4; border-color: rgba(16, 185, 129, 0.3); }
 
-.completion { max-width:700px; margin:50px auto; text-align: center; }
-.completion h1 { margin: 20px 0; font-size: 36px; }
-.completion-actions { display: flex; gap: 16px; justify-content: center; margin-top: 32px; }
+  .feedback-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  strong { font-size: 18px; color: $anime-navy; font-family: $font-anime-title; font-weight: 800; }
+  p { margin: 8px 0; font-size: 14px; line-height: 1.5; color: $ink-dark; }
+  .actions { margin-top: 20px; }
+}
+
+.mini-lesson { margin: 16px 0; padding: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; text-align: left; }
+.mini-lesson h3, .teacher-correction h3 { margin: 6px 0; color: $anime-navy; font-size: 16px; }
+.mini-lesson .tag, .teacher-correction .tag { font-size: 10px; font-weight: 800; color: $anime-blue-deep; text-transform: uppercase; font-family: $font-anime-title; }
+.comparison { margin-top: 10px; background: #f8fafc; padding: 10px; border-radius: 6px; font-family: monospace; border: 1px solid #e2e8f0; font-size: 13px; }
+
+.teacher-correction { margin: 16px 0; padding: 16px; background: #fffdf5; border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; text-align: left; }
+.wrong { color: #dc2626; margin-bottom: 4px; }
+.right { color: #16a34a; font-weight: 700; }
+
+.completion { 
+  max-width: 680px; 
+  margin: 40px auto; 
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime-lg;
+  padding: 36px 28px;
+
+  .completion-title {
+    font-size: 2.4rem;
+    color: $anime-navy;
+    margin: 14px 0 10px;
+  }
+
+  .bounty-reward-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: $anime-ice;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: 8px;
+    padding: 8px 18px;
+    margin: 16px 0 22px;
+
+    .reward-tag {
+      font-family: $font-anime-title;
+      color: $anime-blue-deep;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .reward-val {
+      font-family: $font-anime-title;
+      font-size: 20px;
+      font-weight: 900;
+      color: $bounty-gold-dark;
+    }
+  }
+
+  .completion-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+}
 
 .related-article-cta {
-  background: #f0f7ff;
-  border: 1px solid #cce3ff;
-  border-radius: 16px;
-  padding: 32px;
-  margin: 40px auto;
+  background: $anime-ice;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 24px auto;
   max-width: 500px;
   text-align: left;
+
+  h3 { margin: 6px 0 8px; color: $anime-navy; }
+  p { margin: 0 0 14px; font-size: 14px; color: $ink-muted; }
 }
-.related-article-cta h3 { margin: 8px 0 12px; color: #1e40af; }
-.related-article-cta p { font-size: 15px; color: #475569; margin-bottom: 24px; }
 </style>

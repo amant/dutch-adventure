@@ -7,45 +7,70 @@ const emit = defineEmits(['activate'])
 </script>
 
 <template>
-  <div class="frontier-card card">
-    <div class="eyebrow">The Learning Frontier</div>
-    <h2>Turn passive into active</h2>
-    <p class="muted">You recognize these concepts, but haven't used them in conversation yet. Ready to activate them?</p>
+  <div class="frontier-card card anime-card">
+    <div class="card-top">
+      <span class="eyebrow">PASSIEVE NAAR ACTIEVE KENNIS // フロンティア</span>
+      <ComicSoundBadge text="FRONTIER! ⚡" variant="gold" size="sm" />
+    </div>
+    <h2 class="frontier-title">Activeer Je Verborgen Kennis</h2>
+    <p class="muted">Je herkent deze concepten wel bij het lezen, maar hebt ze nog niet spontaan gebruikt in spraak. Tijd om ze te activeren!</p>
     
     <div class="frontier-list">
-      <div v-for="item in frontier" :key="item.key" class="frontier-item">
+      <div v-for="item in frontier" :key="item.key" class="frontier-item anime-card">
         <div class="info">
-          <span class="kind">{{ item.kind }}</span>
-          <span class="key">{{ item.key }}</span>
+          <span class="kind-tag">{{ item.kind }}</span>
+          <span class="key-label">{{ item.key }}</span>
         </div>
         <div class="gap-visualization">
           <div class="bar passive" :style="{ width: `${item.passive}%` }"></div>
           <div class="bar active" :style="{ width: `${item.active}%` }"></div>
-          <span class="label">Gap: {{ Math.round(item.passive - item.active) }}%</span>
+          <span class="gap-label">Kloof: {{ Math.round(item.passive - item.active) }}%</span>
         </div>
       </div>
     </div>
 
-    <button v-if="frontier.length > 0" class="button" @click="emit('activate')">
-      Start Activation Session
+    <button v-if="frontier.length > 0" class="anime-btn gold lg full-width" @click="emit('activate')">
+      <span>START ACTIVATIE SESSIE ⚡</span>
     </button>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .frontier-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f7f4 100%);
-  border: 2px solid #176b5b;
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.frontier-title {
+  font-size: 1.8rem;
+  color: $anime-navy;
+  margin: 6px 0 8px;
 }
 
 .frontier-list {
-  margin: 24px 0;
+  margin: 20px 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .frontier-item {
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime-sm;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -55,59 +80,63 @@ const emit = defineEmits(['activate'])
   display: flex;
   align-items: center;
   gap: 10px;
-}
 
-.kind {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #176b5b;
-  background: #e0ebe5;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
+  .kind-tag {
+    font-family: $font-anime-title;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+    background: $anime-blue-primary;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
 
-.key {
-  font-weight: 600;
-  color: #20302d;
+  .key-label {
+    font-weight: 700;
+    font-size: 14px;
+    color: $anime-navy;
+  }
 }
 
 .gap-visualization {
   position: relative;
-  height: 12px;
-  background: #e1e5de;
-  border-radius: 6px;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
   overflow: hidden;
+
+  .bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 4px;
+
+    &.passive {
+      background: $bounty-gold;
+      opacity: 0.35;
+    }
+
+    &.active {
+      background: $anime-blue-primary;
+    }
+  }
+
+  .gap-label {
+    position: absolute;
+    right: 6px;
+    top: -1px;
+    font-size: 9px;
+    font-weight: 800;
+    color: $ink-dark;
+  }
 }
 
-.bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  border-radius: 6px;
-}
-
-.bar.passive {
-  background: #176b5b;
-  opacity: 0.2;
-}
-
-.bar.active {
-  background: #176b5b;
-}
-
-.label {
-  position: absolute;
-  right: 8px;
-  top: -1px;
-  font-size: 9px;
-  font-weight: 700;
-  color: #176b5b;
-}
-
-.button {
+.full-width {
   width: 100%;
   text-align: center;
+  justify-content: center;
 }
 </style>

@@ -1,0 +1,153 @@
+@use "variables" as *;
+
+// Modern Anime Card Mixin
+@mixin anime-card($bg: $anime-white, $border: $border-anime-subtle, $shadow: $shadow-anime, $radius: $radius-anime) {
+  background: $bg;
+  border: $border;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+@mixin anime-card-interactive($bg: $anime-white) {
+  @include anime-card($bg);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-anime-hover;
+    border-color: rgba(2, 132, 199, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: $shadow-anime-sm;
+  }
+}
+
+// Modern Anime Action Button (Sleek Gradient & Glowing Accent)
+@mixin anime-button($bg-gradient: linear-gradient(135deg, #0284c7 0%, #0056b3 100%), $color: #ffffff) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: $bg-gradient;
+  color: $color;
+  font-family: $font-anime-title;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $radius-anime-sm;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+    filter: brightness(1.05);
+
+    &::after {
+      left: 120%;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.7);
+    box-shadow: none;
+  }
+}
+
+// Modern Japanese Anime Title
+@mixin anime-title($size: 2rem, $color: $anime-navy) {
+  font-family: $font-anime-title;
+  font-size: $size;
+  color: $color;
+  letter-spacing: 0.04em;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.15;
+}
+
+// Japanese Sound Effect / Manga Accent Tag (Toned down & sleek)
+@mixin sound-effect-badge($bg: $anime-ice, $color: $anime-blue-deep) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: $font-anime-title;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: $color;
+  background: $bg;
+  padding: 4px 10px;
+  border: 1px solid rgba(2, 132, 199, 0.3);
+  border-radius: $radius-anime-sm;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.08);
+}
+
+// Collectible Anime Character Card / Wanted Poster Style
+@mixin wanted-poster() {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1.5px solid rgba(2, 132, 199, 0.3);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime-lg;
+  position: relative;
+  color: $ink-black;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(2, 132, 199, 0.12);
+    border-radius: calc($radius-anime - 4px);
+    pointer-events: none;
+  }
+}
+
+// Haki Aura Glow
+@mixin haki-aura($color: $anime-cyan) {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.35), inset 0 0 10px rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.5) !important;
+}
+
+// Responsive Media Query Helpers
+@mixin mobile {
+  @media (max-width: 640px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 900px) {
+    @content;
+  }
+}

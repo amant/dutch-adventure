@@ -1,25 +1,29 @@
 <script setup lang="ts">
 import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { usePirateGamification } from '~/composables/usePirateGamification'
 import { articles } from '~/data/articles'
-import type { SkillDimension } from '~/types/learning'
 
 const { memory, hydrate, reset } = useLearnerMemory()
-onMounted(hydrate)
+const { profile, calculatedBounty, crewRank, hydrateProfile } = usePirateGamification()
+
+onMounted(() => {
+  hydrate()
+  hydrateProfile()
+})
 
 const readingStats = computed(() => {
-  const allVocab = Object.values(memory.value.vocabulary)
+  const allVocab = Object.values(memory.value.vocabulary || {})
   const mastered = allVocab.filter(v => v.production > 80).length
   const recognized = allVocab.filter(v => v.recognition > 50 && v.production <= 80).length
   const totalEncountered = allVocab.length
 
-  // Calculate avg coverage across articles
   const coverages = articles.map(article => {
     const words = article.content.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/).filter(w => w.length > 2)
     const unique = new Set(words)
     const known = Array.from(unique).filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
     return (known.length / unique.size) * 100
   })
-  const avgCoverage = coverages.reduce((a, b) => a + b, 0) / articles.length
+  const avgCoverage = coverages.reduce((a, b) => a + b, 0) / (articles.length || 1)
 
   return {
     mastered,
@@ -31,54 +35,41 @@ const readingStats = computed(() => {
 
 const levelForScore = (score: number) => {
   if (score < 20) return 'A0'
-  if (score < 40) return 'A1'
-  if (score < 60) return 'A2'
-  if (score < 80) return 'B1'
-  return 'B2'
+  if (score < 40) return 'A1 (Oost-Blauw)'
+  if (score < 60) return 'A2 (Grand Line)'
+  if (score < 80) return 'B1 (Sabaody)'
+  return 'B2 (Nieuwe Wereld)'
 }
 
 const skillRows = computed(() => [
-  { label: 'Reading', score: memory.value.overall.recognition, level: levelForScore(memory.value.overall.recognition) },
-  { label: 'Listening', score: memory.value.overall.listening, level: levelForScore(memory.value.overall.listening) },
-  { label: 'Vocabulary', score: vocabularyScore.value, level: levelForScore(vocabularyScore.value) },
-  { label: 'Grammar', score: grammarScore.value, level: levelForScore(grammarScore.value) },
-  { label: 'Writing', score: memory.value.overall.production, level: levelForScore(memory.value.overall.production) },
-  { label: 'Speaking', score: memory.value.overall.speaking, level: levelForScore(memory.value.overall.speaking) },
-  { label: 'Fluency', score: memory.value.overall.automaticity, level: levelForScore(memory.value.overall.automaticity) },
-  { label: 'Pragmatic', score: memory.value.overall.pragmatic, level: levelForScore(memory.value.overall.pragmatic) },
-  { label: 'Coherence', score: memory.value.overall.coherence, level: levelForScore(memory.value.overall.coherence) },
+  { label: 'Lezen & Begrip', score: memory.value.overall.recognition, level: levelForScore(memory.value.overall.recognition), icon: '📖' },
+  { label: 'Luisteren & Observatie', score: memory.value.overall.listening, level: levelForScore(memory.value.overall.listening), icon: '🎧' },
+  { label: 'Woordenschat Meesterschap', score: vocabularyScore.value, level: levelForScore(vocabularyScore.value), icon: '💎' },
+  { label: 'Grammatica & Structuur', score: grammarScore.value, level: levelForScore(grammarScore.value), icon: '🛡️' },
+  { label: 'Schrijven & Productie', score: memory.value.overall.production, level: levelForScore(memory.value.overall.production), icon: '✍️' },
+  { label: 'Spreekvaardigheid', score: memory.value.overall.speaking, level: levelForScore(memory.value.overall.speaking), icon: '🗣️' },
+  { label: 'Vloeiendheid (Snelheid)', score: memory.value.overall.automaticity, level: levelForScore(memory.value.overall.automaticity), icon: '⚡' },
+  { label: 'Pragmatiek (Verzachten)', score: memory.value.overall.pragmatic, level: levelForScore(memory.value.overall.pragmatic), icon: '🎭' },
+  { label: 'Samenhang & Connectors', score: memory.value.overall.coherence, level: levelForScore(memory.value.overall.coherence), icon: '🔗' },
 ])
 
 const vocabularyScore = computed(() => {
-  const items = Object.values(memory.value.vocabulary)
+  const items = Object.values(memory.value.vocabulary || {})
   if (items.length === 0) return 0
   return items.reduce((acc, item) => acc + (item.recognition + item.meaning + item.production) / 3, 0) / items.length
 })
 
 const grammarScore = computed(() => {
-  const items = Object.values(memory.value.grammar)
+  const items = Object.values(memory.value.grammar || {})
   if (items.length === 0) return 0
   return items.reduce((acc, item) => acc + (item.recognition + item.meaning + item.production) / 3, 0) / items.length
 })
 
 const averageRetrievalSpeed = computed(() => {
-  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  const all = [...Object.values(memory.value.vocabulary || {}), ...Object.values(memory.value.grammar || {})]
   const speeds = all.flatMap(v => v.responseTimes || [])
   if (speeds.length === 0) return 0
   return speeds.reduce((a, b) => a + b, 0) / speeds.length
-})
-
-const bottlenecks = computed(() => {
-  const speed = averageRetrievalSpeed.value
-  const skills = [
-    { id: 'speaking', label: 'Retrieval speed', score: speed > 0 ? Math.max(0, 100 - speed * 10) : 100, status: speed > 6 ? 'red' : speed > 3 ? 'orange' : 'green', text: speed > 0 ? `Your average retrieval time is ${speed.toFixed(1)}s.` : 'Retrieval speed not yet measured.' },
-    { id: 'listening', label: 'Listening', score: memory.value.overall.listening, status: 'orange', text: 'Normal-speed speech is difficult.' },
-    { id: 'grammar', label: 'Word order', score: grammarScore.value, status: 'orange', text: 'Subordinate clauses remain inconsistent.' }
-  ]
-  return skills
-    .sort((a, b) => a.score - b.score)
-    .filter(s => s.score < 80)
-    .slice(0, 3)
 })
 
 const overallLevel = computed(() => {
@@ -89,31 +80,18 @@ const overallLevel = computed(() => {
 
 const canDoItems = computed(() => {
   const items = []
-  if (memory.value.overall.recognition > 20) items.push('Understand basic introductions and signs.')
-  if (memory.value.overall.production > 30) items.push('Introduce yourself and state where you live.')
-  if (memory.value.overall.listening > 40) items.push('Follow slow, clear speech in everyday contexts.')
-  if (grammarScore.value > 50) items.push('Use "omdat" and "want" to explain reasons correctly.')
-  if (memory.value.overall.automaticity > 60) items.push('Participate in simple conversations without too much hesitation.')
-  if (memory.value.overall.production > 70) items.push('Argue a position and disagree politely in work discussions.')
-  if (vocabularyScore.value > 80) items.push('Read authentic news articles with minimal dictionary help.')
-  
-  return items.slice(-4) // Show the 4 most recent achievements
-})
-
-const recentGains = computed(() => {
-  const items = [...Object.entries(memory.value.vocabulary), ...Object.entries(memory.value.grammar)]
-    .filter(([_, state]) => state.encounters > 3 && state.successes / state.encounters > 0.8)
-    .sort((a, b) => new Date(b[1].lastEncountered || 0).getTime() - new Date(a[1].lastEncountered || 0).getTime())
-    .slice(0, 3)
-    .map(([key, state]) => ({ 
-      label: key.replace(/-/g, ' '), 
-      score: Math.round((state.production + state.automaticity) / 2) 
-    }))
-  return items
+  if (memory.value.overall.recognition > 20) items.push('Begrijp eenvoudige introducties en borden in havensteden.')
+  if (memory.value.overall.production > 30) items.push('Stel jezelf voor en vertel waar je vandaan vaart.')
+  if (memory.value.overall.listening > 40) items.push('Volg duidelijke spraak in alledaagse markten en herbergen.')
+  if (grammarScore.value > 50) items.push('Gebruik "omdat" en "want" om overtuigend redenen te geven.')
+  if (memory.value.overall.automaticity > 60) items.push('Neem deel aan gesprekken zonder te aarzelen op het dek.')
+  if (memory.value.overall.production > 70) items.push('Onderhandel en beargumenteer standpunten diplomatiek.')
+  if (vocabularyScore.value > 80) items.push('Lees authentiek Nederlands nieuws en documenten moeiteloos.')
+  return items.slice(-4)
 })
 
 const pipeline = computed(() => {
-  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
+  const all = [...Object.values(memory.value.vocabulary || {}), ...Object.values(memory.value.grammar || {})]
   return {
     new: all.filter(v => v.encounters < 3).length,
     recognized: all.filter(v => v.recognition > 50 && v.production <= 50).length,
@@ -121,340 +99,429 @@ const pipeline = computed(() => {
     automated: all.filter(v => v.automaticity > 50).length
   }
 })
-
-const naturalnessTrend = computed(() => {
-  const allHistory = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
-    .flatMap(v => v.usageHistory || [])
-    .filter(h => h.pragmaticScore !== undefined)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-  if (allHistory.length < 4) return null
-
-  const recent = allHistory.slice(0, 5).reduce((acc, h) => acc + (h.pragmaticScore || 0), 0) / Math.min(5, allHistory.length)
-  const previous = allHistory.slice(5, 10).reduce((acc, h) => acc + (h.pragmaticScore || 0), 0) / Math.min(5, Math.max(0, allHistory.length - 5))
-
-  if (isNaN(previous)) return { score: Math.round(recent), change: 0 }
-  return { score: Math.round(recent), change: Math.round(recent - previous) }
-})
-
-const retrievalTrend = computed(() => {
-  const all = [...Object.values(memory.value.vocabulary), ...Object.values(memory.value.grammar)]
-  const allSpeeds = all.flatMap(v => v.responseTimes || [])
-  
-  if (allSpeeds.length < 10) return null
-
-  const recent = allSpeeds.slice(-10).reduce((a, b) => a + b, 0) / 10
-  const previous = allSpeeds.slice(-20, -10).reduce((a, b) => a + b, 0) / Math.min(10, Math.max(1, allSpeeds.length - 10))
-
-  return { 
-    current: recent, 
-    change: previous - recent, // Positive means faster (time decreased)
-    history: allSpeeds.slice(-20) 
-  }
-})
 </script>
 
 <template>
   <section class="progress-view">
-    <div class="eyebrow">Your Dutch level</div>
-    <h1>{{ overallLevel }} candidate</h1>
-    <p class="muted">Based on your practice across all capabilities.</p>
+    <!-- Hero Status Banner -->
+    <div class="hero-status-card card anime-card">
+      <div class="status-top">
+        <span class="eyebrow">PIRATENLOGBOEK & HAKI MATRIX</span>
+        <ComicSoundBadge text="RANG STATUS 👑" variant="gold" size="sm" />
+      </div>
 
-    <div class="card can-do-card" v-if="canDoItems.length > 0">
-      <div class="eyebrow">Capabilities</div>
-      <h3>What you can do:</h3>
+      <div class="status-main-grid">
+        <div class="status-info">
+          <h1 class="rank-name">{{ crewRank.title }}</h1>
+          <p class="rank-sector muted">Sector: <strong>{{ crewRank.sector }}</strong> ({{ overallLevel }})</p>
+          <div class="bounty-pill-large">
+            <span class="pill-label">OFFICIËLE PREMIE:</span>
+            <span class="pill-val gold-text">฿ {{ calculatedBounty.toLocaleString('nl-NL') }}</span>
+          </div>
+        </div>
+
+        <div class="status-summary-pills">
+          <div class="summary-box">
+            <span class="sum-icon">🔥</span>
+            <span class="sum-val">{{ profile.streakDays }} Dagen</span>
+            <span class="sum-label">Zeeloge Streak</span>
+          </div>
+          <div class="summary-box">
+            <span class="sum-icon">⚔️</span>
+            <span class="sum-val">{{ profile.battlesWon }}</span>
+            <span class="sum-label">Gevechten Gewonnen</span>
+          </div>
+          <div class="summary-box">
+            <span class="sum-icon">⏱️</span>
+            <span class="sum-val">{{ averageRetrievalSpeed > 0 ? `${averageRetrievalSpeed.toFixed(1)}s` : 'N/A' }}</span>
+            <span class="sum-label">Reactietijd</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Haki 3-Spheres Matrix -->
+    <HakiGauge />
+
+    <!-- Can-Do Capabilities -->
+    <div v-if="canDoItems.length > 0" class="card can-do-card anime-card">
+      <div class="eyebrow">BEWEZEN VAARDIGHEDEN</div>
+      <h3>Wat jij kunt op de Zeven Zeeën:</h3>
       <ul class="can-do-list">
-        <li v-for="item in canDoItems" :key="item">{{ item }}</li>
+        <li v-for="item in canDoItems" :key="item">⚓ {{ item }}</li>
       </ul>
     </div>
 
-    <div class="card skill-table">
+    <!-- Skills Detailed Matrix -->
+    <div class="card skill-table anime-card">
+      <h2 class="table-heading">Gedetailleerde Taalvaardigheden</h2>
       <div v-for="row in skillRows" :key="row.label" class="skill-row">
         <div class="skill-info">
+          <span class="skill-icon">{{ row.icon }}</span>
           <strong>{{ row.label }}</strong>
         </div>
         <div class="skill-meter">
-          <div class="meter"><div :style="{ width: `${row.score}%` }" /></div>
+          <div class="meter">
+            <div :style="{ width: `${row.score}%` }" />
+          </div>
         </div>
         <div class="skill-level">
-          {{ row.level }}
+          {{ row.level.split(' ')[0] }} ({{ Math.round(row.score) }}%)
         </div>
       </div>
     </div>
 
-    <div class="card reading-stats-card">
-      <div class="eyebrow">Reading Proficiency</div>
-      <div class="stats-grid mt-4">
-        <div class="stat-item">
-          <span class="stat-value">{{ readingStats.totalEncountered }}</span>
-          <span class="stat-label">Words Encountered</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ readingStats.mastered }}</span>
-          <span class="stat-label">Mastered</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ readingStats.recognized }}</span>
-          <span class="stat-label">Recognized</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ readingStats.avgCoverage }}%</span>
-          <span class="stat-label">Avg. Coverage</span>
-        </div>
-      </div>
-      <div class="mt-6">
-        <NuxtLink to="/reading" class="button secondary small">Explore Reading Feed</NuxtLink>
-      </div>
-    </div>
-
+    <!-- Knowledge Pipeline -->
     <div class="pipeline-section">
-      <h2>Knowledge Pipeline</h2>
-      <div class="pipeline-container card">
+      <h2 class="pipeline-title">Kennis Pijplijn (Geheugen Verloop)</h2>
+      <div class="pipeline-container card anime-card">
         <div class="pipeline-grid">
           <div class="pipeline-step">
             <span class="count">{{ pipeline.new }}</span>
-            <span class="label">New</span>
-            <span class="desc">Exposure</span>
+            <span class="label">Ontdekken</span>
+            <span class="desc">Pas ontmoet</span>
           </div>
-          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-arrow">➔</div>
           <div class="pipeline-step">
             <span class="count">{{ pipeline.recognized }}</span>
-            <span class="label">Recognized</span>
-            <span class="desc">Passive</span>
+            <span class="label">Herkennen</span>
+            <span class="desc">Passief</span>
           </div>
-          <div class="pipeline-arrow active">→</div>
-          <div class="pipeline-step active">
-            <span class="count">{{ pipeline.produced }}</span>
-            <span class="label">Produced</span>
-            <span class="desc">Active</span>
-          </div>
-          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-arrow">➔</div>
           <div class="pipeline-step">
+            <span class="count">{{ pipeline.produced }}</span>
+            <span class="label">Gebruiken</span>
+            <span class="desc">Actieve productie</span>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step automated">
             <span class="count">{{ pipeline.automated }}</span>
-            <span class="label">Automated</span>
-            <span class="desc">Fluent</span>
+            <span class="label">Automatisch</span>
+            <span class="desc">Vloeiende reflex</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="fluency-section">
-      <div class="trend-grid">
-        <div class="card fluency-card">
-          <div class="stat-main">
-            <span class="value">{{ averageRetrievalSpeed > 0 ? averageRetrievalSpeed.toFixed(1) : '--' }}s</span>
-            <span class="label">Avg. Retrieval Time</span>
-          </div>
-          <div class="stat-desc">
-            <p v-if="averageRetrievalSpeed > 5">You are in the <strong>Thinking</strong> phase. Retrieval is conscious and slow.</p>
-            <p v-else-if="averageRetrievalSpeed > 2">You are reaching <strong>Functional Fluency</strong>. Retrieval is becoming semi-automatic.</p>
-            <p v-else-if="averageRetrievalSpeed > 0">You are reaching <strong>Automaticity</strong>. You retrieve Dutch almost as fast as your native language.</p>
-            <p v-else>Start missions and drills to measure your retrieval speed.</p>
-          </div>
+    <!-- Reading Stats -->
+    <div class="card reading-stats-card anime-card">
+      <div class="eyebrow">LEESVAARDIGHEID & LOGBOEK</div>
+      <div class="stats-grid mt-4">
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.totalEncountered }}</span>
+          <span class="stat-label">Woorden Ontmoet</span>
         </div>
-
-        <div v-if="naturalnessTrend" class="card trend-card">
-          <div class="stat-main">
-            <span class="value">{{ naturalnessTrend.score }}%</span>
-            <span class="label">Naturalness Score</span>
-          </div>
-          <div class="trend-meta">
-            <div class="trend-indicator" :class="{ up: naturalnessTrend.change > 0, down: naturalnessTrend.change < 0 }">
-              {{ naturalnessTrend.change > 0 ? '↑' : naturalnessTrend.change < 0 ? '↓' : '→' }} 
-              {{ Math.abs(naturalnessTrend.change) }}%
-            </div>
-            <p class="muted">Trend over last 10 interactions.</p>
-            <p class="desc">B2 learners should aim for >80% naturalness using native particles and flow.</p>
-          </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.mastered }}</span>
+          <span class="stat-label">Volledig Beheerst</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.recognized }}</span>
+          <span class="stat-label">Herkend</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ readingStats.avgCoverage }}%</span>
+          <span class="stat-label">Gem. Tekstdekking</span>
         </div>
       </div>
-
-      <div v-if="retrievalTrend" class="card speed-trend-card mt-6">
-        <div class="trend-header">
-          <div class="stat-main">
-            <span class="value">{{ retrievalTrend.current.toFixed(1) }}s</span>
-            <span class="label">Current Speed</span>
-          </div>
-          <div class="trend-meta">
-            <div class="trend-indicator" :class="{ up: retrievalTrend.change > 0, down: retrievalTrend.change < 0 }">
-              {{ retrievalTrend.change > 0 ? '↑ Faster' : retrievalTrend.change < 0 ? '↓ Slower' : '→ Steady' }} 
-              ({{ Math.abs(retrievalTrend.change).toFixed(1) }}s)
-            </div>
-            <p class="muted">Trend based on last 20 production attempts.</p>
-          </div>
-        </div>
-        <div class="speed-graph">
-          <div 
-            v-for="(speed, idx) in retrievalTrend.history" 
-            :key="idx" 
-            class="speed-bar"
-            :style="{ height: `${Math.min(100, (10 / speed) * 30)}%` }"
-            :title="`${speed.toFixed(1)}s`"
-          ></div>
-        </div>
+      <div class="mt-6">
+        <NuxtLink to="/reading" class="anime-btn gold sm">Verken Verhalenladder 📖</NuxtLink>
       </div>
     </div>
 
-    <div class="reading-progress">
-      <h2>Reading Proficiency</h2>
-      <div class="card">
-        <div class="reading-stats-grid">
-          <div class="stat">
-            <span class="label">Total Words Encountered</span>
-            <span class="value">{{ Object.keys(memory.vocabulary).length }}</span>
-          </div>
-          <div class="stat">
-            <span class="label">Mastered in Context</span>
-            <span class="value">{{ Object.values(memory.vocabulary).filter(v => v.recognition > 70).length }}</span>
-          </div>
-          <div class="stat">
-            <span class="label">Reading Accuracy</span>
-            <span class="value">{{ Math.round((Object.values(memory.vocabulary).reduce((acc, v) => acc + (v.successes / (v.encounters || 1)), 0) / (Object.keys(memory.vocabulary).length || 1)) * 100) }}%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="recent-progress" v-if="recentGains.length > 0">
-      <h2>Recent Gains</h2>
-      <div class="grid">
-        <div v-for="gain in recentGains" :key="gain.label" class="card gain-card">
-          <div class="tag success">Mastery Improving</div>
-          <h3>{{ gain.label }}</h3>
-          <div class="score-badge">{{ gain.score }}%</div>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="bottlenecks.length > 0" class="bottlenecks">
-      <h2>Your biggest bottlenecks</h2>
-      <div class="grid">
-        <div v-for="b in bottlenecks" :key="b.id" class="card bottleneck-card" :class="b.status">
-          <div class="tag">Needs attention</div>
-          <h3>{{ b.label }}</h3>
-          <p class="muted">{{ b.text }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="actions">
-      <button class="button secondary" @click="reset">Reset all progress</button>
+    <!-- Reset Data Action -->
+    <div class="reset-actions">
+      <button class="anime-btn secondary sm" @click="reset">Reset Geheugenlogboek 🔄</button>
     </div>
   </section>
 </template>
 
-<style scoped>
-.skill-table { margin: 32px 0; padding: 12px 28px; }
-
-.can-do-card { background: #f0f7ff; border: 1px solid #cce3ff; margin: 24px 0; padding: 24px; }
-.can-do-card h3 { margin: 8px 0 16px; color: #1e40af; }
-.can-do-list { margin: 0; padding-left: 20px; color: #1e40af; }
-.can-do-list li { margin-bottom: 8px; font-weight: 500; }
-
-.skill-row { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid #f0f2ef; }
-.skill-row:last-child { border-bottom: 0; }
-.skill-info { flex: 1; display: flex; flex-direction: column; }
-.skill-meter { flex: 1; padding: 0 40px; }
-.skill-level { width: 40px; font-weight: 700; text-align: right; color: #176b5b; }
-.meter { height: 8px; background: #e2e9e3; border-radius: 4px; overflow: hidden; }
-.meter div { height: 100%; background: #176b5b; transition: width 0.6s ease; }
-
-.reading-stats-card { margin-top: 30px; padding: 24px; }
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.stat-value { font-size: 24px; font-weight: 800; color: #176b5b; }
-.stat-label { font-size: 12px; color: #687873; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
-.mt-4 { margin-top: 16px; }
-.mt-6 { margin-top: 24px; }
-
-@media (max-width: 600px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+<style lang="scss" scoped>
+.progress-view {
+  padding: 10px 0 40px;
 }
 
-.pipeline-section { margin: 40px 0; }
-.pipeline-container { padding: 30px; background: #f8fafc; }
-.pipeline-grid { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.pipeline-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.pipeline-step.active { color: #176b5b; }
-.pipeline-step .count { font-size: 24px; font-weight: 800; font-family: Fraunces, serif; margin-bottom: 4px; }
-.pipeline-step .label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-.pipeline-step .desc { font-size: 11px; color: #8a9a94; }
-.pipeline-step.active .desc { color: #176b5b; opacity: 0.8; }
-.pipeline-arrow { font-size: 20px; color: #cbd5e1; font-weight: 700; }
-.pipeline-arrow.active { color: #176b5b; }
+.hero-status-card {
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 24px;
+  margin-bottom: 24px;
 
-.fluency-section { margin: 40px 0; }
-.trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.fluency-card, .trend-card { display: flex; align-items: center; gap: 40px; padding: 32px; background: #fffdf9; border: 1px solid #f9e8b9; }
-.trend-card { background: #fdf2f8; border-color: #fbcfe8; }
-.trend-meta { flex: 1; }
-.trend-indicator { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-.trend-indicator.up { color: #176b5b; }
-.trend-indicator.down { color: #ef4444; }
-.trend-meta .desc { font-size: 13px; color: #9d174d; margin-top: 8px; }
-.stat-main { display: flex; flex-direction: column; align-items: center; min-width: 140px; }
-.stat-main .value { font-size: 42px; font-weight: 800; color: #d06b3c; font-family: Fraunces, serif; }
-.stat-main .label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #8a9a94; letter-spacing: 0.1em; }
-.stat-desc { flex: 1; font-size: 16px; line-height: 1.5; color: #2c3e50; }
-.stat-desc strong { color: #d06b3c; }
+  .status-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
 
-.speed-trend-card {
-  padding: 32px;
-  background: #f0fdfa;
-  border-color: #99f6e4;
+  .status-main-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .rank-name {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    color: $anime-navy;
+    margin: 4px 0 6px;
+  }
+
+  .rank-sector {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .bounty-pill-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: $anime-ice;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: 8px;
+    padding: 6px 14px;
+
+    .pill-label {
+      font-family: $font-anime-title;
+      color: $anime-blue-deep;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .pill-val {
+      font-family: $font-anime-title;
+      font-size: 18px;
+      font-weight: 900;
+      color: $bounty-gold-dark;
+    }
+  }
+
+  .status-summary-pills {
+    display: flex;
+    gap: 12px;
+
+    .summary-box {
+      background: $anime-ice;
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 100px;
+
+      .sum-icon { font-size: 20px; }
+      .sum-val { font-family: $font-anime-title; font-size: 15px; font-weight: 800; color: $anime-navy; margin: 4px 0 2px; }
+      .sum-label { font-size: 10px; color: $ink-muted; font-weight: 700; }
+    }
+  }
 }
 
-.trend-header {
+.can-do-card {
+  background: #f0fdf4;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 22px;
+  margin: 24px 0;
+
+  h3 { margin: 6px 0 12px; color: #15803d; font-size: 1.2rem; }
+
+  .can-do-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #166534;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.skill-table {
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 24px;
+  margin: 24px 0;
+
+  .table-heading {
+    font-size: 1.6rem;
+    color: $anime-navy;
+    margin: 0 0 16px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+  }
+}
+
+.skill-row {
   display: flex;
   align-items: center;
-  gap: 40px;
-  margin-bottom: 24px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+
+  &:last-child { border-bottom: 0; }
+
+  .skill-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: $anime-navy;
+  }
+
+  .skill-meter {
+    flex: 1;
+    padding: 0 24px;
+
+    .meter {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+
+      div {
+        height: 100%;
+        background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%);
+        border-radius: 4px;
+        transition: width 0.4s ease;
+      }
+    }
+  }
+
+  .skill-level {
+    font-family: $font-anime-title;
+    font-size: 13px;
+    font-weight: 700;
+    color: $anime-blue-deep;
+    min-width: 80px;
+    text-align: right;
+  }
 }
 
-.speed-graph {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 60px;
-  padding: 10px 0;
-  border-bottom: 1px solid #99f6e4;
+.pipeline-section {
+  margin: 28px 0;
+
+  .pipeline-title {
+    font-size: 1.6rem;
+    color: $anime-navy;
+    margin-bottom: 12px;
+  }
+
+  .pipeline-container {
+    background: #ffffff;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: $radius-anime;
+    box-shadow: $shadow-anime;
+    padding: 24px;
+  }
+
+  .pipeline-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .pipeline-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .count {
+      font-family: $font-anime-title;
+      font-size: 24px;
+      font-weight: 900;
+      color: $anime-blue-deep;
+    }
+
+    .label {
+      font-family: $font-anime-title;
+      font-size: 13px;
+      font-weight: 800;
+      color: $anime-navy;
+    }
+
+    .desc {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    &.automated .count {
+      color: $berry-green;
+    }
+  }
+
+  .pipeline-arrow {
+    font-size: 18px;
+    color: #94a3b8;
+    font-weight: 700;
+  }
 }
 
-.speed-bar {
-  flex: 1;
-  background: #176b5b;
-  border-radius: 2px 2px 0 0;
-  min-height: 4px;
-  transition: height 0.3s ease;
+.reading-stats-card {
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  border-radius: $radius-anime;
+  box-shadow: $shadow-anime;
+  padding: 24px;
+  margin: 24px 0;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 14px 0 18px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: $anime-ice;
+    border: 1px solid rgba(2, 132, 199, 0.15);
+    border-radius: 6px;
+    padding: 10px;
+
+    .stat-value {
+      font-family: $font-anime-title;
+      font-size: 22px;
+      font-weight: 900;
+      color: $anime-blue-deep;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: $ink-muted;
+      text-transform: uppercase;
+    }
+  }
 }
 
-.speed-bar:hover {
-  background: #0d9488;
+.reset-actions {
+  margin-top: 24px;
+  text-align: center;
 }
 
-.reading-progress { margin: 40px 0; }
-.reading-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-.reading-stats-grid .stat { display: flex; flex-direction: column; gap: 8px; }
-.reading-stats-grid .label { font-size: 12px; color: #8a9a94; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-.reading-stats-grid .value { font-size: 28px; font-weight: 700; color: #176b5b; font-family: Fraunces, serif; }
-
-.bottlenecks { margin-top: 60px; }
-.bottleneck-card { border-left: 4px solid #ccc; }
-.bottleneck-card.red { border-left-color: #e53e3e; }
-.bottleneck-card.red .tag { color: #e53e3e; }
-.bottleneck-card.orange { border-left-color: #d06b3c; }
-.bottleneck-card.orange .tag { color: #d06b3c; }
-.tag { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #d06b3c; margin-bottom: 8px; }
-.tag.success { color: #176b5b; }
-.bottleneck-card h3, .gain-card h3 { margin: 0 0 12px; }
-
-.gain-card { position: relative; border-left: 4px solid #176b5b; }
-.score-badge { position: absolute; top: 16px; right: 16px; font-size: 24px; font-weight: 800; color: #176b5b; opacity: 0.2; }
-
-.actions { margin-top: 40px; }
-
-@media (max-width: 768px) {
-  .skill-row { flex-wrap: wrap; }
-  .skill-meter { flex: 1 1 100%; padding: 15px 0 0; order: 3; }
+@media (max-width: 800px) {
+  .status-main-grid {
+    grid-template-columns: 1fr;
+  }
+  .pipeline-grid {
+    flex-direction: column;
+  }
+  .pipeline-arrow {
+    transform: rotate(90deg);
+  }
 }
 </style>

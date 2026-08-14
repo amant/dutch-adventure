@@ -1,0 +1,60 @@
+// Modern Japanese Anime Palette (Blue & White Theme - One Piece Inspired)
+$anime-white: #ffffff;
+$anime-offwhite: #f8fafc;
+$anime-ice: #f0f7ff;
+$anime-ice-hover: #e0f2fe;
+$anime-slate: #f1f5f9;
+
+// Blues
+$anime-blue-primary: #0284c7; // Vibrant Ocean Azure
+$anime-blue-deep: #0056b3;    // Deep Royal Navy
+$anime-blue-electric: #0ea5e9;// Electric Azure
+$anime-cyan: #06b6d4;         // Glowing Cyan
+$anime-cyan-light: #38bdf8;   // High-tech Cyan Highlight
+$anime-navy: #0b192c;         // Japanese Midnight Navy
+$anime-navy-light: #1e293b;   // Dark Slate
+$anime-navy-muted: #334155;   // Mid Slate
+
+// Accents (Refined & Toned Down)
+$bounty-gold: #f59e0b;        // Metallic Amber Gold
+$bounty-gold-light: #fef3c7;  // Soft Amber Light
+$bounty-gold-dark: #b45309;   // Deep Bronze Gold
+$battle-red: #ef4444;         // Crisp Crimson Red
+$battle-red-light: #fee2e2;   // Soft Red Tint
+$battle-red-dark: #b91c1c;    // Deep Crimson
+$haki-violet: #8b5cf6;        // Cyber Violet Haki
+$haki-purple: #6d28d9;        // Deep Purple
+$berry-green: #10b981;        // Emerald Berry Green
+$berry-green-light: #d1fae5;
+
+// Inks & Text
+$ink-black: #0f172a;          // Crisp High-Contrast Japanese Ink
+$ink-dark: #1e293b;
+$ink-muted: #64748b;
+$ink-light: #94a3b8;
+$ink-border: #e2e8f0;
+$ink-border-blue: rgba(2, 132, 199, 0.2);
+
+// Modern Anime Borders & Soft Layered Shadows (No heavy early-2000s black boxes)
+$border-anime-subtle: 1px solid #e2e8f0;
+$border-anime-blue: 1px solid rgba(2, 132, 199, 0.25);
+$border-anime-accent: 2px solid $anime-blue-primary;
+$border-anime-gold: 1.5px solid rgba(245, 158, 11, 0.4);
+
+$shadow-anime-sm: 0 2px 8px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(2, 132, 199, 0.06);
+$shadow-anime: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(2, 132, 199, 0.1);
+$shadow-anime-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(2, 132, 199, 0.15);
+$shadow-anime-glow: 0 0 20px rgba(14, 165, 233, 0.25);
+$shadow-anime-hover: 0 16px 32px -8px rgba(2, 132, 199, 0.16), 0 0 0 1px rgba(2, 132, 199, 0.3);
+
+// Radiuses
+$radius-anime-sm: 6px;
+$radius-anime: 12px;
+$radius-anime-lg: 18px;
+$radius-pill: 9999px;
+
+// Fonts (Clean Modern Japanese Anime Pairing)
+$font-anime-title: 'Montserrat', 'Zen Kaku Gothic New', sans-serif;
+$font-comic: 'Montserrat', sans-serif;
+$font-display: 'Montserrat', sans-serif;
+$font-body: 'Plus Jakarta Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;

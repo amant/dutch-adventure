@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { usePirateGamification } from '~/composables/usePirateGamification'
+
+const { hydrateProfile } = usePirateGamification()
+
+onMounted(hydrateProfile)
+
 useHead({
-  title: 'Netherlands Taal Avonturen',
+  title: 'Netherlands Taal Avontuur • De Grote Taalroute',
   meta: [
-    { name: 'description', content: 'Learn Dutch with interactive exercises and progress tracking.' },
+    { name: 'description', content: 'Leer Nederlands via een episch anime piratenavontuur op de Grand Line!' },
   ],
   link: [
-    { rel: 'icon', type: 'image/x-icon', href: `/favicon.svg` },
+    { rel: 'icon', type: 'image/svg+xml', href: `/favicon.svg` },
   ],
 })
 </script>
@@ -13,47 +19,200 @@ useHead({
 <template>
   <div class="app-shell">
     <NuxtRouteAnnouncer />
-    <header class="topbar">
-      <NuxtLink to="/" class="brand">Netherlands Taal Avonturen</NuxtLink>
-      <nav>
-        <NuxtLink to="/graph">Graph</NuxtLink>
-        <NuxtLink to="/memory">Memory</NuxtLink>
-        <NuxtLink to="/reading">Reading</NuxtLink>
-        <NuxtLink to="/reader">Reader</NuxtLink>
-        <NuxtLink to="/sandbox">Sandbox</NuxtLink>
-        <NuxtLink to="/idioms">Idioms</NuxtLink>
-        <NuxtLink to="/corrections">Corrections</NuxtLink>
-        <NuxtLink to="/vocabulary">Vocabulary</NuxtLink>
-        <NuxtLink to="/grammar">Grammar</NuxtLink>
-        <NuxtLink to="/progress">Progress</NuxtLink>
-      </nav>
-    </header>
-    <main><NuxtPage /></main>
+    
+    <!-- Pirate Anime HUD Header -->
+    <PirateHud />
+
+    <!-- Sub-navigation strip for quick access to tools -->
+    <div class="sub-nav-bar">
+      <div class="sub-nav-container">
+        <NuxtLink to="/graph" class="sub-link">🌐 Taal-Graaf</NuxtLink>
+        <NuxtLink to="/reading" class="sub-link">📖 Verhalenladder</NuxtLink>
+        <NuxtLink to="/reader" class="sub-link">🔍 Tekst Analyzer</NuxtLink>
+        <NuxtLink to="/idioms" class="sub-link">💎 Spreekwoorden</NuxtLink>
+        <NuxtLink to="/corrections" class="sub-link">✍️ Correctie Hub</NuxtLink>
+        <NuxtLink to="/grammar" class="sub-link">🛡️ Grammatica Deck</NuxtLink>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <NuxtPage />
+    </main>
+
+    <!-- Pirate Footer -->
+    <footer class="pirate-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="jolly-emoji">☠️👒</span>
+          <span class="footer-title">De Grote Taalroute • B2 Nederlands Piratenavontuur</span>
+        </div>
+        <div class="footer-links">
+          <NuxtLink to="/">Command Deck</NuxtLink>
+          <NuxtLink to="/map">Zeekaart</NuxtLink>
+          <NuxtLink to="/battle">Taalgevechten</NuxtLink>
+          <NuxtLink to="/bounties">Bounty Hunter</NuxtLink>
+          <NuxtLink to="/progress">Haki & Voortgang</NuxtLink>
+        </div>
+        <p class="footer-quote">"Niet zomaar woorden leren. Verover de taal die je echt kunt gebruiken op zee!"</p>
+      </div>
+    </footer>
   </div>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600&display=swap');
-:root { color: #20302d; background: #f6f4ee; font-family: 'DM Sans', sans-serif; }
-* { box-sizing: border-box; }
-body { margin: 0; }
-a { color: inherit; }
-.app-shell { min-height: 100vh; }
-.topbar { max-width: 1100px; margin: auto; padding: 28px 28px 18px; display: flex; justify-content: space-between; align-items: center; }
-.brand { font: 600 25px Fraunces, serif; text-decoration: none; color: #176b5b; }
-.topbar nav { display: flex; gap: 20px; }
-.topbar nav a { text-decoration: none; font-size: 14px; color: #52645f; font-weight: 500; transition: color 0.2s; }
-.topbar nav a:hover { color: #176b5b; }
-.topbar nav a.router-link-active { color: #176b5b; font-weight: 700; }
-main { max-width: 1100px; margin: auto; padding: 30px 28px 80px; }
-.eyebrow { color: #d06b3c; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 700; }
-h1, h2 { font-family: Fraunces, serif; font-weight: 600; line-height: 1.1; }
-h1 { font-size: clamp(38px, 7vw, 72px); max-width: 700px; margin: 18px 0; }
-h2 { font-size: 32px; }
-.muted { color: #687873; line-height: 1.6; }
-.button { border: 0; border-radius: 999px; background: #176b5b; color: white; padding: 14px 22px; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-block; }
-.button.secondary { background: #e0ebe5; color: #176b5b; }
-.card { background: white; border: 1px solid #e1e5de; border-radius: 22px; padding: 28px; box-shadow: 0 12px 35px #1c4d3b0c; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
-@media (max-width: 600px) { main { padding: 20px 18px 60px; } .topbar { padding: 22px 18px; } }
+<style lang="scss">
+// Global resets and base layout
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: $font-body;
+  background-color: #f8fafc;
+  color: #0f172a;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+</style>
+
+<style lang="scss" scoped>
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: 
+    radial-gradient(rgba(2, 132, 199, 0.06) 1.5px, transparent 1.5px),
+    linear-gradient(180deg, #f0f7ff 0%, #f8fafc 400px);
+  background-size: 24px 24px, 100% 100%;
+}
+
+.sub-nav-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 0;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+
+  .sub-nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 12px;
+    white-space: nowrap;
+  }
+
+  .sub-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      color: $anime-blue-primary;
+      background: $anime-ice;
+    }
+
+    &.router-link-active {
+      color: $anime-blue-deep;
+      background: $anime-ice;
+      font-weight: 700;
+    }
+  }
+}
+
+.main-content {
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  flex: 1;
+}
+
+.pirate-footer {
+  background: $anime-navy;
+  border-top: 3px solid $anime-blue-primary;
+  color: #94a3b8;
+  padding: 40px 20px 50px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: 'ONE PIECE STYLE DUTCH ADVENTURE // オランダ語の大航海';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 900;
+    font-family: $font-anime-title;
+    color: rgba(255, 255, 255, 0.02);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .footer-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: $font-anime-title;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.06em;
+
+    .jolly-emoji {
+      font-size: 22px;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    font-weight: 600;
+    font-size: 13px;
+
+    a {
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: #ffffff;
+        background: rgba(2, 132, 199, 0.2);
+      }
+    }
+  }
+
+  .footer-quote {
+    margin: 4px 0 0;
+    font-style: normal;
+    color: #64748b;
+    font-size: 13px;
+  }
+}
 </style>
