@@ -6642,7 +6642,1951 @@ Architect Lindeman: "Dat klinkt veelbelovend. Maar het was ONZE ERFGOEDCOMMISSIE
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter, modalParticlesChapter, topicalisationChapter]
+export const directionsChapter: Chapter = {
+  slug: 'de-weg-vragen',
+  level: 'A1',
+  title: 'Asking Directions',
+  capability: 'Ask for and follow simple directions in town (left, right, straight ahead, near the station, round the corner).',
+  description: 'Learn how to ask for help on the street and navigate Dutch towns effortlessly.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Direction Words',
+      kind: 'discover',
+      intro: 'When asking the way, use "Waar is..." (Where is) or "Hoe kom ik bij..." (How do I get to), and recognize key directions like "rechtdoor" (straight on), "linksaf" (left), and "rechtsaf" (right).',
+      exercises: [
+        {
+          id: 'dir-induction',
+          kind: 'induction',
+          prompt: 'Notice the directional patterns',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: 'Straight ahead', answer: 'Ga hier rechtdoor.' },
+              { prompt: 'Turn left', answer: 'Sla bij de kerk linksaf.' },
+              { prompt: 'Turn right', answer: 'Sla bij het stoplicht rechtsaf.' }
+            ],
+            ruleChallenge: 'Which word means "straight ahead" in Dutch?',
+            options: [
+              { text: 'rechtdoor', isCorrect: true },
+              { text: 'linksaf', isCorrect: false },
+              { text: 'rechtsaf', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'dir-1',
+          kind: 'info',
+          prompt: 'Core navigation phrases',
+          context: 'Pardon, waar is het station? (Excuse me, where is the station?)\nGa rechtdoor tot de brug. (Go straight ahead until the bridge.)\nSla dan linksaf. (Then turn left.)\nHet museum is aan de rechterkant. (The museum is on the right-hand side.)\nHet is om de hoek. (It is around the corner.)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['rechtdoor', 'linksaf', 'rechtsaf', 'om de hoek', 'aan de rechterkant', 'aan de linkerkant']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Finding the Library',
+      kind: 'understand',
+      intro: 'Read this street dialogue between a tourist and a local resident in Utrecht.',
+      exercises: [
+        {
+          id: 'dir-2',
+          kind: 'reading',
+          prompt: 'Street interaction',
+          readingContent: 'A: Pardon meneer, weet u waar de openbare bibliotheek is?\nB: Ja zeker! Loop deze straat helemaal rechtdoor. Sla bij het grote plein rechtsaf. De bibliotheek ligt dan direct tegenover het museum.\nA: Heel erg bedankt!\nB: Geen dank, succes!',
+          wordHints: {
+            'openbare': { meaning: 'public', category: 'adj' },
+            'bibliotheek': { meaning: 'library', category: 'noun' },
+            'loop': { meaning: 'walk / go', category: 'verb' },
+            'plein': { meaning: 'square / plaza', category: 'noun' },
+            'tegenover': { meaning: 'opposite / across from', category: 'prep' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['bibliotheek', 'plein', 'tegenover']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Quick Navigation Recall',
+      kind: 'retrieve',
+      intro: 'Recall these essential direction phrases quickly.',
+      exercises: [
+        {
+          id: 'dir-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Turn left (imperative)',
+          target: 'Sla linksaf',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'dir-speed-2',
+          kind: 'speed-drill',
+          prompt: 'Go straight ahead',
+          target: 'Ga rechtdoor',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'dir-3',
+          kind: 'typed',
+          prompt: 'Translate: Excuse me, where is the central station?',
+          target: 'Pardon, waar is het centraal station?',
+          acceptedAnswers: [
+            'Pardon, waar is het centraal station?',
+            'Pardon, waar is het centraal station',
+            'Excuseer, waar is het centraal station?',
+            'Pardon waar is het centraal station',
+            'Pardon, waar is het station?'
+          ],
+          explanation: 'Start with "Pardon" and use "waar is het centraal station?".',
+          skills: ['production', 'meaning', 'spelling'],
+          vocabulary: ['pardon', 'station'],
+          placeholder: 'Pardon, waar...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Giving Steps',
+      kind: 'transform',
+      intro: 'Practice giving simple instructions using landmarks and prepositions.',
+      exercises: [
+        {
+          id: 'dir-4',
+          kind: 'typed',
+          prompt: 'Translate: Turn right at the traffic light.',
+          target: 'Sla bij het stoplicht rechtsaf.',
+          acceptedAnswers: [
+            'Sla bij het stoplicht rechtsaf.',
+            'Sla bij het stoplicht rechtsaf',
+            'Sla rechtsaf bij het stoplicht.',
+            'Sla rechtsaf bij het stoplicht'
+          ],
+          explanation: 'Use "Sla bij het stoplicht rechtsaf" or "Sla rechtsaf bij het stoplicht".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['stoplicht', 'rechtsaf'],
+          grammar: ['imperative', 'separable-verbs']
+        },
+        {
+          id: 'dir-5',
+          kind: 'typed',
+          prompt: 'Translate: The supermarket is on the left-hand side, opposite the park.',
+          target: 'De supermarkt is aan de linkerkant, tegenover het park.',
+          acceptedAnswers: [
+            'De supermarkt is aan de linkerkant, tegenover het park.',
+            'De supermarkt is aan de linkerkant tegenover het park',
+            'De supermarkt ligt aan de linkerkant tegenover het park',
+            'De supermarkt ligt aan de linkerkant, tegenover het park.'
+          ],
+          explanation: 'Use "aan de linkerkant" (on the left) and "tegenover het park" (opposite the park).',
+          skills: ['production', 'grammar'],
+          vocabulary: ['linkerkant', 'tegenover', 'supermarkt'],
+          grammar: ['prepositions']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Ask for Directions',
+      kind: 'personalise',
+      intro: 'Imagine you are lost in Amsterdam or Rotterdam. Ask a passerby how to reach a place you want to visit.',
+      exercises: [
+        {
+          id: 'dir-6',
+          kind: 'personalise',
+          prompt: 'Vraag aan een voorbijganger de weg naar een museum, café of station in jouw favoriete stad.',
+          target: 'Pardon, weet u waar het museum is? Hoe kom ik daar?',
+          explanation: 'Politely ask for directions with "Pardon, weet u waar... is?" or "Hoe kom ik bij...?".',
+          skills: ['speaking', 'production', 'automaticity'],
+          vocabulary: ['pardon', 'waar is', 'hoe kom ik bij'],
+          grammar: ['questions', 'word-order'],
+          placeholder: 'Pardon, weet u waar...'
+        }
+      ]
+    }
+  ]
+}
+
+export const supermarketChapter: Chapter = {
+  slug: 'boodschappen-doen',
+  level: 'A1',
+  title: 'At the Supermarket',
+  capability: 'Find products in aisles, ask staff for help, specify quantities, and navigate the supermarket checkout.',
+  description: 'Master daily grocery shopping, packaging units, and effortless checkout interactions in Dutch.',
+  estimatedMinutes: 10,
+  relatedArticleSlug: 'a1-supermarkt',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Packaging & Quantities',
+      kind: 'discover',
+      intro: 'In Dutch supermarkets, products are measured in "pak" (carton/pack), "fles" (bottle), "zak" (bag), "doosje" (box), and "kilo" / "gram" (weight).',
+      exercises: [
+        {
+          id: 'sup-induction',
+          kind: 'induction',
+          prompt: 'Notice how containers and quantities are paired with foods',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: 'Milk container', answer: 'een pak melk' },
+              { prompt: 'Olive oil container', answer: 'een fles olijfolie' },
+              { prompt: 'Apples bag', answer: 'een zak appels' }
+            ],
+            ruleChallenge: 'Which unit is used for liquids in glass/plastic like oil or wine?',
+            options: [
+              { text: 'fles', isCorrect: true },
+              { text: 'pak', isCorrect: false },
+              { text: 'zak', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'sup-1',
+          kind: 'info',
+          prompt: 'Supermarket vocabulary & aisle phrases',
+          context: 'Pardon, waar liggen de eieren? (Where are the eggs?)\nIn gangpad 3 aan de rechterkant. (In aisle 3 on the right.)\neen pak melk, een fles water, een zak aardappelen, een stuk kaas, een doosje eieren',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['gangpad', 'pak', 'fles', 'zak', 'stuk', 'doosje', 'eieren', 'kaas']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'At the Checkout Counter',
+      kind: 'understand',
+      intro: 'Understand the standard questions Dutch cashiers ask at the checkout (*de kassa*).',
+      exercises: [
+        {
+          id: 'sup-2',
+          kind: 'info',
+          prompt: 'Cashier standard questions',
+          context: 'Kassamedewerker: "Wilt u er een tasje bij?" (Would you like a bag?)\nKlant: "Nee bedankt, ik heb een eigen tas." (No thanks, I have my own bag.)\nKassamedewerker: "Pinnen of contant?" (Card or cash?)\nKlant: "Pinnen, alstublieft." (Card, please.)\nKassamedewerker: "Wilt u de bon mee?" (Would you like the receipt?)\nKlant: "Nee hoor, dank u wel. Fijne dag!"',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['tasje', 'pinnen', 'contant', 'bon', 'fijne dag']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Checkout Rapid Response',
+      kind: 'retrieve',
+      intro: 'Respond instantly to common supermarket questions.',
+      exercises: [
+        {
+          id: 'sup-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Card payment, please (Pinnen...)',
+          target: 'Pinnen, alstublieft',
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'sup-speed-2',
+          kind: 'speed-drill',
+          prompt: 'No receipt needed (Nee, dank u)',
+          target: 'Nee, dank u',
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'sup-3',
+          kind: 'typed',
+          prompt: 'Translate: Excuse me, where can I find the pasta?',
+          target: 'Pardon, waar kan ik de pasta vinden?',
+          acceptedAnswers: [
+            'Pardon, waar kan ik de pasta vinden?',
+            'Pardon, waar kan ik de pasta vinden',
+            'Pardon, waar ligt de pasta?',
+            'Pardon, waar ligt de pasta',
+            'Pardon waar kan ik de pasta vinden?'
+          ],
+          explanation: 'Ask politely: "Pardon, waar kan ik de pasta vinden?" or "Pardon, waar ligt de pasta?".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['pardon', 'vinden', 'pasta'],
+          placeholder: 'Pardon, waar...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Specifying Orders & Weights',
+      kind: 'transform',
+      intro: 'Formulate precise orders at the deli or fresh produce counter.',
+      exercises: [
+        {
+          id: 'sup-4',
+          kind: 'typed',
+          prompt: 'Translate: I would like a carton of milk and a loaf of bread, please.',
+          target: 'Ik wil graag een pak melk en een brood, alstublieft.',
+          acceptedAnswers: [
+            'Ik wil graag een pak melk en een brood, alstublieft.',
+            'Ik wil graag een pak melk en een brood alstublieft',
+            'Ik wil graag een pak melk en een brood, graag.',
+            'Ik wil graag een pak melk en een heel brood, alstublieft.'
+          ],
+          explanation: 'Use "Ik wil graag een pak melk en een brood, alstublieft".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['pak melk', 'brood', 'graag', 'alstublieft'],
+          grammar: ['polite-requests']
+        },
+        {
+          id: 'sup-5',
+          kind: 'typed',
+          prompt: 'Translate: May I have half a kilo of old cheese?',
+          target: 'Mag ik een halve kilo oude kaas?',
+          acceptedAnswers: [
+            'Mag ik een halve kilo oude kaas?',
+            'Mag ik een halve kilo oude kaas',
+            'Mag ik een halve kilo oude kaas, alstublieft?',
+            'Ik wil graag een halve kilo oude kaas, alsjeblieft.'
+          ],
+          explanation: 'Use "Mag ik een halve kilo oude kaas?" at the cheese counter.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['halve kilo', 'oude kaas'],
+          grammar: ['quantities', 'adjective-inflection']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Your Shopping List',
+      kind: 'personalise',
+      intro: 'Write down what you need to buy for dinner tonight and how you will ask for it.',
+      exercises: [
+        {
+          id: 'sup-6',
+          kind: 'personalise',
+          prompt: 'Wat moet je vanavond kopen in de supermarkt? Noem minstens drie producten met hun verpakking of hoeveelheid (bijv. een pak, fles, zak of kilo).',
+          target: 'Ik moet een zak aardappelen, een fles olijfolie en een stuk kaas kopen.',
+          explanation: 'Use phrases like "Ik moet ... kopen" or "Ik heb ... nodig" with quantities.',
+          skills: ['production', 'writing', 'automaticity'],
+          vocabulary: ['kopen', 'nodig hebben', 'fles', 'pak', 'zak', 'kilo'],
+          grammar: ['modal-verbs', 'word-order'],
+          placeholder: 'Ik moet...'
+        }
+      ]
+    }
+  ]
+}
+
+export const timeAndScheduleChapter: Chapter = {
+  slug: 'tijd-en-afspraken',
+  level: 'A1',
+  title: 'Telling Time & Appointments',
+  capability: 'Tell the exact time using the Dutch half-hour clock system, read opening hours, and arrange simple meetings.',
+  description: 'Conquer the unique Dutch clock system (half before the next hour!) and schedule appointments easily.',
+  estimatedMinutes: 10,
+  stages: [
+    {
+      id: 'discover',
+      title: 'The Dutch Half-Hour System',
+      kind: 'discover',
+      intro: 'In Dutch, "half vier" does NOT mean 4:30 — it means 3:30 (halfway TO four). Notice how times around the half-hour are expressed relative to "half".',
+      exercises: [
+        {
+          id: 'time-induction',
+          kind: 'induction',
+          prompt: 'Notice how Dutch tells time',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: '03:30', answer: 'half vier' },
+              { prompt: '03:20 (10 mins before 3:30)', answer: 'tien voor half vier' },
+              { prompt: '03:40 (10 mins after 3:30)', answer: 'tien over half vier' }
+            ],
+            ruleChallenge: 'What does "half vijf" mean in Dutch?',
+            options: [
+              { text: '4:30', isCorrect: true },
+              { text: '5:30', isCorrect: false },
+              { text: '5:15', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'time-1',
+          kind: 'info',
+          prompt: 'Full Dutch clock reference',
+          context: '03:00 = drie uur\n03:15 = kwart over drie\n03:20 = tien voor half vier\n03:30 = half vier\n03:40 = tien over half vier\n03:45 = kwart voor vier\n04:00 = vier uur',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['uur', 'kwart over', 'kwart voor', 'half', 'voor', 'over']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Opening Hours & Appointments',
+      kind: 'understand',
+      intro: 'Read about opening hours and scheduling appointments using prepositions of time (*om, op, van... tot*).',
+      exercises: [
+        {
+          id: 'time-2',
+          kind: 'reading',
+          prompt: 'Dentist opening hours announcement',
+          readingContent: 'Tandartspraktijk De Brug is geopend van maandag tot en met vrijdag, van half negen \'s ochtends tot vijf uur \'s middags. Op zaterdag zijn we alleen open voor spoedgevallen van tien tot twaalf uur.',
+          wordHints: {
+            'tandartspraktijk': { meaning: 'dental clinic', category: 'noun' },
+            'geopend': { meaning: 'open / opened', category: 'adj' },
+            'tot en met': { meaning: 'up to and including', category: 'prep' },
+            'spoedgevallen': { meaning: 'emergencies', category: 'noun' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['geopend', 'van... tot', 'spoedgeval']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Digital to Dutch Clock Speed Drill',
+      kind: 'retrieve',
+      intro: 'Convert these digital clock times into spoken Dutch.',
+      exercises: [
+        {
+          id: 'time-speed-1',
+          kind: 'speed-drill',
+          prompt: '14:30 (half ...)',
+          target: 'half drie',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'time-speed-2',
+          kind: 'speed-drill',
+          prompt: '09:15 (kwart ...)',
+          target: 'kwart over negen',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'time-3',
+          kind: 'typed',
+          prompt: 'Translate: It is 17:45 (quarter to six).',
+          target: 'Het is kwart voor zes.',
+          acceptedAnswers: [
+            'Het is kwart voor zes.',
+            'Het is kwart voor zes',
+            'Het is kwart voor 6.',
+            'Kwart voor zes'
+          ],
+          explanation: '17:45 is 15 minutes before 6:00, so "kwart voor zes".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['kwart voor', 'zes']
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Scheduling Dates with Prepositions',
+      kind: 'transform',
+      intro: 'Combine days and times using "op [dag]" and "om [tijd]".',
+      exercises: [
+        {
+          id: 'time-4',
+          kind: 'typed',
+          prompt: 'Translate: Shall we meet on Wednesday at half past two (14:30)?',
+          target: 'Zullen we op woensdag om half drie afspreken?',
+          acceptedAnswers: [
+            'Zullen we op woensdag om half drie afspreken?',
+            'Zullen we op woensdag om half drie afspreken',
+            'Zullen we woensdag om half drie afspreken?',
+            'Kunnen we op woensdag om half drie afspreken?'
+          ],
+          explanation: 'Use "op woensdag" for the day, "om half drie" for 14:30, and the separable verb "afspreken".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['afspreken', 'woensdag', 'half drie'],
+          grammar: ['prepositions-of-time', 'separable-verbs']
+        },
+        {
+          id: 'time-5',
+          kind: 'typed',
+          prompt: 'Translate: The shop is open from nine o\'clock until half past five.',
+          target: 'De winkel is open van negen uur tot half zes.',
+          acceptedAnswers: [
+            'De winkel is open van negen uur tot half zes.',
+            'De winkel is open van negen uur tot half zes',
+            'De winkel is geopend van negen uur tot half zes.',
+            'De winkel is open van 9 uur tot half 6.'
+          ],
+          explanation: 'Use "van [tijd] tot [tijd]" for time spans.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['winkel', 'open', 'half zes'],
+          grammar: ['prepositions-of-time']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Propose an Appointment',
+      kind: 'personalise',
+      intro: 'Send a message to a friend or colleague suggesting a day and time to have lunch or coffee.',
+      exercises: [
+        {
+          id: 'time-6',
+          kind: 'personalise',
+          prompt: 'Stel een dag en een tijd voor om koffie te drinken met een vriend(in). Gebruik "op [dag]" en "om [tijd]" (bijv. om half vier).',
+          target: 'Zullen we op vrijdag om half vier koffie drinken?',
+          explanation: 'Suggest a plan with "Zullen we op [dag] om [tijd]...?" or "Schikt het jou op...?".',
+          skills: ['speaking', 'production', 'automaticity'],
+          vocabulary: ['zullen', 'afspreken', 'koffie drinken', 'op', 'om'],
+          grammar: ['modal-verbs', 'prepositions-of-time'],
+          placeholder: 'Zullen we op...'
+        }
+      ]
+    }
+  ]
+}
+
+export const transitChapter: Chapter = {
+  slug: 'openbaar-vervoer-reizen',
+  level: 'A2',
+  title: 'Public Transit & Train Travel',
+  capability: 'Navigate trains, buses, and trams: check in/out with OV-chipkaart, ask about track numbers and transfers, and handle delays.',
+  description: 'Travel with confidence on the Dutch rail and transit network.',
+  estimatedMinutes: 12,
+  relatedArticleSlug: 'a2-trein',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Transit Verbs & Vocabulary',
+      kind: 'discover',
+      intro: 'Dutch public transport relies on separable verbs like "inchecken" (to check in), "uitchecken" (to check out), "overstappen" (to transfer), and "vertrekken" (to depart).',
+      exercises: [
+        {
+          id: 'tran-induction',
+          kind: 'induction',
+          prompt: 'Notice how transit verbs split in the present tense',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Check in', answer: 'De reiziger checkt bij het poortje in.' },
+              { prompt: 'Transfer', answer: 'Wij stappen in Utrecht over.' },
+              { prompt: 'Get off / exit', answer: 'Zij stapt bij de volgende halte uit.' }
+            ],
+            ruleChallenge: 'Where does the prefix (in, over, uit) go in a main clause?',
+            options: [
+              { text: 'At the very end of the clause', isCorrect: true },
+              { text: 'Directly after the verb', isCorrect: false },
+              { text: 'At the start of the sentence', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'tran-1',
+          kind: 'info',
+          prompt: 'Key public transit terms',
+          context: 'het spoor (the track/platform)\nde vertraging (the delay)\nde overstap (the transfer)\nhet poortje (the fare gate)\nVergeet niet uit te checken! (Don\'t forget to check out!)\nDe trein vertrekt van spoor 4b. (The train departs from track 4b.)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['spoor', 'vertraging', 'overstap', 'inchecken', 'uitchecken', 'vertrek']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Station Announcements & Ticket Inspection',
+      kind: 'understand',
+      intro: 'Listen to and understand station announcements and train conductor questions.',
+      exercises: [
+        {
+          id: 'tran-2',
+          kind: 'reading',
+          prompt: 'Train station broadcast',
+          readingContent: 'Omroeper op station: "Beste reizigers. De intercity naar Amsterdam Centraal van 14:15 heeft een vertraging van ongeveer tien minuten wegens werkzaamheden aan het spoor. Deze trein vertrekt vanaf spoor 7 in plaats van spoor 5. Reizigers voor Schiphol Airport kunnen overstappen in Utrecht."',
+          wordHints: {
+            'reizigers': { meaning: 'passengers / travelers', category: 'noun' },
+            'werkzaamheden': { meaning: 'engineering work / maintenance', category: 'noun' },
+            'in plaats van': { meaning: 'instead of', category: 'prep' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['reizigers', 'werkzaamheden', 'in plaats van']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Transit Questions & Verification',
+      kind: 'retrieve',
+      intro: 'Retrieve important travel questions quickly.',
+      exercises: [
+        {
+          id: 'tran-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Which track? (Van welk...)',
+          target: 'Van welk spoor',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'tran-speed-2',
+          kind: 'speed-drill',
+          prompt: 'Do I have to transfer? (Moet ik...)',
+          target: 'Moet ik overstappen?',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'tran-3',
+          kind: 'typed',
+          prompt: 'Translate: Excuse me, does this train go to Rotterdam Centraal?',
+          target: 'Pardon, gaat deze trein naar Rotterdam Centraal?',
+          acceptedAnswers: [
+            'Pardon, gaat deze trein naar Rotterdam Centraal?',
+            'Pardon, gaat deze trein naar Rotterdam Centraal',
+            'Pardon gaat deze trein naar Rotterdam Centraal?',
+            'Rijdt deze trein naar Rotterdam Centraal?'
+          ],
+          explanation: 'Use "Pardon, gaat deze trein naar...?" or "Rijdt deze trein naar...?".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['trein', 'gaan naar'],
+          placeholder: 'Pardon, gaat...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Handling Delays & Modal Verbs',
+      kind: 'transform',
+      intro: 'Formulate instructions and conditional travel plans using modal verbs (*moeten, kunnen, willen*).',
+      exercises: [
+        {
+          id: 'tran-4',
+          kind: 'typed',
+          prompt: 'Translate: We must transfer in Utrecht because our train has a delay.',
+          target: 'We moeten in Utrecht overstappen omdat onze trein vertraging heeft.',
+          acceptedAnswers: [
+            'We moeten in Utrecht overstappen omdat onze trein vertraging heeft.',
+            'We moeten in Utrecht overstappen omdat onze trein vertraging heeft',
+            'Wij moeten in Utrecht overstappen omdat onze trein vertraging heeft.',
+            'We moeten overstappen in Utrecht omdat onze trein vertraging heeft.'
+          ],
+          explanation: 'With modal "moeten", the infinitive "overstappen" goes to the end of the main clause. In the "omdat" clause, the verb "heeft" goes to the very end.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['overstappen', 'vertraging', 'omdat'],
+          grammar: ['modal-verbs', 'omdat-clause', 'separable-verbs']
+        },
+        {
+          id: 'tran-5',
+          kind: 'typed',
+          prompt: 'Translate: You can easily check in with your bank card or OV-chipkaart.',
+          target: 'Je kunt makkelijk inchecken met je bankpas of OV-chipkaart.',
+          acceptedAnswers: [
+            'Je kunt makkelijk inchecken met je bankpas of OV-chipkaart.',
+            'Je kunt makkelijk inchecken met je bankpas of OV-chipkaart',
+            'U kunt makkelijk inchecken met uw bankpas of OV-chipkaart.',
+            'Je kan gemakkelijk inchecken met je bankpas of OV-chipkaart.'
+          ],
+          explanation: 'Use modal "kunt/kan" + infinitive "inchecken" at the clause end.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['inchecken', 'bankpas', 'OV-chipkaart'],
+          grammar: ['modal-verbs']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Explain Your Route',
+      kind: 'personalise',
+      intro: 'Describe how you travel by public transport to your work, university, or a Dutch city.',
+      exercises: [
+        {
+          id: 'tran-6',
+          kind: 'personalise',
+          prompt: 'Hoe reis jij meestal met het openbaar vervoer? Noem de vervoersmiddelen (trein, tram, bus of metro) en of je moet overstappen.',
+          target: 'Ik neem meestal de trein naar Amsterdam en ik moet een keer overstappen.',
+          explanation: 'Use verbs like "nemen", "reizen met", and "overstappen".',
+          skills: ['speaking', 'production', 'automaticity'],
+          vocabulary: ['nemen', 'trein', 'tram', 'bus', 'overstappen', 'reizen'],
+          grammar: ['separable-verbs', 'word-order'],
+          placeholder: 'Ik reis meestal met...'
+        }
+      ]
+    }
+  ]
+}
+
+export const housingChapter: Chapter = {
+  slug: 'woning-zoeken-en-huren',
+  level: 'A2',
+  title: 'House Hunting & Living Spaces',
+  capability: 'Describe apartments, ask landlords about rent, utilities, and furnishings, and arrange a viewing.',
+  description: 'Navigate the Dutch housing market, understand rental listings, and contact real estate agents.',
+  estimatedMinutes: 12,
+  relatedArticleSlug: 'a2-woning',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Housing Features & Adjective Endings',
+      kind: 'discover',
+      intro: 'Learn how to describe rooms and understand rental features: "gemeubileerd" (furnished), "gestoffeerd" (carpets/curtains only), "kaal" (bare), and whether costs are "inclusief" (inclusive).',
+      exercises: [
+        {
+          id: 'hou-induction',
+          kind: 'induction',
+          prompt: 'Notice adjective endings with de-words and het-words',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'de woning (de-word)', answer: 'een mooie woning' },
+              { prompt: 'het appartement (het-word, indefinite)', answer: 'een mooi appartement' },
+              { prompt: 'het appartement (definite)', answer: 'het mooie appartement' }
+            ],
+            ruleChallenge: 'Why does "een mooi appartement" NOT get an -e ending?',
+            options: [
+              { text: 'Because "appartement" is a het-word preceded by "een"', isCorrect: true },
+              { text: 'Because it is at the end of the sentence', isCorrect: false },
+              { text: 'Because "mooi" is an irregular adjective', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'hou-1',
+          kind: 'info',
+          prompt: 'Essential rental terminology',
+          context: 'de huurprijs (rental price)\nde borg / de waarborgsom (security deposit)\ninclusief gas, water en licht (GWL) (including utilities)\nde bezichtiging (the viewing / tour)\nde makelaar (the real estate agent)\nbeschikbaar per direct (available immediately)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['huurprijs', 'waarborgsom', 'inclusief', 'bezichtiging', 'makelaar', 'gemeubileerd']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Reading a Rental Listing',
+      kind: 'understand',
+      intro: 'Analyze this rental advertisement for an apartment in Utrecht.',
+      exercises: [
+        {
+          id: 'hou-2',
+          kind: 'reading',
+          prompt: 'Rental advertisement details',
+          readingContent: 'Te huur: Ruim en licht 2-kamerappartement in het centrum van Utrecht. Woonoppervlakte: 65 m². De woning is volledig gemeubileerd en heeft een zonnig balkon. Huurprijs: € 1.350,- per maand exclusief gas, water en elektriciteit. Borg: twee maanden huur. Beschikbaar per 1 november. Huisdieren zijn niet toegestaan.',
+          wordHints: {
+            'woonoppervlakte': { meaning: 'living area / floor space', category: 'noun' },
+            'volledig': { meaning: 'completely / fully', category: 'adv' },
+            'balkon': { meaning: 'balcony', category: 'noun' },
+            'toegestaan': { meaning: 'allowed / permitted', category: 'adj' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['woonoppervlakte', 'balkon', 'toegestaan']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Housing Inquiries',
+      kind: 'retrieve',
+      intro: 'Ask crucial questions when searching for a place.',
+      exercises: [
+        {
+          id: 'hou-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Is the apartment furnished? (Is het...)',
+          target: 'Is het appartement gemeubileerd?',
+          automaticitySeconds: 5,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'hou-speed-2',
+          kind: 'speed-drill',
+          prompt: 'When is it available? (Wanneer is...)',
+          target: 'Wanneer is de woning beschikbaar?',
+          automaticitySeconds: 5,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'hou-3',
+          kind: 'typed',
+          prompt: 'Translate: How much is the security deposit?',
+          target: 'Hoeveel is de borg?',
+          acceptedAnswers: [
+            'Hoeveel is de borg?',
+            'Hoeveel is de borg',
+            'Hoeveel bedraagt de borg?',
+            'Hoeveel is de waarborgsom?',
+            'Wat is de borg?'
+          ],
+          explanation: 'Use "Hoeveel is de borg?" or "Hoeveel bedraagt de waarborgsom?".',
+          skills: ['production', 'meaning'],
+          vocabulary: ['borg', 'waarborgsom'],
+          placeholder: 'Hoeveel is...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Comparing Living Spaces & Requesting Viewings',
+      kind: 'transform',
+      intro: 'Use comparative adjectives and polite request phrasing.',
+      exercises: [
+        {
+          id: 'hou-4',
+          kind: 'typed',
+          prompt: 'Translate: This apartment is bigger and quieter than my previous studio.',
+          target: 'Dit appartement is groter en rustiger dan mijn vorige studio.',
+          acceptedAnswers: [
+            'Dit appartement is groter en rustiger dan mijn vorige studio.',
+            'Dit appartement is groter en rustiger dan mijn vorige studio',
+            'Deze woning is groter en rustiger dan mijn vorige studio.'
+          ],
+          explanation: 'Comparatives in Dutch take "-er" + "dan" (groter dan, rustiger dan).',
+          skills: ['production', 'grammar'],
+          vocabulary: ['groter', 'rustiger', 'vorige'],
+          grammar: ['comparatives', 'adjective-inflection']
+        },
+        {
+          id: 'hou-5',
+          kind: 'typed',
+          prompt: 'Translate: I would like to schedule an appointment for a viewing.',
+          target: 'Ik wil graag een afspraak maken voor een bezichtiging.',
+          acceptedAnswers: [
+            'Ik wil graag een afspraak maken voor een bezichtiging.',
+            'Ik wil graag een afspraak maken voor een bezichtiging',
+            'Ik zou graag een afspraak willen maken voor een bezichtiging.',
+            'Ik wil graag een bezichtiging inplannen.'
+          ],
+          explanation: 'Use "Ik wil graag een afspraak maken voor een bezichtiging".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['afspraak', 'bezichtiging'],
+          grammar: ['polite-requests']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Viewing Request Message',
+      kind: 'personalise',
+      intro: 'Write a short message to a real estate agent introducing yourself and requesting to view an apartment.',
+      exercises: [
+        {
+          id: 'hou-6',
+          kind: 'personalise',
+          prompt: 'Schrijf een kort bericht naar de makelaar: stel jezelf voor (naam, beroep), vermeld voor wie de woning is, en vraag om een bezichtiging.',
+          target: 'Beste makelaar, ik ben ... en ik werk als ... Ik heb veel interesse in de woning en wil graag een bezichtiging plannen.',
+          explanation: 'Include your profession, who you are moving with, and a polite viewing request.',
+          skills: ['writing', 'production', 'automaticity'],
+          vocabulary: ['interesse', 'bezichtiging', 'woning', 'afspraak'],
+          grammar: ['word-order', 'polite-requests'],
+          placeholder: 'Geachte makelaar, ik ben...'
+        }
+      ]
+    }
+  ]
+}
+
+export const pastStorytellingChapter: Chapter = {
+  slug: 'verleden-tijd-en-verhalen',
+  level: 'A2',
+  title: 'Telling Stories in the Past (OVT)',
+  capability: 'Recount past events, childhood memories, and sequential narratives using regular and irregular simple past (imperfectum).',
+  description: 'Learn the simple past (OVT) to tell stories and describe past experiences naturally.',
+  estimatedMinutes: 14,
+  stages: [
+    {
+      id: 'discover',
+      title: 'The Simple Past (OVT) Rules',
+      kind: 'discover',
+      intro: 'While spoken Dutch uses the perfect tense for recent individual actions, storytelling and background descriptions use the simple past (OVT). Regular verbs use \'-te(n)\' (if stem ends in \'t kofschip/t-fokschaap) or \'-de(n)\'.',
+      exercises: [
+        {
+          id: 'ovt-induction',
+          kind: 'induction',
+          prompt: 'Notice regular past endings (-te vs -de)',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'werken (stem ends in k -> in \'t kofschip)', answer: 'Ik werkte / Wij werkten' },
+              { prompt: 'wonen (stem ends in n -> not in \'t kofschip)', answer: 'Ik woonde / Wij woonden' },
+              { prompt: 'fietsen (stem ends in s -> in \'t kofschip)', answer: 'Ik fietste / Wij fietsten' }
+            ],
+            ruleChallenge: 'What is the past tense of "luisteren" (stem: luister)?',
+            options: [
+              { text: 'luisterde (ends in r, not in \'t kofschip)', isCorrect: true },
+              { text: 'luisterte', isCorrect: false },
+              { text: 'geluisterd', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'ovt-1',
+          kind: 'info',
+          prompt: 'High-frequency irregular past verbs',
+          context: 'zijn: was / waren (was/were)\nhebben: had / hadden (had)\ngaan: ging / gingen (went)\nzien: zag / zagen (saw)\nkomen: kwam / kwamen (came)\ndenken: dacht / dachten (thought)\nvinden: vond / vonden (found/felt)\nweten: wist / wisten (knew)\nblijven: bleef / bleven (stayed)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['was', 'had', 'ging', 'zag', 'kwam', 'dacht', 'vond', 'wist', 'bleef']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'A Weekend Trip to the Coast',
+      kind: 'understand',
+      intro: 'Read this narrative describing a rainy but cozy weekend in Zeeland.',
+      exercises: [
+        {
+          id: 'ovt-2',
+          kind: 'reading',
+          prompt: 'Narrative in simple past',
+          readingContent: 'Vorig weekend gingen we naar het strand in Zeeland. Het weer was helaas niet fantastisch: het regende en er stond een harde wind. Toch wandelden we langs de zee. \'s Avonds aten we verse vis in een gezellig restaurant en dronken we warme chocolademelk bij de open haard. We voelden ons helemaal ontspannen.',
+          wordHints: {
+            'helas': { meaning: 'unfortunately', category: 'adv' },
+            'strand': { meaning: 'beach', category: 'noun' },
+            'wandelden': { meaning: 'walked / strolled', category: 'verb (past)' },
+            'open haard': { meaning: 'fireplace', category: 'noun' },
+            'ontspannen': { meaning: 'relaxed', category: 'adj' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['strand', 'wandelen', 'ontspannen']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Irregular Past Forms Drill',
+      kind: 'retrieve',
+      intro: 'Recall the past tense forms of these key verbs.',
+      exercises: [
+        {
+          id: 'ovt-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Past of "gaan" (we ...)',
+          target: 'wij gingen',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'ovt-speed-2',
+          kind: 'speed-drill',
+          prompt: 'Past of "blijven" (ik ...)',
+          target: 'ik bleef',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'ovt-3',
+          kind: 'typed',
+          prompt: 'Translate: Yesterday I saw my old colleague in the supermarket.',
+          target: 'Gisteren zag ik mijn oude collega in de supermarkt.',
+          acceptedAnswers: [
+            'Gisteren zag ik mijn oude collega in de supermarkt.',
+            'Gisteren zag ik mijn oude collega in de supermarkt',
+            'Ik zag gisteren mijn oude collega in de supermarkt.'
+          ],
+          explanation: 'When starting with "Gisteren", use inversion: "zag ik" (past of zien).',
+          skills: ['production', 'grammar'],
+          vocabulary: ['gisteren', 'zien', 'collega'],
+          grammar: ['past-tense-ovt', 'inversion']
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Present to Past Narrative Transformation',
+      kind: 'transform',
+      intro: 'Transform these present tense sentences into the past tense (OVT).',
+      exercises: [
+        {
+          id: 'ovt-4',
+          kind: 'typed',
+          prompt: 'Convert to past tense: "We wonen in een klein dorp en werken in de stad."',
+          target: 'We woonden in een klein dorp en werkten in de stad.',
+          acceptedAnswers: [
+            'We woonden in een klein dorp en werkten in de stad.',
+            'We woonden in een klein dorp en werkten in de stad',
+            'Wij woonden in een klein dorp en werkten in de stad.'
+          ],
+          explanation: '"Wonen" becomes "woonden" (-den) and "werken" becomes "werkten" (-ten).',
+          skills: ['production', 'grammar'],
+          grammar: ['past-tense-ovt']
+        },
+        {
+          id: 'ovt-5',
+          kind: 'typed',
+          prompt: 'Convert to past tense: "Het regent hard, maar we fietsen toch naar huis."',
+          target: 'Het regende hard, maar we fietsten toch naar huis.',
+          acceptedAnswers: [
+            'Het regende hard, maar we fietsten toch naar huis.',
+            'Het regende hard, maar we fietsten toch naar huis',
+            'Het regende hard maar we fietsten toch naar huis.'
+          ],
+          explanation: '"Regent" becomes "regende" and "fietsen" becomes "fietsten".',
+          skills: ['production', 'grammar'],
+          grammar: ['past-tense-ovt']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Your Story in the Past',
+      kind: 'personalise',
+      intro: 'Write a short story about what you did on your favorite holiday or weekend using the simple past (OVT).',
+      exercises: [
+        {
+          id: 'ovt-6',
+          kind: 'personalise',
+          prompt: 'Vertel een korte herinnering over een reis, weekend of kindertijd. Gebruik minstens drie werkwoorden in de onvoltooid verleden tijd (bijv. was, ging, zag, woonde, fietste, vond).',
+          target: 'Toen ik jong was, woonde ik in een ander land en ging ik elke dag naar het park.',
+          explanation: 'Use simple past forms like "was", "ging", "woonde", "hadden", "maakten".',
+          skills: ['writing', 'production', 'automaticity'],
+          vocabulary: ['toen', 'vroeger', 'vakantie', 'reis'],
+          grammar: ['past-tense-ovt', 'time-clauses'],
+          placeholder: 'Toen ik...'
+        }
+      ]
+    }
+  ]
+}
+
+export const businessEmailChapter: Chapter = {
+  slug: 'zakelijke-e-mails-en-verzoeken',
+  level: 'B1',
+  title: 'Professional Emails & Formal Requests',
+  capability: 'Draft polite, clear workplace emails: request information, attach documents, follow up respectfully, and use appropriate openings and closings.',
+  description: 'Master professional written communication for Dutch workplaces and business contexts.',
+  estimatedMinutes: 14,
+  stages: [
+    {
+      id: 'discover',
+      title: 'Email Openings & Formal Closings',
+      kind: 'discover',
+      intro: 'In Dutch workplace emails, selecting the right opening (*Geachte* for formal/external vs *Beste* for standard professional) and closing (*Met vriendelijke groet*) establishes professional rapport.',
+      exercises: [
+        {
+          id: 'mail-induction',
+          kind: 'induction',
+          prompt: 'Notice formulaic conventions in business emails',
+          skills: ['recognition', 'pragmatic'],
+          inductionData: {
+            examples: [
+              { prompt: 'Formal external opening', answer: 'Geachte heer Jansen,' },
+              { prompt: 'Colleague / known contact opening', answer: 'Beste Peter,' },
+              { prompt: 'Standard professional closing', answer: 'Met vriendelijke groet,' }
+            ],
+            ruleChallenge: 'Which opening is the most formal and appropriate for official agencies or unknown clients?',
+            options: [
+              { text: 'Geachte heer / mevrouw,', isCorrect: true },
+              { text: 'Hoi allemaal,', isCorrect: false },
+              { text: 'Beste vrienden,', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'mail-1',
+          kind: 'info',
+          prompt: 'Standard business email phrases',
+          context: 'Naar aanleiding van ons gesprek... (Further to our conversation...)\nIn de bijlage treft u de offerte aan. (Please find the quote attached.)\nZou u mij kunnen laten weten of...? (Could you let me know whether...?)\nIk hoor graag van u. (I look forward to hearing from you.)\nBij voorbaat dank voor uw reactie. (Thank you in advance for your reply.)\nMet vriendelijke groet, (With kind regards,)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['naar aanleiding van', 'bijlage', 'aantreffen', 'offerte', 'bij voorbaat dank', 'met vriendelijke groet']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Requesting Project Feedback',
+      kind: 'understand',
+      intro: 'Analyze this professional email requesting feedback on a quarterly report.',
+      exercises: [
+        {
+          id: 'mail-2',
+          kind: 'reading',
+          prompt: 'Project coordination email',
+          readingContent: 'Beste collega\'s,\n\nNaar aanleiding van onze vergadering van afgelopen dinsdag stuur ik jullie hierbij het bijgewerkte projectplan. In de bijlage treffen jullie het volledige overzicht aan.\n\nZouden jullie het document vóór aanstaande vrijdag kunnen doornemen en eventuele opmerkingen aan mij doorgeven? Mocht er nog iets onduidelijk zijn, laat het mij dan gerust weten.\n\nAlvast hartelijk dank voor jullie medewerking.\n\nMet vriendelijke groet,\nLisa van Dam',
+          wordHints: {
+            'bijgewerkte': { meaning: 'updated', category: 'adj' },
+            'doornemen': { meaning: 'to review / go through', category: 'verb' },
+            'opmerkingen': { meaning: 'feedback / comments', category: 'noun' },
+            'medewerking': { meaning: 'cooperation / assistance', category: 'noun' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['bijgewerkt', 'doornemen', 'opmerkingen', 'medewerking']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Email Formulas Recall',
+      kind: 'retrieve',
+      intro: 'Recall these standard workplace formulas accurately.',
+      exercises: [
+        {
+          id: 'mail-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Kind regards (closing)',
+          target: 'Met vriendelijke groet',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'mail-speed-2',
+          kind: 'speed-drill',
+          prompt: 'In the attachment you will find...',
+          target: 'In de bijlage treft u',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'mail-3',
+          kind: 'typed',
+          prompt: 'Translate: Thank you in advance for your assistance.',
+          target: 'Bij voorbaat dank voor uw medewerking.',
+          acceptedAnswers: [
+            'Bij voorbaat dank voor uw medewerking.',
+            'Bij voorbaat dank voor uw medewerking',
+            'Bij voorbaat dank voor uw hulp.',
+            'Alvast dank voor uw medewerking.'
+          ],
+          explanation: 'Use the standard formula "Bij voorbaat dank voor uw medewerking".',
+          skills: ['production', 'pragmatic'],
+          vocabulary: ['bij voorbaat dank', 'medewerking']
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Softening Blunt Inquiries',
+      kind: 'transform',
+      intro: 'Transform direct, blunt demands into courteous professional requests using "Zou u kunnen..." and indirect clauses.',
+      exercises: [
+        {
+          id: 'mail-4',
+          kind: 'typed',
+          prompt: 'Rewrite politely: "Stuur mij het bestand vandaag nog." (Use: "Zou u mij... kunnen sturen?")',
+          target: 'Zou u mij het bestand vandaag nog kunnen sturen?',
+          acceptedAnswers: [
+            'Zou u mij het bestand vandaag nog kunnen sturen?',
+            'Zou u mij het bestand vandaag nog kunnen sturen',
+            'Zou u mij het bestand vandaag kunnen toesturen?',
+            'Zou u het bestand vandaag nog naar mij kunnen sturen?'
+          ],
+          explanation: 'Use the conditional modal "Zou u [object] kunnen sturen?" to soften the request.',
+          skills: ['production', 'pragmatic', 'grammar'],
+          vocabulary: ['bestand', 'toesturen'],
+          grammar: ['conditional', 'modal-verbs']
+        },
+        {
+          id: 'mail-5',
+          kind: 'typed',
+          prompt: 'Translate: I would like to know if the meeting is still taking place tomorrow.',
+          target: 'Ik zou graag willen weten of de vergadering morgen doorgaat.',
+          acceptedAnswers: [
+            'Ik zou graag willen weten of de vergadering morgen doorgaat.',
+            'Ik zou graag willen weten of de vergadering morgen doorgaat',
+            'Ik wil graag weten of de vergadering morgen doorgaat.',
+            'Ik zou graag willen weten of het overleg morgen doorgaat.'
+          ],
+          explanation: 'Indirect question with "of": the verb "doorgaat" moves to the end of the subclause.',
+          skills: ['production', 'grammar'],
+          vocabulary: ['vergadering', 'doorgaan'],
+          grammar: ['indirect-questions', 'subordinate-clauses', 'separable-verbs']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Compose a Professional Email',
+      kind: 'personalise',
+      intro: 'Draft a short email to your project manager or client requesting an update on a deliverable or proposing a deadline adjustment.',
+      exercises: [
+        {
+          id: 'mail-6',
+          kind: 'personalise',
+          prompt: 'Schrijf een zakelijke e-mail aan je leidinggevende of een collega. Gebruik een formele opening, leg het verzoek uit met "zou kunnen" of "in de bijlage", en sluit netjes af.',
+          target: 'Beste collega, naar aanleiding van ons project stuur ik u de update. In de bijlage treft u het overzicht aan. Met vriendelijke groet, ...',
+          explanation: 'Structure with opening, context, polite request, and formal sign-off.',
+          skills: ['writing', 'production', 'pragmatic'],
+          vocabulary: ['naar aanleiding van', 'bijlage', 'met vriendelijke groet', 'zou kunnen'],
+          grammar: ['polite-requests', 'word-order'],
+          placeholder: 'Beste [naam], naar aanleiding van...'
+        }
+      ]
+    }
+  ]
+}
+
+export const debatingAgreementChapter: Chapter = {
+  slug: 'instemmen-en-weerleggen',
+  level: 'B1',
+  title: 'Debating, Agreeing & Nuanced Disagreement',
+  capability: 'Engage constructively in meetings and discussions: agree with conditions, reframe points, and voice diplomatic disagreement.',
+  description: 'Move beyond basic yes/no to express nuanced agreement, partial consensus, and polite counter-arguments.',
+  estimatedMinutes: 15,
+  relatedArticleSlug: 'b1-thuiswerken',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Nuanced Connectors & Agreement Signals',
+      kind: 'discover',
+      intro: 'At B1, discussion requires balancing multiple perspectives using contrast connectors (*enerzijds... anderzijds*, *daarentegen*, *tot op zekere hoogte*) and diplomatic agreement signals.',
+      exercises: [
+        {
+          id: 'deb-induction',
+          kind: 'induction',
+          prompt: 'Notice how speakers concede a point before adding a caveat',
+          skills: ['recognition', 'pragmatic'],
+          inductionData: {
+            examples: [
+              { prompt: 'Complete agreement', answer: 'Daar ben ik het helemaal mee eens.' },
+              { prompt: 'Partial concession', answer: 'Daar zit wat in, maar we moeten ook aan de kosten denken.' },
+              { prompt: 'Balanced contrast', answer: 'Enerzijds bespaart het tijd, anderzijds kost het meer energie.' }
+            ],
+            ruleChallenge: 'Which phrase is best for acknowledging someone has a valid point without 100% agreeing?',
+            options: [
+              { text: 'Daar zit wat in, maar...', isCorrect: true },
+              { text: 'Dat is helemaal verkeerd.', isCorrect: false },
+              { text: 'Ik vind het best.', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'deb-1',
+          kind: 'info',
+          prompt: 'Discussion and debate phrases',
+          context: 'Daar ben ik het volkomen mee eens. (I completely agree with that.)\nTot op zekere hoogte klopt dat. (To a certain extent that is true.)\nIk zie dat toch anders. (I see that differently.)\nEnerzijds... anderzijds... (On the one hand... on the other hand...)\nDaar staat tegenover dat... (On the other hand / set against that is...)\nHoewel het voorstel goed klinkt, zijn er nadelen. (Although the proposal sounds good, there are downsides.)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['volkomen', 'tot op zekere hoogte', 'enerzijds', 'anderzijds', 'daar staat tegenover', 'hoewel']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Workplace Strategy Meeting',
+      kind: 'understand',
+      intro: 'Follow this debate between two team leads discussing a new hybrid work policy.',
+      exercises: [
+        {
+          id: 'deb-2',
+          kind: 'reading',
+          prompt: 'Meeting dialogue',
+          readingContent: 'Mark: "Volgens mij moeten we van iedereen eisen dat ze minimaal vier dagen per week naar kantoor komen. Dat versterkt de teamcultuur."\n\nSandra: "Daar zit zeker wat in, Mark. Maar tot op zekere hoogte zijn onze ontwikkelaars juist productiever wanneer ze rustig thuis kunnen werken. Enerzijds begrijp ik jouw wens voor verbinding, maar anderzijds lopen we het risico dat getalenteerde medewerkers vertrekken als we te streng zijn."\n\nMark: "Daar heb je een punt. Laten we naar een flexibele tussenoplossing zoeken."',
+          wordHints: {
+            'versterkt': { meaning: 'strengthens', category: 'verb' },
+            'ontwikkelaars': { meaning: 'developers', category: 'noun' },
+            'verbinding': { meaning: 'connection / bonding', category: 'noun' },
+            'tussenoplossing': { meaning: 'compromise / middle ground', category: 'noun' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['versterken', 'ontwikkelaars', 'verbinding', 'tussenoplossing']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Discussion Responses Recall',
+      kind: 'retrieve',
+      intro: 'Produce clear debate phrases under time constraints.',
+      exercises: [
+        {
+          id: 'deb-speed-1',
+          kind: 'speed-drill',
+          prompt: 'I completely agree (Daar ben...)',
+          target: 'Daar ben ik het helemaal mee eens',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'deb-speed-2',
+          kind: 'speed-drill',
+          prompt: 'To a certain extent (Tot op...)',
+          target: 'Tot op zekere hoogte',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'deb-3',
+          kind: 'typed',
+          prompt: 'Translate: You have a point, but I view the situation differently.',
+          target: 'Daar heb je een punt, maar ik bekijk de situatie anders.',
+          acceptedAnswers: [
+            'Daar heb je een punt, maar ik bekijk de situatie anders.',
+            'Daar heb je een punt, maar ik bekijk de situatie anders',
+            'Daar heb je een punt, maar ik zie de situatie anders.',
+            'Je hebt een punt, maar ik zie dat toch anders.'
+          ],
+          explanation: 'Combine "Daar heb je een punt" with a contrasting clause.',
+          skills: ['production', 'pragmatic'],
+          vocabulary: ['punt hebben', 'situatie', 'bekijken']
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Constructing Balanced Arguments',
+      kind: 'transform',
+      intro: 'Formulate balanced sentences using subordinating conjunctions and correlative connectors.',
+      exercises: [
+        {
+          id: 'deb-4',
+          kind: 'typed',
+          prompt: 'Combine into one sentence with "Hoewel": "Het plan is duur. Het plan lost wel veel problemen op."',
+          target: 'Hoewel het plan duur is, lost het wel veel problemen op.',
+          acceptedAnswers: [
+            'Hoewel het plan duur is, lost het wel veel problemen op.',
+            'Hoewel het plan duur is, lost het wel veel problemen op',
+            'Hoewel het plan duur is lost het wel veel problemen op.'
+          ],
+          explanation: '"Hoewel" causes verb-final in the subclause ("duur is"), followed by V2 inversion in the main clause ("lost het").',
+          skills: ['production', 'grammar'],
+          grammar: ['hoewel', 'subordinate-clauses', 'inversion']
+        },
+        {
+          id: 'deb-5',
+          kind: 'typed',
+          prompt: 'Translate: On the one hand the investment is high, on the other hand the revenue increases.',
+          target: 'Enerzijds is de investering hoog, anderzijds stijgt de omzet.',
+          acceptedAnswers: [
+            'Enerzijds is de investering hoog, anderzijds stijgt de omzet.',
+            'Enerzijds is de investering hoog, anderzijds stijgt de omzet',
+            'Aan de ene kant is de investering hoog, aan de andere kant stijgt de omzet.'
+          ],
+          explanation: 'Both "enerzijds" and "anderzijds" trigger V2 inversion (adverb -> finite verb -> subject).',
+          skills: ['production', 'grammar'],
+          vocabulary: ['investering', 'omzet', 'stijgen', 'enerzijds', 'anderzijds'],
+          grammar: ['inversion', 'correlative-structures']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Your Perspective in a Debate',
+      kind: 'personalise',
+      intro: 'Give a balanced opinion on a current workplace, educational, or societal topic.',
+      exercises: [
+        {
+          id: 'deb-6',
+          kind: 'personalise',
+          prompt: 'Reageer op een stelling uit jouw vakgebied (bijv. over AI, flexwerken of automatisering). Gebruik "enerzijds... anderzijds" of "hoewel" om een genuanceerd standpunt in te nemen.',
+          target: 'Hoewel technologie veel processen versnelt, blijft menselijk contact onmisbaar.',
+          explanation: 'State both an advantage and a reservation using "hoewel" or "enerzijds... anderzijds".',
+          skills: ['speaking', 'writing', 'production', 'coherence'],
+          vocabulary: ['enerzijds', 'anderzijds', 'hoewel', 'mening', 'standpunt'],
+          grammar: ['subordinate-clauses', 'inversion'],
+          placeholder: 'Hoewel...'
+        }
+      ]
+    }
+  ]
+}
+
+export const civicServicesChapter: Chapter = {
+  slug: 'gemeente-en-instanties',
+  level: 'B1',
+  title: 'Navigating Municipal Services & Bureaucracy',
+  capability: 'Interact confidently with Dutch civil offices: book appointments, register addresses (BSN), ask about permits, and understand official instructions.',
+  description: 'Navigate the Gemeente, BSN registration, official letters, and civic procedures with confidence.',
+  estimatedMinutes: 15,
+  relatedArticleSlug: 'b1-gemeente-inschrijven',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Administrative Terminology & Civic Concepts',
+      kind: 'discover',
+      intro: 'When dealing with Dutch municipalities (*de gemeente*), institutions communicate using formal terms like "inschrijving" (registration), "uittreksel" (official extract), "burgerservicenummer (BSN)", and "leges" (administrative fees).',
+      exercises: [
+        {
+          id: 'civ-induction',
+          kind: 'induction',
+          prompt: 'Notice administrative requirements and modal verbs of obligation',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: 'Formal obligation with dienen', answer: 'U dient uw paspoort mee te nemen.' },
+              { prompt: 'Passive administrative instruction', answer: 'De aanvraag wordt digitaal verwerkt.' },
+              { prompt: 'Time condition', answer: 'Binnen vijf werkdagen ontvangt u bericht.' }
+            ],
+            ruleChallenge: 'What does "U dient [document] te overleggen" mean in formal Dutch?',
+            options: [
+              { text: 'You are required to provide / present [document]', isCorrect: true },
+              { text: 'You can optionally discard [document]', isCorrect: false },
+              { text: 'You should translate [document]', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'civ-1',
+          kind: 'info',
+          prompt: 'Official civic terms',
+          context: 'de Basisregistratie Personen (BRP) (municipal personal records)\nhet burgerservicenummer (BSN) (citizen service number / tax ID)\nhet uittreksel (official registry extract)\nde vergunning aanvragen (to apply for a permit)\nde leges betalen (to pay municipal administration fees)\nhet legitimatiebewijs (identity document / passport)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['BRP', 'BSN', 'uittreksel', 'vergunning', 'leges', 'legitimatiebewijs', 'gemeente']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Municipal Appointment Instructions',
+      kind: 'understand',
+      intro: 'Read this official confirmation letter from the municipal service desk (*Publiekszaken*).',
+      exercises: [
+        {
+          id: 'civ-2',
+          kind: 'reading',
+          prompt: 'Appointment confirmation letter',
+          readingContent: 'Geachte inwoner,\n\nHierbij bevestigen wij uw afspraak op het Stadskantoor voor de eerste inschrijving in de Basisregistratie Personen (BRP). Uw afspraak vindt plaats op donderdag 22 oktober om 10:30 uur aan balie 4.\n\nWat moet u meenemen?\n- Een geldig paspoort of Europese identiteitskaart van alle gezinsleden;\n- Een door beide partijen ondertekende huurovereenkomst of koopakte;\n- Indien van toepassing: een gelegaliseerde geboorteakte.\n\nLet op: Indien uw documenten niet compleet zijn, kan uw inschrijving niet in behandeling worden genomen.',
+          wordHints: {
+            'inwoner': { meaning: 'resident / citizen', category: 'noun' },
+            'huurovereenkomst': { meaning: 'lease agreement / rental contract', category: 'noun' },
+            'koopakte': { meaning: 'deed of purchase', category: 'noun' },
+            'gelegaliseerde': { meaning: 'legalized / authenticated', category: 'adj' },
+            'in behandeling': { meaning: 'under consideration / processed', category: 'prep phrase' }
+          },
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['inwoner', 'huurovereenkomst', 'koopakte', 'gelegaliseerd']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Civic Service Desk Inquiries',
+      kind: 'retrieve',
+      intro: 'Inquire clearly about administrative processes at the municipal service counter.',
+      exercises: [
+        {
+          id: 'civ-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Apply for a permit (Een vergunning...)',
+          target: 'Een vergunning aanvragen',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'civ-speed-2',
+          kind: 'speed-drill',
+          prompt: 'How long does the processing take? (Hoe lang...)',
+          target: 'Hoe lang duurt de behandeling?',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'civ-3',
+          kind: 'typed',
+          prompt: 'Translate: I would like to register at my new address and apply for a BSN.',
+          target: 'Ik wil me graag inschrijven op mijn nieuwe adres en een BSN aanvragen.',
+          acceptedAnswers: [
+            'Ik wil me graag inschrijven op mijn nieuwe adres en een BSN aanvragen.',
+            'Ik wil me graag inschrijven op mijn nieuwe adres en een BSN aanvragen',
+            'Ik wil mij graag inschrijven op mijn nieuwe adres en een BSN aanvragen.',
+            'Ik zou me graag willen inschrijven op mijn nieuwe adres en een BSN aanvragen.'
+          ],
+          explanation: 'Use the reflexive verb "zich inschrijven" (ik wil me inschrijven) and "aanvragen".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['inschrijven', 'adres', 'BSN', 'aanvragen'],
+          grammar: ['reflexive-verbs', 'modal-verbs']
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Formal Bureaucratic Instructions',
+      kind: 'transform',
+      intro: 'Practice understanding and transforming administrative requirements using formal structures like "dienen te" and the passive voice.',
+      exercises: [
+        {
+          id: 'civ-4',
+          kind: 'typed',
+          prompt: 'Rewrite using formal "U dient... te overleggen": "U moet uw huurcontract laten zien."',
+          target: 'U dient uw huurcontract te overleggen.',
+          acceptedAnswers: [
+            'U dient uw huurcontract te overleggen.',
+            'U dient uw huurcontract te overleggen',
+            'U dient het huurcontract te overleggen.'
+          ],
+          explanation: 'Formal administrative Dutch replaces "moeten laten zien" with "dienen te overleggen".',
+          skills: ['production', 'pragmatic', 'grammar'],
+          vocabulary: ['dienen', 'overleggen', 'huurcontract'],
+          grammar: ['formal-register', 'semi-auxiliary-verbs']
+        },
+        {
+          id: 'civ-5',
+          kind: 'typed',
+          prompt: 'Translate: The official confirmation will be sent to your home address within two weeks.',
+          target: 'De officiële bevestiging wordt binnen twee weken naar uw woonadres gestuurd.',
+          acceptedAnswers: [
+            'De officiële bevestiging wordt binnen twee weken naar uw woonadres gestuurd.',
+            'De officiële bevestiging wordt binnen twee weken naar uw woonadres gestuurd',
+            'De officiële bevestiging wordt binnen twee weken naar uw adres verstuurd.',
+            'De bevestiging wordt binnen twee weken naar uw adres verzonden.'
+          ],
+          explanation: 'Passive voice with "wordt ... gestuurd" / "verzonden".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['bevestiging', 'woonadres', 'binnen twee weken'],
+          grammar: ['passive-voice', 'word-order']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Simulate a Municipal Service Appointment',
+      kind: 'personalise',
+      intro: 'Simulate an interaction at the Stadskantoor desk: state what service you need (registration, permit, certificate) and what documents you have brought with you.',
+      exercises: [
+        {
+          id: 'civ-6',
+          kind: 'personalise',
+          prompt: 'Je staat aan de balie van de gemeente. Leg uit waarvoor je komt (bijv. verhuizing doorgeven, BSN regelen of uittreksel aanvragen) en welke documenten je bij je hebt.',
+          target: 'Goedendag, ik kom voor mijn inschrijving in de gemeente. Ik heb mijn paspoort en het huurcontract bij me.',
+          explanation: 'Politely explain your goal using "Ik kom voor...", "Ik wil graag...", and mention your documents.',
+          skills: ['speaking', 'production', 'pragmatic'],
+          vocabulary: ['inschrijving', 'gemeente', 'paspoort', 'huurcontract', 'afspraak'],
+          grammar: ['polite-requests', 'word-order'],
+          placeholder: 'Goedendag, ik kom voor...'
+        }
+      ]
+    }
+  ]
+}
+
+export const maritimeChapter: Chapter = {
+  slug: 'piraten-en-maritieme-zeevaart',
+  level: 'B2',
+  title: 'Pirates, Privateers & The Maritime Age',
+  capability: 'Discuss 17th-century maritime history, contrast privateering (kaapvaart) with piracy (zeeroof), analyze naval tactics, and master Dutch nautical idioms in modern discourse.',
+  description: 'Explore the high seas of the Dutch Golden Age: naval battles, the Silver Fleet, letters of marque, life aboard sailing ships, and maritime idioms vibrant in Dutch today.',
+  estimatedMinutes: 12,
+  relatedArticleSlug: 'b2-zilvervloot-en-kaapvaart',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Privateering, Piracy & Maritime Lexicon',
+      kind: 'discover',
+      intro: 'In the 17th century, there was a strict legal distinction between "zeeroof" (unlawful piracy) and "kaapvaart" (state-sanctioned privateering with an official "kaperbrief"). Discover the nautical vocabulary and vivid seafaring idioms that remain central to modern Dutch.',
+      exercises: [
+        {
+          id: 'mar-induction',
+          kind: 'induction',
+          prompt: 'Distinguish privateering from piracy and analyze nautical terms',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: 'State-sanctioned raid on enemy ships', answer: 'kaapvaart (met een kaperbrief van de Staten-Generaal)' },
+              { prompt: 'Illegal plunder on the high seas', answer: 'zeeroof (ongeoorloofde piraterij voor eigen gewin)' },
+              { prompt: 'Boarding an enemy vessel by force', answer: 'het enteren van een schip' }
+            ],
+            ruleChallenge: 'What was the legal document called that authorized a captain to attack enemy ships on behalf of the Dutch Republic?',
+            options: [
+              { text: 'Een kaperbrief', isCorrect: true },
+              { text: 'Een scheepsjournaal', isCorrect: false },
+              { text: 'Een vlootvoogdij', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'mar-info-1',
+          kind: 'info',
+          prompt: 'Nautical & naval terminology',
+          context: 'de kaperbrief (letter of marque / privateering commission)\nhet vlaggenschip (flagship)\nenteren (to board an enemy vessel)\nde buit / de schat (the booty / plunder / treasure)\nhet ruim / het laadruim (the cargo hold)\nde kombuis (the galley / ship\'s kitchen)\nhet kraaiennest (the crow\'s nest)\nmuiterij (mutiny)\nscheurbuik (scurvy)\novermeesteren (to overpower / capture)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['kaperbrief', 'vlaggenschip', 'enteren', 'buit', 'laadruim', 'kombuis', 'kraaiennest', 'muiterij', 'scheurbuik', 'overmeesteren']
+        },
+        {
+          id: 'mar-info-2',
+          kind: 'info',
+          prompt: 'Living Dutch maritime idioms used in daily life',
+          context: 'alle hens aan dek = everyone must help urgently ("all hands on deck")\nhet roer omgooien = to radically change course or strategy\nkapers op de kust = lurking competitors or rivals seeking to seize an opportunity\nschoon schip maken = to thoroughly resolve issues or start with a clean slate\noverstag gaan = to change one\'s mind / give in to persuasion\nbakzeil halen = to back down / admit defeat',
+          skills: ['recognition', 'idiomatic', 'meaning'],
+          idioms: ['alle hens aan dek', 'het roer omgooien', 'kapers op de kust', 'schoon schip maken', 'overstag gaan', 'bakzeil halen']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'The Capture of the Silver Fleet (1628)',
+      kind: 'understand',
+      intro: 'Read this historical chronicle of Admiral Piet Hein capturing the Spanish Silver Fleet in the Bay of Matanzas for the West India Company (WIC).',
+      exercises: [
+        {
+          id: 'mar-reading',
+          kind: 'reading',
+          prompt: 'Historical chronicle: De Verovering van de Zilvervloot',
+          readingContent: 'In september 1628 behaalde luitenant-admiraal Piet Hein een legendarische overwinning in de baai van Matanzas bij Cuba. Uitgerust met een officiële kaperbrief van de Republiek der Zeven Verenigde Nederlanden, slaagde zijn vloot erin de Spaanse Zilvervloot zonder noemenswaardig bloedvergieten te omsingelen.\n\nDe Spaanse galjoenen, volgeladen met zilver, goud en kostbare specerijen, werden door de Nederlandse matrozen geënterd en overmeesterd. De fabelachtige buit ter waarde van ruim elf miljoen gulden financierde niet alleen het leger van stadhouder Frederik Hendrik in de Tachtigjarige Oorlog, maar bezorgde Piet Hein ook een onsterfelijke heldenstatus in de maritieme geschiedenis.',
+          wordHints: {
+            'behaalde': { meaning: 'achieved / scored', category: 'verb (past)' },
+            'bloedvergieten': { meaning: 'bloodshed', category: 'noun' },
+            'omsingelen': { meaning: 'to encircle / surround', category: 'verb' },
+            'galjoenen': { meaning: 'galleons', category: 'noun' },
+            'volgeladen': { meaning: 'heavily loaded / laden', category: 'adj' },
+            'geënterd': { meaning: 'boarded', category: 'verb (past part)' },
+            'fabelachtige': { meaning: 'fabulous / legendary', category: 'adj' },
+            'buit': { meaning: 'booty / loot / spoils', category: 'noun' },
+            'bezorgde': { meaning: 'earned / provided / secured for', category: 'verb (past)' }
+          },
+          skills: ['recognition', 'meaning', 'coherence'],
+          vocabulary: ['bloedvergieten', 'omsingelen', 'galjoen', 'buit', 'specerijen', 'financierde']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Rapid Nautical Recall & Idioms',
+      kind: 'retrieve',
+      intro: 'Instantly produce nautical terms and historical idioms.',
+      exercises: [
+        {
+          id: 'mar-speed-1',
+          kind: 'speed-drill',
+          prompt: 'All hands on deck! (Alle hens...)',
+          target: 'Alle hens aan dek!',
+          automaticitySeconds: 3,
+          skills: ['automaticity', 'idiomatic']
+        },
+        {
+          id: 'mar-speed-2',
+          kind: 'speed-drill',
+          prompt: 'Board the enemy ship (Het schip...)',
+          target: 'Het schip enteren',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'mar-speed-3',
+          kind: 'speed-drill',
+          prompt: 'Competitors / rivals lurking (Kapers...)',
+          target: 'Er zijn kapers op de kust',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'idiomatic']
+        },
+        {
+          id: 'mar-3',
+          kind: 'typed',
+          prompt: 'Translate: The admiral held an official letter of marque from the Dutch Republic.',
+          target: 'De admiraal beschikte over een officiële kaperbrief van de Republiek.',
+          acceptedAnswers: [
+            'De admiraal beschikte over een officiële kaperbrief van de Republiek.',
+            'De admiraal beschikte over een officiële kaperbrief van de Republiek',
+            'De admiraal had een officiële kaperbrief van de Republiek.',
+            'De admiraal had een officiële kaperbrief van de Republiek',
+            'De admiraal bezat een officiële kaperbrief van de Republiek.'
+          ],
+          explanation: 'Use "kaperbrief" and "Republiek". "Beschikte over" or "had" both work well.',
+          skills: ['production', 'meaning'],
+          vocabulary: ['admiraal', 'kaperbrief', 'Republiek'],
+          placeholder: 'De admiraal...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Historical Chronicles & Modern Idiom Application',
+      kind: 'transform',
+      intro: 'Practice transforming active naval combat reports into passive chronicles, applying past perfect temporal sequences, and reframing modern situations with nautical idioms.',
+      exercises: [
+        {
+          id: 'mar-4',
+          kind: 'typed',
+          prompt: 'Rewrite in the passive voice (lijdende vorm): "De kapers overmeesterden het Spaanse galjoen in de baai."',
+          target: 'Het Spaanse galjoen werd door de kapers overmeesterd in de baai.',
+          acceptedAnswers: [
+            'Het Spaanse galjoen werd door de kapers overmeesterd in de baai.',
+            'Het Spaanse galjoen werd door de kapers overmeesterd in de baai',
+            'Het Spaanse galjoen werd in de baai door de kapers overmeesterd.',
+            'Het Spaanse galjoen werd in de baai overmeesterd door de kapers.',
+            'Het Spaanse galjoen werd door de kapers in de baai overmeesterd.'
+          ],
+          explanation: 'Transform active "overmeesterden" into past passive "werd ... overmeesterd door de kapers".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['galjoen', 'kapers', 'overmeesterd'],
+          grammar: ['passive-voice']
+        },
+        {
+          id: 'mar-5',
+          kind: 'typed',
+          prompt: 'Combine using "nadat" + past perfect (VVT): (1) De kapitein gaf het bevel. (2) De bemanning enterde het vijandelijke schip.',
+          target: 'Nadat de kapitein het bevel had gegeven, enterde de bemanning het vijandelijke schip.',
+          acceptedAnswers: [
+            'Nadat de kapitein het bevel had gegeven, enterde de bemanning het vijandelijke schip.',
+            'Nadat de kapitein het bevel had gegeven, enterde de bemanning het vijandelijke schip',
+            'Nadat de kapitein het bevel had gegeven enterde de bemanning het vijandelijke schip'
+          ],
+          explanation: 'In the subordinate clause with "nadat", use past perfect "had gegeven" with verb-final word order, followed by inversion in the main clause "enterde de bemanning".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['bevel', 'bemanning', 'enteren'],
+          grammar: ['subordinate-clauses', 'past-perfect', 'word-order']
+        },
+        {
+          id: 'mar-6',
+          kind: 'typed',
+          prompt: 'Express idiomatically: "We moeten onze strategie compleet veranderen omdat er concurrenten op de loer liggen." (Use "het roer omgooien" and "kapers op de kust")',
+          target: 'We moeten het roer omgooien omdat er kapers op de kust zijn.',
+          acceptedAnswers: [
+            'We moeten het roer omgooien omdat er kapers op de kust zijn.',
+            'We moeten het roer omgooien omdat er kapers op de kust zijn',
+            'We moeten het roer omgooien, want er zijn kapers op de kust.',
+            'We moeten het roer omgooien want er zijn kapers op de kust.'
+          ],
+          explanation: 'Use the maritime idioms "het roer omgooien" (change course) and "kapers op de kust" (lurking competitors).',
+          skills: ['production', 'idiomatic', 'grammar'],
+          idioms: ['het roer omgooien', 'kapers op de kust'],
+          grammar: ['subordinate-clauses']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Ship\'s Logbook & The Privateering Debate',
+      kind: 'personalise',
+      intro: 'Put yourself in the shoes of a 17th-century navigator or historical analyst. Write a logbook entry (*scheepsjournaal*) or argue whether Dutch privateering (*kaapvaart*) was legitimate warfare or glorified piracy.',
+      exercises: [
+        {
+          id: 'mar-7',
+          kind: 'personalise',
+          prompt: 'Schrijf een kort fragment uit een 17e-eeuws scheepsjournaal of beargumenteer het verschil tussen kaapvaart en zeeroof. Gebruik minstens drie historische of maritieme termen (bijv. vloot, kaperbrief, enteren, buit, storm, bemanning, muiterij).',
+          target: 'Na weken op open zee signaleerde het kraaiennest een vijandelijk konvooi. Dankzij onze officiële kaperbrief enterde de bemanning het vlaggenschip en werd de rijke buit veiliggesteld.',
+          explanation: 'Use authentic historical terms (kaperbrief, vlaggenschip, bemanning, enteren, buit) and vivid narrative structure.',
+          skills: ['speaking', 'production', 'coherence', 'idiomatic'],
+          vocabulary: ['kaperbrief', 'vlaggenschip', 'bemanning', 'enteren', 'buit', 'kraaiennest'],
+          grammar: ['past-tense', 'passive-voice', 'word-order'],
+          placeholder: 'In het scheepsjournaal staat genoteerd dat...'
+        }
+      ]
+    }
+  ]
+}
+
+export const footballCruyffChapter: Chapter = {
+  slug: 'totaalvoetbal-en-johan-cruijff',
+  level: 'B2',
+  title: 'Total Football, Tiki-Taka & Johan Cruijff Philosophy',
+  capability: 'Analyze football tactics, master the principles of Total Football (Totaalvoetbal) and the tiki-taka positional style invented by Johan Cruijff, and apply his legendary aphorisms (Cruijffiaans) such as "Elk nadeel heb z\'n voordeel" in tactical, professional, and everyday discourse.',
+  description: 'Explore the tactical and cultural genius of Johan Cruijff: positional play (positiespel), triangle combinations (driehoeken), the invention of Tiki-Taka at FC Barcelona, and legendary aphorisms like "Elk nadeel heb z\'n voordeel" applied to modern Dutch life.',
+  estimatedMinutes: 15,
+  relatedArticleSlug: 'b2-totaalvoetbal-en-cruijff',
+  stages: [
+    {
+      id: 'discover',
+      title: 'Totaalvoetbal, Tiki-Taka & Cruijffian Lexicon',
+      kind: 'discover',
+      intro: 'Football in the Netherlands and Johan Cruijff\'s philosophy revolutionized world sport through geometry, spatial awareness, and passing circuits. Discover the tactical mechanics of Tiki-Taka and the linguistic phenomenon of "Cruijffiaans", headlined by the legendary quote "Elk nadeel heb z\'n voordeel".',
+      exercises: [
+        {
+          id: 'cruyff-induction',
+          kind: 'induction',
+          prompt: 'Analyze tactical concepts, Tiki-Taka, and Cruijff\'s football philosophy',
+          skills: ['recognition', 'meaning'],
+          inductionData: {
+            examples: [
+              { prompt: 'Tiki-taka positional triangles and ball circulation', answer: 'constante driehoekscombinaties vormen om de vrije man te vinden' },
+              { prompt: 'Fluid positional swapping across lines', answer: 'Totaalvoetbal: verdedigers en aanvallers wisselen naadloos van positie' },
+              { prompt: 'Cruijffian resilience and pragmatic optimism', answer: '"Elk nadeel heb z\'n voordeel": tegenslag ombuigen naar nieuwe kansen' }
+            ],
+            ruleChallenge: 'What is the tactical essence of the Tiki-Taka style developed by Johan Cruijff and perfected at Barcelona?',
+            options: [
+              { text: 'Snel combinatiespel in driehoeken met dominant balbezit om ruimtes te creëren en de derde man vrij te spelen.', isCorrect: true },
+              { text: 'Uitsluitend fysieke duels uitvechten en lange ballen richting de spits trappen.', isCorrect: false },
+              { text: 'Met alle veldspelers rond het eigen zestienmetergebied blijven verdedigen.', isCorrect: false }
+            ]
+          }
+        },
+        {
+          id: 'cruyff-info-1',
+          kind: 'info',
+          prompt: 'Tactical terminology: Totaalvoetbal, Tiki-Taka and match dynamics',
+          context: 'het tiki-taka (tiki-taka short-passing style / rapid combination play)\nhet positiespel (positional play / Juego de Posición)\nde driehoekscombinatie (triangle passing circuit)\nde derde man vinden (finding the third man)\nhet balbezit domineren (to dominate ball possession)\nde balcirculatie (ball circulation)\nde omschakeling (the transition between attack and defense)\nruimte creëren / benutten (to create / exploit space)\nhet veld breed houden (to keep the pitch wide)\nde overtalpositie / het overtal (numerical superiority / overload)\nde vleugelaanvaller / de buitenspeler (the winger)\nde spelmaker / de regisseur (the playmaker)\nhet strafschopgebied / de zestien (the penalty box)\nbuitenspel staan / zetten (to be / put offside)\nde Cruijff-draai (the Cruyff turn)',
+          skills: ['recognition', 'meaning'],
+          vocabulary: ['tiki-taka', 'positiespel', 'driehoekscombinatie', 'derde man', 'balbezit', 'balcirculatie', 'omschakeling', 'overtal', 'vleugelaanvaller', 'strafschopgebied']
+        },
+        {
+          id: 'cruyff-info-2',
+          kind: 'info',
+          prompt: 'Famous Cruijff aphorisms ("Cruijffiaans") used in sports, business and daily life',
+          context: '1. "Elk nadeel heb z\'n voordeel" = Every disadvantage has its advantage (iconic Amsterdam dialect grammar with "heb"; universally used to reframe setbacks into strategic opportunities).\n2. "Als wij de bal hebben, kunnen zij niet scoren" = The foundational premise of Tiki-Taka and possession football.\n3. "Je gaat het pas zien als je het doorhebt" = Deeper tactical or systemic insight requires understanding the underlying pattern.\n4. "Voetbal is simpel, maar simpel voetballen is het moeilijkste wat er is" = One-touch tiki-taka simplicity requires the highest level of technical mastery.\n5. "Als je niet ken winnen, moet je zorgen dat je niet verliest" = Pragmatic game management.\n6. "De bal moet het werk doen, niet de benen" = Let the ball circulate quickly rather than running unnecessarily.',
+          skills: ['recognition', 'idiomatic', 'meaning'],
+          idioms: ['elk nadeel heb z\'n voordeel', 'als wij de bal hebben kunnen zij niet scoren', 'je gaat het pas zien als je het doorhebt', 'simpel voetballen', 'de bal het werk laten doen']
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'The Revolution: From Totaalvoetbal to Tiki-Taka',
+      kind: 'understand',
+      intro: 'Read about how Johan Cruijff transformed football from Ajax and 1974 Oranje to inventing Tiki-Taka at FC Barcelona, and how his aphorisms entered everyday Dutch.',
+      exercises: [
+        {
+          id: 'cruyff-reading',
+          kind: 'reading',
+          prompt: 'Historical and tactical essay: Johan Cruijff, Totaalvoetbal en de geboorte van Tiki-Taka',
+          readingContent: 'Johan Cruijff (1947–2016) geldt wereldwijd als de architect van het moderne voetbal. Samen met coach Rinus Michels introduceerde hij begin jaren zeventig bij Ajax en het Nederlands elftal het revolutionaire "Totaalvoetbal", waarin spelers flexibel van positie wisselden en voortdurend ruimtes creëerden.\n\nToen Cruijff eind jaren tachtig trainer werd van FC Barcelona, transformeerde hij deze filosofie tot wat later bekend werd als "tiki-taka": een speelstijl gebaseerd op razendsnelle driehoekscombinaties, dominant balbezit en het principe van de derde man. In plaats van fysieke kracht stelde Cruijff technisch spelinzicht en balcirculatie centraal: "De bal moet het werk doen, niet de benen." Via de door hem hervormde jeugdacademie La Masia legde hij het fundament voor het legendarische succesteam van Pep Guardiola.\n\nNaast zijn tactische genialiteit verrijkte Cruijff de Nederlandse cultuur met zijn gevleugelde uitspraken ("Cruijffiaans"). Zijn beroemdste citaat, "Elk nadeel heb z\'n voordeel", is diep verankerd in het collectieve geheugen en wordt in het Nederlandse bedrijfsleven en de politiek dagelijks gebruikt om tegenslag om te buigen naar vooruitgang.',
+          wordHints: {
+            'architect': { meaning: 'architect / mastermind', category: 'noun' },
+            'revolutionaire': { meaning: 'revolutionary', category: 'adj' },
+            'driehoekscombinaties': { meaning: 'triangle passing combinations', category: 'noun' },
+            'balcirculatie': { meaning: 'ball circulation / passing flow', category: 'noun' },
+            'spelinzicht': { meaning: 'tactical vision / game insight', category: 'noun' },
+            'centraal': { meaning: 'central / key', category: 'adv' },
+            'jeugdacademie': { meaning: 'youth academy', category: 'noun' },
+            'gevleugelde': { meaning: 'winged / famous (sayings)', category: 'adj' },
+            'collectieve': { meaning: 'collective', category: 'adj' },
+            'verankerd': { meaning: 'anchored / ingrained', category: 'verb (past part)' },
+            'ombuigen': { meaning: 'to turn around / transform', category: 'verb' }
+          },
+          skills: ['recognition', 'meaning', 'coherence'],
+          vocabulary: ['architect', 'tiki-taka', 'driehoekscombinatie', 'balcirculatie', 'spelinzicht', 'gevleugelde uitspraak', 'verankerd', 'ombuigen']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Rapid Football & Cruijffian Recall',
+      kind: 'retrieve',
+      intro: 'Test your immediate recall of tactical terms, Tiki-Taka concepts, and famous Cruijff aphorisms.',
+      exercises: [
+        {
+          id: 'cruyff-speed-1',
+          kind: 'speed-drill',
+          prompt: 'Every disadvantage has its advantage (Elk nadeel...)',
+          target: "Elk nadeel heb z'n voordeel",
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'idiomatic']
+        },
+        {
+          id: 'cruyff-speed-2',
+          kind: 'speed-drill',
+          prompt: 'If we have the ball, they cannot score (Als wij...)',
+          target: 'Als wij de bal hebben, kunnen zij niet scoren',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'idiomatic']
+        },
+        {
+          id: 'cruyff-speed-3',
+          kind: 'speed-drill',
+          prompt: 'Rapid short-passing triangle combinations in tiki-taka (Snelle driehoekscombinaties...)',
+          target: 'Snelle driehoekscombinaties en positiespel',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'cruyff-speed-4',
+          kind: 'speed-drill',
+          prompt: 'Finding the third man in open space (De derde man...)',
+          target: 'De derde man vinden in de vrije ruimte',
+          automaticitySeconds: 4,
+          skills: ['automaticity', 'production']
+        },
+        {
+          id: 'cruyff-3',
+          kind: 'typed',
+          prompt: 'Translate: In tiki-taka, the playmaker creates space through rapid triangle combinations and ball circulation.',
+          target: 'In het tiki-taka creëert de spelmaker ruimte via snelle driehoekscombinaties en balcirculatie.',
+          acceptedAnswers: [
+            'In het tiki-taka creëert de spelmaker ruimte via snelle driehoekscombinaties en balcirculatie.',
+            'In het tiki-taka creëert de spelmaker ruimte via snelle driehoekscombinaties en balcirculatie',
+            'In tiki-taka creëert de spelmaker ruimte door snelle driehoekscombinaties en balcirculatie.',
+            'In het tiki-taka creëert de spelmaker ruimte door snelle driehoekscombinaties en balcirculatie.',
+            'In tiki-taka maakt de spelmaker ruimte via snelle driehoekscombinaties en balcirculatie.'
+          ],
+          explanation: 'Use "tiki-taka", "driehoekscombinaties" (passing triangles), and "balcirculatie" (ball circulation) with correct V2 inversion after the prepositional phrase.',
+          skills: ['production', 'grammar', 'meaning'],
+          vocabulary: ['tiki-taka', 'spelmaker', 'driehoekscombinatie', 'balcirculatie'],
+          placeholder: 'In het tiki-taka...'
+        }
+      ]
+    },
+    {
+      id: 'transform',
+      title: 'Tactical Analysis & Communicative Application',
+      kind: 'transform',
+      intro: 'Transform match observations into conditional tactical logic, passive match reports, causal breakdowns, and idiomatic Cruijffian reframing.',
+      exercises: [
+        {
+          id: 'cruyff-4',
+          kind: 'typed',
+          prompt: 'Combine into a conditional sentence using "als": (1) Wij domineren het balbezit met tiki-taka. (2) De tegenstander kan niet scoren.',
+          target: 'Als wij het balbezit domineren met tiki-taka, kan de tegenstander niet scoren.',
+          acceptedAnswers: [
+            'Als wij het balbezit domineren met tiki-taka, kan de tegenstander niet scoren.',
+            'Als wij het balbezit domineren met tiki-taka, kan de tegenstander niet scoren',
+            'Als we het balbezit domineren met tiki-taka, kan de tegenstander niet scoren.',
+            'Als we het balbezit domineren met tiki-taka, kan de tegenstander niet scoren',
+            'Als wij met tiki-taka het balbezit domineren, kan de tegenstander niet scoren.',
+            'Als we met tiki-taka het balbezit domineren, kan de tegenstander niet scoren.'
+          ],
+          explanation: 'In the subordinate clause with "als", place the finite verb at the end ("domineren"), followed by verb-subject inversion in the main clause ("kan de tegenstander...").',
+          skills: ['production', 'grammar'],
+          vocabulary: ['tiki-taka', 'balbezit', 'scoren'],
+          grammar: ['subordinate-clauses', 'word-order']
+        },
+        {
+          id: 'cruyff-5',
+          kind: 'typed',
+          prompt: 'Rewrite in the passive voice (lijdende vorm): "De verdediger onderschepte de gevaarlijke pass in het strafschopgebied."',
+          target: 'De gevaarlijke pass werd door de verdediger onderschept in het strafschopgebied.',
+          acceptedAnswers: [
+            'De gevaarlijke pass werd door de verdediger onderschept in het strafschopgebied.',
+            'De gevaarlijke pass werd door de verdediger onderschept in het strafschopgebied',
+            'De gevaarlijke pass werd door de verdediger in het strafschopgebied onderschept.',
+            'De gevaarlijke pass werd door de verdediger in het strafschopgebied onderschept',
+            'De gevaarlijke pass werd in het strafschopgebied door de verdediger onderschept.',
+            'De gevaarlijke pass werd in het strafschopgebied onderschept door de verdediger.'
+          ],
+          explanation: 'Transform the active past "onderschepte" into passive past "werd ... onderschept door de verdediger".',
+          skills: ['production', 'grammar'],
+          vocabulary: ['strafschopgebied', 'verdediger', 'onderscheppen'],
+          grammar: ['passive-voice']
+        },
+        {
+          id: 'cruyff-6',
+          kind: 'typed',
+          prompt: 'Apply Cruijff\'s legendary quote to reframe a business setback: "Elke tegenslag biedt ook een onverwachte kans." (Cite Cruijff\'s exact quote: "Elk nadeel heb z\'n voordeel")',
+          target: "Elk nadeel heb z'n voordeel, dus deze tegenslag biedt ook nieuwe kansen.",
+          acceptedAnswers: [
+            "Elk nadeel heb z'n voordeel, dus deze tegenslag biedt ook nieuwe kansen.",
+            "Elk nadeel heb z'n voordeel, dus deze tegenslag biedt ook nieuwe kansen",
+            "Elk nadeel heb z'n voordeel, dus deze tegenslag biedt nieuwe kansen.",
+            "Elk nadeel heb z'n voordeel.",
+            "Elk nadeel heb z'n voordeel",
+            "Elk nadeel heeft zijn voordeel, dus deze tegenslag biedt ook nieuwe kansen.",
+            "Elk nadeel heeft zijn voordeel."
+          ],
+          explanation: 'Cruijff\'s quote "Elk nadeel heb z\'n voordeel" (Every disadvantage has its advantage) is an iconic cultural idiom used across business, sports, and everyday Dutch.',
+          skills: ['production', 'idiomatic'],
+          idioms: ["elk nadeel heb z'n voordeel"],
+          grammar: ['connectors']
+        },
+        {
+          id: 'cruyff-7',
+          kind: 'typed',
+          prompt: 'Combine with causal connector "doordat": (1) Het team hanteerde snelle driehoekscombinaties en tiki-taka. (2) Ze speelden de derde man moeiteloos vrij.',
+          target: 'Doordat het team snelle driehoekscombinaties en tiki-taka hanteerde, speelden ze de derde man moeiteloos vrij.',
+          acceptedAnswers: [
+            'Doordat het team snelle driehoekscombinaties en tiki-taka hanteerde, speelden ze de derde man moeiteloos vrij.',
+            'Doordat het team snelle driehoekscombinaties en tiki-taka hanteerde, speelden ze de derde man moeiteloos vrij',
+            'Doordat het team tiki-taka en snelle driehoekscombinaties hanteerde, speelden ze de derde man moeiteloos vrij.',
+            'Doordat het team snelle driehoeken en tiki-taka hanteerde, speelden ze de derde man moeiteloos vrij.'
+          ],
+          explanation: '"Doordat" introduces a factual cause and requires verb-final order ("hanteerde"), followed by inversion in the main clause ("speelden ze").',
+          skills: ['production', 'grammar'],
+          vocabulary: ['driehoekscombinatie', 'tiki-taka', 'derde man', 'vrijspelen'],
+          grammar: ['subordinate-clauses', 'causality', 'word-order']
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Tactical Analysis & Cruijffian Philosophy',
+      kind: 'personalise',
+      intro: 'Step into the role of a football tactician or strategic leader. Analyze how Johan Cruijff\'s invention of Tiki-Taka, positional geometry, and his philosophy ("Elk nadeel heb z\'n voordeel") apply to modern sport, team leadership, or problem solving.',
+      exercises: [
+        {
+          id: 'cruyff-8',
+          kind: 'personalise',
+          prompt: 'Analyseer hoe Johan Cruijff met het Totaalvoetbal en de uitvinding van het tiki-taka het moderne voetbal veranderde, of leg uit hoe zijn filosofie ("Elk nadeel heb z\'n voordeel", positiespel, de derde man) toegepast kan worden in een professioneel team. Gebruik minstens drie vaktermen (bijv. tiki-taka, positiespel, driehoekscombinatie, derde man, balbezit, overtal, "Elk nadeel heb z\'n voordeel").',
+          target: 'Volgens de filosofie van Johan Cruijff draait tiki-taka om constant positiespel en snelle driehoekscombinaties. Door dominant balbezit te houden en de derde man vrij te spelen, creëert een team overtal. Daarnaast leert zijn bekende uitspraak "elk nadeel heb z\'n voordeel" ons om elke tegenslag als een tactische kans te benutten.',
+          explanation: 'Use authentic tactical terms (tiki-taka, positiespel, driehoekscombinaties, derde man, overtal) and Cruijffian quotes.',
+          skills: ['speaking', 'production', 'coherence', 'idiomatic'],
+          vocabulary: ['tiki-taka', 'positiespel', 'driehoekscombinatie', 'derde man', 'balbezit', 'overtal'],
+          grammar: ['subordinate-clauses', 'om te', 'inversion'],
+          placeholder: 'Volgens de filosofie van Johan Cruijff...'
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [
+  introductionChapter, storyChapter, coffeeChapter, directionsChapter, supermarketChapter, timeAndScheduleChapter, a1Capstone,
+  bakeryChapter, doctorMission, talkingAboutDayChapter, transitChapter, housingChapter, pastStorytellingChapter,
+  opinionChapter, landlordMission, hotelMission, doubtChapter, connectionChapter, businessEmailChapter, debatingAgreementChapter, civicServicesChapter,
+  workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, formalityChapter, presentationChapter, newsSummaryChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter, modalParticlesChapter, topicalisationChapter, maritimeChapter, footballCruyffChapter
+]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)
