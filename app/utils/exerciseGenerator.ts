@@ -102,6 +102,10 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'achterhalen': { prompt: 'The police are trying to trace the truth.', target: 'De politie probeert de toedracht te achterhalen.', explanation: '"Achterhálen" is strictly inseparable, taking "te" before the whole verb.' },
   'doorbreken': { prompt: 'The mediator broke the deadlock.', target: 'De bemiddelaar heeft de impasse doorbroken.', explanation: '"Doorbréken" (break deadlock) is inseparable, forming "doorbroken".' },
   'doorlopen': { prompt: 'Employees must complete the training.', target: 'Medewerkers moeten het complete traject doorlopen.', explanation: '"Doorlópen" (complete education/process) is inseparable.' },
+  'middenveld-syntaxis': { prompt: 'We are traveling to Brussels by train tomorrow.', target: 'Wij reizen morgen met de trein naar Brussel.', explanation: 'In the Dutch midfield, adverbial adjuncts follow strict Time -> Manner -> Place (TMP) order.' },
+  'tmp-volgorde': { prompt: 'I am taking the high-speed train to Amsterdam tomorrow.', target: 'Ik reis morgen met de sneltrein naar Amsterdam.', explanation: 'TMP sequence: Tijd (morgen) -> Manier (met de sneltrein) -> Plaats (naar Amsterdam).' },
+  'objectplaatsing': { prompt: 'I read the contract carefully yesterday.', target: 'Ik heb het contract gisteren aandachtig gelezen.', explanation: 'Definite direct objects precede Time and Manner in the Dutch midfield.' },
+  'negatie-scope': { prompt: 'The manager is not sending the report to the client today.', target: 'De manager stuurt het rapport vandaag niet naar de klant.', explanation: '"Niet" follows definite objects and time, preceding prepositional phrases.' }
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -128,6 +132,9 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'participial-drill') skills.push('production', 'grammar')
   if (kind === 'correlative-drill') skills.push('production', 'grammar')
   if (kind === 'conditional-drill') skills.push('production', 'grammar')
+  if (kind === 'causality-drill') skills.push('production', 'grammar')
+  if (kind === 'prefix-verb-drill') skills.push('production', 'grammar')
+  if (kind === 'midfield-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -405,6 +412,31 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         contextPrompt: info.prompt,
         structureFormula: isSeparable ? '[Onderwerp] + [vorm] + [rest] + [voorvoegsel]' : '[Onderwerp] + [samengesteld werkwoord] + [rest]',
         hint: isSeparable ? 'Het werkwoord splitst in de hoofdzin.' : 'Het werkwoord is onscheidbaar en splitst nooit.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'midfield-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      midfieldData: {
+        focusRule: key.includes('object') ? 'definite-vs-indefinite-object' : key.includes('negatie') ? 'negation-placement' : 'tmp-order',
+        slots: {
+          time: 'morgen',
+          manner: 'met de trein',
+          place: 'naar kantoor'
+        },
+        contextPrompt: info.prompt,
+        providedElements: ['Onderwerp', 'Tijd', 'Manier', 'Plaats'],
+        structureFormula: '[Onderwerp] + [PV] + [Tijd] + [Manier] + [Plaats]',
+        hint: 'Respecteer de volgorde: Tijd -> Manier -> Plaats.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

@@ -4755,7 +4755,318 @@ export const prefixVerbChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter]
+export const midfieldChapter: Chapter = {
+  slug: 'middenveld-syntaxis-tmp',
+  level: 'B2',
+  title: 'Midfield Word Order & Syntactic Architecture (TMP)',
+  capability: 'Master the Dutch midfield hierarchy: sequencing Time -> Manner -> Place, placing Definite Objects before TMP, positioning Indefinite Objects near the verb cluster, and correctly scoping negation with niet and geen.',
+  description: 'Learn to structure complex Dutch sentences effortlessly by mastering the structural rules of the midfield (het middenveld), avoiding Anglicisms in constituent order.',
+  estimatedMinutes: 18,
+  stages: [
+    {
+      id: 'discover',
+      title: 'The Architecture of the Dutch Midfield',
+      kind: 'discover',
+      intro: 'In Dutch main clauses, the space between the finite verb (V2) and the final verb cluster is called "het middenveld". Within this midfield, constituents follow a strict, elegant hierarchical blueprint.',
+      exercises: [
+        {
+          id: 'midfield-ind-1',
+          kind: 'induction',
+          prompt: 'Observe the order of adverbial adjuncts and object placement in these authentic Dutch sentences:',
+          skills: ['grammar', 'reading'],
+          inductionData: {
+            examples: [
+              {
+                prompt: 'TMP Adverbial Sequence (Time -> Manner -> Place):',
+                answer: 'Ik reis [morgen (Tijd)] [met de trein (Manier)] [naar Amsterdam (Plaats)].'
+              },
+              {
+                prompt: 'Definite Direct Object (Precedes Time and Manner):',
+                answer: 'Ik heb [het rapport (Bepalend Object)] [gisteren (Tijd)] [aandachtig (Manier)] gelezen.'
+              },
+              {
+                prompt: 'Indefinite Direct Object (Follows Time and Manner):',
+                answer: 'Ik heb [gisteren (Tijd)] [met veel plezier (Manier)] [een nieuw boek (Onbepaald Object)] gelezen.'
+              },
+              {
+                prompt: 'Negation Scope with Niet (After Definite Object, before Prepositional Phrase):',
+                answer: 'Ik stuur [het document (Definite Object)] [vandaag (Tijd)] [niet (Negatie)] [naar de klant (Plaats/Prep)].'
+              }
+            ],
+            ruleChallenge: 'What is the standard order for adverbial adjuncts and definite objects in the Dutch midfield?',
+            options: [
+              { text: 'Time (Tijd) -> Manner (Manier) -> Place (Plaats), with definite direct objects preceding Time and Manner.', isCorrect: true },
+              { text: 'Place (Plaats) -> Manner (Manier) -> Time (Tijd), exactly like English.', isCorrect: false },
+              { text: 'Manner -> Place -> Time, with all objects always placed at the very end.', isCorrect: false }
+            ]
+          },
+          explanation: 'Dutch strictly prioritizes Time before Manner before Place (TMP). Definite objects (het/de/mijn) take priority before TMP, whereas indefinite objects (een/geen) appear after TMP.'
+        }
+      ]
+    },
+    {
+      id: 'understand',
+      title: 'Syntactic Blueprint & Constituent Analysis',
+      kind: 'understand',
+      intro: 'Analyze how Dutch native speakers construct rich, multifaceted sentences in academic and professional contexts.',
+      exercises: [
+        {
+          id: 'midfield-und-1',
+          kind: 'reading',
+          prompt: 'Read this executive briefing excerpt and analyze the syntactic slots in the highlighted sentence.',
+          readingContent: `Tijdens de bestuursvergadering van vanochtend heeft de directievoorzitter de financiële jaarcijfers (1: Bepalend Object) om tien uur (2: Tijd) met behulp van een interactieve presentatie (3: Manier) in de grote conferentiezaal (4: Plaats) aan alle aandeelhouders (5: Meewerkend Vw) toegelicht. 
+
+Opmerkelijk was dat de financieel directeur over de voorgestelde begrotingswijziging gisteren (Tijd) met opzet (Manier) geen overhaaste uitspraken (Onbepaald Object) heeft gedaan. Hierdoor verliep het overleg zonder noemenswaardige frictie.`,
+          wordHints: {
+            'bestuursvergadering': { meaning: 'board meeting', category: 'noun' },
+            'jaarcijfers': { meaning: 'annual financial figures', category: 'noun' },
+            'met behulp van': { meaning: 'by means of / using', category: 'connector' },
+            'begrotingswijziging': { meaning: 'budget amendment', category: 'noun' },
+            'overhaaste': { meaning: 'hasty / premature', category: 'adjective' }
+          },
+          listeningQuestion: 'Why is "de financiële jaarcijfers" placed before "om tien uur" in the first sentence?',
+          listeningOptions: [
+            { text: 'Because definite direct objects (with de/het) precede adverbial time adjuncts in the Dutch midfield.', isCorrect: true },
+            { text: 'Because time adjuncts are always placed at the end of the sentence.', isCorrect: false },
+            { text: 'Because "de financiële jaarcijfers" is the grammatical subject.', isCorrect: false }
+          ],
+          explanation: 'In Dutch midfield syntax, a definite direct object ("de jaarcijfers") precedes temporal, modal/manner, and locative adjuncts.',
+          skills: ['reading', 'grammar']
+        }
+      ]
+    },
+    {
+      id: 'retrieve',
+      title: 'Active Midfield Assembly & TMP Precision Drills',
+      kind: 'retrieve',
+      intro: 'Assemble the provided constituents into natural, syntactically flawless Dutch sentences following TMP and object ordering rules.',
+      exercises: [
+        {
+          id: 'midfield-d-1',
+          kind: 'midfield-drill',
+          prompt: 'TMP Adverbial Sequence (Time -> Manner -> Place)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'tmp-order',
+            slots: {
+              time: 'morgen',
+              manner: 'met de hogesnelheidstrein',
+              place: 'naar Brussel'
+            },
+            contextPrompt: 'Je plant een dienstreis naar het Europese hoofdkantoor. Integreer de tijd (morgen), het vervoermiddel (met de hogesnelheidstrein) en de bestemming (naar Brussel).',
+            providedElements: ['Wij reizen', 'naar Brussel (Plaats)', 'morgen (Tijd)', 'met de hogesnelheidstrein (Manier)'],
+            structureFormula: '[Onderwerp] + reizen + [Tijd] + [Manier] + [Plaats]',
+            hint: 'Volgorde: Tijd (morgen) -> Manier (met de hogesnelheidstrein) -> Plaats (naar Brussel).'
+          },
+          target: 'Wij reizen morgen met de hogesnelheidstrein naar Brussel',
+          acceptedAnswers: [
+            'Wij reizen morgen met de hogesnelheidstrein naar Brussel',
+            'We reizen morgen met de hogesnelheidstrein naar Brussel',
+            'Morgen reizen wij met de hogesnelheidstrein naar Brussel',
+            'Morgen reizen we met de hogesnelheidstrein naar Brussel'
+          ],
+          explanation: 'In the Dutch midfield, adverbial adjuncts follow strict TMP order: Tijd (morgen) -> Manier (met de hogesnelheidstrein) -> Plaats (naar Brussel).'
+        },
+        {
+          id: 'midfield-d-2',
+          kind: 'midfield-drill',
+          prompt: 'Definite Direct Object Precedence (Before Time & Manner)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'definite-vs-indefinite-object',
+            slots: {
+              directObject: { text: 'het vertrouwelijke contract', isDefinite: true },
+              time: 'gisteren',
+              manner: 'aandachtig'
+            },
+            contextPrompt: 'Je hebt een belangrijk juridisch document bestudeerd. Plaats het bepalend lijdend voorwerp vóór de tijd- en maniersbepaling.',
+            providedElements: ['Ik heb', 'aandachtig (Manier)', 'het vertrouwelijke contract (Bepalend Object)', 'gisteren (Tijd)', 'gelezen'],
+            structureFormula: '[Onderwerp] + heb + [Bepalend Object] + [Tijd] + [Manier] + gelezen',
+            hint: 'Plaats "het vertrouwelijke contract" vóór "gisteren" en "aandachtig".'
+          },
+          target: 'Ik heb het vertrouwelijke contract gisteren aandachtig gelezen',
+          acceptedAnswers: [
+            'Ik heb het vertrouwelijke contract gisteren aandachtig gelezen',
+            'Ik heb het contract gisteren aandachtig gelezen',
+            'Ik heb het vertrouwelijke contract gisteren zorgvuldig gelezen',
+            'Gisteren heb ik het vertrouwelijke contract aandachtig gelezen'
+          ],
+          explanation: 'Definite direct objects (preceded by het/de/dit/mijn) precede temporal and manner adjuncts in the midfield.'
+        },
+        {
+          id: 'midfield-d-3',
+          kind: 'midfield-drill',
+          prompt: 'Indefinite Direct Object Placement (After Time & Manner)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'definite-vs-indefinite-object',
+            slots: {
+              time: 'vorige week',
+              manner: 'met veel toewijding',
+              directObject: { text: 'een subsidieaanvraag', isDefinite: false }
+            },
+            contextPrompt: 'Een collega heeft een aanvraag ingediend voor een innovatieproject. Plaats het onbepaald lijdend voorwerp (een subsidieaanvraag) ná de tijd en manier.',
+            providedElements: ['Zij heeft', 'een subsidieaanvraag (Onbepaald Object)', 'vorige week (Tijd)', 'met veel toewijding (Manier)', 'ingediend'],
+            structureFormula: '[Onderwerp] + heeft + [Tijd] + [Manier] + [Onbepaald Object] + ingediend',
+            hint: 'Onbepaald object (met "een") komt ná Tijd (vorige week) en Manier (met veel toewijding).'
+          },
+          target: 'Zij heeft vorige week met veel toewijding een subsidieaanvraag ingediend',
+          acceptedAnswers: [
+            'Zij heeft vorige week met veel toewijding een subsidieaanvraag ingediend',
+            'Ze heeft vorige week met veel toewijding een subsidieaanvraag ingediend',
+            'Vorige week heeft zij met veel toewijding een subsidieaanvraag ingediend',
+            'Vorige week heeft ze met veel toewijding een subsidieaanvraag ingediend'
+          ],
+          explanation: 'Indefinite direct objects (preceded by "een" or numerals) appear towards the end of the midfield, following Time and Manner.'
+        },
+        {
+          id: 'midfield-d-4',
+          kind: 'midfield-drill',
+          prompt: 'Indirect Object vs Direct Object Ordering (Without Preposition)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'indirect-direct-object',
+            slots: {
+              indirectObject: { text: 'de commissie' },
+              directObject: { text: 'het eindrapport', isDefinite: true }
+            },
+            contextPrompt: 'De projectleider overhandigt de documenten aan de beoordelingscommissie. Gebruik geen voorzetsel ("aan"), maar plaats het meewerkend voorwerp direct vóór het lijdend voorwerp.',
+            providedElements: ['De projectleider overhandigt', 'het eindrapport (Lijdend Voorwerp)', 'de commissie (Meewerkend Voorwerp)'],
+            structureFormula: '[Onderwerp] + [Persoonsvorm] + [Meewerkend Voorwerp] + [Lijdend Voorwerp]',
+            hint: 'Zonder voorzetsel komt de persoon (de commissie) vóór de zaak (het eindrapport).'
+          },
+          target: 'De projectleider overhandigt de commissie het eindrapport',
+          acceptedAnswers: [
+            'De projectleider overhandigt de commissie het eindrapport',
+            'De projectleider overhandigt de commissie het rapport',
+            'De projectmanager overhandigt de commissie het eindrapport'
+          ],
+          explanation: 'In Dutch without a preposition, the Indirect Object (de commissie) precedes the Direct Object (het eindrapport).'
+        },
+        {
+          id: 'midfield-d-5',
+          kind: 'midfield-drill',
+          prompt: 'Prepositional Indirect Object (With "Aan")',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'indirect-direct-object',
+            slots: {
+              directObject: { text: 'de kwartaalcijfers', isDefinite: true },
+              time: 'vandaag',
+              indirectObject: { text: 'de aandeelhouders', preposition: 'aan' }
+            },
+            contextPrompt: 'Het bestuur presenteert de cijfers. Wanneer het meewerkend voorwerp wordt voorafgegaan door "aan", volgt het na het lijdend voorwerp.',
+            providedElements: ['De directie presenteert', 'aan de aandeelhouders (Voorzetselvoorwerp)', 'vandaag (Tijd)', 'de kwartaalcijfers (Lijdend Voorwerp)'],
+            structureFormula: '[Onderwerp] + presenteert + [Lijdend Voorwerp] + [Tijd] + [aan + Meewerkend Voorwerp]',
+            hint: 'Formuleer: "De directie presenteert de kwartaalcijfers vandaag aan de aandeelhouders."'
+          },
+          target: 'De directie presenteert de kwartaalcijfers vandaag aan de aandeelhouders',
+          acceptedAnswers: [
+            'De directie presenteert de kwartaalcijfers vandaag aan de aandeelhouders',
+            'Het bestuur presenteert de kwartaalcijfers vandaag aan de aandeelhouders',
+            'Vandaag presenteert de directie de kwartaalcijfers aan de aandeelhouders'
+          ],
+          explanation: 'When using preposition "aan", the prepositional phrase ("aan de aandeelhouders") is placed after the direct object at the end of the midfield.'
+        },
+        {
+          id: 'midfield-d-6',
+          kind: 'midfield-drill',
+          prompt: 'Negation Scope with "Niet" (Placement in Midfield)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'negation-placement',
+            slots: {
+              directObject: { text: 'de officiële documenten', isDefinite: true },
+              time: 'vandaag',
+              negation: 'niet',
+              place: 'naar de klant'
+            },
+            contextPrompt: 'De accountmanager besluit om de documenten nog niet te versturen. Plaats "niet" ná het bepalend object en de tijd, maar vóór de richtingsbepaling (naar de klant).',
+            providedElements: ['De accountmanager stuurt', 'naar de klant (Richting)', 'vandaag (Tijd)', 'niet (Negatie)', 'de officiële documenten (Bepalend Object)'],
+            structureFormula: '[Onderwerp] + stuurt + [Bepalend Object] + [Tijd] + [niet] + [Richting/Plaats]',
+            hint: 'Plaats "niet" ná "de officiële documenten vandaag", maar vóór "naar de klant".'
+          },
+          target: 'De accountmanager stuurt de officiële documenten vandaag niet naar de klant',
+          acceptedAnswers: [
+            'De accountmanager stuurt de officiële documenten vandaag niet naar de klant',
+            'De accountmanager stuurt de documenten vandaag niet naar de klant',
+            'Vandaag stuurt de accountmanager de officiële documenten niet naar de klant'
+          ],
+          explanation: '"Niet" follows definite objects and time adjuncts, but precedes prepositional phrases, direction phrases, and predicates.'
+        },
+        {
+          id: 'midfield-d-7',
+          kind: 'midfield-drill',
+          prompt: 'Indefinite Negation with "Geen" (Never "Niet Een")',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'negation-placement',
+            slots: {
+              time: 'tijdens de controleaudit',
+              directObject: { text: 'geen onregelmatigheden', isDefinite: false },
+              negation: 'geen'
+            },
+            contextPrompt: 'De accountant heeft een grondige inspectie uitgevoerd en niets verdachts gevonden. Gebruik "geen onregelmatigheden" (niet "niet een").',
+            providedElements: ['De accountant heeft', 'tijdens de controleaudit (Tijd)', 'aangetroffen', 'geen onregelmatigheden (Negatie + Object)'],
+            structureFormula: '[Onderwerp] + heeft + [Tijd] + [geen + Onbepaald Object] + aangetroffen',
+            hint: 'Gebruik "geen onregelmatigheden" ná de tijdsbepaling.'
+          },
+          target: 'De accountant heeft tijdens de controleaudit geen onregelmatigheden aangetroffen',
+          acceptedAnswers: [
+            'De accountant heeft tijdens de controleaudit geen onregelmatigheden aangetroffen',
+            'De accountant heeft tijdens de audit geen onregelmatigheden aangetroffen',
+            'Tijdens de controleaudit heeft de accountant geen onregelmatigheden aangetroffen'
+          ],
+          explanation: 'Dutch strictly negates indefinite direct objects with "geen" (never "niet een"), placed towards the end of the midfield.'
+        },
+        {
+          id: 'midfield-d-8',
+          kind: 'midfield-drill',
+          prompt: 'Midfield Hierarchy in a Subordinate Clause (SOV Order)',
+          skills: ['production', 'grammar'],
+          midfieldData: {
+            focusRule: 'tmp-order',
+            slots: {
+              time: 'morgen om negen uur',
+              manner: 'met het voltallige team',
+              place: 'in de grote zaal'
+            },
+            contextPrompt: 'Je stuurt een formele bevestigingsmail met een onderschikkende bijzin ("dat wij..."). Behoud de TMP-volgorde binnen de bijzin vóór de persoonsvorm aan het einde.',
+            providedElements: ['Ik bevestig dat wij', 'in de grote zaal (Plaats)', 'morgen om negen uur (Tijd)', 'met het voltallige team (Manier)', 'vergaderen (PV)'],
+            structureFormula: 'Ik bevestig dat [Onderwerp] + [Tijd] + [Manier] + [Plaats] + [vergaderen]',
+            hint: 'In de bijzin volgt het middenveld dezelfde TMP-volgorde vóór het eindwerkwoord.'
+          },
+          target: 'Ik bevestig dat wij morgen om negen uur met het voltallige team in de grote zaal vergaderen',
+          acceptedAnswers: [
+            'Ik bevestig dat wij morgen om negen uur met het voltallige team in de grote zaal vergaderen',
+            'Ik bevestig dat we morgen om negen uur met het voltallige team in de grote zaal vergaderen',
+            'Ik bevestig dat wij morgen om 9:00 uur met het hele team in de grote zaal vergaderen',
+            'Ik bevestig dat we morgen om negen uur met het team in de grote zaal vergaderen'
+          ],
+          explanation: 'Even in subordinate clauses with verb-final word order, the internal midfield respects the Tijd -> Manier -> Plaats hierarchy.'
+        }
+      ]
+    },
+    {
+      id: 'personalise',
+      title: 'Your Professional Day & Syntactic Flow',
+      kind: 'personalise',
+      intro: 'Describe a meeting, project, or travel plan from your work or study, integrating at least three midfield elements (e.g. Definite Object, Time, Manner, Place, or Negation with niet/geen) in flawless sequence.',
+      exercises: [
+        {
+          id: 'midfield-p-1',
+          kind: 'personalise',
+          prompt: 'Beschrijf een activiteit uit jouw werk of dagelijks leven. Combineer een bepalend voorwerp (of negatie), een tijd, een manier/middel en een plaats in één vloeiende zin met de correcte volgorde.',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['rapport', 'vergadering', 'overleg', 'trein', 'kantoor', 'voorstel', 'aandachtig', 'zorgvuldig', 'bevestigen', 'toelichten'],
+          grammar: ['middenveld-syntaxis', 'tmp-volgorde', 'objectplaatsing', 'negatie-scope']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

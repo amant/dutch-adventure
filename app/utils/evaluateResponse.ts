@@ -840,6 +840,167 @@ function checkCausalityError(normalized: string, relationType?: string) {
   return { found: false }
 }
 
+function checkMidfieldOrderError(
+  normalized: string,
+  midfieldData?: {
+    focusRule: 'tmp-order' | 'definite-vs-indefinite-object' | 'indirect-direct-object' | 'negation-placement' | 'modal-adverb-tmp'
+    slots?: {
+      time?: string
+      manner?: string
+      place?: string
+      directObject?: { text: string; isDefinite: boolean }
+      indirectObject?: { text: string; preposition?: string }
+      negation?: 'niet' | 'geen'
+      predicateOrPrepObject?: string
+    }
+  }
+) {
+  // 1. Check: "niet een" instead of "geen"
+  if (/\bniet\s+een\b/i.test(normalized)) {
+    return {
+      found: true,
+      message: 'In Dutch, do not use "niet een" to negate an indefinite noun. Use "geen" instead (e.g. "geen fout", "geen rapport").',
+      miniLesson: {
+        title: 'Negation: Geen vs Niet Een',
+        content: 'Dutch always negates indefinite nouns (nouns preceded by "een" or plural nouns with no article) using "geen", never "niet een".',
+        example: {
+          wrong: 'Hij heeft gisteren niet een e-mail gestuurd.',
+          right: 'Hij heeft gisteren geen e-mail gestuurd.'
+        }
+      }
+    }
+  }
+
+  // 2. Check: "niet" placed at the very end after a prepositional/directional phrase or predicate adjective
+  if (/\b(naar|in|op|aan|bij|voor|uit)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+niet\b/i.test(normalized) || /\b(klaar|tevreden|bereikbaar|aanwezig)\s+niet\b/i.test(normalized)) {
+    return {
+      found: true,
+      message: 'In Dutch, "niet" is placed BEFORE prepositional/directional phrases and predicate adjectives, not after them.',
+      miniLesson: {
+        title: 'Negation Placement: Before Prepositional Phrases & Predicates',
+        content: 'When negating a sentence, "niet" precedes prepositional phrases, directional complements, and predicate adjectives (e.g. "niet naar kantoor", "niet tevreden").',
+        example: {
+          wrong: 'De manager gaat naar Amsterdam niet.',
+          right: 'De manager gaat niet naar Amsterdam.'
+        }
+      }
+    }
+  }
+
+  // 3. Check: "niet" placed before a definite direct object (e.g. "niet het rapport", "niet de plannen")
+  if (/\bniet\s+(het|de|dit|dat|deze|mijn|jouw|zijn|haar|ons|onze|hun)\s+[a-z]+/i.test(normalized)) {
+    // Only flag if it is not a contrastive "niet X maar Y"
+    if (!normalized.includes(' maar ')) {
+      return {
+        found: true,
+        message: 'Definite direct objects (with "de/het/dit/mijn") precede "niet" in the midfield: "[Definite Object] + niet" (e.g. "het rapport niet ondertekend").',
+        miniLesson: {
+          title: 'Negation Placement: After Definite Direct Objects',
+          content: 'A definite direct object (with de, het, dit, or possessives) comes before "niet" in the midfield, unless you are making a specific contrast with "maar".',
+          example: {
+            wrong: 'Ik heb gisteren niet het rapport gelezen.',
+            right: 'Ik heb het rapport gisteren niet gelezen.'
+          }
+        }
+      }
+    }
+  }
+
+  // 4. Check: Place before Time (Plaats vóór Tijd)
+  // E.g., "naar kantoor gisteren", "in amsterdam morgen", "op kantoor vandaag", "naar brussel vorige week"
+  const placeBeforeTimeRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|altijd|nooit|vaak|om\s+\w+\s+uur|elke\s+dag|binnenkort)\b/i
+  if (placeBeforeTimeRegex.test(normalized) || /\bthuis\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|altijd|nooit|vaak)\b/i.test(normalized)) {
+    return {
+      found: true,
+      message: 'TMP Rule violation: In the Dutch midfield, Time (Tijd) comes BEFORE Place (Plaats). Place should be after Time.',
+      miniLesson: {
+        title: 'TMP Rule: Time Before Place (Tijd vóór Plaats)',
+        content: 'Adverbial adjuncts follow the strict order: Tijd (Time) → Manier (Manner) → Plaats (Place). Never put Place before Time.',
+        example: {
+          wrong: 'Ik reis naar kantoor morgen.',
+          right: 'Ik reis morgen naar kantoor.'
+        }
+      }
+    }
+  }
+
+  // 5. Check: Place before Manner (Plaats vóór Manier/Wijze)
+  // E.g., "naar kantoor met de trein", "in het park snel", "op school aandachtig"
+  const placeBeforeMannerRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|snel|rustig|graag|samen|alleen|met\s+plezier)\b/i
+  if (placeBeforeMannerRegex.test(normalized) || /\bthuis\s+(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|snel|rustig|graag|samen|alleen|met\s+plezier)\b/i.test(normalized)) {
+    return {
+      found: true,
+      message: 'TMP Rule violation: Manner / Means (Manier/Wijze) comes BEFORE Place (Plaats) in Dutch: Time → Manner → Place.',
+      miniLesson: {
+        title: 'TMP Rule: Manner Before Place (Manier vóór Plaats)',
+        content: 'In Dutch, how you do something (Manner/Means) precedes where you do it (Place/Direction): "met de trein (Manier) naar Amsterdam (Plaats)".',
+        example: {
+          wrong: 'Wij reizen naar Brussel met de trein.',
+          right: 'Wij reizen met de trein naar Brussel.'
+        }
+      }
+    }
+  }
+
+  // 6. Check: Manner before Time (Manier vóór Tijd)
+  // E.g., "met de trein gisteren", "zorgvuldig vandaag", "met plezier morgen"
+  const mannerBeforeTimeRegex = /\b(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|met\s+plezier)\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|om\s+\w+\s+uur)\b/i
+  if (mannerBeforeTimeRegex.test(normalized)) {
+    return {
+      found: true,
+      message: 'TMP Rule violation: Time (Tijd) comes BEFORE Manner (Manier/Wijze) in Dutch.',
+      miniLesson: {
+        title: 'TMP Rule: Time Before Manner (Tijd vóór Manier)',
+        content: 'Adverbial time adjuncts take priority at the front of the midfield: Time first, then Manner, then Place.',
+        example: {
+          wrong: 'Zij heeft met veel plezier gisteren gewerkt.',
+          right: 'Zij heeft gisteren met veel plezier gewerkt.'
+        }
+      }
+    }
+  }
+
+  // 7. Check: Indirect Object without preposition placed AFTER Direct Object
+  // E.g. "Ik geef het rapport de manager" instead of "Ik geef de manager het rapport" or "Ik geef het rapport aan de manager"
+  if (midfieldData?.focusRule === 'indirect-direct-object') {
+    if (/\bgeef(t)?\s+(het|de|dit)\s+[a-z]+\s+(de|het|deze|mijn)\s+[a-z]+\b/i.test(normalized) && !normalized.includes('aan') && !normalized.includes('voor')) {
+      return {
+        found: true,
+        message: 'Without a preposition like "aan", the Indirect Object (Meewerkend Voorwerp) must come BEFORE the Direct Object (e.g. "Ik geef de directeur het document").',
+        miniLesson: {
+          title: 'Object Ordering: Indirect Before Direct',
+          content: 'In Dutch without prepositions: [Onderwerp] + [Persoonsvorm] + [Indirect Object] + [Direct Object]. Alternatively, use "aan": [Direct Object] + [aan + Indirect Object].',
+          example: {
+            wrong: 'Ik overhandig het contract de klant.',
+            right: 'Ik overhandig de klant het contract.'
+          }
+        }
+      }
+    }
+  }
+
+  // 8. Check: Indefinite Object placed before Time
+  // E.g. "een boek gisteren" vs "gisteren een boek"
+  if (midfieldData?.focusRule === 'definite-vs-indefinite-object') {
+    if (/\b(een|twee|drie)\s+[a-z]+\s+(gisteren|vandaag|morgen|vorige\s+week)\b/i.test(normalized)) {
+      return {
+        found: true,
+        message: 'Indefinite direct objects (with "een" / numerals) follow Time and Manner in the midfield: "gisteren (Time) een rapport (Indefinite Object)".',
+        miniLesson: {
+          title: 'Indefinite Object Position: After Time & Manner',
+          content: 'Unlike definite objects which precede TMP, indefinite direct objects appear towards the end of the midfield, following Time and Manner.',
+          example: {
+            wrong: 'Ik heb een presentatie gisteren voorbereid.',
+            right: 'Ik heb gisteren een presentatie voorbereid.'
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkPrefixVerbError(
   normalized: string,
   prefixVerbData?: {
@@ -2576,6 +2737,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           outcome: 'retry',
           message: 'Not quite. Check the prefix verb conjugation and split rules.',
           explanation: exercise.explanation || 'Conjugate the prefix verb according to its stress pattern and target structure.'
+        }
+      }
+    }
+
+    // Midfield Word Order & Syntactic Architecture Drill Evaluation
+    if (exercise.kind === 'midfield-drill') {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const midfieldError = checkMidfieldOrderError(normalized, exercise.midfieldData)
+      if (midfieldError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: midfieldError.message,
+          miniLesson: midfieldError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Remember the Dutch midfield hierarchy: Definite Object -> Tijd (Time) -> Manier (Manner) -> Negatie (Niet) -> Plaats (Place) -> Indefinite Object.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Perfect Dutch midfield word order and syntactic sequencing.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the relative ordering of Time, Manner, Place, Direct Object, and Negation.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Verify the positions of Time, Manner, Place, and Objects in the midfield.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Reorder the constituents according to Dutch TMP and object placement rules.',
+          explanation: exercise.explanation || 'Construct the sentence following: [Subject] + [Verb] + [Definite Object] + [Time] + [Manner] + [Niet] + [Place] + [Indefinite Object].'
         }
       }
     }

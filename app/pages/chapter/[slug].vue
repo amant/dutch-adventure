@@ -234,6 +234,15 @@ function next() { feedback.value = undefined; session.advance() }
         />
       </div>
 
+      <div v-else-if="session.exercise.value.kind === 'midfield-drill'" class="renderer">
+        <MidfieldDrill
+          :exercise="session.exercise.value"
+          :feedback="feedback"
+          @submit="submit"
+          @next="next"
+        />
+      </div>
+
       <div v-else-if="session.exercise.value.kind === 'reframing-drill'" class="renderer">
         <ReframingDrill
           :exercise="session.exercise.value"

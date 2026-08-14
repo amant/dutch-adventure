@@ -41,7 +41,7 @@ export interface LearnerMemory {
 
 export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill'
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill'
 
 export interface Exercise {
   id: string
@@ -252,6 +252,23 @@ export interface Exercise {
     meaningDefinition: string
     targetStructure: 'present-main' | 'present-subclause' | 'perfect-tense' | 'infinitive-te'
     contextPrompt: string
+    structureFormula?: string
+    hint?: string
+  }
+  // For midfield word order, TMP sequencing & object/negation distribution (Tijd - Manier - Plaats, Lijdend/Meewerkend Voorwerp, Negatie)
+  midfieldData?: {
+    focusRule: 'tmp-order' | 'definite-vs-indefinite-object' | 'indirect-direct-object' | 'negation-placement' | 'modal-adverb-tmp'
+    slots?: {
+      time?: string
+      manner?: string
+      place?: string
+      directObject?: { text: string; isDefinite: boolean }
+      indirectObject?: { text: string; preposition?: string }
+      negation?: 'niet' | 'geen'
+      predicateOrPrepObject?: string
+    }
+    contextPrompt: string
+    providedElements: string[]
     structureFormula?: string
     hint?: string
   }
