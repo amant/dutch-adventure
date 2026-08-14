@@ -11,22 +11,24 @@ const diff = computed(() => diffStrings(props.userAnswer, props.naturalCorrectio
 
 <template>
   <div class="teacher-redline card">
-    <div class="eyebrow">Teacher's Redline</div>
+    <div class="eyebrow red">Teacher's Redline</div>
     <div class="diff-view">
       <template v-for="(part, idx) in diff" :key="idx">
         <span :class="part.type">{{ part.value }}</span>
       </template>
     </div>
     <p class="explanation">
-      Red indicates your original phrasing. Green shows the natural native-speaker way.
+      Strikethrough red shows literal/stiff phrasing. Emerald shows natural native-speaker flow.
     </p>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .teacher-redline {
-  background: #fdfaf3;
-  border-left: 4px solid #176b5b;
+  background: linear-gradient(135deg, $white-pure 0%, $parchment-bg 100%);
+  border-left: 5px solid $battle-red-vibrant;
+  border-radius: $radius-lg;
+  padding: 20px;
 }
 
 .diff-view {
@@ -38,21 +40,23 @@ const diff = computed(() => diffStrings(props.userAnswer, props.naturalCorrectio
 
 .removed {
   text-decoration: line-through;
-  color: #d06b3c;
-  background: #fef1e8;
-  padding: 0 2px;
+  color: $battle-red-dark;
+  background: $battle-red-light;
+  padding: 1px 4px;
+  border-radius: $radius-xs;
 }
 
 .added {
-  color: #176b5b;
-  background: #eef8f2;
-  font-weight: 700;
-  padding: 0 2px;
+  color: $sea-emerald-dark;
+  background: $sea-emerald-light;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: $radius-xs;
 }
 
 .explanation {
   font-size: 12px;
-  color: #8a9a94;
+  color: $ink-muted;
   font-style: italic;
   margin: 0;
 }

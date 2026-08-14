@@ -17,69 +17,78 @@ function reset() {
 <template>
   <div class="reader-container">
     <header class="page-header">
-      <div class="eyebrow">Stage 11 — Reading as Real Dutch</div>
-      <h1>Custom Reader</h1>
-      <p class="muted">Paste any Dutch text below. We'll highlight words based on your current knowledge and help you identify "frontier" vocabulary to activate.</p>
+      <div class="eyebrow gold">AUTHENTIC TEXT EXPLORER</div>
+      <h1>Custom Dutch Reader</h1>
+      <p class="muted">Paste any Dutch text below (news, articles, stories, emails). We'll highlight words based on your current knowledge log and identify frontier vocabulary to activate.</p>
     </header>
 
     <div v-if="!analyzedText" class="input-view card">
       <textarea 
         v-model="inputText" 
-        placeholder="Paste your Dutch text here (news articles, emails, stories...)" 
-        rows="12"
+        placeholder="Paste your Dutch text here (news articles, emails, stories, podcasts transcripts...)" 
+        rows="10"
         class="reader-input"
       ></textarea>
       <div class="actions">
-        <button class="button" :disabled="!inputText.trim()" @click="analyze">
-          Analyze Text
+        <button class="button gold large" :disabled="!inputText.trim()" @click="analyze">
+          <span>⚡ Analyze & Decode Text</span>
         </button>
       </div>
     </div>
 
     <div v-else class="analysis-view">
       <div class="view-header">
-        <button class="button secondary small" @click="reset">← New Text</button>
+        <button class="button secondary small" @click="reset">← Enter New Text</button>
       </div>
       <TextAnalyzer :text="analyzedText" />
     </div>
 
     <aside class="reader-tips card">
-      <h4>How to use the Reader</h4>
+      <h4>How to Navigate the Reader</h4>
       <ul>
-        <li><strong>Interact:</strong> Click on any word to see its meaning or status.</li>
-        <li><strong>Activate:</strong> Words highlighted in <span class="frontier-text">orange</span> are concepts you recognize but haven't used yet. Try to use them in your next Mission!</li>
-        <li><strong>Exposure:</strong> Every time you interact with a word, we record an encounter in your Language Graph.</li>
+        <li><strong>Interact:</strong> Click on any word to inspect its meaning or mastery status.</li>
+        <li><strong>Activate:</strong> Words highlighted in <span class="frontier-text">gold</span> are concepts you recognize but haven't actively produced yet. Try using them in your next Mission!</li>
+        <li><strong>Exposure:</strong> Every time you interact with a word, an encounter is recorded in your Language Graph.</li>
       </ul>
     </aside>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .reader-container {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px 0 60px;
 }
 
 .page-header {
-  margin-bottom: 40px;
+  margin-bottom: 36px;
+}
+
+.input-view {
+  padding: 32px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 
 .reader-input {
   width: 100%;
   padding: 20px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: $radius-lg;
   font-size: 16px;
   font-family: inherit;
   margin-bottom: 20px;
   resize: vertical;
-}
+  line-height: 1.6;
 
-.reader-input:focus {
-  outline: none;
-  border-color: #176b5b;
-  box-shadow: 0 0 0 3px rgba(23, 107, 91, 0.1);
+  &:focus {
+    outline: none;
+    border-color: $ocean-vibrant;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+  }
 }
 
 .actions {
@@ -93,28 +102,37 @@ function reset() {
 
 .reader-tips {
   margin-top: 40px;
-  background: #f8fafc;
-}
+  background: linear-gradient(135deg, $white-pure 0%, $ocean-ice 100%);
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  padding: 28px;
 
-.reader-tips h4 {
-  margin-bottom: 12px;
-}
+  h4 {
+    margin-bottom: 14px;
+    font-family: $font-anime;
+    font-size: 16px;
+    font-weight: 800;
+    color: $ocean-deepest;
+  }
 
-.reader-tips ul {
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+  }
 
-.reader-tips li {
-  font-size: 14px;
-  color: #475569;
+  li {
+    font-size: 14px;
+    color: $ink-slate;
+    line-height: 1.6;
+  }
 }
 
 .frontier-text {
-  color: #b45309;
-  font-weight: 700;
-  border-bottom: 2px solid #f59e0b;
+  color: $gold-deep;
+  font-weight: 800;
+  border-bottom: 2px solid $gold-bright;
 }
 </style>

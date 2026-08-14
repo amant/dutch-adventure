@@ -66,7 +66,7 @@ function toggleListening() {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .voice-input {
   display: inline-flex;
   align-items: center;
@@ -77,31 +77,34 @@ function toggleListening() {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid #176b5b;
-  background: white;
-  color: #176b5b;
+  border: 2px solid $ocean-primary;
+  background: $white-pure;
+  color: $ocean-primary;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all $transition-fast;
   padding: 0;
   outline: none;
-}
+  box-shadow: 0 2px 6px rgba(0, 102, 204, 0.2);
 
-.mic-button:hover {
-  background: #f0f7f4;
-}
+  &:hover {
+    background: $ocean-ice;
+    transform: scale(1.05);
+  }
 
-.mic-button.listening {
-  background: #d06b3c;
-  border-color: #d06b3c;
-  color: white;
-}
+  &.listening {
+    background: linear-gradient(135deg, $battle-red-vibrant 0%, $battle-red 100%);
+    border-color: $battle-red-dark;
+    color: $white-pure;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+  }
 
-.mic-button.active {
-  background: #176b5b;
-  color: white;
+  &.active {
+    background: $ocean-primary;
+    color: $white-pure;
+  }
 }
 
 .icon {
@@ -116,13 +119,13 @@ function toggleListening() {
   right: -2px;
   bottom: -2px;
   border-radius: 50%;
-  border: 2px solid #d06b3c;
+  border: 2px solid $battle-red-vibrant;
   animation: pulse 1.5s infinite;
   z-index: 1;
 }
 
 @keyframes pulse {
   0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
 }
 </style>

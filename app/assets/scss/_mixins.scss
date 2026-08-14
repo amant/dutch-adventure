@@ -1,0 +1,214 @@
+// =============================================================================
+// ONE PIECE ANIME THEME: SCSS MIXINS
+// =============================================================================
+@use 'sass:color';
+@use './variables' as *;
+
+// --- Anime Card Styles ---
+@mixin anime-card($bg: $white-pure, $border: rgba($ocean-primary, 0.12), $hover-lift: true) {
+  background: $bg;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  overflow: hidden;
+  transition: transform $transition-normal, box-shadow $transition-normal, border-color $transition-normal;
+
+  @if $hover-lift {
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: $shadow-card-hover;
+      border-color: rgba($ocean-vibrant, 0.35);
+    }
+  }
+}
+
+// Frosted glass anime effect
+@mixin anime-glass($bg: rgba(255, 255, 255, 0.88), $blur: 16px) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+// --- Anime Action Buttons ---
+@mixin anime-button($variant: 'primary') {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: $font-anime;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 24px;
+  border-radius: $radius-md;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  position: relative;
+  user-select: none;
+  line-height: 1.2;
+  transition: transform $transition-fast, box-shadow $transition-fast, background-color $transition-fast, color $transition-fast;
+
+  @if $variant == 'primary' {
+    background: linear-gradient(135deg, $ocean-primary 0%, $ocean-vibrant 100%);
+    color: $white-pure;
+    box-shadow: 0 4px 0 #003b73, 0 8px 15px rgba(0, 86, 179, 0.25);
+
+    &:hover {
+      background: linear-gradient(135deg, color.adjust($ocean-primary, $lightness: 4%) 0%, color.adjust($ocean-vibrant, $lightness: 4%) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #003b73, 0 12px 20px rgba(0, 86, 179, 0.35);
+    }
+
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #003b73, 0 4px 8px rgba(0, 86, 179, 0.2);
+    }
+  } @else if $variant == 'battle-red' {
+    background: linear-gradient(135deg, $battle-red-vibrant 0%, $battle-red 100%);
+    color: $white-pure;
+    box-shadow: 0 4px 0 $battle-red-dark, 0 8px 15px rgba(225, 29, 72, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, color.adjust($battle-red-vibrant, $lightness: 4%) 0%, color.adjust($battle-red, $lightness: 4%) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 $battle-red-dark, 0 12px 20px rgba(225, 29, 72, 0.4);
+    }
+
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 $battle-red-dark, 0 4px 8px rgba(225, 29, 72, 0.2);
+    }
+  } @else if $variant == 'gold' {
+    background: linear-gradient(135deg, $gold-parchment 0%, $gold-bright 100%);
+    color: $ocean-deepest;
+    box-shadow: 0 4px 0 $gold-deep, 0 8px 15px rgba(245, 158, 11, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, color.adjust($gold-parchment, $lightness: 4%) 0%, color.adjust($gold-bright, $lightness: 4%) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 $gold-deep, 0 12px 20px rgba(245, 158, 11, 0.4);
+    }
+
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 $gold-deep, 0 4px 8px rgba(245, 158, 11, 0.2);
+    }
+  } @else if $variant == 'secondary' {
+    background: $ocean-ice;
+    color: $ocean-primary;
+    border: 1px solid $ocean-border;
+    box-shadow: 0 4px 0 #bae6fd;
+
+    &:hover {
+      background: #e0f2fe;
+      color: $ocean-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #bae6fd;
+    }
+
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #bae6fd;
+    }
+  } @else if $variant == 'outline' {
+    background: transparent;
+    color: $ocean-primary;
+    border: 2px solid $ocean-primary;
+    box-shadow: 0 4px 0 rgba($ocean-primary, 0.15);
+
+    &:hover {
+      background: rgba($ocean-primary, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba($ocean-primary, 0.2);
+    }
+
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba($ocean-primary, 0.2);
+    }
+  }
+}
+
+// --- Anime Badges & Tags ---
+@mixin anime-badge($theme: 'ocean') {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-anime;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  line-height: 1.2;
+
+  @if $theme == 'ocean' {
+    background: $ocean-light;
+    color: $ocean-dark;
+    border: 1px solid $ocean-border;
+  } @else if $theme == 'gold' {
+    background: $parchment-bg;
+    color: $gold-dark;
+    border: 1px solid $parchment-border;
+  } @else if $theme == 'red' {
+    background: $battle-red-light;
+    color: $battle-red-dark;
+    border: 1px solid $battle-red-border;
+  } @else if $theme == 'emerald' {
+    background: $sea-emerald-light;
+    color: $sea-emerald-dark;
+    border: 1px solid $sea-emerald-border;
+  }
+}
+
+// --- Manga / Anime Cuts ---
+@mixin diagonal-clip($angle: 12px) {
+  clip-path: polygon(0 0, calc(100% - #{$angle}) 0, 100% #{$angle}, 100% 100%, #{$angle} 100%, 0 calc(100% - #{$angle}));
+}
+
+@mixin diagonal-tab {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+// --- Gradient Text ---
+@mixin gradient-text($gradient: linear-gradient(135deg, $ocean-dark 0%, $ocean-vibrant 100%)) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// --- Responsive Breakpoints ---
+@mixin mobile {
+  @media (max-width: #{$bp-mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: #{$bp-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$bp-desktop}) {
+    @content;
+  }
+}
+
+// --- Flex / Grid Helpers ---
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

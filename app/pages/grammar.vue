@@ -25,13 +25,15 @@ const formatKey = (key: string) => {
 
 <template>
   <section class="grammar-view">
-    <div class="eyebrow">Language Graph</div>
-    <h1>Grammar Assistant</h1>
-    <p class="muted">Structural patterns you've encountered and your current mastery of their usage.</p>
+    <div class="eyebrow gold">STRUCTURAL LOG POSE</div>
+    <h1>Grammar Command Deck</h1>
+    <p class="muted">Structural sentence patterns you've encountered and your current battle readiness across each dimension.</p>
 
-    <div v-if="grammarPoints.length === 0" class="empty-state">
-      <p>You haven't encountered any grammar patterns yet. Patterns appear as you work through missions.</p>
-      <NuxtLink to="/" class="button">Browse chapters</NuxtLink>
+    <div v-if="grammarPoints.length === 0" class="empty-state card">
+      <div class="empty-icon">⚓</div>
+      <h3>No Grammar Patterns Logged Yet</h3>
+      <p class="muted">Patterns will be automatically recorded as you embark on chapter missions and tactical drills.</p>
+      <NuxtLink to="/" class="button gold"><span>⚔️ Browse Chapter Missions</span></NuxtLink>
     </div>
 
     <div v-else class="grammar-grid">
@@ -54,40 +56,60 @@ const formatKey = (key: string) => {
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .grammar-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  gap: 24px;
   margin-top: 32px;
+}
+
+.grammar-card {
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  padding: 24px;
+  background: $white-pure;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: $ocean-vibrant;
+    transform: translateY(-3px);
+    box-shadow: $shadow-card;
+  }
 }
 
 .grammar-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-}
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $ocean-ice;
 
-.grammar-header h3 {
-  margin: 0;
-  color: #176b5b;
-  font-size: 20px;
+  h3 {
+    margin: 0;
+    color: $ocean-deepest;
+    font-size: 20px;
+    font-family: $font-anime;
+    font-weight: 800;
+  }
 }
 
 .encounter-badge {
+  font-family: $font-anime;
   font-size: 11px;
-  background: #fdf2e9;
-  color: #d4a373;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  background: $parchment-bg;
+  color: $gold-dark;
+  border: 1px solid $parchment-border;
+  padding: 3px 10px;
+  border-radius: $radius-pill;
+  font-weight: 800;
 }
 
 .dimensions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .dimension-row {
@@ -97,39 +119,58 @@ const formatKey = (key: string) => {
 }
 
 .dim-label {
-  width: 90px;
-  color: #687873;
+  width: 95px;
+  color: $ink-slate;
+  font-weight: 600;
 }
 
 .dim-bar-container {
   flex: 1;
   height: 8px;
-  background: #f0f2ef;
-  border-radius: 4px;
+  background: #e2e8f0;
+  border-radius: 999px;
   margin: 0 12px;
   overflow: hidden;
 }
 
 .dim-bar {
   height: 100%;
-  background: #d4a373; /* Different color for grammar */
-  border-radius: 4px;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, $gold-parchment 0%, $gold-bright 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  transition: width 0.35s ease;
 }
 
 .dim-value {
-  width: 35px;
+  width: 38px;
   text-align: right;
-  font-family: monospace;
-  color: #176b5b;
+  font-family: $font-anime;
+  font-weight: 800;
+  color: $gold-deep;
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px dashed #c2cfc9;
+  padding: 60px 24px;
+  background: $white-pure;
+  border-radius: $radius-xl;
+  border: 2px dashed $ocean-border;
   margin-top: 32px;
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 24px;
+    color: $ocean-deepest;
+    margin-bottom: 8px;
+  }
+
+  .muted {
+    max-width: 460px;
+    margin: 0 auto 24px;
+  }
 }
 </style>

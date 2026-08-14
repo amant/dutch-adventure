@@ -43,15 +43,19 @@ const chaptersByLevel = computed(() => {
 
 <template>
   <div class="capability-map card">
-    <div class="eyebrow">The B2 Journey</div>
-    <h2>Your Capability Map</h2>
-    <p class="muted">Master these real-world scenarios to reach B2 independence.</p>
+    <div class="header">
+      <div class="eyebrow gold">GRAND LINE NAVIGATION</div>
+      <h2>Your Capability Map</h2>
+      <p class="muted">Master these real-world mission capabilities to conquer the B2 language frontier.</p>
+    </div>
     
     <div class="levels-grid">
       <div v-for="level in levels" :key="level" class="level-column">
         <div class="level-header">
-          <span class="level-badge">{{ level }}</span>
-          <span class="level-label">{{ level === 'A1' ? 'Survival' : level === 'A2' ? 'Everyday' : level === 'B1' ? 'Independent' : 'Complex' }}</span>
+          <span class="level-badge" :class="level.toLowerCase()">{{ level }}</span>
+          <div class="level-meta">
+            <span class="level-label">{{ level === 'A1' ? 'East Blue Survival' : level === 'A2' ? 'Everyday Voyage' : level === 'B1' ? 'Grand Line Independence' : 'New World Mastery' }}</span>
+          </div>
         </div>
         
         <div class="capabilities-list">
@@ -64,7 +68,7 @@ const chaptersByLevel = computed(() => {
           >
             <div class="dot"></div>
             <span class="title">{{ chapter.title }}</span>
-            <span v-if="chapter.isCapstone" class="capstone-icon">🏆</span>
+            <span v-if="chapter.isCapstone" class="capstone-icon" title="Capstone Mission">🏆</span>
           </NuxtLink>
         </div>
       </div>
@@ -72,49 +76,86 @@ const chaptersByLevel = computed(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .capability-map {
   margin: 40px 0;
-  padding: 32px;
+  padding: 36px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 
-h2 { margin: 12px 0 8px; }
+.header {
+  margin-bottom: 24px;
+
+  h2 {
+    margin: 8px 0;
+    font-size: 28px;
+  }
+}
 
 .levels-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 32px;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.level-column {
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-lg;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
 }
 
 .level-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $ocean-border;
 }
 
 .level-badge {
-  background: #176b5b;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 800;
+  background: linear-gradient(135deg, $ocean-primary 0%, $ocean-vibrant 100%);
+  color: $white-pure;
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  font-family: $font-anime;
+  font-weight: 900;
   font-size: 14px;
+  box-shadow: 0 2px 0 $ocean-dark;
+
+  &.a1 { background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); }
+  &.a2 { background: linear-gradient(135deg, #0066cc 0%, #0284c7 100%); }
+  &.b1 { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+  &.b2 { background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%); }
+}
+
+.level-meta {
+  display: flex;
+  flex-direction: column;
 }
 
 .level-label {
-  font-size: 12px;
-  font-weight: 700;
+  font-family: $font-anime;
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #8a9a94;
+  color: $ink-slate;
   letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
 .capabilities-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  flex: 1;
 }
 
 .capability-item {
@@ -122,55 +163,60 @@ h2 { margin: 12px 0 8px; }
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
-  color: #52645f;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: #f8f9f8;
-  border: 1px solid #e1e5de;
-  transition: all 0.2s ease;
-}
+  font-size: 13px;
+  font-weight: 600;
+  color: $ink-navy;
+  padding: 10px 12px;
+  border-radius: $radius-md;
+  background: $white-pure;
+  border: 1px solid rgba(0, 86, 179, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all $transition-fast;
 
-.capability-item:hover {
-  transform: translateX(4px);
-  border-color: #176b5b;
-  background: #fff;
-}
+  &:hover {
+    transform: translateX(3px);
+    border-color: $ocean-vibrant;
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.12);
+    color: $ocean-primary;
+  }
 
-.capability-item.mastered {
-  background: #e6f2f0;
-  border-color: #176b5b;
-  color: #176b5b;
-}
+  &.mastered {
+    background: #ecfdf5;
+    border-color: $sea-emerald;
+    color: $sea-emerald-dark;
 
-.capability-item.mastered .dot {
-  background: #176b5b;
-  box-shadow: 0 0 0 3px #176b5b22;
-}
+    .dot {
+      background: $sea-emerald;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    }
+  }
 
-.capability-item.in-progress {
-  border-left: 3px solid #d06b3c;
-}
+  &.in-progress {
+    border-left: 3px solid $gold-parchment;
+    background: #fffbeb;
 
-.capability-item.in-progress .dot {
-  background: #d06b3c;
-}
+    .dot {
+      background: $gold-parchment;
+    }
+  }
 
-.capability-item.is-capstone {
-  margin-top: 8px;
-  background: #fdf2f8;
-  border: 1px dashed #ec4899;
-}
+  &.is-capstone {
+    margin-top: 6px;
+    background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+    border: 1.5px dashed $battle-red-vibrant;
+    color: $battle-red-dark;
 
-.capability-item.is-capstone:hover {
-  background: #fce7f3;
-  border-style: solid;
-}
+    &:hover {
+      background: #ffe4e6;
+      border-style: solid;
+    }
 
-.capability-item.is-capstone.mastered {
-  background: #fbcfe8;
-  border-style: solid;
-  color: #9d174d;
+    &.mastered {
+      background: #fef08a;
+      border: 1.5px solid $gold-parchment;
+      color: $gold-dark;
+    }
+  }
 }
 
 .capstone-icon {
@@ -179,18 +225,19 @@ h2 { margin: 12px 0 8px; }
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #cbd5e1;
+  background: #94a3b8;
   flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $bp-desktop) {
   .levels-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 600px) {
+@media (max-width: $bp-mobile) {
+  .capability-map { padding: 22px 16px; }
   .levels-grid { grid-template-columns: 1fr; }
 }
 </style>

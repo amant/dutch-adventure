@@ -1,0 +1,97 @@
+// =============================================================================
+// ONE PIECE ANIME THEME: SCSS VARIABLES
+// Primary: Modern Ocean Blue & Sea White Palette
+// Companion: Straw Hat Gold Parchment, Energetic Battle Red, Sea Emerald, Deep Ink
+// =============================================================================
+
+// --- Primary Ocean Blues ---
+$ocean-deepest: #071326;     // Abyssal deep ocean navy
+$ocean-navy: #0a2540;        // Marine headquarters navy
+$ocean-dark: #003b73;        // Grand Line deep blue
+$ocean-primary: #0066cc;     // Core ocean blue
+$ocean-vibrant: #0284c7;     // Vibrant sunny ocean blue
+$ocean-sky: #38bdf8;         // Bright sky / sea spray
+$ocean-light: #e0f2fe;       // Ice blue background tint
+$ocean-ice: #f0f7ff;         // Ultra-light coastal foam
+$ocean-border: #bae6fd;      // Sea border highlight
+
+// --- Modern Sea Whites & Grays ---
+$white-pure: #ffffff;
+$white-cloud: #f8fafc;
+$white-sand: #f1f5f9;
+$white-muted: #e2e8f0;
+
+// --- Vibrant Anime Companion Accents ---
+// 1. Golden Parchment / Straw Hat Treasure Yellow
+$gold-parchment: #f59e0b;
+$gold-bright: #fbbf24;
+$gold-shimmer: #fde047;
+$gold-deep: #d97706;
+$gold-dark: #92400e;
+$gold-glow: #fef08a;
+$parchment-bg: #fffbeb;
+$parchment-border: #fde68a;
+
+// 2. Energetic Battle Red / Marine Wanted Red
+$battle-red: #ef4444;
+$battle-red-vibrant: #e11d48;
+$battle-red-dark: #b91c1c;
+$battle-red-light: #ffe4e6;
+$battle-red-border: #fecdd3;
+
+// 3. Sea Emerald / Grand Line Green
+$sea-emerald: #10b981;
+$sea-emerald-dark: #047857;
+$sea-emerald-light: #d1fae5;
+$sea-emerald-border: #a7f3d0;
+
+// 4. Sunset Tangerine / Sunny Voyage Orange
+$sunset-orange: #f97316;
+$sunset-orange-light: #ffedd5;
+$sunset-orange-border: #fed7aa;
+
+// 5. Marine Deep Ink & Slate
+$ink-dark: #0f172a;
+$ink-navy: #1e293b;
+$ink-slate: #334155;
+$ink-muted: #64748b;
+$ink-light: #94a3b8;
+
+// --- Typography Tokens ---
+$font-sans: 'Plus Jakarta Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-anime: 'Outfit', 'Roboto Condensed', 'Montserrat', -apple-system, sans-serif;
+$font-display: 'Outfit', 'Fraunces', 'Cinzel', serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, monospace;
+
+// --- Radii & Geometry ---
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 14px;
+$radius-lg: 20px;
+$radius-xl: 28px;
+$radius-pill: 9999px;
+
+// --- Shadows & Anime 3D Offsets ---
+$shadow-sm: 0 2px 8px rgba(7, 19, 38, 0.06);
+$shadow-card: 0 10px 25px -5px rgba(0, 59, 115, 0.07), 0 8px 10px -6px rgba(0, 59, 115, 0.04);
+$shadow-card-hover: 0 20px 35px -5px rgba(0, 59, 115, 0.15), 0 10px 10px -5px rgba(0, 59, 115, 0.06);
+$shadow-glow-blue: 0 0 20px rgba(2, 132, 199, 0.35);
+$shadow-glow-gold: 0 0 20px rgba(245, 158, 11, 0.4);
+$shadow-glow-red: 0 0 20px rgba(239, 68, 68, 0.35);
+
+// 3D Anime Button Depths
+$btn-shadow-blue: 0 4px 0 #003b73;
+$btn-shadow-blue-active: 0 1px 0 #003b73;
+$btn-shadow-red: 0 4px 0 #991b1b;
+$btn-shadow-gold: 0 4px 0 #b45309;
+
+// --- Breakpoints ---
+$bp-mobile: 640px;
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-wide: 1280px;
+
+// --- Transitions ---
+$transition-fast: 0.15s ease;
+$transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);

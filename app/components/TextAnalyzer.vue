@@ -112,7 +112,7 @@ const showHint = (token: any) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .text-analyzer {
   display: flex;
   flex-direction: column;
@@ -122,9 +122,10 @@ const showHint = (token: any) => {
 .stats-bar {
   display: flex;
   gap: 20px;
-  padding: 12px 20px;
-  background: #f8fafc;
-  border-radius: 12px;
+  padding: 14px 20px;
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-md;
   flex-wrap: wrap;
 }
 
@@ -132,56 +133,62 @@ const showHint = (token: any) => {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: $font-anime;
   font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
+  font-weight: 700;
+  color: $ink-slate;
 }
 
 .dot { width: 8px; height: 8px; border-radius: 50%; }
-.dot.mastered { background: #10b981; }
-.dot.frontier { background: #f59e0b; }
-.dot.recognized { background: #94a3b8; }
+.dot.mastered { background: $sea-emerald; }
+.dot.frontier { background: $gold-parchment; }
+.dot.recognized { background: $ocean-sky; }
 .dot.new { background: #cbd5e1; }
 
 .content-box {
   font-size: 18px;
   line-height: 1.8;
-  padding: 24px;
-  background: white;
-  border-radius: 16px;
-  color: #1a1a1a;
+  padding: 28px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  color: $ocean-deepest;
   white-space: pre-wrap;
+  box-shadow: $shadow-card;
 }
 
 .word.interactable {
-  color: #1a1a1a;
-  font-weight: 500;
-  border-bottom: 2px solid #e2e8f0;
+  color: $ocean-deepest;
+  font-weight: 600;
+  border-bottom: 2px solid $ocean-border;
   cursor: pointer;
-  transition: all 0.2s;
-  padding: 0 2px;
-}
+  transition: all $transition-fast;
+  padding: 1px 3px;
+  border-radius: $radius-xs;
 
-.word.interactable.new { border-bottom-color: #cbd5e1; }
-.word.interactable.recognized { border-bottom-color: #94a3b8; font-weight: 600; }
-.word.interactable.frontier { border-bottom-color: #f59e0b; color: #b45309; font-weight: 600; }
-.word.interactable.mastered { border-bottom-color: #10b981; color: #065f46; font-weight: 600; }
+  &.new { border-bottom-color: #cbd5e1; }
+  &.recognized { border-bottom-color: $ocean-sky; color: $ocean-primary; }
+  &.frontier { border-bottom-color: $gold-bright; color: $gold-deep; font-weight: 700; }
+  &.mastered { border-bottom-color: $sea-emerald; color: $sea-emerald-dark; font-weight: 700; }
 
-.word.interactable:hover {
-  background: #f1f5f9;
-  border-radius: 4px;
-}
+  &:hover {
+    background: $ocean-light;
+  }
 
-.word.interactable.active {
-  background: #176b5b;
-  color: white;
-  border-radius: 4px;
+  &.active {
+    background: linear-gradient(135deg, $ocean-primary 0%, $ocean-vibrant 100%);
+    color: $white-pure;
+    box-shadow: 0 2px 6px rgba(0, 102, 204, 0.35);
+  }
 }
 
 .hint-popup {
-  background: #fffcf4;
-  border: 1px solid #f9e8b9;
+  background: linear-gradient(135deg, $white-pure 0%, $parchment-bg 100%);
+  border: 1.5px solid $gold-bright;
+  border-top: 4px solid $gold-parchment;
+  border-radius: $radius-lg;
   padding: 20px;
+  box-shadow: $shadow-card;
 }
 
 .hint-header {
@@ -192,19 +199,21 @@ const showHint = (token: any) => {
 }
 
 .word-label {
-  font-size: 18px;
-  font-weight: 700;
-  color: #d06b3c;
+  font-family: $font-anime;
+  font-size: 19px;
+  font-weight: 800;
+  color: $ocean-deepest;
 }
 
 .category-tag {
+  font-family: $font-anime;
   font-size: 10px;
   text-transform: uppercase;
-  background: #fef1e8;
-  color: #d06b3c;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
+  background: $parchment-border;
+  color: $gold-dark;
+  padding: 2px 8px;
+  border-radius: $radius-xs;
+  font-weight: 800;
 }
 
 .close-btn {
@@ -213,11 +222,17 @@ const showHint = (token: any) => {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #8a9a94;
+  color: $ink-muted;
+
+  &:hover {
+    color: $battle-red-vibrant;
+  }
 }
 
 .meaning {
   font-size: 16px;
+  color: $ink-slate;
+  line-height: 1.5;
   margin: 0;
 }
 </style>

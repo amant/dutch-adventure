@@ -24,16 +24,23 @@ const getIdiomData = (phrase: string) => {
 
 <template>
   <section class="idioms-view">
-    <div class="eyebrow">Language Graph</div>
-    <h1>Idiom Library</h1>
-    <p class="muted">Natural Dutch expressions that make you sound like a native speaker.</p>
+    <div class="eyebrow gold">TREASURE VAULT</div>
+    <h1>Idiom & Expression Library</h1>
+    <p class="muted">Authentic, colloquial Dutch phrases and expressions that give your speech true native nuance and flair.</p>
 
-    <div v-if="idioms.length === 0" class="empty-state">
-      <p>No idioms found in the library.</p>
+    <div v-if="idioms.length === 0" class="empty-state card">
+      <div class="empty-icon">💎</div>
+      <h3>No Idioms Found in Vault</h3>
+      <p class="muted">Check back as new authentic expressions are discovered.</p>
     </div>
 
     <div v-else class="idiom-grid">
-      <div v-for="idiom in idioms" :key="idiom.phrase" class="card idiom-card" :class="{ mastered: (memory.idioms?.[idiom.phrase]?.idiomatic || 0) > 80 }">
+      <div 
+        v-for="idiom in idioms" 
+        :key="idiom.phrase" 
+        class="card idiom-card" 
+        :class="{ mastered: (memory.idioms?.[idiom.phrase]?.idiomatic || 0) > 80 }"
+      >
         <div class="idiom-header">
           <div>
             <h3>{{ idiom.phrase }}</h3>
@@ -42,7 +49,7 @@ const getIdiomData = (phrase: string) => {
           <div v-if="memory.idioms?.[idiom.phrase]" class="encounter-badge">
             {{ memory.idioms[idiom.phrase].successes }}/{{ memory.idioms[idiom.phrase].encounters }} hits
           </div>
-          <div v-else class="new-badge">New</div>
+          <div v-else class="new-badge">Discovered</div>
         </div>
 
         <div class="meaning">
@@ -50,7 +57,7 @@ const getIdiomData = (phrase: string) => {
         </div>
         
         <div class="example">
-          <strong>Example:</strong> "{{ idiom.example }}"
+          <strong>Context:</strong> "{{ idiom.example }}"
         </div>
 
         <div v-if="memory.idioms?.[idiom.phrase]" class="dimensions">
@@ -70,10 +77,10 @@ const getIdiomData = (phrase: string) => {
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .idiom-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 24px;
   margin-top: 32px;
 }
@@ -82,71 +89,90 @@ const getIdiomData = (phrase: string) => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: all 0.3s ease;
-}
+  padding: 26px;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  background: $white-pure;
+  transition: all $transition-normal;
 
-.idiom-card.mastered {
-  border-color: #176b5b;
-  background: #f0f7f4;
+  &:hover {
+    border-color: $ocean-vibrant;
+    transform: translateY(-3px);
+    box-shadow: $shadow-card;
+  }
+
+  &.mastered {
+    border-color: $gold-bright;
+    border-top: 5px solid $gold-parchment;
+    background: linear-gradient(135deg, $white-pure 0%, $parchment-bg 100%);
+  }
 }
 
 .idiom-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-}
+  gap: 12px;
 
-.idiom-header h3 {
-  margin: 0;
-  color: #176b5b;
-  font-size: 22px;
+  h3 {
+    margin: 0;
+    color: $ocean-deepest;
+    font-size: 20px;
+    font-family: $font-anime;
+    font-weight: 800;
+  }
 }
 
 .literal {
   font-style: italic;
-  font-size: 14px;
-  color: #8a9a94;
+  font-size: 13px;
+  color: $ink-muted;
   margin: 4px 0 0;
 }
 
 .encounter-badge {
+  font-family: $font-anime;
   font-size: 11px;
-  background: #e8f3ec;
-  color: #176b5b;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  background: $ocean-light;
+  color: $ocean-dark;
+  border: 1px solid $ocean-border;
+  padding: 3px 8px;
+  border-radius: $radius-pill;
+  font-weight: 800;
 }
 
 .new-badge {
-  font-size: 11px;
-  background: #fef1e8;
-  color: #d06b3c;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  font-family: $font-anime;
+  font-size: 10px;
+  background: $parchment-bg;
+  color: $gold-dark;
+  border: 1px solid $parchment-border;
+  padding: 3px 8px;
+  border-radius: $radius-pill;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .meaning, .example {
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: $ink-slate;
 }
 
 .example {
-  background: #f9faf9;
-  padding: 12px;
-  border-radius: 8px;
-  border-left: 4px solid #cad6ce;
+  background: $ocean-ice;
+  padding: 14px;
+  border-radius: $radius-md;
+  border-left: 4px solid $ocean-sky;
 }
 
 .dimensions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   margin-top: 8px;
   padding-top: 16px;
-  border-top: 1px solid #f0f2ef;
+  border-top: 1px solid $ocean-ice;
 }
 
 .dimension-row {
@@ -156,35 +182,38 @@ const getIdiomData = (phrase: string) => {
 }
 
 .dim-label {
-  width: 100px;
-  color: #687873;
+  width: 105px;
+  color: $ink-slate;
+  font-weight: 600;
 }
 
 .dim-bar-container {
   flex: 1;
-  height: 6px;
-  background: #f0f2ef;
-  border-radius: 3px;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
   margin: 0 10px;
   overflow: hidden;
 }
 
 .dim-bar {
   height: 100%;
-  background: #176b5b;
-  border-radius: 3px;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, $ocean-primary 0%, $ocean-vibrant 100%);
+  border-radius: 999px;
+  transition: width 0.35s ease;
 }
 
 .dim-value {
-  width: 30px;
+  width: 34px;
   text-align: right;
-  font-family: monospace;
+  font-family: $font-anime;
+  font-weight: 800;
+  color: $ocean-primary;
 }
 
 .unlock-hint {
   font-size: 13px;
-  color: #8a9a94;
+  color: $ink-muted;
   font-style: italic;
   margin-top: 12px;
   text-align: center;
@@ -193,9 +222,9 @@ const getIdiomData = (phrase: string) => {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px dashed #c2cfc9;
+  background: $white-pure;
+  border-radius: $radius-xl;
+  border: 2px dashed $ocean-border;
   margin-top: 32px;
 }
 </style>

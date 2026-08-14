@@ -15,13 +15,13 @@ const getMatchStats = (articleContent: string) => {
     return s && s.recognition > 0.5 && s.production < 0.3
   })
   
-  const percentage = Math.round((known.length / uniqueWords.size) * 100)
+  const percentage = Math.round((known.length / (uniqueWords.length || 1)) * 100)
   
   return {
     percentage,
     knownCount: known.length,
     frontierCount: frontier.length,
-    totalCount: uniqueWords.size
+    totalCount: uniqueWords.length
   }
 }
 </script>
@@ -29,9 +29,9 @@ const getMatchStats = (articleContent: string) => {
 <template>
   <div class="reading-feed">
     <div class="hero">
-      <div class="eyebrow">Reading Feed</div>
-      <h1>Authentic Dutch</h1>
-      <p class="muted">Read real articles adapted to your level. We track every word you encounter.</p>
+      <div class="eyebrow gold">AUTHENTIC TEXT ARCHIVES</div>
+      <h1>Authentic Dutch Reading Logs</h1>
+      <p class="muted">Read authentic Dutch chronicles adapted to your voyage level. We track every word encounter into your Language Graph.</p>
     </div>
 
     <div class="articles-grid grid">
@@ -42,11 +42,11 @@ const getMatchStats = (articleContent: string) => {
         class="article-card card"
       >
         <div class="article-meta">
-          <span class="level-badge" :class="article.level">{{ article.level }}</span>
+          <span class="level-badge" :class="article.level.toLowerCase()">{{ article.level }}</span>
           <span class="source">{{ article.source }}</span>
         </div>
         <h3>{{ article.title }}</h3>
-        <p class="excerpt">{{ article.content.substring(0, 100) }}...</p>
+        <p class="excerpt">{{ article.content.substring(0, 110) }}...</p>
         
         <div class="article-footer">
           <div class="match">
@@ -58,7 +58,7 @@ const getMatchStats = (articleContent: string) => {
               <div class="fill" :style="{ width: getMatchStats(article.content).percentage + '%' }"></div>
             </div>
             <div v-if="getMatchStats(article.content).frontierCount > 0" class="frontier-count">
-              {{ getMatchStats(article.content).frontierCount }} activation opportunities
+              ⚡ {{ getMatchStats(article.content).frontierCount }} activation opportunities
             </div>
           </div>
           <span class="date">{{ article.publishedAt }}</span>
@@ -68,21 +68,37 @@ const getMatchStats = (articleContent: string) => {
   </div>
 </template>
 
-<style scoped>
-.reading-feed { padding: 20px 0; }
-.hero { margin-bottom: 40px; }
+<style scoped lang="scss">
+.reading-feed {
+  padding: 20px 0;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
 
 .article-card {
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.2s, border-color 0.2s;
-}
+  gap: 14px;
+  padding: 26px;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-xl;
+  background: $white-pure;
+  transition: all $transition-normal;
 
-.article-card:hover {
-  transform: translateY(-4px);
-  border-color: #176b5b;
+  &:hover {
+    transform: translateY(-4px);
+    border-color: $ocean-vibrant;
+    box-shadow: $shadow-card;
+  }
+
+  h3 {
+    font-size: 20px;
+    margin: 0;
+    color: $ocean-deepest;
+  }
 }
 
 .article-meta {
@@ -92,41 +108,40 @@ const getMatchStats = (articleContent: string) => {
 }
 
 .level-badge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-  color: white;
-}
+  font-family: $font-anime;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: $radius-sm;
+  color: $white-pure;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
 
-.level-badge.A1 { background: #4caf50; }
-.level-badge.A2 { background: #2196f3; }
-.level-badge.B1 { background: #ff9800; }
-.level-badge.B2 { background: #f44336; }
+  &.a1 { background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); }
+  &.a2 { background: linear-gradient(135deg, #0066cc 0%, #0284c7 100%); }
+  &.b1 { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+  &.b2 { background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%); }
+}
 
 .source {
-  font-size: 12px;
-  color: #8a9a94;
-  font-weight: 500;
-}
-
-.article-card h3 {
-  font-size: 20px;
-  margin: 0;
-  color: #20302d;
+  font-family: $font-anime;
+  font-size: 11px;
+  color: $ink-muted;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .excerpt {
   font-size: 14px;
-  color: #687873;
-  line-height: 1.5;
+  color: $ink-slate;
+  line-height: 1.6;
   margin: 0;
+  flex: 1;
 }
 
 .article-footer {
   margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid #f0f2f0;
+  padding-top: 14px;
+  border-top: 1px solid $ocean-ice;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -143,47 +158,57 @@ const getMatchStats = (articleContent: string) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 140px;
 }
 
 .match .label {
+  font-family: $font-anime;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #8a9a94;
+  color: $ink-muted;
+  font-weight: 700;
 }
 
 .progress-bar {
-  height: 4px;
-  background: #f0f2f0;
-  border-radius: 2px;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
   width: 100%;
-  max-width: 120px;
+  max-width: 140px;
   overflow: hidden;
-}
 
-.progress-bar .fill {
-  height: 100%;
-  background: #176b5b;
+  .fill {
+    height: 100%;
+    background: linear-gradient(90deg, $ocean-primary 0%, $ocean-sky 100%);
+    border-radius: 999px;
+  }
 }
 
 .match .value {
+  font-family: $font-anime;
   font-size: 12px;
-  font-weight: 700;
-  color: #176b5b;
+  font-weight: 800;
+  color: $ocean-primary;
 }
 
 .frontier-count {
+  font-family: $font-anime;
   font-size: 10px;
-  font-weight: 600;
-  color: #d06b3c;
-  background: #fff7ed;
-  padding: 1px 6px;
-  border-radius: 4px;
+  font-weight: 800;
+  color: $gold-dark;
+  background: $parchment-bg;
+  border: 1px solid $parchment-border;
+  padding: 2px 8px;
+  border-radius: $radius-xs;
   align-self: flex-start;
+  margin-top: 4px;
 }
 
 .date {
+  font-family: $font-anime;
   font-size: 11px;
-  color: #8a9a94;
+  color: $ink-muted;
+  font-weight: 700;
 }
 </style>

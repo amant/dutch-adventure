@@ -259,33 +259,184 @@ function next() {
   </div>
 </template>
 
-<style scoped>
-.session { max-width: 760px; margin: auto; }
-.session-head { display:flex; justify-content:space-between; color:#687873; margin-bottom:12px; align-items: baseline; }
-.timer { font-weight: 700; color: #176b5b; background: #e8f3ec; padding: 2px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
-.timer.urgent { color: #d06b3c; background: #fef1e8; animation: pulse 1s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-.progress-track { height:7px; background:#dfe7df; border-radius:9px; margin-bottom:32px; overflow: hidden; }
-.progress-track div { height:100%; background:#d06b3c; border-radius:9px; transition:width .3s; }
+<style scoped lang="scss">
+.session {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-.exercise h2 { font-size:36px; margin:24px 0; }
-.exercise pre { white-space:pre-wrap; font: 500 21px/1.7 'DM Sans',sans-serif; background:#f3f7f2; border-radius:14px; padding:20px; color: #176b5b; }
-.exercise textarea { width:100%; border:1px solid #cad6ce; border-radius:12px; padding:15px; font:inherit; resize:vertical; margin-bottom:14px; }
+.session-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $ink-slate;
+  margin-bottom: 14px;
+}
 
-.feedback { margin-top:24px; padding:24px; border-radius:16px; background:#e8f3ec; border: 1px solid #c8e1d3; }
-.feedback.retry { background:#fff0e7; border-color: #f7d8c5; }
-.feedback strong { font-size:22px; display: block; margin-bottom: 8px; }
-.feedback p { margin: 8px 0; font-size: 16px; line-height: 1.5; }
-.feedback .actions { margin-top: 20px; }
-.mini-lesson { margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #cad6ce; text-align: left; }
-.mini-lesson h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
-.mini-lesson .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
+.timer {
+  font-family: $font-anime;
+  font-weight: 800;
+  color: $ocean-primary;
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  padding: 4px 12px;
+  border-radius: $radius-sm;
+  font-variant-numeric: tabular-nums;
 
-.teacher-correction { margin: 20px 0; padding: 16px; background: #fefce8; border: 1px solid #fef08a; text-align: left; }
-.teacher-correction h3 { margin: 8px 0; color: #176b5b; font-size: 18px; }
-.teacher-correction .tag { font-size: 11px; font-weight: 700; color: #d06b3c; text-transform: uppercase; }
+  &.urgent {
+    color: $battle-red-vibrant;
+    background: $battle-red-light;
+    border-color: $battle-red-border;
+    animation: anime-pulse 0.8s infinite;
+  }
+}
 
-.completion { max-width:700px; margin:50px auto; text-align: center; }
-.completion h1 { margin: 20px 0; }
-.completion .button { margin-top: 30px; }
+.progress-track {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  margin-bottom: 32px;
+  overflow: hidden;
+
+  div {
+    height: 100%;
+    background: linear-gradient(90deg, $ocean-primary 0%, $gold-bright 100%);
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    transition: width 0.35s ease;
+  }
+}
+
+.exercise {
+  h2 {
+    font-size: clamp(26px, 3.5vw, 36px);
+    margin: 20px 0;
+    color: $ocean-deepest;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    font-family: $font-sans;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.7;
+    background: linear-gradient(135deg, $white-pure 0%, $ocean-ice 100%);
+    border: 1.5px solid $ocean-border;
+    border-radius: $radius-lg;
+    padding: 24px;
+    color: $ocean-dark;
+  }
+
+  textarea {
+    width: 100%;
+    border: 1.5px solid #cbd5e1;
+    border-radius: $radius-md;
+    padding: 16px;
+    font-family: $font-sans;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 16px;
+
+    &:focus {
+      border-color: $ocean-vibrant;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+    }
+  }
+}
+
+.feedback {
+  margin-top: 28px;
+  padding: 26px;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $white-pure 0%, #ecfdf5 100%);
+  border: 1.5px solid $sea-emerald-border;
+  box-shadow: $shadow-card;
+
+  &.retry {
+    background: linear-gradient(135deg, $white-pure 0%, #fff1f2 100%);
+    border-color: $battle-red-border;
+  }
+
+  strong {
+    font-family: $font-anime;
+    font-size: 22px;
+    display: block;
+    margin-bottom: 8px;
+    color: $ocean-deepest;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .actions {
+    margin-top: 20px;
+  }
+}
+
+.mini-lesson {
+  margin: 20px 0;
+  padding: 20px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-md;
+  text-align: left;
+
+  h3 {
+    margin: 8px 0;
+    color: $ocean-dark;
+    font-size: 18px;
+  }
+
+  .tag {
+    font-family: $font-anime;
+    font-size: 11px;
+    font-weight: 800;
+    color: $gold-deep;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
+
+.teacher-correction {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, $parchment-bg 0%, #fef9c3 100%);
+  border: 1.5px solid $parchment-border;
+  border-radius: $radius-md;
+  text-align: left;
+
+  h3 {
+    margin: 8px 0;
+    color: $gold-dark;
+    font-size: 18px;
+  }
+
+  .tag {
+    font-family: $font-anime;
+    font-size: 11px;
+    font-weight: 800;
+    color: $battle-red-vibrant;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
+
+.completion {
+  max-width: 720px;
+  margin: 40px auto;
+  text-align: center;
+
+  h1 {
+    margin: 20px 0;
+    font-size: clamp(32px, 4vw, 44px);
+    color: $ocean-deepest;
+  }
+
+  .button {
+    margin-top: 30px;
+  }
+}
 </style>

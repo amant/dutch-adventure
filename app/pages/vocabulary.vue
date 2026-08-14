@@ -252,7 +252,7 @@ const wordFamily = computed(() => {
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .layout {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -263,33 +263,39 @@ const wordFamily = computed(() => {
 
 .search-corpus {
   margin-top: 24px;
-  padding: 16px;
-  background: #f8faf9;
-  border-color: #eef2f0;
+  padding: 20px;
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-lg;
 }
 
 .corpus-input {
   width: 100%;
-  border: 1px solid #cad6ce;
-  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: $radius-md;
   padding: 12px 16px;
-  font: inherit;
-  font-size: 16px;
-  background: white;
+  font-size: 15px;
+  background: $white-pure;
+
+  &:focus {
+    border-color: $ocean-vibrant;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+  }
 }
 
 .search-meta {
+  font-family: $font-anime;
   font-size: 11px;
   margin-top: 8px;
-  color: #8a9a94;
-  font-weight: 600;
+  color: $ink-muted;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .corpus-results {
   margin-bottom: 40px;
   padding-bottom: 30px;
-  border-bottom: 2px solid #eef2f0;
+  border-bottom: 2px solid $ocean-ice;
 }
 
 .usage-grid {
@@ -301,14 +307,18 @@ const wordFamily = computed(() => {
 
 .usage-card {
   cursor: pointer;
-  padding: 16px;
-  background: #fff;
-  border-color: #e1e5de;
-}
+  padding: 18px;
+  background: $white-pure;
+  border: 1.5px solid rgba(0, 86, 179, 0.12);
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  transition: all $transition-fast;
 
-.usage-card:hover {
-  border-color: #176b5b;
-  transform: translateY(-2px);
+  &:hover {
+    border-color: $ocean-vibrant;
+    transform: translateY(-2px);
+    box-shadow: $shadow-card;
+  }
 }
 
 .usage-meta {
@@ -319,12 +329,13 @@ const wordFamily = computed(() => {
 }
 
 .word-link {
+  font-family: $font-anime;
   font-size: 12px;
-  font-weight: 700;
-  color: #176b5b;
-  background: #e6f2f0;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-weight: 800;
+  color: $ocean-primary;
+  background: $ocean-light;
+  padding: 3px 8px;
+  border-radius: $radius-xs;
 }
 
 @media (max-width: 900px) {
@@ -339,28 +350,47 @@ const wordFamily = computed(() => {
 
 .word-card {
   cursor: pointer;
-  transition: all 0.2s;
-  padding: 16px;
-  border: 1px solid #e1e5de;
-}
+  transition: all $transition-fast;
+  padding: 18px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
 
-.word-card:hover { transform: translateY(-2px); border-color: #176b5b; }
-.word-card.active { border-color: #176b5b; background: #f0f4f2; }
+  &:hover {
+    transform: translateY(-2px);
+    border-color: $ocean-vibrant;
+    box-shadow: $shadow-card;
+  }
+
+  &.active {
+    border-color: $ocean-primary;
+    background: $ocean-ice;
+    box-shadow: 0 0 0 2px $ocean-primary;
+  }
+}
 
 .word-header h3 {
   margin: 0;
-  color: #176b5b;
+  color: $ocean-deepest;
+  font-family: $font-anime;
   font-size: 18px;
+  font-weight: 800;
 }
-.last-seen { font-size: 10px; color: #8a9a94; }
+
+.last-seen {
+  font-size: 10px;
+  color: $ink-muted;
+}
 
 .encounter-badge {
+  font-family: $font-anime;
   font-size: 10px;
-  background: #f0f4f2;
-  color: #176b5b;
-  padding: 1px 6px;
-  border-radius: 8px;
-  font-weight: 600;
+  background: $ocean-ice;
+  color: $ocean-dark;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  font-weight: 700;
   margin-top: 4px;
 }
 
@@ -374,16 +404,19 @@ const wordFamily = computed(() => {
 
 .mini-bar {
   flex: 1;
-  background: #176b5b;
-  border-radius: 1px;
+  background: linear-gradient(180deg, $ocean-sky 0%, $ocean-primary 100%);
+  border-radius: 2px 2px 0 0;
 }
 
 .detail-panel {
   position: sticky;
-  top: 20px;
-  padding: 24px;
-  background: #fdfaf3;
-  border-left: 4px solid #176b5b;
+  top: 90px;
+  padding: 28px;
+  background: $white-pure;
+  border: 1.5px solid $gold-bright;
+  border-top: 5px solid $gold-parchment;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 
 .detail-header {
@@ -391,31 +424,67 @@ const wordFamily = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-}
 
-.detail-header h2 { margin: 0; font-size: 28px; color: #176b5b; }
+  h2 {
+    margin: 0;
+    font-size: 28px;
+    color: $ocean-deepest;
+  }
+}
 
 .close-btn {
   background: none;
   border: none;
   font-size: 24px;
-  color: #8a9a94;
+  color: $ink-muted;
   cursor: pointer;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $battle-red-vibrant;
+  }
 }
 
-.dimensions-detail { margin-bottom: 32px; }
+.dimensions-detail {
+  margin-bottom: 32px;
+}
 
 .dimension-row {
   display: flex;
   align-items: center;
   font-size: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.dim-label { width: 80px; color: #687873; }
-.dim-bar-container { flex: 1; height: 6px; background: #e0e6e1; border-radius: 3px; margin: 0 10px; overflow: hidden; }
-.dim-bar { height: 100%; background: #176b5b; transition: width 0.3s; }
-.dim-value { width: 30px; text-align: right; color: #176b5b; }
+.dim-label {
+  width: 90px;
+  color: $ink-slate;
+  font-weight: 600;
+}
+
+.dim-bar-container {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  margin: 0 10px;
+  overflow: hidden;
+}
+
+.dim-bar {
+  height: 100%;
+  background: linear-gradient(90deg, $ocean-primary 0%, $gold-bright 100%);
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.dim-value {
+  width: 34px;
+  text-align: right;
+  font-family: $font-anime;
+  font-weight: 800;
+  color: $ocean-primary;
+}
 
 .section-header, .corpus-header {
   display: flex;
@@ -425,37 +494,35 @@ const wordFamily = computed(() => {
 }
 
 .practice-link {
+  font-family: $font-anime;
   font-size: 11px;
-  font-weight: 700;
-  color: #176b5b;
+  font-weight: 800;
+  color: $ocean-primary;
   text-decoration: none;
   text-transform: uppercase;
-}
+  letter-spacing: 0.05em;
 
-.practice-link:hover {
-  text-decoration: underline;
-}
-
-.button.small {
-  padding: 6px 12px;
-  font-size: 12px;
+  &:hover {
+    text-decoration: underline;
+    color: $ocean-vibrant;
+  }
 }
 
 .history-section { margin-top: 24px; }
 .usage-list { list-style: none; padding: 0; margin: 12px 0; }
-.usage-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e1e5de; }
-.snippet { font-style: italic; margin: 0; font-size: 14px; }
-.date { font-size: 10px; color: #8a9a94; }
+.usage-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid $ocean-ice; }
+.snippet { font-style: italic; margin: 0; font-size: 14px; color: $ink-slate; }
+.date { font-size: 10px; color: $ink-muted; }
 
 .collocations-section { margin-top: 24px; }
 .coll-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 .coll-item { 
   font-size: 14px; 
-  color: #1e293b; 
-  background: white; 
+  color: $ink-dark; 
+  background: $ocean-ice; 
   padding: 8px 12px; 
-  border-radius: 8px; 
-  border: 1px solid #e2e8f0;
+  border-radius: $radius-sm; 
+  border: 1px solid $ocean-border;
   font-weight: 600;
 }
 
@@ -464,42 +531,58 @@ const wordFamily = computed(() => {
 .family-member {
   cursor: pointer;
   padding: 8px 12px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: $white-pure;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-sm;
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 80px;
-  transition: all 0.2s;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: $ocean-vibrant;
+    background: $ocean-ice;
+  }
+
+  &.current {
+    border-color: $gold-parchment;
+    background: $parchment-bg;
+  }
 }
-.family-member:hover { border-color: #94a3b8; background: #f8fafc; }
-.family-member.current { border-color: #176b5b; background: #e6f2f0; }
-.member-word { font-size: 14px; font-weight: 700; color: #1e293b; }
-.member-role { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600; }
-.synonyms { font-size: 13px; color: #475569; margin-top: 12px; }
+
+.member-word { font-size: 14px; font-weight: 700; color: $ocean-deepest; }
+.member-role { font-size: 10px; color: $ink-muted; text-transform: uppercase; font-weight: 700; font-family: $font-anime; }
+.synonyms { font-size: 13px; color: $ink-slate; margin-top: 12px; }
 .mt-3 { margin-top: 12px; }
 
 .related-section { margin-top: 24px; }
 .chapter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .chapter-tag {
+  font-family: $font-anime;
   font-size: 11px;
+  font-weight: 700;
   padding: 4px 10px;
-  background: white;
-  border: 1px solid #cad6ce;
-  border-radius: 12px;
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-pill;
   text-decoration: none;
-  color: #176b5b;
-  transition: all 0.2s;
+  color: $ocean-dark;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: $ocean-primary;
+    background: $ocean-light;
+    color: $ocean-primary;
+  }
 }
-.chapter-tag:hover { border-color: #176b5b; background: #f0f4f2; }
 
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px dashed #c2cfc9;
+  background: $white-pure;
+  border-radius: $radius-xl;
+  border: 2px dashed $ocean-border;
   margin-top: 32px;
 }
 </style>

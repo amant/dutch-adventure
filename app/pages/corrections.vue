@@ -58,15 +58,16 @@ function closeRetry() {
 <template>
   <div class="corrections-page">
     <div class="hero">
-      <div class="eyebrow">The Feedback Loop</div>
-      <h1>Correction Hub</h1>
-      <p class="muted">Review and re-try sentences where you received a "Teacher's Redline". This is where passive correction becomes active learning.</p>
+      <div class="eyebrow red">REDLINE TACTICAL LOG</div>
+      <h1>Teacher's Redlines & Corrections</h1>
+      <p class="muted">Review and re-engage sentences where you received a "Teacher's Redline". This is where passive correction becomes active conversational reflex.</p>
     </div>
 
+    <!-- Active Re-try Modal Overlay -->
     <div v-if="activeRedline" class="retry-overlay">
       <div class="card retry-card">
-        <button class="close-btn" @click="closeRetry">×</button>
-        <div class="eyebrow">Re-try Challenge</div>
+        <button class="close-btn" @click="closeRetry" aria-label="Close">×</button>
+        <div class="eyebrow gold">BATTLE RETRY CHALLENGE</div>
         <h2>{{ activeRedline.prompt }}</h2>
         
         <div v-if="!feedback" class="previous-attempt">
@@ -77,27 +78,30 @@ function closeRetry() {
         <div class="input-area">
           <textarea 
             v-model="response" 
-            placeholder="Try saying it more naturally this time..."
+            placeholder="Try saying it more naturally with authentic Dutch flow..."
             :disabled="!!feedback"
             class="retry-input"
           ></textarea>
           
           <div v-if="!feedback" class="actions">
-            <button class="button" @click="submitRetry" :disabled="!response">Check Naturalness</button>
+            <button class="button gold" @click="submitRetry" :disabled="!response">
+              <span>⚔️ Check Naturalness</span>
+            </button>
           </div>
         </div>
 
         <div v-if="feedback" class="feedback-box" :class="feedback.outcome">
-          <p>{{ feedback.message }}</p>
+          <p class="outcome-message">{{ feedback.message }}</p>
           <div v-if="feedback.teacherCorrection || feedback.correction" class="natural-example">
-            <div class="label">Natural Dutch:</div>
+            <div class="label">Authentic Native Dutch:</div>
             <div class="text">{{ feedback.teacherCorrection?.natural || feedback.correction }}</div>
           </div>
-          <button class="button secondary mt-4" @click="closeRetry">Done with this one</button>
+          <button class="button secondary mt-4" @click="closeRetry">Done with this mission</button>
         </div>
       </div>
     </div>
 
+    <!-- List of Recent Redlines -->
     <div v-if="recentRedlines.length > 0" class="redlines-list">
       <div v-for="redline in recentRedlines" :key="redline.id" class="card redline-item">
         <div class="redline-meta">
@@ -112,82 +116,321 @@ function closeRetry() {
         
         <div class="diff-view">
           <div class="version">
-            <span class="v-label">You said:</span>
+            <span class="v-label">Stiff / Literal:</span>
             <span class="v-text error">{{ redline.userAnswer }}</span>
           </div>
           <div class="version">
-            <span class="v-label">Teacher:</span>
+            <span class="v-label">Authentic Dutch:</span>
             <span class="v-text success">{{ redline.naturalCorrection }}</span>
           </div>
         </div>
 
         <p class="explanation">{{ redline.explanation }}</p>
         
-        <button class="button secondary full-width" @click="startRetry(redline)">Try again</button>
+        <button class="button secondary full-width" @click="startRetry(redline)">
+          <span>⚡ Try Re-producing</span>
+        </button>
       </div>
     </div>
 
-    <div v-else class="empty-state">
-      <p>No redlines yet! Keep practicing to get personalized feedback.</p>
-      <NuxtLink to="/" class="button">Go to Chapters</NuxtLink>
+    <div v-else class="empty-state card">
+      <div class="empty-icon">🎯</div>
+      <h3>No Redlines Logged Yet!</h3>
+      <p class="muted">Keep practicing in chapter missions and drills to unlock personalized feedback and teacher corrections.</p>
+      <NuxtLink to="/" class="button gold"><span>⚔️ Explore Chapters</span></NuxtLink>
     </div>
   </div>
 </template>
 
-<style scoped>
-.corrections-page { padding-bottom: 60px; }
-.hero { margin-bottom: 40px; }
+<style scoped lang="scss">
+.corrections-page {
+  padding-bottom: 60px;
+}
 
-.redlines-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 24px; }
-.redline-item { display: flex; flex-direction: column; gap: 16px; border-left: 6px solid #ef4444; }
+.hero {
+  margin-bottom: 40px;
+}
 
-.redline-meta { display: flex; justify-content: space-between; align-items: center; }
-.date { font-size: 12px; color: #8a9a94; }
-.tags { display: flex; gap: 6px; }
-.tag { font-size: 10px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-.tag.vocabulary { background: #e8f3ec; color: #176b5b; }
-.tag.grammar { background: #fef1e8; color: #d06b3c; }
+.redlines-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  gap: 24px;
+}
 
-.diff-view { background: #f8faf9; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.version { display: flex; flex-direction: column; gap: 4px; }
-.v-label { font-size: 11px; font-weight: 700; color: #8a9a94; text-transform: uppercase; }
-.v-text { font-size: 15px; font-weight: 500; }
-.v-text.error { color: #ef4444; text-decoration: line-through; opacity: 0.8; }
-.v-text.success { color: #176b5b; }
+.redline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-left: 5px solid $battle-red-vibrant;
+  border-radius: $radius-xl;
+  padding: 26px;
+  background: $white-pure;
+  box-shadow: $shadow-card;
 
-.explanation { font-size: 14px; color: #687873; font-style: italic; }
-.full-width { width: 100%; margin-top: auto; }
+  h3 {
+    margin: 0;
+    font-size: 19px;
+    color: $ocean-deepest;
+  }
+}
+
+.redline-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date {
+  font-family: $font-anime;
+  font-size: 11px;
+  font-weight: 700;
+  color: $ink-muted;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+}
+
+.tag {
+  font-family: $font-anime;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: $radius-xs;
+  font-weight: 800;
+
+  &.vocabulary {
+    background: $ocean-light;
+    color: $ocean-dark;
+  }
+
+  &.grammar {
+    background: $parchment-border;
+    color: $gold-dark;
+  }
+}
+
+.diff-view {
+  background: $ocean-ice;
+  border: 1px solid $ocean-border;
+  border-radius: $radius-md;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.version {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.v-label {
+  font-family: $font-anime;
+  font-size: 10px;
+  font-weight: 800;
+  color: $ink-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.v-text {
+  font-size: 15px;
+  font-weight: 600;
+
+  &.error {
+    color: $battle-red-vibrant;
+    text-decoration: line-through;
+    opacity: 0.85;
+  }
+
+  &.success {
+    color: $sea-emerald-dark;
+  }
+}
+
+.explanation {
+  font-size: 14px;
+  color: $ink-slate;
+  font-style: italic;
+  margin: 0;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: auto;
+}
 
 .retry-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(32, 48, 45, 0.9);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(7, 19, 38, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
 }
-.retry-card { max-width: 600px; width: 100%; position: relative; }
-.close-btn { position: absolute; top: 20px; right: 20px; border: 0; background: none; font-size: 24px; cursor: pointer; color: #8a9a94; }
 
-.previous-attempt { margin-bottom: 20px; padding: 12px; background: #fff5f5; border-radius: 8px; }
-.previous-attempt .label { font-size: 11px; font-weight: 700; color: #c53030; text-transform: uppercase; }
-.previous-attempt .text { font-size: 16px; color: #c53030; }
+.retry-card {
+  max-width: 620px;
+  width: 100%;
+  position: relative;
+  background: $white-pure;
+  border: 2px solid $ocean-border;
+  border-radius: $radius-xl;
+  padding: 36px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+
+  h2 {
+    margin: 8px 0 20px;
+    font-size: 26px;
+    color: $ocean-deepest;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: 0;
+  background: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: $ink-muted;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $battle-red-vibrant;
+  }
+}
+
+.previous-attempt {
+  margin-bottom: 20px;
+  padding: 14px;
+  background: #fff1f2;
+  border: 1px solid $battle-red-border;
+  border-radius: $radius-md;
+
+  .label {
+    font-family: $font-anime;
+    font-size: 11px;
+    font-weight: 800;
+    color: $battle-red-dark;
+    text-transform: uppercase;
+  }
+
+  .text {
+    font-size: 16px;
+    color: $battle-red-dark;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+}
 
 .retry-input {
-  width: 100%; min-height: 100px; padding: 16px;
-  border: 2px solid #cad6ce; border-radius: 12px;
-  font-size: 18px; font-family: inherit; margin-bottom: 12px;
+  width: 100%;
+  min-height: 100px;
+  padding: 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: $radius-md;
+  font-size: 16px;
+  font-family: inherit;
+  margin-bottom: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: $ocean-vibrant;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+  }
 }
-.retry-input:focus { outline: none; border-color: #176b5b; }
 
-.feedback-box { padding: 20px; border-radius: 12px; margin-top: 10px; }
-.feedback-box.correct { background: #f0f7f4; color: #176b5b; border: 1px solid #176b5b; }
-.feedback-box.acceptable { background: #fffbeb; color: #92400e; border: 1px solid #f59e0b; }
-.feedback-box.retry { background: #fef2f2; color: #991b1b; border: 1px solid #ef4444; }
+.feedback-box {
+  padding: 20px;
+  border-radius: $radius-md;
+  margin-top: 16px;
 
-.natural-example { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
-.natural-example .label { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.7; }
-.natural-example .text { font-size: 18px; font-weight: 600; }
+  &.correct {
+    background: #ecfdf5;
+    color: $sea-emerald-dark;
+    border: 1.5px solid $sea-emerald;
+  }
+
+  &.acceptable {
+    background: $parchment-bg;
+    color: $gold-dark;
+    border: 1.5px solid $gold-parchment;
+  }
+
+  &.retry {
+    background: #fff1f2;
+    color: $battle-red-dark;
+    border: 1.5px solid $battle-red-vibrant;
+  }
+
+  .outcome-message {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+}
+
+.natural-example {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  .label {
+    font-family: $font-anime;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .text {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+}
 
 .mt-4 { margin-top: 16px; }
 
-.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  background: $white-pure;
+  border-radius: $radius-xl;
+  border: 2px dashed $ocean-border;
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: $ocean-deepest;
+  }
+
+  .muted {
+    max-width: 440px;
+    margin: 0 auto 24px;
+  }
+}
+
+@media (max-width: $bp-tablet) {
+  .redlines-list {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

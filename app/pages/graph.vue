@@ -129,96 +129,103 @@ const suggestedChapter = computed(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .graph-page { padding: 20px 0; }
 .hero { flex: 1; }
-.hero-flex { display: flex; align-items: flex-end; gap: 40px; margin-bottom: 60px; }
+.hero-flex { display: flex; align-items: flex-end; gap: 40px; margin-bottom: 50px; }
 
 .suggestion {
-  flex: 0 0 320px;
-  background: #fdfaf3;
-  border-color: #f2e6c9;
-  padding: 20px;
-}
+  flex: 0 0 340px;
+  background: linear-gradient(135deg, $white-pure 0%, $parchment-bg 100%);
+  border: 1.5px solid $gold-bright;
+  border-radius: $radius-xl;
+  padding: 24px;
+  box-shadow: $shadow-card;
 
-.suggestion h3 { font-size: 18px; margin: 8px 0; }
-.suggestion p { font-size: 13px; margin-bottom: 16px; }
-.suggestion .button { font-size: 13px; padding: 10px 18px; }
+  h3 { font-size: 18px; margin: 8px 0; color: $ocean-deepest; }
+  p { font-size: 13px; margin-bottom: 16px; color: $ink-slate; }
+  .button { font-size: 13px; padding: 10px 18px; }
+}
 
 .graph-container {
   display: flex;
-  gap: 40px;
+  gap: 32px;
   overflow-x: auto;
-  padding-bottom: 40px;
-  min-height: 600px;
+  padding-bottom: 30px;
+  min-height: 550px;
 }
 
 .level-column {
   flex: 1;
-  min-width: 250px;
+  min-width: 260px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 24px;
 }
 
 .level-header {
-  border-bottom: 2px solid #e1e5de;
+  border-bottom: 2px solid $ocean-border;
   padding-bottom: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .level-tag {
-  background: #176b5b;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 99px;
-  font-weight: 700;
+  background: linear-gradient(135deg, $ocean-primary 0%, $ocean-vibrant 100%);
+  color: $white-pure;
+  padding: 4px 14px;
+  border-radius: $radius-pill;
+  font-family: $font-anime;
+  font-weight: 800;
   font-size: 14px;
+  box-shadow: 0 2px 0 $ocean-dark;
 }
 
 .chapters-stack {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
 }
 
 .chapter-node {
-  background: white;
-  border: 1px solid #e1e5de;
-  border-radius: 16px;
-  padding: 16px;
+  background: $white-pure;
+  border: 1.5px solid $ocean-border;
+  border-radius: $radius-lg;
+  padding: 18px;
   position: relative;
-  transition: all 0.3s;
-}
+  transition: all $transition-normal;
+  box-shadow: $shadow-sm;
 
-.chapter-node:hover, .chapter-node.related {
-  border-color: #176b5b;
-  box-shadow: 0 10px 25px rgba(23, 107, 91, 0.05);
-}
+  &:hover, &.related {
+    border-color: $ocean-vibrant;
+    box-shadow: $shadow-card;
+  }
 
-.chapter-node.related {
-  background: #f0f7f4;
-  transform: scale(1.02);
+  &.related {
+    background: $ocean-ice;
+    transform: scale(1.02);
+  }
 }
 
 .chapter-info h3 {
+  font-family: $font-anime;
+  font-weight: 800;
   font-size: 16px;
   margin: 0 0 8px;
-  color: #20302d;
+  color: $ocean-deepest;
 }
 
 .mastery-mini-bar {
-  height: 4px;
-  background: #f0f2f0;
-  border-radius: 2px;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
   overflow: hidden;
   margin-bottom: 15px;
-}
 
-.mastery-mini-bar .fill {
-  height: 100%;
-  background: #176b5b;
-  transition: width 1s ease-out;
+  .fill {
+    height: 100%;
+    background: linear-gradient(90deg, $ocean-primary 0%, $gold-bright 100%);
+    transition: width 1s ease-out;
+  }
 }
 
 .concept-cloud {
@@ -228,28 +235,35 @@ const suggestedChapter = computed(() => {
 }
 
 .concept-dot {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   position: relative;
   cursor: help;
   transition: transform 0.2s;
-}
 
-.concept-dot.vocabulary { background: #176b5b; }
-.concept-dot.grammar { background: #d06b3c; }
+  &.vocabulary {
+    background: $ocean-primary;
+    box-shadow: 0 0 4px rgba(0, 102, 204, 0.4);
+  }
 
-.concept-dot.highlighted {
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #176b5b;
-  z-index: 5;
-  opacity: 1 !important;
-  transform: scale(1.3) !important;
-}
+  &.grammar {
+    background: $gold-deep;
+    box-shadow: 0 0 4px rgba(217, 119, 6, 0.4);
+  }
 
-.concept-dot:hover {
-  transform: scale(1.5) !important;
-  z-index: 10;
-  opacity: 1 !important;
+  &.highlighted {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px $gold-bright;
+    z-index: 5;
+    opacity: 1 !important;
+    transform: scale(1.35) !important;
+  }
+
+  &:hover {
+    transform: scale(1.5) !important;
+    z-index: 10;
+    opacity: 1 !important;
+  }
 }
 
 .tooltip {
@@ -257,65 +271,82 @@ const suggestedChapter = computed(() => {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: #20302d;
-  color: white;
+  background: $ocean-deepest;
+  color: $white-pure;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: $radius-sm;
   font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
   margin-bottom: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(7, 19, 38, 0.35);
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
+  z-index: 100;
 
-.tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: #20302d;
-}
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: $ocean-deepest;
+  }
 
-.tooltip strong { font-size: 13px; }
-.tooltip .hits { font-size: 10px; opacity: 0.7; }
+  strong { font-size: 13px; font-family: $font-anime; color: $gold-bright; }
+  .hits { font-size: 10px; opacity: 0.8; }
+}
 
 .legend {
-  margin-top: 60px;
+  margin-top: 40px;
   display: flex;
   gap: 30px;
-  padding: 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e1e5de;
+  padding: 18px 24px;
+  background: $white-pure;
+  border-radius: $radius-lg;
+  border: 1.5px solid $ocean-border;
   width: fit-content;
+  box-shadow: $shadow-sm;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #52645f;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: $font-anime;
+  color: $ink-slate;
 }
 
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot.vocabulary { background: #176b5b; }
-.dot.grammar { background: #d06b3c; }
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  &.vocabulary { background: $ocean-primary; }
+  &.grammar { background: $gold-deep; }
+}
+
 .dot-scale { 
-  width: 14px; height: 14px; border-radius: 50%; 
-  background: linear-gradient(135deg, #eee, #999);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%; 
+  background: linear-gradient(135deg, #cbd5e1, $ocean-primary);
 }
 
 @media (max-width: 900px) {
+  .hero-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .graph-container {
     flex-direction: column;
   }
+
   .level-column {
     min-width: 0;
   }
