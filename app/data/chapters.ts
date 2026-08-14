@@ -3330,7 +3330,192 @@ export const infinitiveChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter]
+export const doubleInfinitiveChapter: Chapter = {
+  slug: 'dubbele-infinitief-ipp',
+  level: 'B2',
+  title: 'Verb Clusters & Double Infinitive (IPP)',
+  capability: "Master compound tenses with modals, causative 'laten', perception verbs, and 'leren/helpen' using the double infinitive rule (IPP) and correct verb cluster word order.",
+  description: "Learn the Infinitivus Pro Participio (IPP) rule: in Dutch compound tenses (voltooide tijd), when a modal (moeten/kunnen), causative (laten), perception (zien/horen), or instruction verb (leren/helpen) governs another verb, the past participle is replaced by the infinitive form.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Double Infinitive Rule (IPP)', kind: 'discover',
+      intro: "In Dutch, a participle turns into an infinitive whenever it is accompanied by another infinitive in compound tenses.",
+      exercises: [
+        {
+          id: 'ipp-ind-1', kind: 'induction', prompt: 'Compare single verb vs governed verb structures',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Single modal (Past Participle)', answer: 'Ik heb het niet gewild.' },
+              { prompt: 'Modal + Action (Double Infinitive)', answer: 'Ik heb het niet willen doen.' },
+              { prompt: 'Causative "laten" + Action', answer: 'Zij heeft haar auto laten repareren.' },
+              { prompt: 'Perception "horen" + Action', answer: 'We hebben de buren horen schreeuwen.' },
+              { prompt: 'Instruction "leren" + Action', answer: 'Hij heeft me leren programmeren.' }
+            ],
+            ruleChallenge: 'Why does "gewild" change to "willen" in "Ik heb het niet willen doen"?',
+            options: [
+              { text: 'Because "willen" governs the action verb "doen", triggering the double infinitive (IPP) rule.', isCorrect: true },
+              { text: 'Because "willen" can never have a past participle in Dutch.', isCorrect: false },
+              { text: 'Because the sentence contains a negation ("niet").', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Contextual Inferences & Nuance', kind: 'understand',
+      intro: "Observe how causative 'laten' and modal clusters express delegation and operational constraints in Dutch professional life.",
+      exercises: [
+        {
+          id: 'ipp-inf-1', kind: 'inference-challenge', prompt: 'What did the management actually do?',
+          context: 'De directie heeft de externe consultants een grondig auditrapport laten opstellen.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'In an annual review, the board announces: "De directie heeft de externe consultants een grondig auditrapport laten opstellen."',
+            options: [
+              { text: 'Management commissioned and had external consultants produce the audit report.', isCorrect: true, explanation: 'Correct. Causative "laten opstellen" indicates delegating or directing someone else to perform the action.' },
+              { text: 'Management wrote the entire audit report by themselves.', isCorrect: false, explanation: 'Incorrect. "Laten opstellen" means having someone else prepare it.' },
+              { text: 'Management refused to allow consultants to look at the audit.', isCorrect: false, explanation: 'Incorrect. "Laten" here signifies commissioning/authorizing.' }
+            ]
+          }
+        },
+        {
+          id: 'ipp-inf-2', kind: 'inference-challenge', prompt: 'What constraint occurred in this project?',
+          context: 'Omdat we de servermigratie hebben moeten uitstellen, is de livegang met twee weken vertraagd.',
+          skills: ['recognition', 'grammar'],
+          inferenceData: {
+            scenario: 'A project manager writes to stakeholders: "Omdat we de servermigratie hebben moeten uitstellen, is de livegang met twee weken vertraagd."',
+            options: [
+              { text: 'The team was forced by necessity or constraints to postpone the server migration.', isCorrect: true, explanation: 'Correct. "Hebben moeten uitstellen" expresses a past necessity/obligation that led to the delay.' },
+              { text: 'The team voluntarily decided not to migrate the servers at all.', isCorrect: false, explanation: 'Incorrect. "Moeten" indicates necessity or external constraint, not abandonment.' },
+              { text: 'The server migration was completed ahead of schedule.', isCorrect: false, explanation: 'Incorrect. It was delayed by two weeks.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Double Infinitive Production Drills', kind: 'transform',
+      intro: "Construct accurate compound tense sentences using the double infinitive across modals, causatives, perception, and subclauses.",
+      exercises: [
+        {
+          id: 'ipp-d-1', kind: 'double-infinitive-drill', prompt: 'Modal in compound tense (Main clause)',
+          skills: ['production', 'grammar'],
+          doubleInfinitiveData: {
+            sentenceContext: 'Gisteren op het vliegveld: we waren erg vroeg, maar de vlucht was vertraagd.',
+            auxiliary: 'hebben',
+            governingVerb: 'moeten',
+            governingType: 'modal',
+            mainVerb: 'wachten',
+            hint: 'Auxiliary in position 2, double infinitive at the end: "We hebben ... moeten wachten".'
+          },
+          target: 'We hebben gisteren drie uur op onze vlucht moeten wachten',
+          acceptedAnswers: [
+            'We hebben gisteren drie uur op onze vlucht moeten wachten',
+            'We hebben gisteren drie uur moeten wachten op onze vlucht',
+            'Gisteren hebben we drie uur op onze vlucht moeten wachten',
+            'Gisteren hebben we drie uur moeten wachten op onze vlucht'
+          ],
+          explanation: 'In Dutch compound tenses with modals, use the double infinitive "moeten wachten" (not "gemoeten wachten").'
+        },
+        {
+          id: 'ipp-d-2', kind: 'double-infinitive-drill', prompt: 'Causative "laten" (Main clause)',
+          skills: ['production', 'grammar'],
+          doubleInfinitiveData: {
+            sentenceContext: 'De kantoorruimte was sterk verouderd en het management heeft actie ondernomen.',
+            auxiliary: 'hebben',
+            governingVerb: 'laten',
+            governingType: 'causative-laten',
+            mainVerb: 'renoveren',
+            hint: 'Use "heeft laten renoveren" for having something renovated.'
+          },
+          target: 'Het bedrijf heeft de complete kantoorruimte grondig laten renoveren',
+          acceptedAnswers: [
+            'Het bedrijf heeft de complete kantoorruimte grondig laten renoveren',
+            'Het bedrijf heeft het kantoor laten renoveren',
+            'De directie heeft de kantoorruimte laten renoveren',
+            'Het bedrijf heeft de kantoorruimte grondig laten renoveren'
+          ],
+          explanation: 'Causative "laten" takes the double infinitive "laten renoveren" (never "gelaten renoveren").'
+        },
+        {
+          id: 'ipp-d-3', kind: 'double-infinitive-drill', prompt: 'Instruction "leren" (Main clause)',
+          skills: ['production', 'grammar'],
+          doubleInfinitiveData: {
+            sentenceContext: 'Toen ik bij het softwarebedrijf begon, kende ik TypeScript nog niet goed.',
+            auxiliary: 'hebben',
+            governingVerb: 'leren',
+            governingType: 'instruction-leren-helpen',
+            mainVerb: 'programmeren',
+            hint: 'Use "heeft me leren programmeren" without the "ge-" prefix on leren.'
+          },
+          target: 'Mijn senior collega heeft me in korte tijd professioneel leren programmeren',
+          acceptedAnswers: [
+            'Mijn senior collega heeft me in korte tijd professioneel leren programmeren',
+            'Mijn collega heeft me leren programmeren',
+            'Mijn senior collega heeft me leren programmeren'
+          ],
+          explanation: 'When "leren" or "helpen" governs an action verb, it turns into an infinitive: "leren programmeren".'
+        },
+        {
+          id: 'ipp-d-4', kind: 'double-infinitive-drill', prompt: 'Perception verb in subclause (Subordinate clause)',
+          skills: ['production', 'grammar'],
+          doubleInfinitiveData: {
+            sentenceContext: 'We stonden op het perron in de kou en plotseling klonk er een geluid.',
+            auxiliary: 'hebben',
+            governingVerb: 'horen',
+            governingType: 'perception',
+            mainVerb: 'aankomen',
+            isSubordinate: true,
+            subordinateConjunction: 'omdat',
+            hint: 'Subclause word order: place the entire cluster "hebben horen aankomen" at the very end.'
+          },
+          target: 'We waren opgelucht omdat we de laatste trein in de verte hebben horen aankomen',
+          acceptedAnswers: [
+            'We waren opgelucht omdat we de laatste trein in de verte hebben horen aankomen',
+            'We waren opgelucht omdat we de trein hebben horen aankomen',
+            'We waren erg opgelucht omdat we de laatste trein hebben horen aankomen'
+          ],
+          explanation: 'In subclauses with perception verbs, the verb cluster "hebben horen aankomen" sits at the end of the clause.'
+        },
+        {
+          id: 'ipp-d-5', kind: 'double-infinitive-drill', prompt: 'Conditional Perfect with Modal (Hypothetical past)',
+          skills: ['production', 'grammar'],
+          doubleInfinitiveData: {
+            sentenceContext: 'Als de documentatie op tijd was aangeleverd, was er geen probleem geweest.',
+            auxiliary: 'hebben',
+            governingVerb: 'kunnen',
+            governingType: 'modal',
+            mainVerb: 'afronden',
+            hint: 'Use past subjunctive/pluperfect: "hadden kunnen afronden".'
+          },
+          target: 'We hadden het project gemakkelijk op tijd kunnen afronden',
+          acceptedAnswers: [
+            'We hadden het project gemakkelijk op tijd kunnen afronden',
+            'We hadden het project op tijd kunnen afronden',
+            'We hadden het werk gemakkelijk op tijd kunnen afronden'
+          ],
+          explanation: 'For hypothetical past possibilities, combine "hadden" with the double infinitive "kunnen afronden".'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Real-World Verb Clusters', kind: 'personalise',
+      intro: "Share a personal or professional experience where you had to do something, had something done, or learned a new capability.",
+      exercises: [
+        {
+          id: 'ipp-p-1', kind: 'personalise', prompt: 'Vertel over een situatie op je werk of in je privéleven waarin je iets hebt moeten regelen, laten repareren of leren gebruiken (gebruik een dubbele infinitief zoals "hebben moeten...", "laten...", of "leren...").',
+          skills: ['production', 'speaking', 'pragmatic', 'grammar'],
+          vocabulary: ['regelen', 'repareren', 'leren', 'moeten', 'laten', 'ervaring', 'oplossen'],
+          grammar: ['dubbele-infinitief', 'werkwoordclusters']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

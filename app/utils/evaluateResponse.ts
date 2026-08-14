@@ -262,6 +262,125 @@ function checkRelativePronounError(normalized: string) {
   return { found: false }
 }
 
+function checkDoubleInfinitiveError(normalized: string) {
+  // Check 1: Modal participles incorrectly used with an infinitive / compound tense
+  const modalParticiples = [
+    { part: 'gemoeten', inf: 'moeten', label: 'moeten' },
+    { part: 'gekund', inf: 'kunnen', label: 'kunnen' },
+    { part: 'gewild', inf: 'willen', label: 'willen' },
+    { part: 'gemogen', inf: 'mogen', label: 'mogen' },
+    { part: 'gezuld', inf: 'zullen', label: 'zullen' }
+  ]
+
+  for (const mp of modalParticiples) {
+    if (normalized.includes(mp.part)) {
+      return {
+        found: true,
+        message: `In compound tenses with another action verb, Dutch replaces the modal participle with an infinitive (IPP): use '${mp.inf}' instead of '${mp.part}'.`,
+        miniLesson: {
+          title: `Double Infinitive (IPP): ${mp.label.toUpperCase()}`,
+          content: `When a modal verb is combined with an auxiliary and a main action verb, you must use the double infinitive (e.g. "hebben moeten wachten", not "hebben gemoeten wachten").`,
+          example: {
+            wrong: `hebben ${mp.part} doen`,
+            right: `hebben ${mp.inf} doen`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 2: Causative 'laten' incorrectly used as 'gelaten' with an infinitive
+  if (normalized.includes('gelaten')) {
+    const commonInfinitives = ['repareren', 'maken', 'zien', 'komen', 'wachten', 'staan', 'doen', 'halen', 'brengen', 'bezorgen', 'bouwen', 'vervangen', 'weten']
+    const hasInf = commonInfinitives.some(inf => normalized.includes(inf))
+    if (hasInf || normalized.includes('laten')) {
+      return {
+        found: true,
+        message: `When 'laten' governs an action verb (causative), use the double infinitive 'laten [werkwoord]' instead of the participle 'gelaten'.`,
+        miniLesson: {
+          title: 'Causative "Laten": Double Infinitive',
+          content: 'When "laten" is used to mean "having something done" or "letting someone do something", it becomes an infinitive in the perfect tense (e.g. "heeft laten repareren").',
+          example: {
+            wrong: 'heeft de auto gelaten repareren',
+            right: 'heeft de auto laten repareren'
+          }
+        }
+      }
+    }
+  }
+
+  // Check 3: Perception verbs (horen, zien) incorrectly used as participles with an infinitive
+  const perceptionParticiples = [
+    { part: 'gehoord', inf: 'horen', label: 'horen' },
+    { part: 'gezien', inf: 'zien', label: 'zien' }
+  ]
+  for (const pp of perceptionParticiples) {
+    const commonInfinitives = ['zeggen', 'praten', 'aankomen', 'vertrekken', 'roepen', 'zingen', 'lopen', 'binnenkomen', 'rijden']
+    if (normalized.includes(pp.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
+      return {
+        found: true,
+        message: `Perception verbs like '${pp.label}' take the double infinitive when governing another action verb: use '${pp.inf}' instead of '${pp.part}'.`,
+        miniLesson: {
+          title: `Perception Verbs & IPP: ${pp.label}`,
+          content: `In Dutch, when you hear or see someone perform an action in the past, use the double infinitive (e.g. "Ik heb hem horen praten" instead of "gehoord praten").`,
+          example: {
+            wrong: `hebben hem ${pp.part} praten`,
+            right: `hebben hem ${pp.inf} praten`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 4: Instruction/Help verbs (leren, helpen) with participles + infinitive
+  const instructionParticiples = [
+    { part: 'geleerd', inf: 'leren', label: 'leren' },
+    { part: 'geholpen', inf: 'helpen', label: 'helpen' }
+  ]
+  for (const ip of instructionParticiples) {
+    const commonInfinitives = ['programmeren', 'spreken', 'koken', 'zwemmen', 'rijden', 'verhuizen', 'dragen', 'schoonmaken', 'schrijven', 'oplossen']
+    if (normalized.includes(ip.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
+      return {
+        found: true,
+        message: `When '${ip.label}' governs an action verb in a compound tense, use the double infinitive '${ip.inf}' instead of '${ip.part}'.`,
+        miniLesson: {
+          title: `Instruction & Help: ${ip.label}`,
+          content: `Verbs like "leren" and "helpen" drop the "ge-" prefix in compound tenses when followed by an infinitive (e.g. "hij heeft me leren programmeren").`,
+          example: {
+            wrong: `heeft me ${ip.part} zwemmen`,
+            right: `heeft me ${ip.inf} zwemmen`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 5: Motion/state verbs (blijven, gaan) with 'zijn' + participle + infinitive
+  const motionParticiples = [
+    { part: 'gebleven', inf: 'blijven', label: 'blijven' },
+    { part: 'gegaan', inf: 'gaan', label: 'gaan' }
+  ]
+  for (const mp of motionParticiples) {
+    const commonInfinitives = ['slapen', 'eten', 'wonen', 'zitten', 'staan', 'wandelen', 'zoeken', 'sporten', 'werken']
+    if (normalized.includes(mp.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
+      return {
+        found: true,
+        message: `Verbs like '${mp.label}' take the double infinitive with 'zijn' when combined with an action: use '${mp.inf}' instead of '${mp.part}'.`,
+        miniLesson: {
+          title: `Double Infinitive: ${mp.label}`,
+          content: `When "blijven" or "gaan" is combined with another infinitive in compound tenses with "zijn", use the double infinitive (e.g. "Zij is blijven slapen").`,
+          example: {
+            wrong: `is ${mp.part} slapen`,
+            right: `is ${mp.inf} slapen`
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkInfinitiveClauseError(normalized: string) {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
   const separableVerbs: { full: string, prefix: string, stem: string }[] = [
@@ -1248,6 +1367,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Double Infinitive (IPP) Drill Evaluation
+    if (exercise.kind === 'double-infinitive-drill' && exercise.doubleInfinitiveData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const ippError = checkDoubleInfinitiveError(normalized)
+      if (ippError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: ippError.message,
+          miniLesson: ippError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'When governing verbs (modals, laten, horen, zien, leren, helpen) govern another verb in a compound tense, replace the participle with an infinitive (IPP).'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Uitstekend! Your double infinitive verb cluster and word order are completely accurate.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the position and sequence of the verbs in the cluster.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure the auxiliary and infinitives appear in the correct verb cluster sequence.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check the verb cluster formation and double infinitive rules.',
+          explanation: exercise.explanation || 'Use the auxiliary (hebben/zijn) with the double infinitive sequence at the end of the clause.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1316,6 +1486,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: infinitiveError.message,
         miniLesson: infinitiveError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Double Infinitive (IPP) Check
+    const doubleInfError = checkDoubleInfinitiveError(normalized)
+    if (doubleInfError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: doubleInfError.message,
+        miniLesson: doubleInfError.miniLesson
       }
     }
 

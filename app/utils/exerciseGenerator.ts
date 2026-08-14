@@ -56,6 +56,11 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'op te lossen': { prompt: 'It is important to solve the problem.', target: 'Het is belangrijk om het probleem op te lossen.', explanation: 'In separable verbs with "te", insert "te" between prefix and stem.' },
   'voor te bereiden': { prompt: 'You do not need to prepare a presentation.', target: 'U hoeft geen presentatie voor te bereiden.', explanation: 'The semi-auxiliary "hoeven" requires "te".' },
   'hoeven': { prompt: 'You don\'t have to wait.', target: 'Je hoeft niet te wachten.', explanation: '"Hoeven... niet" takes "te" + infinitive.' },
+  'dubbele-infinitief': { prompt: 'We had to wait for three hours.', target: 'We hebben drie uur moeten wachten.', explanation: 'In compound tenses, modal participles become infinitives (IPP).' },
+  'moeten wachten': { prompt: 'We had to wait for three hours.', target: 'We hebben drie uur moeten wachten.', explanation: 'Use the double infinitive "moeten wachten" with auxiliary "hebben".' },
+  'laten repareren': { prompt: 'She had her car repaired.', target: 'Zij heeft haar auto laten repareren.', explanation: 'Causative "laten" takes the double infinitive "laten repareren".' },
+  'leren programmeren': { prompt: 'He taught me how to program.', target: 'Hij heeft me leren programmeren.', explanation: '"Leren" takes the double infinitive without "ge-" prefix in compound tenses.' },
+  'horen aankomen': { prompt: 'We heard the train arriving.', target: 'We hebben de trein horen aankomen.', explanation: 'Perception verbs trigger the double infinitive in compound tenses.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -205,6 +210,27 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         infinitiveAction: `${key} volgens afspraak`,
         constructionType: 'purpose-om-te',
         hint: 'Use (om...) te and place all verbal elements at the end.'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'double-infinitive-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      doubleInfinitiveData: {
+        sentenceContext: 'Situatie in het verleden (compound tense met regerend werkwoord):',
+        auxiliary: 'hebben',
+        governingVerb: key.includes('laten') ? 'laten' : key.includes('leren') ? 'leren' : key.includes('horen') ? 'horen' : 'moeten',
+        governingType: key.includes('laten') ? 'causative-laten' : key.includes('leren') ? 'instruction-leren-helpen' : key.includes('horen') ? 'perception' : 'modal',
+        mainVerb: key.replace('laten ', '').replace('leren ', '').replace('horen ', '').replace('moeten ', ''),
+        hint: 'Apply the Infinitivus Pro Participio (IPP) rule with double infinitive at the end.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
