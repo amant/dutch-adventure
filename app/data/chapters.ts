@@ -7632,6 +7632,41 @@ export const pastStorytellingChapter: Chapter = {
     }
   ]
 }
+export const a2Capstone: Chapter = {
+  slug: 'a2-verhuisdag-capstone',
+  level: 'A2',
+  title: 'Moving Day in Utrecht',
+  capability: 'Handle a full day of independent living: describe your daily routine, tell a short story in the past tense, arrange a doctor appointment, describe your train journey, and settle practical housing details with your neighbour.',
+  description: 'The A2 capstone. Combine everything you have learned at A2 — daily routines, past-tense storytelling, doctor appointments, public transit, and house-hunting — in one live conversation.',
+  estimatedMinutes: 25,
+  isCapstone: true,
+  stages: [
+    {
+      id: 'mission',
+      title: 'The Moving Day Challenge',
+      kind: 'personalise',
+      intro: 'You have just moved to Utrecht. Your new neighbour Fatima helps you carry the last boxes and wants to get to know you. Use everything you have learned in A2 to keep the conversation going and complete all five goals.',
+      exercises: [
+        {
+          id: 'a2-cap-1',
+          kind: 'conversation',
+          prompt: 'Welkom in Utrecht! Ik ben Fatima, je nieuwe buurvrouw. Wat een drukke dag voor jou! Vertel eens: hoe was de reis vandaag met de trein? En waar woonde je hiervoor? Ik hoorde dat je morgen de huisarts wilt bellen voor een afspraak. Over de huur en de verwarming van je nieuwe appartement kun je mij ook alles vragen. Oh, en ik ben benieuwd: hoe ziet jouw normale dag er eigenlijk uit?',
+          simulatorResponse: 'Goh, wat interessant! Vertel me daar eens wat meer over. Ik luister graag.',
+          aiPersonality: { isDifficult: false, style: 'helpful', pushbackProbability: 0.2 },
+          skills: ['speaking', 'production', 'automaticity', 'pragmatic', 'interaction'],
+          missionGoals: [
+            { id: 'travel', label: 'Describe your train journey today', keywords: ['trein', 'overgestapt', 'overstappen', 'vertraging', 'inchecken', 'station', 'gegaan'] },
+            { id: 'story', label: 'Tell a short story about the move (past tense)', keywords: ['ging', 'waren', 'woonde', 'lukte', 'regende', 'verhuizing', 'dozen'] },
+            { id: 'routine', label: 'Describe your normal daily routine', keywords: ['sta op', 'sta om', 'opstaan', 'ontbijt', 'lunch', 'werk', 'sport'] },
+            { id: 'doctor', label: 'Mention calling the doctor for an appointment', keywords: ['huisarts', 'dokter', 'ziek', 'niet lekker', 'keelpijn', 'pijn'] },
+            { id: 'housing', label: 'Ask about rent, heating, and the apartment', keywords: ['huur', 'verwarming', 'borg', 'waarborgsom', 'gwl', 'balkon'] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
 
 export const businessEmailChapter: Chapter = {
   slug: 'zakelijke-e-mails-en-verzoeken',
@@ -8578,7 +8613,7 @@ export const footballCruyffChapter: Chapter = {
 
 export const chapters: Chapter[] = [
   introductionChapter, storyChapter, coffeeChapter, directionsChapter, supermarketChapter, timeAndScheduleChapter, a1Capstone,
-  bakeryChapter, doctorMission, talkingAboutDayChapter, transitChapter, housingChapter, pastStorytellingChapter,
+  bakeryChapter, doctorMission, talkingAboutDayChapter, transitChapter, housingChapter, pastStorytellingChapter, a2Capstone,
   opinionChapter, landlordMission, hotelMission, doubtChapter, connectionChapter, businessEmailChapter, debatingAgreementChapter, civicServicesChapter,
   workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, formalityChapter, presentationChapter, newsSummaryChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter, doubleInfinitiveChapter, concessionChapter, participialChapter, correlativeChapter, conditionalChapter, causalityChapter, prefixVerbChapter, midfieldChapter, fixedPrepositionChapter, pronominalSplittingChapter, aspectualChapter, modalParticlesChapter, topicalisationChapter, maritimeChapter, footballCruyffChapter
 ]
