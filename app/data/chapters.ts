@@ -3181,7 +3181,156 @@ export const relativeClauseChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter]
+export const infinitiveChapter: Chapter = {
+  slug: 'om-te-infinitief',
+  level: 'B2',
+  title: "Infinitive Clauses & 'Te' Mastery",
+  capability: "Construct complex infinitive clauses with om... te, master separable verbs with te (op te lossen), and use semi-auxiliaries (hoeven te, blijken te).",
+  description: "Master Dutch infinitive constructions: purpose clauses (om... te), adjective triggers (het is essentieel om... te), separable verb infixation (in te voeren, voor te bereiden), and semi-auxiliaries (hoeven niet te, blijken te).",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'The Mechanics of "Te" & "Om te"', kind: 'discover',
+      intro: "Infinitive clauses allow you to link actions concisely without repeating the subject.",
+      exercises: [
+        {
+          id: 'inf-ind-1', kind: 'induction', prompt: 'Notice how "te" attaches to verbs',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'Purpose (om... te)', answer: 'We bellen om een afspraak te maken.' },
+              { prompt: 'Separable verb (prefix + te + stem)', answer: 'Het is belangrijk om het probleem op te lossen.' },
+              { prompt: 'Semi-auxiliary (hoeven niet te)', answer: 'U hoeft zich geen zorgen te maken.' },
+              { prompt: 'Semi-auxiliary (blijken te)', answer: 'De kosten blijken hoger te zijn.' },
+              { prompt: 'Modal verb (geen te)', answer: 'We moeten morgen overleggen.' }
+            ],
+            ruleChallenge: 'Where is "te" placed when using a separable verb like "voorbereiden" in an infinitive clause?',
+            options: [
+              { text: 'Between the prefix and stem (voor te bereiden)', isCorrect: true },
+              { text: 'Before the whole verb (om te voorbereiden)', isCorrect: false },
+              { text: 'After the verb (voorbereiden te)', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Contextual Inferences & Obligation', kind: 'understand',
+      intro: "Examine how semi-auxiliary verbs with 'te' express subtle distinctions in policy and requirements.",
+      exercises: [
+        {
+          id: 'inf-inf-1', kind: 'inference-challenge', prompt: 'What does this policy statement imply?',
+          context: 'Medewerkers hoeven de formulieren niet vóór vrijdag in te leveren, maar worden vriendelijk verzocht dit zo snel mogelijk te doen.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'In an internal company memo, HR writes: "Medewerkers hoeven de formulieren niet vóór vrijdag in te leveren, maar worden vriendelijk verzocht dit zo snel mogelijk te doen."',
+            options: [
+              { text: 'There is no strict obligation to submit the forms before Friday, although doing so promptly is encouraged.', isCorrect: true, explanation: 'Correct. "Hoeven niet... te inleveren" signifies the absence of necessity/obligation.' },
+              { text: 'Employees are strictly prohibited from submitting the forms on Friday.', isCorrect: false, explanation: 'Incorrect. "Niet hoeven" indicates absence of obligation, not prohibition.' },
+              { text: 'The deadline is mandatory and fixed for Friday morning.', isCorrect: false, explanation: 'Incorrect. "Niet hoeven" explicitly removes the strict requirement.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Infinitive Constructions', kind: 'transform',
+      intro: "Form precise infinitive clauses using (om...) te and proper separable verb splitting.",
+      exercises: [
+        {
+          id: 'inf-d-1', kind: 'infinitive-drill', prompt: 'Express purpose with a separable verb',
+          skills: ['production', 'grammar'],
+          infinitiveData: {
+            mainClause: 'Het team heeft direct een extra vergadering gepland.',
+            infinitiveAction: 'de ontstane problemen oplossen',
+            constructionType: 'separable-te',
+            separablePrefix: 'op',
+            baseVerb: 'lossen',
+            hint: 'Use "om ... op te lossen". Notice how "te" splits the separable verb.'
+          },
+          target: 'Het team heeft direct een extra vergadering gepland om de ontstane problemen op te lossen',
+          acceptedAnswers: [
+            'Het team heeft direct een extra vergadering gepland om de ontstane problemen op te lossen',
+            'Het team heeft een extra vergadering gepland om de ontstane problemen op te lossen',
+            'Het team heeft direct een extra vergadering georganiseerd om de ontstane problemen op te lossen'
+          ],
+          explanation: 'In Dutch infinitive clauses, separable verbs insert "te" between the prefix and the stem: "op te lossen".'
+        },
+        {
+          id: 'inf-d-2', kind: 'infinitive-drill', prompt: 'Adjective complement clause',
+          skills: ['production', 'grammar'],
+          infinitiveData: {
+            mainClause: 'Het is van cruciaal belang voor onze organisatie.',
+            infinitiveAction: 'deze nieuwe veiligheidsmaatregelen zorgvuldig invoeren',
+            constructionType: 'adjective-om-te',
+            separablePrefix: 'in',
+            baseVerb: 'voeren',
+            hint: 'Evaluation adjectives take "om ... in te voeren".'
+          },
+          target: 'Het is van cruciaal belang voor onze organisatie om deze nieuwe veiligheidsmaatregelen zorgvuldig in te voeren',
+          acceptedAnswers: [
+            'Het is van cruciaal belang voor onze organisatie om deze nieuwe veiligheidsmaatregelen zorgvuldig in te voeren',
+            'Het is van cruciaal belang om deze nieuwe veiligheidsmaatregelen zorgvuldig in te voeren',
+            'Het is voor onze organisatie van cruciaal belang om deze nieuwe veiligheidsmaatregelen zorgvuldig in te voeren'
+          ],
+          explanation: 'After evaluation phrases like "het is van belang", use "om ... in te voeren".'
+        },
+        {
+          id: 'inf-d-3', kind: 'infinitive-drill', prompt: 'Express lack of obligation with "hoeven"',
+          skills: ['production', 'grammar'],
+          infinitiveData: {
+            mainClause: 'Voor de informele bijeenkomst van morgen.',
+            infinitiveAction: 'u hoeft geen formele presentatie voorbereiden',
+            constructionType: 'semi-auxiliary-te',
+            separablePrefix: 'voor',
+            baseVerb: 'bereiden',
+            hint: 'Semi-auxiliary "hoeven niet/geen" takes "te" (here: "voor te bereiden") without "om".'
+          },
+          target: 'U hoeft voor de informele bijeenkomst van morgen geen formele presentatie voor te bereiden',
+          acceptedAnswers: [
+            'U hoeft voor de informele bijeenkomst van morgen geen formele presentatie voor te bereiden',
+            'Voor de informele bijeenkomst van morgen hoeft u geen formele presentatie voor te bereiden',
+            'Je hoeft voor de informele bijeenkomst van morgen geen formele presentatie voor te bereiden',
+            'Voor de informele bijeenkomst van morgen hoef je geen formele presentatie voor te bereiden'
+          ],
+          explanation: '"Hoeven" takes "te" before the infinitive ("voor te bereiden") without the conjunction "om".'
+        },
+        {
+          id: 'inf-d-4', kind: 'infinitive-drill', prompt: 'Express decision with fixed verb "besluiten"',
+          skills: ['production', 'grammar'],
+          infinitiveData: {
+            mainClause: 'De directie heeft na lang beraad besloten.',
+            infinitiveAction: 'het verouderde systeem volledig vervangen',
+            constructionType: 'fixed-verb-te',
+            verb: 'vervangen',
+            hint: 'Use "om ... volledig te vervangen".'
+          },
+          target: 'De directie heeft na lang beraad besloten om het verouderde systeem volledig te vervangen',
+          acceptedAnswers: [
+            'De directie heeft na lang beraad besloten om het verouderde systeem volledig te vervangen',
+            'De directie heeft na lang beraad besloten het verouderde systeem volledig te vervangen',
+            'De directie heeft besloten om het verouderde systeem volledig te vervangen'
+          ],
+          explanation: 'Verbs of decision like "besluiten" take an infinitive clause with (om...) te.'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Professional Objectives', kind: 'personalise',
+      intro: "Describe an objective or policy at your workplace using an infinitive construction.",
+      exercises: [
+        {
+          id: 'inf-p-1', kind: 'personalise', prompt: 'Beschrijf een doel of verandering op je werk met een "om... te"-constructie en een scheidbaar werkwoord (bijv. "oplossen", "voorbereiden", "uitvoeren", "aanpakken").',
+          skills: ['production', 'speaking', 'pragmatic'],
+          vocabulary: ['doel', 'belangrijk', 'oplossen', 'voorbereiden', 'uitvoeren', 'aanpakken'],
+          grammar: ['om-te-infinitief', 'scheidbare-werkwoorden']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter, infinitiveChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

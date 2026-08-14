@@ -262,6 +262,103 @@ function checkRelativePronounError(normalized: string) {
   return { found: false }
 }
 
+function checkInfinitiveClauseError(normalized: string) {
+  // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
+  const separableVerbs: { full: string, prefix: string, stem: string }[] = [
+    { full: 'oplossen', prefix: 'op', stem: 'lossen' },
+    { full: 'voorbereiden', prefix: 'voor', stem: 'bereiden' },
+    { full: 'meenemen', prefix: 'mee', stem: 'nemen' },
+    { full: 'invoeren', prefix: 'in', stem: 'voeren' },
+    { full: 'afspreken', prefix: 'af', stem: 'spreken' },
+    { full: 'aanpakken', prefix: 'aan', stem: 'pakken' },
+    { full: 'afmaken', prefix: 'af', stem: 'maken' },
+    { full: 'aannemen', prefix: 'aan', stem: 'nemen' },
+    { full: 'aanvragen', prefix: 'aan', stem: 'vragen' },
+    { full: 'uitvoeren', prefix: 'uit', stem: 'voeren' },
+    { full: 'opbellen', prefix: 'op', stem: 'bellen' },
+    { full: 'doorgeven', prefix: 'door', stem: 'geven' },
+    { full: 'uitnodigen', prefix: 'uit', stem: 'nodigen' },
+    { full: 'samenwerken', prefix: 'samen', stem: 'werken' },
+    { full: 'aankondigen', prefix: 'aan', stem: 'kondigen' },
+    { full: 'doorsturen', prefix: 'door', stem: 'sturen' },
+    { full: 'invullen', prefix: 'in', stem: 'vullen' },
+    { full: 'opsturen', prefix: 'op', stem: 'sturen' },
+    { full: 'inleveren', prefix: 'in', stem: 'leveren' },
+    { full: 'aanmelden', prefix: 'aan', stem: 'melden' },
+    { full: 'uitstellen', prefix: 'uit', stem: 'stellen' },
+    { full: 'overleggen', prefix: 'over', stem: 'leggen' },
+    { full: 'afstemmen', prefix: 'af', stem: 'stemmen' }
+  ]
+
+  for (const sv of separableVerbs) {
+    if (normalized.includes(`om te ${sv.full}`) || normalized.includes(` te ${sv.full}`) || normalized.startsWith(`te ${sv.full}`)) {
+      return {
+        found: true,
+        message: `With separable verbs, 'te' is inserted between the prefix and the stem: '${sv.prefix} te ${sv.stem}' (not 'te ${sv.full}').`,
+        miniLesson: {
+          title: 'Separable Verbs with "Te"',
+          content: 'In Dutch infinitive clauses, "te" is inserted between the separable prefix and the verb root (e.g. "op te lossen", "voor te bereiden").',
+          example: {
+            wrong: `om te ${sv.full}`,
+            right: `om ${sv.prefix} te ${sv.stem}`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 2: Pure modal verbs incorrectly used with 'te'
+  const modalTePatterns = [
+    'moet te', 'moeten te', 'moest te', 'moesten te',
+    'kan te', 'kunnen te', 'kon te', 'konden te',
+    'wil te', 'willen te', 'wilde te', 'wilden te',
+    'mag te', 'mogen te', 'mocht te', 'mochten te',
+    'zal te', 'zullen te', 'zou te', 'zouden te'
+  ]
+  for (const mt of modalTePatterns) {
+    if (normalized.includes(mt)) {
+      return {
+        found: true,
+        message: 'Pure modal verbs (moeten, kunnen, willen, mogen, zullen) take a bare infinitive without "te".',
+        miniLesson: {
+          title: 'Modal Verbs: No "Te"',
+          content: 'Pure modal verbs are followed directly by the infinitive without "te". Only semi-auxiliary verbs (like hoeven, blijken, schijnen, lijken) take "te".',
+          example: {
+            wrong: `${mt} doen`,
+            right: `${mt.replace(' te', '')} doen`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 3: Semi-auxiliary 'hoeven' used without 'te'
+  const hasHoeven = normalized.includes('hoef niet') || 
+                    normalized.includes('hoeft niet') || 
+                    normalized.includes('hoeven niet') || 
+                    normalized.includes('hoefde niet') || 
+                    normalized.includes('hoefden niet') ||
+                    normalized.includes('hoef geen') ||
+                    normalized.includes('hoeft geen') ||
+                    normalized.includes('hoeven geen')
+  if (hasHoeven && !normalized.includes(' te ') && !normalized.includes(' te-')) {
+    return {
+      found: true,
+      message: 'The semi-auxiliary verb "hoeven" (with niet/geen) always requires "te" before the infinitive.',
+      miniLesson: {
+        title: 'Semi-Auxiliary "Hoeven" Requires "Te"',
+        content: 'Unlike "moeten", the verb "hoeven" must always take "te" before the infinitive (e.g. "Je hoeft niet te wachten").',
+        example: {
+          wrong: 'je hoeft niet wachten',
+          right: 'je hoeft niet te wachten'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkSubordinateClauseError(normalized: string, conjunction: string) {
   const words = normalized.split(' ')
   const index = words.indexOf(conjunction)
@@ -1100,6 +1197,57 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Infinitive Drill Evaluation (om... te / te + inf)
+    if (exercise.kind === 'infinitive-drill' && exercise.infinitiveData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+
+      const infError = checkInfinitiveClauseError(normalized)
+      if (infError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: infError.message,
+          miniLesson: infError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Pay close attention to separable verb placement and "te" in infinitive constructions.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Fantastisch! Your infinitive clause is grammatically precise with proper "te" placement and word order.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the position of elements inside the (om...) te bracket.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Ensure all objects and adverbs are placed between "om" and "te + infinitive".'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check how the infinitive construction is formulated.',
+          explanation: exercise.explanation || 'Structure the sentence with (om...) te and place all verbal elements at the end.'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1157,6 +1305,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: relativePronounError.message,
         miniLesson: relativePronounError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Infinitive & Te Check
+    const infinitiveError = checkInfinitiveClauseError(normalized)
+    if (infinitiveError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: infinitiveError.message,
+        miniLesson: infinitiveError.miniLesson
       }
     }
 

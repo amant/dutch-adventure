@@ -52,6 +52,10 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'waarmee': { prompt: 'The tool with which we work.', target: 'Het gereedschap waarmee we werken.', explanation: 'Use "waarmee" for things with preposition met.' },
   'met wie': { prompt: 'The person with whom I spoke.', target: 'De persoon met wie ik sprak.', explanation: 'Use "met wie" for people with preposition met.' },
   'wat': { prompt: 'Everything that he says.', target: 'Alles wat hij zegt.', explanation: 'Use "wat" after indefinite pronouns like alles.' },
+  'om-te-infinitief': { prompt: 'We are calling to make an appointment.', target: 'We bellen om een afspraak te maken.', explanation: 'Use "om ... te" for purpose clauses.' },
+  'op te lossen': { prompt: 'It is important to solve the problem.', target: 'Het is belangrijk om het probleem op te lossen.', explanation: 'In separable verbs with "te", insert "te" between prefix and stem.' },
+  'voor te bereiden': { prompt: 'You do not need to prepare a presentation.', target: 'U hoeft geen presentatie voor te bereiden.', explanation: 'The semi-auxiliary "hoeven" requires "te".' },
+  'hoeven': { prompt: 'You don\'t have to wait.', target: 'Je hoeft niet te wachten.', explanation: '"Hoeven... niet" takes "te" + infinitive.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -72,6 +76,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'passive-drill') skills.push('production', 'grammar')
   if (kind === 'reported-speech-drill') skills.push('production', 'grammar')
   if (kind === 'relative-clause-drill') skills.push('production', 'grammar')
+  if (kind === 'infinitive-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -181,6 +186,25 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         subordinateInfo: `We bespreken ${key} vandaag.`,
         antecedent: key,
         antecedentType: key === 'wat' ? 'general-wat' : key === 'met wie' ? 'person-prep' : key === 'waarmee' ? 'thing-prep' : 'het-word'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'infinitive-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      infinitiveData: {
+        mainClause: 'Het is van groot belang voor het team.',
+        infinitiveAction: `${key} volgens afspraak`,
+        constructionType: 'purpose-om-te',
+        hint: 'Use (om...) te and place all verbal elements at the end.'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
