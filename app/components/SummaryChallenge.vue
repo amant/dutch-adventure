@@ -101,9 +101,12 @@ function handleSubmit() {
         
         <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.redline" class="redline-box mt-4">
+        <div v-if="feedback.teacherCorrection" class="redline-box mt-4">
           <div class="eyebrow">Natural Paraphrase:</div>
-          <TeacherRedline :redline="feedback.redline" />
+          <TeacherRedline 
+            :original="answer" 
+            :corrected="feedback.teacherCorrection.natural" 
+          />
         </div>
 
         <div v-if="feedback.explanation" class="explanation-box mt-4">

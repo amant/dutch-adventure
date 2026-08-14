@@ -243,8 +243,8 @@ function next() {
             <div class="tag">Teacher's Tip</div>
             <h3>A more natural way to say it:</h3>
             <TeacherRedline 
-              :userAnswer="session.response.value" 
-              :naturalCorrection="feedback.teacherCorrection.natural" 
+              :original="session.response.value" 
+              :corrected="feedback.teacherCorrection.natural" 
             />
             <p class="muted">{{ feedback.teacherCorrection.explanation }}</p>
           </div>

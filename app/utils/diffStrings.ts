@@ -3,9 +3,9 @@ export interface DiffPart {
   type: 'added' | 'removed' | 'same'
 }
 
-export function diffStrings(oldStr: string, newStr: string): DiffPart[] {
-  const oldWords = oldStr.split(/(\s+)/)
-  const newWords = newStr.split(/(\s+)/)
+export function diffStrings(oldStr: string = '', newStr: string = ''): DiffPart[] {
+  const oldWords = (oldStr || '').split(/(\s+)/)
+  const newWords = (newStr || '').split(/(\s+)/)
   
   // Very simple word-based diff for pedagogical purposes
   // A real diff algorithm (like Myers) would be better, but this is a start

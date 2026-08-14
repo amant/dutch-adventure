@@ -217,8 +217,8 @@ const handleNext = () => {
             
             <div v-if="feedback.correction" class="correction">
               <TeacherRedline 
-                :userAnswer="currentResponse" 
-                :naturalCorrection="feedback.correction" 
+                :original="currentResponse" 
+                :corrected="feedback.correction" 
               />
             </div>
 

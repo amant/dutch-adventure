@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { diffStrings } from '~/utils/diffStrings'
 
 const props = defineProps<{
-  userAnswer: string
-  naturalCorrection: string
+  original: string
+  corrected: string
 }>()
 
-const diff = computed(() => diffStrings(props.userAnswer, props.naturalCorrection))
+const diff = computed(() => diffStrings(props.original, props.corrected))
 </script>
 
 <template>
