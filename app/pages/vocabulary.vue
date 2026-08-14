@@ -161,7 +161,7 @@ const wordFamily = computed(() => {
               v-for="dim in dimensions" 
               :key="dim.id" 
               class="mini-bar" 
-              :style="{ height: `${state[dim.id]}%`, opacity: 0.3 + (state[dim.id] / 150) }"
+              :style="{ height: `${state[dim.id] || 0}%`, opacity: 0.3 + ((state[dim.id] || 0) / 150) }"
               :title="dim.label"
             ></div>
           </div>
@@ -179,9 +179,9 @@ const wordFamily = computed(() => {
           <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
             <span class="dim-label">{{ dim.label }}</span>
             <div class="dim-bar-container">
-              <div class="dim-bar" :style="{ width: `${selectedState[dim.id]}%` }"></div>
+              <div class="dim-bar" :style="{ width: `${selectedState[dim.id] || 0}%` }"></div>
             </div>
-            <span class="dim-value">{{ selectedState[dim.id] }}%</span>
+            <span class="dim-value">{{ selectedState[dim.id] || 0 }}%</span>
           </div>
         </div>
 

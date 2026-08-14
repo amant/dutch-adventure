@@ -6,7 +6,7 @@ const props = defineProps<{
   feedback?: Feedback
 }>()
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next', 'next-step'])
 const response = defineModel<string>()
 
 const currentStepIndex = ref(0)

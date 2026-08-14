@@ -8,7 +8,7 @@ import TeacherRedline from '~/components/TeacherRedline.vue'
 import VoiceInput from '~/components/VoiceInput.vue'
 
 const route = useRoute()
-const { memory, hydrate, recordExposure, updateConceptMastery } = useLearnerMemory()
+const { memory, hydrate, recordExposure, record } = useLearnerMemory()
 onMounted(hydrate)
 
 const article = computed(() => articles.find(a => a.id === route.params.id))
@@ -23,7 +23,7 @@ const tokens = computed(() => {
     if (token.match(/^\s+$/)) return { text: token, isInteractable: false }
     
     const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    const hint = article.value.wordHints[cleanWord]
+    const hint = article.value ? article.value.wordHints[cleanWord] : undefined
     
     // Check memory
     const state = memory.value.vocabulary[cleanWord]
@@ -83,7 +83,7 @@ const handleWordClick = (token: any) => {
 const readingFinished = ref(false)
 const showChallenge = ref(false)
 const currentResponse = ref('')
-const feedback = ref<Feedback | null>(null)
+const feedback = ref<Feedback | undefined>(undefined)
 
 const finishReading = () => {
   readingFinished.value = true
@@ -102,12 +102,26 @@ const handleChallengeSubmit = (response: string) => {
   if (!article.value?.challenge) return
   currentResponse.value = response
   
-  feedback.value = evaluateResponse(article.value.challenge, response)
+  const result = evaluateResponse(article.value.challenge, response)
+  feedback.value = result
   
-  if (feedback.value.outcome === 'correct' || feedback.value.outcome === 'acceptable') {
-    article.value.challenge.vocabulary?.forEach(v => updateConceptMastery(v, 'vocabulary', true, feedback.value!.skills))
-    article.value.challenge.grammar?.forEach(g => updateConceptMastery(g, 'grammar', true, feedback.value!.skills))
+  if (result.outcome === 'correct' || result.outcome === 'acceptable') {
+    record(
+      result.skills,
+      result.outcome,
+      article.value.challenge.vocabulary,
+      article.value.challenge.grammar,
+      article.value.challenge.idioms,
+      result.changeModifier,
+      response,
+      article.value.challenge.prompt,
+      result
+    )
   }
+}
+
+const handleSubmitChallenge = () => {
+  handleChallengeSubmit(currentResponse.value)
 }
 
 const handleNext = () => {
@@ -164,8 +178,8 @@ const handleNext = () => {
           </div>
           <p class="meaning">{{ selectedWord.meaning }}</p>
           <div class="status-info">
-            <span v-if="memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters > 1" class="encounters">
-              You've seen this {{ memory.vocabulary[selectedWord.word.toLowerCase()].encounters }} times
+            <span v-if="(memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters ?? 0) > 1" class="encounters">
+              You've seen this {{ memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters }} times
             </span>
             <span v-else class="new">New word!</span>
           </div>

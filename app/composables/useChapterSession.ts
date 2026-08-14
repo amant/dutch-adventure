@@ -10,11 +10,16 @@ const fresh = (chapter: Chapter): PersistedSession => ({
   attempts: [], 
   completed: false, 
   memory: { 
-    overall: { recognition: 0, meaning: 0, production: 0, automaticity: 0, listening: 0, speaking: 0, spelling: 0, pragmatic: 0, coherence: 0, idiomatic: 0 },
+    overall: { 
+      recognition: 0, meaning: 0, production: 0, automaticity: 0, 
+      listening: 0, speaking: 0, spelling: 0, pragmatic: 0, 
+      coherence: 0, idiomatic: 0, grammar: 0,
+      writing: 0, reading: 0, flexibility: 0, interaction: 0, analysis: 0
+    },
     vocabulary: {},
     grammar: {},
     idioms: {}
-  } 
+  }
 })
 
 export function useChapterSession(chapter: Chapter) {
@@ -68,7 +73,7 @@ export function useChapterSession(chapter: Chapter) {
     return feedback
   }
   function advance() {
-    if (state.value.exerciseIndex < stage.value.exercises.length - 1) state.value.exerciseIndex++
+    if (stage.value && state.value.exerciseIndex < stage.value.exercises.length - 1) state.value.exerciseIndex++
     else if (state.value.stageIndex < chapter.stages.length - 1) { state.value.stageIndex++; state.value.exerciseIndex = 0 }
     else state.value.completed = true
     persist()

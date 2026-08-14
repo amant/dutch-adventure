@@ -1,4 +1,4 @@
-export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic' | 'coherence' | 'idiomatic'
+export type SkillDimension = 'recognition' | 'meaning' | 'production' | 'automaticity' | 'listening' | 'speaking' | 'spelling' | 'pragmatic' | 'coherence' | 'idiomatic' | 'grammar' | 'writing' | 'reading' | 'flexibility' | 'interaction' | 'analysis'
 
 export interface ConceptState {
   recognition: number
@@ -11,12 +11,19 @@ export interface ConceptState {
   pragmatic: number
   coherence: number
   idiomatic: number
+  grammar?: number
+  writing?: number
+  reading?: number
+  flexibility?: number
+  interaction?: number
+  analysis?: number
   encounters: number
   successes: number
   lastEncountered?: string
   usageHistory?: { prompt: string, snippet: string, date: string, pragmaticScore?: number }[]
   redlineHistory?: { userAnswer: string, naturalCorrection: string, date: string }[]
   responseTimes?: number[]
+  [key: string]: any
 }
 
 export interface Redline {
@@ -39,9 +46,11 @@ export interface LearnerMemory {
   recentRedlines?: Redline[]
 }
 
-export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review'
+export type CEFR = 'A1' | 'A2' | 'B1' | 'B2'
 
-export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill' | 'pronominal-splitting-drill' | 'aspect-drill' | 'modal-particle-drill' | 'topicalisation-drill'
+export type StageKind = 'discover' | 'understand' | 'retrieve' | 'transform' | 'personalise' | 'review' | 'flexibility' | 'drill' | 'challenge' | 'conversation'
+
+export type ExerciseKind = 'info' | 'typed' | 'conversation' | 'listening' | 'reading' | 'transformation' | 'flexibility' | 'challenge' | 'speed-drill' | 'pragmatic-drill' | 'formality-drill' | 'mediation' | 'connector-drill' | 'recombination-drill' | 'induction' | 'correction-challenge' | 'circumlocution' | 'nuance-drill' | 'collocation-drill' | 'fluency-challenge' | 'mirroring' | 'precision-drill' | 'inference-challenge' | 'morphing-drill' | 'listening-cloze' | 'debate' | 'understatement-drill' | 'cohesion-drill' | 'summary-challenge' | 'er-drill' | 'reframing-drill' | 'pronominal-drill' | 'nominalisation-drill' | 'passive-drill' | 'reported-speech-drill' | 'relative-clause-drill' | 'infinitive-drill' | 'double-infinitive-drill' | 'concession-drill' | 'participial-drill' | 'correlative-drill' | 'conditional-drill' | 'causality-drill' | 'prefix-verb-drill' | 'midfield-drill' | 'fixed-preposition-drill' | 'pronominal-splitting-drill' | 'aspect-drill' | 'modal-particle-drill' | 'topicalisation-drill' | 'personalise'
 
 export interface Exercise {
   id: string
@@ -85,10 +94,17 @@ export interface Exercise {
   requiredWords?: string[]
   // For challenge
   minimumLength?: number
+  options?: (string | { text: string, isCorrect?: boolean, explanation?: string, label?: string })[]
+  inferenceData?: {
+    scenario?: string
+    premise?: string
+    options: { text: string, isCorrect: boolean, explanation?: string }[]
+    hint?: string
+  }
   // For AI Personas
   aiPersonality?: {
     isDifficult?: boolean
-    style?: 'polite' | 'colloquial' | 'impatient' | 'helpful'
+    style?: 'polite' | 'colloquial' | 'impatient' | 'helpful' | 'professional'
     pushbackProbability?: number
   }
   // For pragmatic context choice
@@ -336,8 +352,9 @@ export interface ChapterStage {
 }
 
 export interface Chapter {
+  id?: string
   slug: string
-  level: 'A1' | 'A2' | 'B1' | 'B2'
+  level: CEFR
   title: string
   capability: string
   description: string
@@ -355,6 +372,9 @@ export interface Feedback {
   target?: string
   explanation?: string
   correction?: string
+  natural?: string
+  teacherTip?: string
+  isShadowing?: boolean
   skills: SkillDimension[]
   vocabulary?: string[]
   grammar?: string[]

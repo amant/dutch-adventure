@@ -21,16 +21,22 @@ watch(() => props.exercise, initSentences, { immediate: true })
 
 function moveUp(index: number) {
   if (index === 0 || props.feedback) return
-  const temp = sentences.value[index]
-  sentences.value[index] = sentences.value[index - 1]
-  sentences.value[index - 1] = temp
+  const current = sentences.value[index]
+  const prev = sentences.value[index - 1]
+  if (current !== undefined && prev !== undefined) {
+    sentences.value[index] = prev
+    sentences.value[index - 1] = current
+  }
 }
 
 function moveDown(index: number) {
-  if (index === sentences.value.length - 1 || props.feedback) return
-  const temp = sentences.value[index]
-  sentences.value[index] = sentences.value[index + 1]
-  sentences.value[index + 1] = temp
+  if (index >= sentences.value.length - 1 || props.feedback) return
+  const current = sentences.value[index]
+  const next = sentences.value[index + 1]
+  if (current !== undefined && next !== undefined) {
+    sentences.value[index] = next
+    sentences.value[index + 1] = current
+  }
 }
 
 function handleSubmit() {

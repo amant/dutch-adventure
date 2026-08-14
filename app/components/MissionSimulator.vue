@@ -99,7 +99,9 @@ watch(() => props.feedback, (f) => {
       if (currentPhaseIndex.value < props.exercise.debateData.phases.length - 1) {
         currentPhaseIndex.value++
         const nextPhase = props.exercise.debateData.phases[currentPhaseIndex.value]
-        conversationHistory.value.push({ role: 'ai', text: nextPhase.prompt })
+        if (nextPhase) {
+          conversationHistory.value.push({ role: 'ai', text: nextPhase.prompt })
+        }
       }
     }
   }

@@ -13,6 +13,12 @@ const emptyConcept = (): ConceptState => ({
   pragmatic: 0,
   coherence: 0,
   idiomatic: 0,
+  grammar: 0,
+  writing: 0,
+  reading: 0,
+  flexibility: 0,
+  interaction: 0,
+  analysis: 0,
   encounters: 0,
   successes: 0
 })
@@ -28,7 +34,13 @@ const emptyMemory = (): LearnerMemory => ({
     spelling: 0,
     pragmatic: 0,
     coherence: 0,
-    idiomatic: 0
+    idiomatic: 0,
+    grammar: 0,
+    writing: 0,
+    reading: 0,
+    flexibility: 0,
+    interaction: 0,
+    analysis: 0
   },
   vocabulary: {},
   grammar: {},
@@ -116,7 +128,7 @@ export function useLearnerMemory() {
 
     // Update overall
     for (const skill of skills) {
-      next.overall[skill] = Math.min(100, next.overall[skill] + change)
+      next.overall[skill] = Math.min(100, (next.overall[skill] || 0) + change)
     }
 
     // Update concepts
@@ -150,9 +162,9 @@ export function useLearnerMemory() {
       }
 
       for (const skill of skills) {
-        if (skill in dict[key]) {
-          const s = skill as keyof ConceptState
-          dict[key][s] = Math.min(100, dict[key][s] + change)
+        const currentVal = dict[key][skill]
+        if (typeof currentVal === 'number') {
+          dict[key][skill] = Math.min(100, currentVal + change)
         }
       }
     }
@@ -174,8 +186,9 @@ export function useLearnerMemory() {
     next.vocabulary[word].lastEncountered = new Date().toISOString()
 
     for (const skill of skills) {
-      if (skill in next.vocabulary[word]) {
-        next.vocabulary[word][skill] = Math.min(100, next.vocabulary[word][skill] + 5)
+      const currentVal = next.vocabulary[word][skill]
+      if (typeof currentVal === 'number') {
+        next.vocabulary[word][skill] = Math.min(100, currentVal + 5)
       }
     }
     memory.value = next

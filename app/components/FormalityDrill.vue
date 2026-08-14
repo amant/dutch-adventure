@@ -59,7 +59,7 @@ function prevLevel() {
       </div>
     </div>
 
-    <div class="drill-content card">
+    <div v-if="currentLevel" class="drill-content card">
       <div class="level-header">
         <h3>Express this {{ currentLevel.level }}ly</h3>
         <p class="small muted">{{ currentLevel.prompt || `How would you say this in a ${currentLevel.level} context?` }}</p>

@@ -46,8 +46,8 @@ const getIdiomData = (phrase: string) => {
             <h3>{{ idiom.phrase }}</h3>
             <p class="literal">Literal: "{{ idiom.literal }}"</p>
           </div>
-          <div v-if="memory.idioms?.[idiom.phrase]" class="encounter-badge">
-            {{ memory.idioms[idiom.phrase].successes }}/{{ memory.idioms[idiom.phrase].encounters }} hits
+          <div v-if="memory.idioms && memory.idioms[idiom.phrase]" class="encounter-badge">
+            {{ memory.idioms[idiom.phrase]?.successes || 0 }}/{{ memory.idioms[idiom.phrase]?.encounters || 0 }} hits
           </div>
           <div v-else class="new-badge">Discovered</div>
         </div>
@@ -60,13 +60,13 @@ const getIdiomData = (phrase: string) => {
           <strong>Context:</strong> "{{ idiom.example }}"
         </div>
 
-        <div v-if="memory.idioms?.[idiom.phrase]" class="dimensions">
+        <div v-if="memory.idioms && memory.idioms[idiom.phrase]" class="dimensions">
           <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
             <span class="dim-label">{{ dim.label }}</span>
             <div class="dim-bar-container">
-              <div class="dim-bar" :style="{ width: `${memory.idioms[idiom.phrase][dim.id as keyof typeof memory.idioms[string]]}%` }"></div>
+              <div class="dim-bar" :style="{ width: `${Number(memory.idioms[idiom.phrase]?.[dim.id] || 0)}%` }"></div>
             </div>
-            <span class="dim-value">{{ Math.round(memory.idioms[idiom.phrase][dim.id as keyof typeof memory.idioms[string]]) }}%</span>
+            <span class="dim-value">{{ Math.round(Number(memory.idioms[idiom.phrase]?.[dim.id] || 0)) }}%</span>
           </div>
         </div>
         <div v-else class="unlock-hint">

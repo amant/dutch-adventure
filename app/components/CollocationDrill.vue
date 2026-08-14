@@ -11,7 +11,7 @@ const emit = defineEmits<{
 }>()
 
 const userText = ref('')
-const options = computed(() => props.exercise.options || [])
+const options = computed<string[]>(() => (props.exercise.options || []).map(opt => typeof opt === 'string' ? opt : opt.text))
 
 const selectOption = (opt: string) => {
   userText.value = opt

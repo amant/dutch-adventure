@@ -18,6 +18,8 @@ const hasAttempted = ref(false)
 const isShadowing = ref(false)
 const shadowingResult = ref('')
 
+type ClozePart = { type: 'gap'; index: number } | { type: 'text'; text: string }
+
 // Cloze state
 const clozeAnswers = ref<string[]>([])
 const initCloze = () => {
@@ -26,15 +28,7 @@ const initCloze = () => {
   }
 }
 
-onMounted(() => {
-  loadVoices()
-  initCloze()
-  if (window.speechSynthesis.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = loadVoices
-  }
-})
-
-const clozeParts = computed(() => {
+const clozeParts = computed<ClozePart[]>(() => {
   if (props.exercise.kind !== 'listening-cloze' || !props.exercise.clozeData) return []
   const parts = props.exercise.clozeData.textWithGaps.split(/(\[..\])/)
   let gapIndex = 0
@@ -99,6 +93,7 @@ const loadVoices = () => {
 
 onMounted(() => {
   loadVoices()
+  initCloze()
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
     window.speechSynthesis.onvoiceschanged = loadVoices
   }
@@ -213,7 +208,7 @@ const toggleTranscript = () => {
           <button 
             class="button" 
             :disabled="selectedOption === null"
-            @click="hasAttempted = true; emit('submit', { answer: exercise.listeningOptions![selectedOption!].text })"
+            @click="hasAttempted = true; selectedOption !== null && exercise.listeningOptions && emit('submit', { answer: exercise.listeningOptions[selectedOption]?.text || '' })"
           >
             Check Answer
           </button>
@@ -229,7 +224,7 @@ const toggleTranscript = () => {
         <template v-for="(part, idx) in clozeParts" :key="idx">
           <span v-if="part.type === 'text'">{{ part.text }}</span>
           <input 
-            v-else 
+            v-else-if="part.type === 'gap'" 
             v-model="clozeAnswers[part.index]" 
             class="cloze-input" 
             :placeholder="`...`"
@@ -241,7 +236,7 @@ const toggleTranscript = () => {
       <div v-if="!feedback || feedback.outcome === 'retry'" class="actions">
         <button 
           class="button" 
-          @click="emit('submit', { clozeAnswers })"
+          @click="emit('submit', { clozeAnswers: clozeAnswers })"
         >
           Check Transcription
         </button>
@@ -305,8 +300,7 @@ const toggleTranscript = () => {
         <p class="instruction">Repeat the sentence clearly. We'll check your flow.</p>
         
         <VoiceInput 
-          v-model="shadowingResult" 
-          @submit="emit('submit', { answer: shadowingResult, isShadowing: true })" 
+          @result="(text: string) => { shadowingResult = text; emit('submit', { answer: text, isShadowing: true }) }" 
         />
       </div>
 

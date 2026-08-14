@@ -41,6 +41,7 @@ function submitRetry() {
     result.outcome,
     result.vocabulary,
     result.grammar,
+    undefined,
     result.changeModifier,
     response.value,
     activeRedline.value.prompt,

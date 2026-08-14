@@ -640,28 +640,30 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
 
   // Stage 3: High-pressure use
   if (vocabularyKeys.length > 0 || grammarKeys.length > 0) {
-    const mainConcept = vocabularyKeys[0] || grammarKeys[0]
-    stages.push({
-      id: 'smart-automate',
-      title: 'Automate Retrieval',
-      kind: 'review',
-      intro: 'Quick! Recall these concepts before the timer runs out.',
-      exercises: [
-        generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'speed-drill')
-      ]
-    })
+    const mainConcept = vocabularyKeys[0] || grammarKeys[0] || ''
+    if (mainConcept) {
+      stages.push({
+        id: 'smart-automate',
+        title: 'Automate Retrieval',
+        kind: 'review',
+        intro: 'Quick! Recall these concepts before the timer runs out.',
+        exercises: [
+          generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'speed-drill')
+        ]
+      })
 
-    stages.push({
-      id: 'smart-personalise',
-      title: 'Real-world Use',
-      kind: 'personalise',
-      intro: 'Let\'s use what you know in a short conversation.',
-      exercises: [{
-        ...generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'conversation'),
-        prompt: `Can you use ${mainConcept} in a sentence about your day?`,
-        aiPersonality: { isDifficult: true, style: 'helpful', pushbackProbability: 0.5 }
-      }]
-    })
+      stages.push({
+        id: 'smart-personalise',
+        title: 'Real-world Use',
+        kind: 'personalise',
+        intro: 'Let\'s use what you know in a short conversation.',
+        exercises: [{
+          ...generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'conversation'),
+          prompt: `Can you use ${mainConcept} in a sentence about your day?`,
+          aiPersonality: { isDifficult: true, style: 'helpful', pushbackProbability: 0.5 }
+        }]
+      })
+    }
   }
 
   return {

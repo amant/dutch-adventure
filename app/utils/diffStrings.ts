@@ -17,17 +17,19 @@ export function diffStrings(oldStr: string = '', newStr: string = ''): DiffPart[
   let j = 0
   
   while (i < oldWords.length || j < newWords.length) {
-    if (i < oldWords.length && j < newWords.length && oldWords[i].toLowerCase() === newWords[j].toLowerCase()) {
-      result.push({ value: oldWords[i], type: 'same' })
+    const oldWord = oldWords[i]
+    const newWord = newWords[j]
+    if (oldWord !== undefined && newWord !== undefined && oldWord.toLowerCase() === newWord.toLowerCase()) {
+      result.push({ value: oldWord, type: 'same' })
       i++
       j++
     } else {
-      if (i < oldWords.length) {
-        result.push({ value: oldWords[i], type: 'removed' })
+      if (oldWord !== undefined) {
+        result.push({ value: oldWord, type: 'removed' })
         i++
       }
-      if (j < newWords.length) {
-        result.push({ value: newWords[j], type: 'added' })
+      if (newWord !== undefined) {
+        result.push({ value: newWord, type: 'added' })
         j++
       }
     }

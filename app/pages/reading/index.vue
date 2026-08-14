@@ -9,7 +9,7 @@ const getMatchStats = (articleContent: string) => {
   const words = articleContent.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/)
   const uniqueWords = Array.from(new Set(words.filter(w => w.length > 2)))
   
-  const known = uniqueWords.filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
+  const known = uniqueWords.filter(w => (memory.value.vocabulary[w]?.recognition ?? 0) > 0.5)
   const frontier = uniqueWords.filter(w => {
     const s = memory.value.vocabulary[w]
     return s && s.recognition > 0.5 && s.production < 0.3

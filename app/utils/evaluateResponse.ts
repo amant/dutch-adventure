@@ -26,6 +26,27 @@ export interface EvaluationContext {
   clozeAnswers?: string[]
 }
 
+export type GrammarCheckResult =
+  | {
+      found: true
+      message: string
+      explanation?: string
+      miniLesson?: {
+        title: string
+        content: string
+        example: {
+          wrong: string
+          right: string
+        }
+      }
+    }
+  | {
+      found: false
+      message?: undefined
+      explanation?: undefined
+      miniLesson?: undefined
+    }
+
 function calculateSimilarity(s1: string, s2: string): number {
   const longer = s1.length > s2.length ? s1 : s2
   const shorter = s1.length > s2.length ? s2 : s1
@@ -35,16 +56,17 @@ function calculateSimilarity(s1: string, s2: string): number {
 }
 
 function editDistance(s1: string, s2: string): number {
-  const costs = []
+  const costs: number[] = []
   for (let i = 0; i <= s1.length; i++) {
     let lastValue = i
     for (let j = 0; j <= s2.length; j++) {
-      if (i === 0) costs[j] = j
-      else {
+      if (i === 0) {
+        costs[j] = j
+      } else {
         if (j > 0) {
-          let newValue = costs[j - 1]
+          let newValue = (costs[j - 1] ?? 0)
           if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
-            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j] ?? 0) + 1
           }
           costs[j - 1] = lastValue
           lastValue = newValue
@@ -53,25 +75,27 @@ function editDistance(s1: string, s2: string): number {
     }
     if (i > 0) costs[s2.length] = lastValue
   }
-  return costs[s2.length]
+  return costs[s2.length] ?? 0
 }
 
-function checkInversionError(normalized: string) {
+function checkInversionError(normalized: string): GrammarCheckResult {
   const adverbs = ['gisteren', 'vandaag', 'morgen', 'soms', 'meestal', 'nu', 'daarna', 'toen']
   const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
   const words = normalized.split(' ')
+  const firstWord = words[0]
+  const secondWord = words[1]
   
-  if (words.length >= 3 && adverbs.includes(words[0]) && pronouns.includes(words[1])) {
+  if (words.length >= 3 && firstWord && secondWord && adverbs.includes(firstWord) && pronouns.includes(secondWord)) {
      return {
        found: true,
-       message: `In Dutch, if you start with '${words[0]}', the verb must come next!`,
-       explanation: `Try: ${words[0]} [verb] ${words[1]}...`,
+       message: `In Dutch, if you start with '${firstWord}', the verb must come next!`,
+       explanation: `Try: ${firstWord} [verb] ${secondWord}...`,
        miniLesson: {
          title: 'Inversion (Word Order)',
          content: 'When a sentence starts with something other than the subject (like an adverb of time), the verb and subject must swap places.',
          example: {
-           wrong: `${words[0]} ${words[1]} werk...`,
-           right: `${words[0]} werk ${words[1]}...`
+           wrong: `${firstWord} ${secondWord} werk...`,
+           right: `${firstWord} werk ${secondWord}...`
          }
        }
      }
@@ -79,7 +103,7 @@ function checkInversionError(normalized: string) {
   return { found: false }
 }
 
-function checkPerfectTenseError(normalized: string) {
+function checkPerfectTenseError(normalized: string): GrammarCheckResult {
   const motionVerbs = ['gegaan', 'gekomen', 'gebleven', 'gebeurd', 'vertrokken']
   const words = normalized.split(' ')
   
@@ -103,7 +127,7 @@ function checkPerfectTenseError(normalized: string) {
   return { found: false }
 }
 
-function checkSeparableVerbError(normalized: string, target: string) {
+function checkSeparableVerbError(normalized: string, target: string): GrammarCheckResult {
   const separableVerbs = [
     { full: 'schoonmaken', stem: 'maak', prefix: 'schoon' },
     { full: 'opbellen', stem: 'bel', prefix: 'op' },
@@ -131,7 +155,7 @@ function checkSeparableVerbError(normalized: string, target: string) {
   return { found: false }
 }
 
-function checkConditionalError(normalized: string) {
+function checkConditionalError(normalized: string): GrammarCheckResult {
   const words = normalized.split(' ')
   const hasAls = words.includes('als')
   const hasZou = words.includes('zou') || words.includes('zouden')
@@ -171,7 +195,7 @@ function checkConditionalError(normalized: string) {
   return { found: false }
 }
 
-function checkIndirectQuestionError(normalized: string) {
+function checkIndirectQuestionError(normalized: string): GrammarCheckResult {
   const phrases = [
     'vroeg als', 'vroegen als', 'vraagt als', 'vragen als',
     'wilde weten als', 'wil weten als', 'benieuwd als', 'onzeker als'
@@ -195,7 +219,7 @@ function checkIndirectQuestionError(normalized: string) {
   return { found: false }
 }
 
-function checkRelativePronounError(normalized: string) {
+function checkRelativePronounError(normalized: string): GrammarCheckResult {
   // Check 1: 'alles dat', 'iets dat', 'niets dat', 'het enige dat' -> should be 'wat'
   const indefiniteMatches = [
     { wrong: 'alles dat', right: 'alles wat', word: 'alles' },
@@ -262,7 +286,7 @@ function checkRelativePronounError(normalized: string) {
   return { found: false }
 }
 
-function checkDoubleInfinitiveError(normalized: string) {
+function checkDoubleInfinitiveError(normalized: string): GrammarCheckResult {
   // Check 1: Modal participles incorrectly used with an infinitive / compound tense
   const modalParticiples = [
     { part: 'gemoeten', inf: 'moeten', label: 'moeten' },
@@ -381,7 +405,7 @@ function checkDoubleInfinitiveError(normalized: string) {
   return { found: false }
 }
 
-function checkConcessionError(normalized: string) {
+function checkConcessionError(normalized: string): GrammarCheckResult {
   // Check 1: 'ondanks' used with a subject pronoun without 'dat' or 'het feit dat'
   // e.g. "ondanks hij ziek was", "ondanks we weinig tijd hadden", "ondanks ik"
   const pronounAfterOndanks = /\bondanks\s+(hij|zij|ze|wij|we|ik|je|jij|jullie|u|men)\b/i
@@ -455,12 +479,12 @@ function checkConcessionError(normalized: string) {
   return { found: false }
 }
 
-function checkParticipialError(normalized: string) {
+function checkParticipialError(normalized: string): GrammarCheckResult {
   // Check 1: Separable verbs with te in front of whole word instead of infix
   // e.g. "de te oplossen problemen", "het te uitvoeren plan", "de te voorbereiden presentatie"
   const separableGerundiveRegex = /\b(de|het|een)\s+te\s+(oplossen|uitvoeren|aanpakken|voorbereiden|doorvoeren|indienen|afhandelen|samenstellen|invoeren|aannemen|aanvragen|opbellen|doorgeven|inleveren|uitstellen|overleggen|afstemmen)\b/i
   const matchSep = normalized.match(separableGerundiveRegex)
-  if (matchSep) {
+  if (matchSep && matchSep[2]) {
     const wrongWord = matchSep[2]
     return {
       found: true,
@@ -537,7 +561,7 @@ function checkParticipialError(normalized: string) {
   return { found: false }
 }
 
-function checkConditionalRestrictiveError(normalized: string, conditionType?: string) {
+function checkConditionalRestrictiveError(normalized: string, conditionType?: string): GrammarCheckResult {
   // Check 1: "mits" vs "tenzij" confusion
   if (conditionType === 'mits' && normalized.includes('tenzij')) {
     return {
@@ -674,7 +698,7 @@ function checkConditionalRestrictiveError(normalized: string, conditionType?: st
   return { found: false }
 }
 
-function checkCausalityError(normalized: string, relationType?: string) {
+function checkCausalityError(normalized: string, relationType?: string): GrammarCheckResult {
   // Check 1: "doordat" vs "omdat" (Involuntary physical/external cause vs voluntary motivation/reason)
   if (relationType === 'doordat-oorzaak') {
     if (normalized.includes('omdat') || normalized.includes(' want ')) {
@@ -848,7 +872,7 @@ function checkFixedPrepositionRegimeError(
     fixedPreposition?: string
     commonTransferErrors?: string[]
   }
-) {
+): GrammarCheckResult {
   // 1. If specific fixedPrepositionData is provided for the exercise:
   if (fixedPrepositionData?.governingHead && fixedPrepositionData?.fixedPreposition) {
     const head = fixedPrepositionData.governingHead.toLowerCase()
@@ -1057,7 +1081,7 @@ function checkMidfieldOrderError(
       predicateOrPrepObject?: string
     }
   }
-) {
+): GrammarCheckResult {
   // 1. Check: "niet een" instead of "geen"
   if (/\bniet\s+een\b/i.test(normalized)) {
     return {
@@ -1213,7 +1237,7 @@ function checkPrefixVerbError(
     meaningDefinition: string
     targetStructure: 'present-main' | 'present-subclause' | 'perfect-tense' | 'infinitive-te'
   }
-) {
+): GrammarCheckResult {
   if (!prefixVerbData) return { found: false }
   const { verb, stressPattern, targetStructure } = prefixVerbData
 
@@ -1510,7 +1534,7 @@ function checkPronominalSplittingError(
     clauseType?: string
     splittingStatus?: string
   }
-) {
+): GrammarCheckResult {
   // 1. If explicit pronominalSplittingData is provided:
   if (pronominalSplittingData?.rWord && pronominalSplittingData?.preposition) {
     const rWord = pronominalSplittingData.rWord.toLowerCase()
@@ -1599,7 +1623,7 @@ function checkAspectError(
     infinitiveAction?: string
     clauseType?: string
   }
-) {
+): GrammarCheckResult {
   // 1. If explicit aspectData is provided:
   if (aspectData) {
     const { aspectCategory, postureOrAspectVerb } = aspectData
@@ -1761,7 +1785,7 @@ function checkModalParticleError(
     pragmaticFunction?: string
     stiffOriginalSentence?: string
   }
-) {
+): GrammarCheckResult {
   if (modalParticleData) {
     const { particleCluster, pragmaticFunction } = modalParticleData
 
@@ -1892,7 +1916,7 @@ function checkTopicalisationError(
     baseSentence?: string
     resumptiveElement?: string
   }
-) {
+): GrammarCheckResult {
   if (topicalisationData) {
     const { focusType, frontedElement, resumptiveElement } = topicalisationData
 
@@ -1988,7 +2012,7 @@ function checkTopicalisationError(
   return { found: false }
 }
 
-function checkCorrelativeError(normalized: string) {
+function checkCorrelativeError(normalized: string): GrammarCheckResult {
   // Check 1: "niet alleen" missing "maar ook" (e.g. using "maar" alone or "en ook")
   if (normalized.includes('niet alleen')) {
     if (!normalized.includes('maar ook') && !normalized.includes('maar tevens') && !normalized.includes('maar eveneens')) {
@@ -2088,7 +2112,7 @@ function checkCorrelativeError(normalized: string) {
   return { found: false }
 }
 
-function checkInfinitiveClauseError(normalized: string) {
+function checkInfinitiveClauseError(normalized: string): GrammarCheckResult {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
   const separableVerbs: { full: string, prefix: string, stem: string }[] = [
     { full: 'oplossen', prefix: 'op', stem: 'lossen' },
@@ -2185,19 +2209,17 @@ function checkInfinitiveClauseError(normalized: string) {
   return { found: false }
 }
 
-function checkSubordinateClauseError(normalized: string, conjunction: string) {
+function checkSubordinateClauseError(normalized: string, conjunction: string): GrammarCheckResult {
   const words = normalized.split(' ')
   const index = words.indexOf(conjunction)
   if (index !== -1 && index < words.length - 2) {
     const nextWords = words.slice(index + 1)
     const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
-    // A common mistake is to put the verb right after the subject in a subordinate clause
-    if (pronouns.includes(nextWords[0]) && nextWords.length > 1) {
-      // This is a very rough heuristic but often catches SVO in subordinate clauses
-      // We check if the last word is NOT a verb-like word (usually ends in -en, -t, or is short)
-      // Actually, it's safer to just check if the second word is a common verb
+    const firstNext = nextWords[0]
+    const secondNext = nextWords[1]
+    if (firstNext && pronouns.includes(firstNext) && nextWords.length > 1 && secondNext) {
       const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen']
-      if (commonVerbs.includes(nextWords[1])) {
+      if (commonVerbs.includes(secondNext)) {
         return {
           found: true,
           message: `After '${conjunction}', the verb moves to the end of the sentence!`,
@@ -2205,8 +2227,8 @@ function checkSubordinateClauseError(normalized: string, conjunction: string) {
             title: 'Subordinate Clauses',
             content: `When you use '${conjunction}', the word order changes. The verb must go to the very end.`,
             example: {
-              wrong: `... ${conjunction} ik ${nextWords[1]} ziek.`,
-              right: `... ${conjunction} ik ziek ${nextWords[1]}.`
+              wrong: `... ${conjunction} ik ${secondNext} ziek.`,
+              right: `... ${conjunction} ik ziek ${secondNext}.`
             }
           }
         }
@@ -2216,36 +2238,38 @@ function checkSubordinateClauseError(normalized: string, conjunction: string) {
   return { found: false }
 }
 
-function checkArticleError(normalized: string, target: string) {
+function checkArticleError(normalized: string, target: string): GrammarCheckResult {
   const deWords = ['man', 'vrouw', 'tafel', 'stoel', 'stad', 'bakker', 'collega', 'vergadering']
   const hetWords = ['kind', 'meisje', 'boek', 'huis', 'weer', 'werk', 'hotel', 'ontbijt']
   
   const words = normalized.split(' ')
   for (let i = 0; i < words.length - 1; i++) {
-    if (words[i] === 'het' && deWords.includes(words[i+1])) {
+    const currentWord = words[i]
+    const nextWord = words[i + 1]
+    if (currentWord === 'het' && nextWord && deWords.includes(nextWord)) {
       return {
         found: true,
-        message: `'${words[i+1]}' is a "de-word", not "het".`,
+        message: `'${nextWord}' is a "de-word", not "het".`,
         miniLesson: {
           title: 'De vs Het',
           content: 'Every Dutch noun is either "de" or "het". Most words (about 75%) are "de". Diminutives (ending in -je) are always "het".',
           example: {
-            wrong: `het ${words[i+1]}`,
-            right: `de ${words[i+1]}`
+            wrong: `het ${nextWord}`,
+            right: `de ${nextWord}`
           }
         }
       }
     }
-    if (words[i] === 'de' && hetWords.includes(words[i+1])) {
+    if (currentWord === 'de' && nextWord && hetWords.includes(nextWord)) {
       return {
         found: true,
-        message: `'${words[i+1]}' is a "het-word", not "de".`,
+        message: `'${nextWord}' is a "het-word", not "de".`,
         miniLesson: {
           title: 'De vs Het',
           content: 'Every Dutch noun is either "de" or "het". Learning the article with the word is essential.',
           example: {
-            wrong: `de ${words[i+1]}`,
-            right: `het ${words[i+1]}`
+            wrong: `de ${nextWord}`,
+            right: `het ${nextWord}`
           }
         }
       }
@@ -2254,23 +2278,24 @@ function checkArticleError(normalized: string, target: string) {
   return { found: false }
 }
 
-function checkAdjectiveEndingError(normalized: string) {
+function checkAdjectiveEndingError(normalized: string): GrammarCheckResult {
   const words = normalized.split(' ')
-  // Check for common adjectives missing the -e before a noun
   const commonAdjectives = ['mooi', 'groot', 'klein', 'leuk', 'lekker', 'warm', 'koud']
   const deWords = ['man', 'vrouw', 'dag', 'stad', 'tafel', 'stoel', 'bakker']
   
   for (let i = 0; i < words.length - 1; i++) {
-    if (commonAdjectives.includes(words[i]) && deWords.includes(words[i+1])) {
+    const currentWord = words[i]
+    const nextWord = words[i + 1]
+    if (currentWord && nextWord && commonAdjectives.includes(currentWord) && deWords.includes(nextWord)) {
       return {
         found: true,
-        message: `Before '${words[i+1]}', the adjective should usually end in -e: '${words[i]}e'.`,
+        message: `Before '${nextWord}', the adjective should usually end in -e: '${currentWord}e'.`,
         miniLesson: {
           title: 'Adjective Endings',
           content: 'Most adjectives get an -e when they come before a noun, except for "het-words" preceded by "een" or no article.',
           example: {
-            wrong: `${words[i]} ${words[i+1]}`,
-            right: `${words[i]}e ${words[i+1]}`
+            wrong: `${currentWord} ${nextWord}`,
+            right: `${currentWord}e ${nextWord}`
           }
         }
       }
@@ -2279,7 +2304,7 @@ function checkAdjectiveEndingError(normalized: string) {
   return { found: false }
 }
 
-function checkReflexiveError(normalized: string) {
+function checkReflexiveError(normalized: string): GrammarCheckResult {
   const reflexives = [
     { verb: 'herinner', correct: 'me', wrong: ['mij'] },
     { verb: 'verveel', correct: 'je', wrong: [] },
@@ -2307,7 +2332,7 @@ function checkReflexiveError(normalized: string) {
   return { found: false }
 }
 
-function checkFixedPrepositionError(normalized: string) {
+function checkFixedPrepositionError(normalized: string): GrammarCheckResult {
   const fixed = [
     { verb: 'wachten', prep: 'op' },
     { verb: 'rekenen', prep: 'op' },
@@ -2457,22 +2482,24 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
     if (exercise.kind === 'morphing-drill' && exercise.morphingData) {
       const stepIndex = context?.morphingStepIndex ?? 0
       const step = exercise.morphingData.steps[stepIndex]
-      const stepTarget = normalizeAnswer(step.target)
-      
-      if (normalized === stepTarget) {
-        const isFinalStep = stepIndex === exercise.morphingData.steps.length - 1
-        return {
-          ...base,
-          outcome: 'correct',
-          message: isFinalStep ? 'Final morph complete! You successfully evolved the sentence.' : 'Step correct! Now for the next change.',
-          changeModifier: (base.changeModifier || 0) + 2
-        }
-      } else {
-        return {
-          ...base,
-          outcome: 'retry',
-          message: 'That change doesn\'t look quite right.',
-          explanation: step.hint || `Try to focus on: ${step.instruction}`
+      if (step) {
+        const stepTarget = normalizeAnswer(step.target)
+        
+        if (normalized === stepTarget) {
+          const isFinalStep = stepIndex === exercise.morphingData.steps.length - 1
+          return {
+            ...base,
+            outcome: 'correct',
+            message: isFinalStep ? 'Final morph complete! You successfully evolved the sentence.' : 'Step correct! Now for the next change.',
+            changeModifier: (base.changeModifier || 0) + 2
+          }
+        } else {
+          return {
+            ...base,
+            outcome: 'retry',
+            message: 'That change doesn\'t look quite right.',
+            explanation: step.hint || `Try to focus on: ${step.instruction}`
+          }
         }
       }
     }
@@ -2484,7 +2511,8 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       
       const mistakes: number[] = []
       userAnswers.forEach((ans, idx) => {
-        if (normalizeAnswer(ans) !== normalizeAnswer(correctAnswers[idx])) {
+        const expected = correctAnswers[idx] || ''
+        if (normalizeAnswer(ans || '') !== normalizeAnswer(expected)) {
           mistakes.push(idx)
         }
       })
@@ -2590,7 +2618,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           ...base,
           outcome: 'retry',
           message: `You've fixed ${foundFixed} out of ${exercise.correctionData.mistakes.length} errors. Keep looking!`,
-          explanation: `Focus on: ${remainingMistakes[0].explanation}`
+          explanation: remainingMistakes[0] ? `Focus on: ${remainingMistakes[0].explanation}` : undefined
         }
       }
     }
@@ -2666,7 +2694,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       } else if (exercise.forbiddenWords?.some(w => normalized.includes(w.toLowerCase()))) {
         return {
           ...base,
-          outcome: 'incorrect',
+          outcome: 'retry',
           message: "That's an 'Anglicism' or a literal translation. It's technically understandable, but not how a native speaker would say it.",
           explanation: "In Dutch, we use specific verbs with certain nouns. For example, you 'take' a decision (besluit nemen) rather than 'make' it."
         }
@@ -2743,7 +2771,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
           ...base,
           outcome: 'retry',
           message: `You're missing some key information: ${missing.map(m => m.label).join(', ')}.`,
-          explanation: `Try to incorporate more details about: ${missing[0].label}.`
+          explanation: missing[0] ? `Try to incorporate more details about: ${missing[0].label}.` : undefined
         }
       }
     }
@@ -3746,7 +3774,7 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       return { ...base, outcome: 'correct', message: 'Notice this pattern for the next activity.' }
     }
 
-    const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+    const accepted = [target || '', ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
     
     if (accepted.includes(normalized)) {
       return { ...base, outcome: 'correct', message: 'That sounds perfectly natural!' }

@@ -11,10 +11,12 @@ const emit = defineEmits(['submit'])
 const selectedIndex = ref<number | null>(null)
 
 function select(index: number) {
-  if (props.feedback) return
+  if (props.feedback || !props.exercise.pragmaticOptions) return
   selectedIndex.value = index
-  const option = props.exercise.pragmaticOptions![index]
-  emit('submit', option.text)
+  const option = props.exercise.pragmaticOptions[index]
+  if (option) {
+    emit('submit', option.text)
+  }
 }
 </script>
 

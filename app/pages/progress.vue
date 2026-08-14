@@ -16,7 +16,7 @@ const readingStats = computed(() => {
   const coverages = articles.map(article => {
     const words = article.content.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/).filter(w => w.length > 2)
     const unique = new Set(words)
-    const known = Array.from(unique).filter(w => memory.value.vocabulary[w]?.recognition > 0.5)
+    const known = Array.from(unique).filter(w => (memory.value.vocabulary[w]?.recognition ?? 0) > 0.5)
     return (known.length / unique.size) * 100
   })
   const avgCoverage = coverages.reduce((a, b) => a + b, 0) / articles.length

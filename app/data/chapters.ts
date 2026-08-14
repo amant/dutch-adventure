@@ -716,6 +716,7 @@ export const coffeeChapter: Chapter = {
       intro: 'What do you usually drink?',
       exercises: [{ 
         id: 'coffee-3', kind: 'personalise', prompt: 'Wat wilt u drinken?', 
+        skills: ['production', 'speaking'],
         vocabulary: ['koffie', 'thee', 'melk', 'suiker'],
         placeholder: 'Ik wil graag...'
       }],
@@ -1207,7 +1208,7 @@ export const workplaceChapter: Chapter = {
         id: 'work-mission-1',
         kind: 'conversation',
         prompt: 'Explain the situation to Jan.',
-        intro: 'Your manager, Jan, is waiting for an update.',
+        context: 'Your manager, Jan, is waiting for an update.',
         simulatorResponse: 'Ik begrijp het, maar wanneer verwacht je dat het project nu klaar is?',
         skills: ['speaking', 'interaction'],
         missionGoals: [
@@ -1669,7 +1670,7 @@ export const selfCorrectionChapter: Chapter = {
       exercises: [{ 
         id: 'correct-5', kind: 'challenge', prompt: 'Describe your week and perform a self-correction.', 
         skills: ['writing', 'pragmatic'],
-        targetVocabulary: ['gisteren', 'omdat', 'gegaan'],
+        vocabulary: ['gisteren', 'omdat', 'gegaan'],
         explanation: 'Show that you can identify a word order or auxiliary verb error and fix it.'
       }],
     }
@@ -1917,29 +1918,23 @@ export const mirroringChapter: Chapter = {
         {
           id: 'mir-1', kind: 'mirroring', 
           prompt: 'You are at a cafe. Ask the waiter to wait a moment.',
-          context: 'Kunt u even wachten?', // Stiff version (wait, even is actually natural, let's make it stiffer)
-          // Wait, actually I should show the stiff one:
-          // "Kunt u wachten?" -> "Kunt u even wachten?"
+          context: 'Kunt u wachten?',
+          target: 'Kunt u even wachten?',
+          explanation: 'Adding "even" makes the request much more natural and less demanding.',
+          skills: ['production', 'pragmatic']
+        },
+        {
+          id: 'mir-2', kind: 'mirroring',
+          prompt: 'A friend asks if you are coming. Confirm you are.',
+          context: 'Ja, ik kom.',
+          target: 'Ja, ik kom eraan hoor!',
+          explanation: 'Using "eraan" and "hoor" adds a layer of natural reassurance and flow.',
+          skills: ['production', 'pragmatic']
         }
       ]
     }
   ]
 }
-
-// Correcting the example
-mirroringChapter.stages[0].exercises[0].context = 'Kunt u wachten?'
-mirroringChapter.stages[0].exercises[0].target = 'Kunt u even wachten?'
-mirroringChapter.stages[0].exercises[0].explanation = 'Adding "even" makes the request much more natural and less demanding.'
-
-const mir2: Exercise = {
-  id: 'mir-2', kind: 'mirroring',
-  prompt: 'A friend asks if you are coming. Confirm you are.',
-  context: 'Ja, ik kom.',
-  target: 'Ja, ik kom eraan hoor!',
-  explanation: 'Using "eraan" and "hoor" adds a layer of natural reassurance and flow.'
-}
-
-mirroringChapter.stages[0].exercises.push(mir2)
 
 export const precisionChapter: Chapter = {
   slug: 'precision-and-nuance',
@@ -3921,12 +3916,12 @@ export const correlativeChapter: Chapter = {
           id: 'corr-inf-1', kind: 'inference-challenge', prompt: 'Analyze the tone and communicative intent of the correlative statement',
           skills: ['reading', 'pragmatic'],
           inferenceData: {
-            text: 'Tijdens de aandeelhoudersvergadering verklaarde de CFO: "Enerzijds biedt de overname van de buitenlandse concurrent ons directe toegang tot nieuwe groeimarkten, maar anderzijds brengt de integratie aanzienlijke operationele en culturele risico\'s met zich mee. We moeten derhalve niet alleen scherp sturen op kostenbesparing, maar ook de medewerkerstevredenheid nauwlettend monitoren."',
-            question: 'How does the speaker frame the strategic situation through correlative markers?',
+            scenario: 'Tijdens de aandeelhoudersvergadering verklaarde de CFO: "Enerzijds biedt de overname van de buitenlandse concurrent ons directe toegang tot nieuwe groeimarkten, maar anderzijds brengt de integratie aanzienlijke operationele en culturele risico\'s met zich mee. We moeten derhalve niet alleen scherp sturen op kostenbesparing, maar ook de medewerkerstevredenheid nauwlettend monitoren."',
+            premise: 'How does the speaker frame the strategic situation through correlative markers?',
             options: [
-              { text: 'The speaker constructs a balanced, mature risk-reward analysis using "enerzijds... anderzijds" for nuance and "niet alleen... maar ook" to mandate dual focus on both finances and people.', isCorrect: true, feedback: 'Uitstekend! Correlatives allow leaders to weigh trade-offs and enforce multidimensional priorities simultaneously.' },
-              { text: 'The speaker rejects the acquisition outright because the risks outweigh any possible market gain.', isCorrect: false, feedback: '"Enerzijds... anderzijds" acknowledges the valid positive opportunities while noting risks.' },
-              { text: 'The speaker is strictly concerned with cost-cutting and ignores internal staff relations.', isCorrect: false, feedback: 'The phrase "niet alleen... maar ook" explicitly elevates employee satisfaction to an equal priority.' }
+              { text: 'The speaker constructs a balanced, mature risk-reward analysis using "enerzijds... anderzijds" for nuance and "niet alleen... maar ook" to mandate dual focus on both finances and people.', isCorrect: true, explanation: 'Uitstekend! Correlatives allow leaders to weigh trade-offs and enforce multidimensional priorities simultaneously.' },
+              { text: 'The speaker rejects the acquisition outright because the risks outweigh any possible market gain.', isCorrect: false, explanation: '"Enerzijds... anderzijds" acknowledges the valid positive opportunities while noting risks.' },
+              { text: 'The speaker is strictly concerned with cost-cutting and ignores internal staff relations.', isCorrect: false, explanation: 'The phrase "niet alleen... maar ook" explicitly elevates employee satisfaction to an equal priority.' }
             ]
           }
         }
@@ -4115,12 +4110,12 @@ export const conditionalChapter: Chapter = {
           id: 'cond-inf-1', kind: 'inference-challenge', prompt: 'Analyze the legal commitments and contingencies in the statement',
           skills: ['reading', 'pragmatic'],
           inferenceData: {
-            text: 'Tijdens de contractonderhandelingen stelde de bedrijfsjurist: "Wij stemmen in met de voorgestelde leveringstermijnen, mits de softwareleverancier de uptime van 99,9% schriftelijk garandeert. Tenzij er vóór vrijdag een bindend SLA-document wordt ondertekend, behouden wij ons het recht voor om de overeenkomst eenzijdig te ontbinden. Mocht er overmacht optreden, dan treden partijen binnen 48 uur in overleg."',
-            question: 'How does the lawyer structure the commitments using conditional markers?',
+            scenario: 'Tijdens de contractonderhandelingen stelde de bedrijfsjurist: "Wij stemmen in met de voorgestelde leveringstermijnen, mits de softwareleverancier de uptime van 99,9% schriftelijk garandeert. Tenzij er vóór vrijdag een bindend SLA-document wordt ondertekend, behouden wij ons het recht voor om de overeenkomst eenzijdig te ontbinden. Mocht er overmacht optreden, dan treden partijen binnen 48 uur in overleg."',
+            premise: 'How does the lawyer structure the commitments using conditional markers?',
             options: [
-              { text: 'The lawyer sets a strict prerequisite with "mits" (uptime guarantee), establishes a binding dealbreaker with "tenzij" (signed SLA), and provides a contingency process with "mocht" for force majeure.', isCorrect: true, feedback: 'Uitstekend! "Mits" creates a prerequisite, "tenzij" marks an exception/cancellation clause, and "mocht" handles contingency.' },
-              { text: 'The lawyer terminates the contract immediately and refuses to negotiate further.', isCorrect: false, feedback: 'The lawyer sets clear conditions under which the contract remains valid.' },
-              { text: 'The lawyer assumes that uptime guarantees are unnecessary if force majeure occurs.', isCorrect: false, feedback: 'Both conditions are strictly separated and formally defined.' }
+              { text: 'The lawyer sets a strict prerequisite with "mits" (uptime guarantee), establishes a binding dealbreaker with "tenzij" (signed SLA), and provides a contingency process with "mocht" for force majeure.', isCorrect: true, explanation: 'Uitstekend! "Mits" creates a prerequisite, "tenzij" marks an exception/cancellation clause, and "mocht" handles contingency.' },
+              { text: 'The lawyer terminates the contract immediately and refuses to negotiate further.', isCorrect: false, explanation: 'The lawyer sets clear conditions under which the contract remains valid.' },
+              { text: 'The lawyer assumes that uptime guarantees are unnecessary if force majeure occurs.', isCorrect: false, explanation: 'Both conditions are strictly separated and formally defined.' }
             ]
           }
         }
@@ -4311,12 +4306,12 @@ export const causalityChapter: Chapter = {
           id: 'caus-inf-1', kind: 'inference-challenge', prompt: 'Analyze causal attributions and strategic goals in the management report',
           skills: ['reading', 'pragmatic'],
           inferenceData: {
-            text: 'In het jaarverslag rapporteerde de Raad van Bestuur: "Doordat een zware storm de hoofdcentrale beschadigde, ondervond ons datacentrum een tijdelijke stroomonderbreking. Hoewel de initiële downtime te wijten was aan een falende noodaggregaat, is het snelle herstel binnen drie uur te danken aan de doortastende inzet van ons technische team. Aangezien digitale continuïteit cruciaal is voor onze cliënten, hebben we een nieuw redundantiesysteem geïnstalleerd, waardoor toekomstige storingen direct opgevangen worden. Wij hebben deze maatregelen met spoed doorgevoerd, opdat onze operationele betrouwbaarheid ten alle tijden gegarandeerd blijft."',
-            question: 'How does management delineate causes, merits, and strategic intent using these connectors?',
+            scenario: 'In het jaarverslag rapporteerde de Raad van Bestuur: "Doordat een zware storm de hoofdcentrale beschadigde, ondervond ons datacentrum een tijdelijke stroomonderbreking. Hoewel de initiële downtime te wijten was aan een falende noodaggregaat, is het snelle herstel binnen drie uur te danken aan de doortastende inzet van ons technische team. Aangezien digitale continuïteit cruciaal is voor onze cliënten, hebben we een nieuw redundantiesysteem geïnstalleerd, waardoor toekomstige storingen direct opgevangen worden. Wij hebben deze maatregelen met spoed doorgevoerd, opdat onze operationele betrouwbaarheid ten alle tijden gegarandeerd blijft."',
+            premise: 'How does management delineate causes, merits, and strategic intent using these connectors?',
             options: [
-              { text: 'Management clearly attributes the physical trigger to "doordat", blames the generator failure with "te wijten aan", credits the engineers with "te danken aan", explains the consequence with "waardoor", and states the overarching goal with "opdat".', isCorrect: true, feedback: 'Uitstekend! Every connector is used with exact semantic and pragmatic precision.' },
-              { text: 'Management claims that the technical team caused the power outage.', isCorrect: false, feedback: 'The power outage was triggered by the storm ("doordat") and failure of the generator ("te wijten aan").' },
-              { text: 'Management views the new redundancy system as an unnecessary cost.', isCorrect: false, feedback: 'Management installed it specifically to prevent future downtime ("opdat").' }
+              { text: 'Management clearly attributes the physical trigger to "doordat", blames the generator failure with "te wijten aan", credits the engineers with "te danken aan", explains the consequence with "waardoor", and states the overarching goal with "opdat".', isCorrect: true, explanation: 'Uitstekend! Every connector is used with exact semantic and pragmatic precision.' },
+              { text: 'Management claims that the technical team caused the power outage.', isCorrect: false, explanation: 'The power outage was triggered by the storm ("doordat") and failure of the generator ("te wijten aan").' },
+              { text: 'Management views the new redundancy system as an unnecessary cost.', isCorrect: false, explanation: 'Management installed it specifically to prevent future downtime ("opdat").' }
             ]
           }
         }
@@ -4547,12 +4542,12 @@ export const prefixVerbChapter: Chapter = {
           id: 'prefix-inf-1', kind: 'inference-challenge', prompt: 'Analyze prefix verbs and semantic distinctions in the legal counsel report',
           skills: ['reading', 'pragmatic'],
           inferenceData: {
-            text: 'Tijdens de aandeelhoudersvergadering lichtte de hoofdjurist toe: "Ons complianceteam voorkomt proactief juridische risico\'s door alle contracten vooraf te screenen. Mocht er desalniettemin een geschil vóórkomen, dan overleggen we direct met externe experts. Om boetes te vermijden, zijn alle leveranciers verplicht om hun certificaten tijdig over te leggen. Het afgelopen jaar heeft onze onderneming een omvangrijke audit ondergaan, waarbij we het complete veiligheidsprotocol hebben doorlopen. Dankzij dit strenge beleid heeft het management de negatieve trend definitief doorbroken."',
-            question: 'How does the legal counsel utilize separable and inseparable verbs to convey precise administrative actions?',
+            scenario: 'Tijdens de aandeelhoudersvergadering lichtte de hoofdjurist toe: "Ons complianceteam voorkomt proactief juridische risico\'s door alle contracten vooraf te screenen. Mocht er desalniettemin een geschil vóórkomen, dan overleggen we direct met externe experts. Om boetes te vermijden, zijn alle leveranciers verplicht om hun certificaten tijdig over te leggen. Het afgelopen jaar heeft onze onderneming een omvangrijke audit ondergaan, waarbij we het complete veiligheidsprotocol hebben doorlopen. Dankzij dit strenge beleid heeft het management de negatieve trend definitief doorbroken."',
+            premise: 'How does the legal counsel utilize separable and inseparable verbs to convey precise administrative actions?',
             options: [
-              { text: 'The counsel uses "voorkomt" (inseparable) for preventing risks, "vóórkomen" (separable) for issues arising, "overleggen" (inseparable) for consulting experts, "over te leggen" (separable) for submitting certificates, "ondergaan" (inseparable) for undergoing an audit, "doorlopen" (inseparable) for completing protocols, and "doorbroken" (inseparable) for breaking the trend.', isCorrect: true, feedback: 'Uitstekend! Every verb is conjugated according to its specific stress pattern and semantic meaning.' },
-              { text: 'The counsel claims that the company refused to submit any documents to the auditors.', isCorrect: false, feedback: 'Suppliers were required to submit certificates ("over te leggen").' },
-              { text: 'The counsel states that the company failed its safety audit.', isCorrect: false, feedback: 'The company completed the entire protocol ("heeft doorlopen") and broke the negative trend ("heeft doorbroken").' }
+              { text: 'The counsel uses "voorkomt" (inseparable) for preventing risks, "vóórkomen" (separable) for issues arising, "overleggen" (inseparable) for consulting experts, "over te leggen" (separable) for submitting certificates, "ondergaan" (inseparable) for undergoing an audit, "doorlopen" (inseparable) for completing protocols, and "doorbroken" (inseparable) for breaking the trend.', isCorrect: true, explanation: 'Uitstekend! Every verb is conjugated according to its specific stress pattern and semantic meaning.' },
+              { text: 'The counsel claims that the company refused to submit any documents to the auditors.', isCorrect: false, explanation: 'Suppliers were required to submit certificates ("over te leggen").' },
+              { text: 'The counsel states that the company failed its safety audit.', isCorrect: false, explanation: 'The company completed the entire protocol ("heeft doorlopen") and broke the negative trend ("heeft doorbroken").' }
             ]
           }
         }

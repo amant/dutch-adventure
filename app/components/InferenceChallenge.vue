@@ -23,7 +23,9 @@ function handleSelect(index: number) {
   if (props.feedback) return
   selectedIndex.value = index
   const selected = options.value[index]
-  emit('submit', selected.text)
+  if (selected) {
+    emit('submit', selected.text)
+  }
 }
 </script>
 
