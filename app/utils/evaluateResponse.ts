@@ -131,6 +131,46 @@ function checkSeparableVerbError(normalized: string, target: string) {
   return { found: false }
 }
 
+function checkConditionalError(normalized: string) {
+  const words = normalized.split(' ')
+  const hasAls = words.includes('als')
+  const hasZou = words.includes('zou') || words.includes('zouden')
+  const hasHad = words.includes('had') || words.includes('hadden')
+  const hasWas = words.includes('was') || words.includes('waren')
+
+  if (hasAls && !hasZou && !hasHad && !hasWas) {
+    return {
+      found: true,
+      message: 'When using "als" for a hypothetical, you usually need "zou", "had", or "was".',
+      miniLesson: {
+        title: 'Hypothetical Conditions',
+        content: 'To express something that is not real or unlikely, Dutch uses the past tense (had/was) or "zou" + infinitive.',
+        example: {
+          wrong: 'Als ik geld heb, koop ik een auto.',
+          right: 'Als ik geld had, zou ik een auto kopen.'
+        }
+      }
+    }
+  }
+  
+  if (normalized.includes('als ik zou hebben')) {
+    return {
+      found: true,
+      message: 'While "zou hebben" is okay, using "had" after "als" is often more natural for hypotheticals.',
+      miniLesson: {
+        title: 'Als + Had/Was',
+        content: 'In the "if" clause (als...), Dutch speakers prefer the simple past (had, was, kon) over "zou hebben/zijn/kunnen".',
+        example: {
+          wrong: 'Als ik tijd zou hebben...',
+          right: 'Als ik tijd had...'
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkSubordinateClauseError(normalized: string, conjunction: string) {
   const words = normalized.split(' ')
   const index = words.indexOf(conjunction)
@@ -856,6 +896,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         message: inversionError.message, 
         explanation: inversionError.explanation,
         miniLesson: inversionError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Conditional Check
+    const conditionalError = checkConditionalError(normalized)
+    if (conditionalError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: conditionalError.message,
+        miniLesson: conditionalError.miniLesson
       }
     }
 

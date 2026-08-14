@@ -2833,7 +2833,75 @@ export const passiveVoiceChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter]
+export const hypotheticalChapter: Chapter = {
+  slug: 'hypothetische-scenario-s',
+  level: 'B2',
+  title: "Hypotheticals & Unreal Conditions",
+  capability: "Speculate about unreal or unlikely situations in the present and past.",
+  description: "Master the use of 'had', 'was', and 'zou' to express regrets, wishes, and hypothetical scenarios.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Unreal Present', kind: 'discover',
+      intro: "To talk about a hypothetical present, use 'had' (had), 'was' (were), or 'zou' (would).",
+      exercises: [
+        {
+          id: 'hypo-ind-1', kind: 'induction', prompt: 'Notice the pattern',
+          skills: ['recognition'],
+          inductionData: {
+            examples: [
+              { prompt: 'Fact', answer: 'Ik heb geen geld. Ik koop geen auto.' },
+              { prompt: 'Hypothetical', answer: 'Als ik geld had, zou ik een auto kopen.' }
+            ],
+            ruleChallenge: 'Which word is preferred in the "if" (als) clause for a hypothetical?',
+            options: [
+              { text: 'zou hebben', isCorrect: false },
+              { text: 'had', isCorrect: true },
+              { text: 'heb', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'morph', title: 'Sentence Evolution', kind: 'transform',
+      intro: "Evolve these sentences from simple facts into complex hypotheticals.",
+      exercises: [
+        {
+          id: 'hypo-m-1', kind: 'morphing-drill', prompt: 'Evolve the regret',
+          skills: ['production', 'grammar'],
+          morphingData: {
+            baseSentence: 'Ik werk veel. Ik ben moe.',
+            steps: [
+              { 
+                instruction: 'Turn it into a hypothetical present (If I worked less, I wouldn\'t be tired).', 
+                target: 'Als ik minder werkte, zou ik niet moe zijn' 
+              },
+              { 
+                instruction: 'Now turn it into a past regret (If I had worked less, I wouldn\'t have been tired).', 
+                target: 'Als ik minder had gewerkt, zou ik niet moe zijn geweest' 
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Own Regrets', kind: 'personalise',
+      intro: "Describe a real-world situation you'd like to change using 'als... had...'.",
+      exercises: [
+        {
+          id: 'hypo-p-1', kind: 'personalise', prompt: 'Wat zou je anders hebben gedaan als je vorig jaar meer tijd had gehad?',
+          skills: ['production', 'speaking', 'pragmatic'],
+          vocabulary: ['tijd', 'anders', 'gedaan', 'gekozen'],
+          grammar: ['conditional-past']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

@@ -35,10 +35,13 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'passive-voice': { prompt: 'The project is being prepared.', target: 'Het project wordt voorbereid.', explanation: 'Use "worden" + past participle for the passive process.' },
   'worden': { prompt: 'It is being done.', target: 'Het wordt gedaan.', explanation: 'Worden is the auxiliary for the passive voice.' },
   'gepland': { prompt: 'The meeting is being planned.', target: 'De vergadering wordt gepland.', explanation: 'Gepland is the past participle of plannen.' },
+  'conditional': { prompt: 'If I had money, I would buy it.', target: 'Als ik geld had, zou ik het kopen.', explanation: 'Use "had" and "zou" for hypotheticals.' },
+  'had': { prompt: 'If I had time...', target: 'Als ik tijd had...', explanation: 'Had is the past tense of hebben, used for hypotheticals.' },
+  'zou': { prompt: 'I would do it.', target: 'Ik zou het doen.', explanation: 'Zou means would.' },
+  'conditional-past': { prompt: 'If I had known it, I would have come.', target: 'Als ik het had geweten, zou ik zijn gekomen.', explanation: 'For past hypotheticals, use "had [participle]" and "zou zijn/hebben [participle]".' },
   'diplomatic-reframing': { prompt: 'Can you say that more politely?', target: 'Het zou misschien beter zijn als...', explanation: 'Use softeners like "zou" and "misschien" for diplomacy.' },
   'verzachten': { prompt: 'You should soften your feedback.', target: 'Je zou je feedback wat moeten verzachten.', explanation: 'Verzachten means to soften or mitigate.' },
   'zullen': { prompt: 'It will rain tomorrow.', target: 'Het zal morgen regenen.', explanation: 'Use "zullen" for future predictions.' },
-  'zou': { prompt: 'I would like to go.', target: 'Ik zou graag gaan.', explanation: 'Use "zou" for hypothetical or polite requests.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {

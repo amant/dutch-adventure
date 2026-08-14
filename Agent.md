@@ -94,6 +94,7 @@ The AI in this app is not just a chatbot; it's a coach.
     - **Pronominal Adverb Mastery**: Practice merging prepositions with reference words (*er, hier, daar, waar*) to create essential Dutch connectors like *ermee, waarop,* and *daarnaar*, a critical bridge to B2-level cohesion.
     - **Formal Style & Nominalisation**: Training for B2+ learners to transform informal verbal sentences into professional, noun-based constructions (e.g., "De prijzen stijgen" -> "De stijging van de prijzen"), a key feature of academic and professional Dutch.
     - **Passive Voice Mastery**: Specialized training for B2 learners to master the passive voice (*lijdende vorm*), focusing on the distinction between process (*worden*) and result (*zijn*), and the unique Dutch impersonal "Er-passive" construction.
+    - **Hypotheticals & Unreal Conditions**: Practice expressing wishes, regrets, and hypothetical present and past scenarios using *had, was, zou* and *zou zijn/hebben*, a key B2 strategic and linguistic capability.
 
 ## 5. Information Architecture
 
