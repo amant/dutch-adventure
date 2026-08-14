@@ -3028,7 +3028,160 @@ export const reportedSpeechChapter: Chapter = {
   ]
 }
 
-export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter]
+export const relativeClauseChapter: Chapter = {
+  slug: 'betrekkelijke-bijzinnen',
+  level: 'B2',
+  title: "Relative Clauses & Antecedents",
+  capability: "Form elegant complex sentences by accurately embedding relative clauses using die, dat, wie, waar+prep, and wat.",
+  description: "Master Dutch relative clauses (betrekkelijke bijzinnen): distinguish die vs dat, person prepositions (met wie) vs pronominal relatives (waarmee), general antecedents (alles wat), and maintain subordinate word order.",
+  estimatedMinutes: 20,
+  stages: [
+    {
+      id: 'discover', title: 'Antecedents & Relative Pronouns', kind: 'discover',
+      intro: "A relative clause provides extra information about an antecedent (noun, person, or entire phrase).",
+      exercises: [
+        {
+          id: 'rel-ind-1', kind: 'induction', prompt: 'Notice the relative pronoun choice',
+          skills: ['recognition', 'grammar'],
+          inductionData: {
+            examples: [
+              { prompt: 'De-woord', answer: 'De collega die gisteren presenteerde...' },
+              { prompt: 'Het-woord', answer: 'Het rapport dat we hebben goedgekeurd...' },
+              { prompt: 'Persoon + Voorzetsel', answer: 'De klant met wie we overlegden...' },
+              { prompt: 'Zaak + Voorzetsel', answer: 'Het plan waarmee we instemden...' },
+              { prompt: 'Hele zin / Alles', answer: 'Hij haalde de deadline, wat iedereen verbaasde.' }
+            ],
+            ruleChallenge: 'Which relative pronoun is used after indefinite words like "alles" or "iets"?',
+            options: [
+              { text: 'wat', isCorrect: true },
+              { text: 'dat', isCorrect: false },
+              { text: 'die', isCorrect: false }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'understand', title: 'Contextual Inferences', kind: 'understand',
+      intro: "Examine how relative clauses convey precise qualifications in professional contexts.",
+      exercises: [
+        {
+          id: 'rel-inf-1', kind: 'inference-challenge', prompt: 'What does this clause specify?',
+          context: 'De leverancier met wie we vorig jaar een contract hebben gesloten, levert de software.',
+          skills: ['recognition', 'pragmatic'],
+          inferenceData: {
+            scenario: 'In an operations meeting, a manager states: "De leverancier met wie we vorig jaar een contract hebben gesloten, levert de software."',
+            options: [
+              { text: 'They are referring to the specific vendor who signed a contract with them last year.', isCorrect: true, explanation: 'Correct. "Met wie..." specifies and restricts the exact supplier being talked about.' },
+              { text: 'They are looking for a brand-new supplier to sign a contract with.', isCorrect: false, explanation: 'Incorrect. The contract was already signed last year.' },
+              { text: 'The supplier refused to deliver the software.', isCorrect: false, explanation: 'Incorrect. The supplier is currently delivering the software.' }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      id: 'transform', title: 'Combining Sentences', kind: 'transform',
+      intro: "Combine the two statements into one fluent sentence with a relative clause.",
+      exercises: [
+        {
+          id: 'rel-d-1', kind: 'relative-clause-drill', prompt: 'Combine these statements about the report',
+          skills: ['production', 'grammar'],
+          relativeClauseData: {
+            mainClause: 'Het rapport bevat belangrijke aanbevelingen.',
+            subordinateInfo: 'We hebben het rapport gisteren ontvangen.',
+            antecedent: 'Het rapport (het-woord)',
+            antecedentType: 'het-word',
+            relativePronoun: 'dat',
+            hint: 'Use "dat" and move all verbs to the end of the relative clause.'
+          },
+          target: 'Het rapport dat we gisteren hebben ontvangen, bevat belangrijke aanbevelingen',
+          acceptedAnswers: [
+            'Het rapport dat we gisteren hebben ontvangen bevat belangrijke aanbevelingen',
+            'Het rapport dat we gisteren ontvingen, bevat belangrijke aanbevelingen',
+            'Het rapport dat we gisteren ontvingen bevat belangrijke aanbevelingen',
+            'Het rapport dat we gisteren hebben gekregen, bevat belangrijke aanbevelingen',
+            'Het rapport dat we gisteren kregen, bevat belangrijke aanbevelingen'
+          ],
+          explanation: 'Since "rapport" is a het-word, use "dat", and move the verbs ("hebben ontvangen") to the end of the embedded clause.'
+        },
+        {
+          id: 'rel-d-2', kind: 'relative-clause-drill', prompt: 'Combine these statements about your colleague',
+          skills: ['production', 'grammar'],
+          relativeClauseData: {
+            mainClause: 'De projectleider is vandaag afwezig.',
+            subordinateInfo: 'Ik werk nauw samen met deze projectleider.',
+            antecedent: 'De projectleider (persoon + met)',
+            antecedentType: 'person-prep',
+            preposition: 'met',
+            relativePronoun: 'met wie',
+            hint: 'For people with a preposition, use "voorzetsel + wie" (met wie).'
+          },
+          target: 'De projectleider met wie ik nauw samenwerk, is vandaag afwezig',
+          acceptedAnswers: [
+            'De projectleider met wie ik nauw samenwerk is vandaag afwezig',
+            'De projectleider waar ik nauw mee samenwerk, is vandaag afwezig',
+            'De projectleider waar ik nauw mee samenwerk is vandaag afwezig'
+          ],
+          explanation: 'When referring to a person with a preposition, formal Dutch uses "[voorzetsel] wie" (e.g. "met wie").'
+        },
+        {
+          id: 'rel-d-3', kind: 'relative-clause-drill', prompt: 'Combine these statements about project factors',
+          skills: ['production', 'grammar'],
+          relativeClauseData: {
+            mainClause: 'Er zijn verschillende factoren.',
+            subordinateInfo: 'We moeten absoluut rekening houden met deze factoren.',
+            antecedent: 'Factoren (zaak + met)',
+            antecedentType: 'thing-prep',
+            preposition: 'met',
+            relativePronoun: 'waarmee',
+            hint: 'For inanimate objects with a preposition, combine into "waar + voorzetsel" (waarmee).'
+          },
+          target: 'Er zijn verschillende factoren waarmee we absoluut rekening moeten houden',
+          acceptedAnswers: [
+            'Er zijn verschillende factoren waar we absoluut rekening mee moeten houden',
+            'Er zijn verschillende factoren waarmee we rekening moeten houden',
+            'Er zijn verscheidene factoren waarmee we absoluut rekening moeten houden'
+          ],
+          explanation: 'For inanimate things + prepositions, use a pronominal relative adverb like "waarmee" or split "waar ... mee".'
+        },
+        {
+          id: 'rel-d-4', kind: 'relative-clause-drill', prompt: 'Combine these statements about the surprising event',
+          skills: ['production', 'grammar'],
+          relativeClauseData: {
+            mainClause: 'De directeur heeft onverwacht ontslag genomen.',
+            subordinateInfo: 'Deze hele gebeurtenis verbaast iedereen erg.',
+            antecedent: 'De gehele voorafgaande mededeling (whole clause)',
+            antecedentType: 'general-wat',
+            relativePronoun: 'wat',
+            hint: 'When referring to an entire preceding clause or fact, use "wat".'
+          },
+          target: 'De directeur heeft onverwacht ontslag genomen, wat iedereen erg verbaast',
+          acceptedAnswers: [
+            'De directeur heeft onverwacht ontslag genomen wat iedereen erg verbaast',
+            'De directeur heeft onverwacht ontslag genomen, wat iedereen verbaast',
+            'De directeur heeft onverwacht ontslag genomen, hetgeen iedereen erg verbaast'
+          ],
+          explanation: 'When the antecedent is an entire sentence or action, use "wat" (or formal "hetgeen").'
+        }
+      ]
+    },
+    {
+      id: 'personalise', title: 'Your Personal Connections', kind: 'personalise',
+      intro: "Describe a project, colleague, or system using a relative clause.",
+      exercises: [
+        {
+          id: 'rel-p-1', kind: 'personalise', prompt: 'Beschrijf een project, collega of applicatie waar je trots op bent met een betrekkelijke bijzin (gebruik "die", "dat", "met wie" of "waarmee").',
+          skills: ['production', 'speaking', 'pragmatic'],
+          vocabulary: ['project', 'collega', 'applicatie', 'ervaring', 'samenwerken'],
+          grammar: ['betrekkelijke-bijzinnen']
+        }
+      ]
+    }
+  ]
+}
+
+export const chapters: Chapter[] = [introductionChapter, storyChapter, coffeeChapter, formalityChapter, bakeryChapter, doctorMission, talkingAboutDayChapter, a1Capstone, opinionChapter, landlordMission, hotelMission, workDiscussionMission, newsChapter, debatingWorkChapter, salaryNegotiationMission, presentationChapter, newsSummaryChapter, doubtChapter, futureSpeculationChapter, socialNuanceChapter, workplaceChapter, mediationChapter, argumentationChapter, synthesisChapter, morphingChapter, persuasionChapter, paraphrasingChapter, registerChapter, selfCorrectionChapter, circumlocutionChapter, nuanceChapter, collocationChapter, mirroringChapter, precisionChapter, inferenceChapter, understatementChapter, logicalFlowChapter, b2Capstone, erChapter, diplomacyChapter, connectionChapter, formalStyleChapter, passiveVoiceChapter, hypotheticalChapter, reportedSpeechChapter, relativeClauseChapter]
 
 export function getChapter(slug: string) {
   return chapters.find((chapter) => chapter.slug === slug)

@@ -46,6 +46,12 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'beweren': { prompt: 'They claim that it is true.', target: 'Ze beweren dat het waar is.', explanation: 'Beweren means to claim or assert.' },
   'aangeven': { prompt: 'She indicated that she agreed.', target: 'Zij gaf aan dat ze het ermee eens was.', explanation: 'Aangeven means to indicate or state.' },
   'vragen of': { prompt: 'He asked whether we were ready.', target: 'Hij vroeg of we klaar waren.', explanation: 'Use "of" for indirect questions.' },
+  'betrekkelijke-bijzinnen': { prompt: 'The book that I am reading is interesting.', target: 'Het boek dat ik lees, is interessant.', explanation: 'Use "dat" for het-words in relative clauses.' },
+  'die': { prompt: 'The colleague who is helping me.', target: 'De collega die mij helpt.', explanation: 'Use "die" for de-words in relative clauses.' },
+  'dat': { prompt: 'The report that we received.', target: 'Het rapport dat we hebben ontvangen.', explanation: 'Use "dat" for het-words in relative clauses.' },
+  'waarmee': { prompt: 'The tool with which we work.', target: 'Het gereedschap waarmee we werken.', explanation: 'Use "waarmee" for things with preposition met.' },
+  'met wie': { prompt: 'The person with whom I spoke.', target: 'De persoon met wie ik sprak.', explanation: 'Use "met wie" for people with preposition met.' },
+  'wat': { prompt: 'Everything that he says.', target: 'Alles wat hij zegt.', explanation: 'Use "wat" after indefinite pronouns like alles.' },
 }
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
@@ -65,6 +71,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
   if (kind === 'nominalisation-drill') skills.push('production', 'grammar')
   if (kind === 'passive-drill') skills.push('production', 'grammar')
   if (kind === 'reported-speech-drill') skills.push('production', 'grammar')
+  if (kind === 'relative-clause-drill') skills.push('production', 'grammar')
 
   if (kind === 'reframing-drill') {
     return {
@@ -155,6 +162,25 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         speaker: 'De collega',
         reportingClause: 'De collega zei dat...',
         quoteType: 'statement'
+      },
+      vocabulary: type === 'vocabulary' ? [key] : [],
+      grammar: type === 'grammar' ? [key] : [],
+      target: info.target,
+      explanation: info.explanation
+    }
+  }
+
+  if (kind === 'relative-clause-drill') {
+    return {
+      id: `smart-${type}-${key}-${kind}`,
+      kind,
+      prompt: info.prompt,
+      skills,
+      relativeClauseData: {
+        mainClause: `Het onderwerp is belangrijk.`,
+        subordinateInfo: `We bespreken ${key} vandaag.`,
+        antecedent: key,
+        antecedentType: key === 'wat' ? 'general-wat' : key === 'met wie' ? 'person-prep' : key === 'waarmee' ? 'thing-prep' : 'het-word'
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],

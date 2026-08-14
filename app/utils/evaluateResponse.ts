@@ -195,6 +195,73 @@ function checkIndirectQuestionError(normalized: string) {
   return { found: false }
 }
 
+function checkRelativePronounError(normalized: string) {
+  // Check 1: 'alles dat', 'iets dat', 'niets dat', 'het enige dat' -> should be 'wat'
+  const indefiniteMatches = [
+    { wrong: 'alles dat', right: 'alles wat', word: 'alles' },
+    { wrong: 'iets dat', right: 'iets wat', word: 'iets' },
+    { wrong: 'niets dat', right: 'niets wat', word: 'niets' },
+    { wrong: 'het enige dat', right: 'het enige wat', word: 'het enige' },
+    { wrong: 'het beste dat', right: 'het beste wat', word: 'het beste' }
+  ]
+  for (const m of indefiniteMatches) {
+    if (normalized.includes(m.wrong)) {
+      return {
+        found: true,
+        message: `After '${m.word}', Dutch uses the relative pronoun 'wat', not 'dat'.`,
+        miniLesson: {
+          title: 'Relative Pronoun "Wat"',
+          content: 'Use "wat" (not "dat") when referring to indefinite pronouns (alles, iets, niets, veel, weinig), superlatives (het beste, het mooiste), or an entire preceding sentence.',
+          example: {
+            wrong: m.wrong,
+            right: m.right
+          }
+        }
+      }
+    }
+  }
+
+  // Check 2: Het-words incorrectly followed by 'die'
+  const hetWords = ['rapport', 'boek', 'plan', 'probleem', 'team', 'voorstel', 'project', 'contract', 'bedrijf', 'gebouw', 'document']
+  for (const hw of hetWords) {
+    if (normalized.includes(`het ${hw} die`) || normalized.includes(`dat ${hw} die`)) {
+      return {
+        found: true,
+        message: `'${hw}' is a het-word, so its relative pronoun is 'dat', not 'die'.`,
+        miniLesson: {
+          title: 'Relative Pronouns: Die vs Dat',
+          content: 'Use "die" for de-words and all plural nouns. Use "dat" for het-words in the singular.',
+          example: {
+            wrong: `het ${hw} die we zagen`,
+            right: `het ${hw} dat we zagen`
+          }
+        }
+      }
+    }
+  }
+
+  // Check 3: De-words incorrectly followed by 'dat'
+  const deWords = ['manager', 'collega', 'klant', 'presentatie', 'offerte', 'vergadering', 'oplossing', 'strategie', 'commissie']
+  for (const dw of deWords) {
+    if (normalized.includes(`de ${dw} dat`) || normalized.includes(`die ${dw} dat`)) {
+      return {
+        found: true,
+        message: `'${dw}' is a de-word, so its relative pronoun is 'die', not 'dat'.`,
+        miniLesson: {
+          title: 'Relative Pronouns: Die vs Dat',
+          content: 'Use "die" for de-words (and plurals). "Dat" is strictly for singular het-words.',
+          example: {
+            wrong: `de ${dw} dat hier werkt`,
+            right: `de ${dw} die hier werkt`
+          }
+        }
+      }
+    }
+  }
+
+  return { found: false }
+}
+
 function checkSubordinateClauseError(normalized: string, conjunction: string) {
   const words = normalized.split(' ')
   const index = words.indexOf(conjunction)
@@ -961,6 +1028,78 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       }
     }
 
+    // Relative Clause Drill Evaluation
+    if (exercise.kind === 'relative-clause-drill' && exercise.relativeClauseData) {
+      const target = normalizeAnswer(exercise.target || '')
+      const accepted = [target, ...(exercise.acceptedAnswers ?? [])].filter(Boolean).map(normalizeAnswer) as string[]
+      
+      const relError = checkRelativePronounError(normalized)
+      if (relError.found) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: relError.message,
+          miniLesson: relError.miniLesson,
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: 'Remember the correct relative pronoun for this antecedent.'
+          }
+        }
+      }
+
+      if (accepted.includes(normalized)) {
+        if (!base.skills.includes('production')) base.skills.push('production')
+        if (!base.skills.includes('grammar')) base.skills.push('grammar')
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Spot on! The antecedent, relative pronoun, and subordinate verb order are completely accurate.',
+          changeModifier: (base.changeModifier || 0) + 20
+        }
+      }
+
+      // Check for SVO inside die/dat/wat/waar clause
+      const pronounsToCheck = ['die', 'dat', 'wat', 'waarmee', 'waarop', 'waaraan', 'waarover', 'waarnaar', 'wie']
+      let foundSubError: any = null
+      for (const p of pronounsToCheck) {
+        const subErr = checkSubordinateClauseError(normalized, p)
+        if (subErr.found) {
+          foundSubError = subErr
+          break
+        }
+      }
+
+      if (foundSubError) {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'In relative clauses, all verbs must be placed at the end of the clause.',
+          explanation: foundSubError.message,
+          miniLesson: foundSubError.miniLesson
+        }
+      }
+
+      const similarity = calculateSimilarity(normalized, target)
+      if (similarity > 0.75) {
+        return {
+          ...base,
+          outcome: 'acceptable',
+          message: 'Very close! Check the exact relative pronoun or word placement.',
+          teacherCorrection: {
+            natural: exercise.target || '',
+            explanation: exercise.explanation || 'Make sure the relative clause is linked with the proper pronoun and verb-final word order.'
+          }
+        }
+      } else {
+        return {
+          ...base,
+          outcome: 'retry',
+          message: 'Not quite. Check how the two sentences connect using a relative pronoun.',
+          explanation: exercise.explanation || 'Identify the antecedent and use the corresponding relative pronoun (die, dat, wie, waar+prep, or wat).'
+        }
+      }
+    }
+
     if (!normalized && exercise.kind === 'typed') {
       return { ...base, outcome: 'retry', message: 'Type an answer to try it.' }
     }
@@ -1007,6 +1146,17 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
         outcome: 'acceptable',
         message: indirectQuestionError.message,
         miniLesson: indirectQuestionError.miniLesson
+      }
+    }
+
+    // Grammar Assistant: Relative Pronoun Check
+    const relativePronounError = checkRelativePronounError(normalized)
+    if (relativePronounError.found) {
+      return {
+        ...base,
+        outcome: 'acceptable',
+        message: relativePronounError.message,
+        miniLesson: relativePronounError.miniLesson
       }
     }
 
