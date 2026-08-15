@@ -56,13 +56,13 @@ export const introductionChapter: Chapter = {
         { 
           id: 'intro-speed-1', kind: 'speed-drill', prompt: 'I am ...', 
           target: 'Ik ben', 
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         { 
           id: 'intro-speed-2', kind: 'speed-drill', prompt: 'I live in ...', 
           target: 'Ik woon in', 
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         }
       ],
@@ -157,7 +157,7 @@ export const opinionChapter: Chapter = {
         vocabulary: ['rustig'],
         grammar: ['omdat-clause'],
         placeholder: 'Rewrite the sentence...',
-        automaticitySeconds: 15
+        automaticitySeconds: 20
       }],
     },
     {
@@ -167,14 +167,14 @@ export const opinionChapter: Chapter = {
         { 
           id: 'opinion-speed-1', kind: 'speed-drill', prompt: 'I think that...', 
           target: 'Ik denk dat', 
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           grammar: ['omdat-clause']
         },
         { 
           id: 'opinion-speed-2', kind: 'speed-drill', prompt: 'In my opinion...', 
           target: 'Volgens mij', 
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           grammar: ['word-order']
         }
@@ -407,7 +407,7 @@ export const newsChapter: Chapter = {
         target: 'voorstel', 
         skills: ['production', 'automaticity'],
         vocabulary: ['voorstel'],
-        automaticitySeconds: 5
+        automaticitySeconds: 10
       }],
     }
   ]
@@ -613,7 +613,7 @@ export const bakeryChapter: Chapter = {
         target: 'Mag ik twee krentenbollen?',
         skills: ['production', 'automaticity'],
         vocabulary: ['krentenbollen'],
-        automaticitySeconds: 8
+        automaticitySeconds: 20
       }],
     },
     {
@@ -810,14 +810,14 @@ export const formalityChapter: Chapter = {
         { 
           id: 'formal-3', kind: 'speed-drill', prompt: 'Your book (formal)', 
           target: 'Uw boek', 
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           grammar: ['formal-v-informal']
         },
         { 
           id: 'formal-4', kind: 'speed-drill', prompt: 'How are you? (informal)', 
           target: 'Hoe gaat het met je?', 
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           grammar: ['formal-v-informal']
         }
@@ -866,14 +866,14 @@ export const presentationChapter: Chapter = {
         { 
           id: 'pres-2', kind: 'speed-drill', prompt: 'In conclusion', 
           target: 'Tot slot', 
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           vocabulary: ['tot slot']
         },
         { 
           id: 'pres-3', kind: 'speed-drill', prompt: 'On the other hand', 
           target: 'Aan de andere kant', 
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           vocabulary: ['aan de andere kant']
         }
@@ -959,14 +959,14 @@ export const doubtChapter: Chapter = {
         { 
           id: 'doubt-2', kind: 'speed-drill', prompt: 'Probably', 
           target: 'Waarschijnlijk', 
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           vocabulary: ['waarschijnlijk']
         },
         { 
           id: 'doubt-3', kind: 'speed-drill', prompt: 'Maybe', 
           target: 'Misschien', 
-          automaticitySeconds: 2,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production'],
           vocabulary: ['misschien']
         }
@@ -1653,14 +1653,14 @@ export const selfCorrectionChapter: Chapter = {
           target: 'Ik denk dat hij moe is.', 
           skills: ['production', 'automaticity'],
           grammar: ['word-order'],
-          automaticitySeconds: 5
+          automaticitySeconds: 20
         },
         { 
           id: 'correct-4', kind: 'transformation', prompt: 'Repair: Morgen we gaan naar zee.', 
           target: 'Morgen gaan we naar zee.', 
           skills: ['production', 'automaticity'],
           grammar: ['word-order'],
-          automaticitySeconds: 5
+          automaticitySeconds: 20
         }
       ],
     },
@@ -6714,7 +6714,7 @@ export const directionsChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Turn left (imperative)',
           target: 'Sla linksaf',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -6722,7 +6722,7 @@ export const directionsChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Go straight ahead',
           target: 'Ga rechtdoor',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -6877,7 +6877,7 @@ export const supermarketChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Card payment, please (Pinnen...)',
           target: 'Pinnen, alstublieft',
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -6885,7 +6885,7 @@ export const supermarketChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'No receipt needed (Nee, dank u)',
           target: 'Nee, dank u',
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7045,7 +7045,7 @@ export const timeAndScheduleChapter: Chapter = {
           kind: 'speed-drill',
           prompt: '14:30 (half ...)',
           target: 'half drie',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7053,7 +7053,7 @@ export const timeAndScheduleChapter: Chapter = {
           kind: 'speed-drill',
           prompt: '09:15 (kwart ...)',
           target: 'kwart over negen',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7211,7 +7211,7 @@ export const transitChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Which track? (Van welk...)',
           target: 'Van welk spoor',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7219,7 +7219,7 @@ export const transitChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Do I have to transfer? (Moet ik...)',
           target: 'Moet ik overstappen?',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7379,7 +7379,7 @@ export const housingChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Is the apartment furnished? (Is het...)',
           target: 'Is het appartement gemeubileerd?',
-          automaticitySeconds: 5,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -7387,7 +7387,7 @@ export const housingChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'When is it available? (Wanneer is...)',
           target: 'Wanneer is de woning beschikbaar?',
-          automaticitySeconds: 5,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -7547,7 +7547,7 @@ export const pastStorytellingChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Past of "gaan" (we ...)',
           target: 'wij gingen',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7555,7 +7555,7 @@ export const pastStorytellingChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Past of "blijven" (ik ...)',
           target: 'ik bleef',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7744,7 +7744,7 @@ export const businessEmailChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Kind regards (closing)',
           target: 'Met vriendelijke groet',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7752,7 +7752,7 @@ export const businessEmailChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'In the attachment you will find...',
           target: 'In de bijlage treft u',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -7911,7 +7911,7 @@ export const debatingAgreementChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'I completely agree (Daar ben...)',
           target: 'Daar ben ik het helemaal mee eens',
-          automaticitySeconds: 4,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -7919,7 +7919,7 @@ export const debatingAgreementChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'To a certain extent (Tot op...)',
           target: 'Tot op zekere hoogte',
-          automaticitySeconds: 4,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -8076,7 +8076,7 @@ export const civicServicesChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Apply for a permit (Een vergunning...)',
           target: 'Een vergunning aanvragen',
-          automaticitySeconds: 4,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -8084,7 +8084,7 @@ export const civicServicesChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'How long does the processing take? (Hoe lang...)',
           target: 'Hoe lang duurt de behandeling?',
-          automaticitySeconds: 4,
+          automaticitySeconds: 20,
           skills: ['automaticity', 'production']
         },
         {
@@ -8256,7 +8256,7 @@ export const maritimeChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'All hands on deck! (Alle hens...)',
           target: 'Alle hens aan dek!',
-          automaticitySeconds: 3,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'idiomatic']
         },
         {
@@ -8264,7 +8264,7 @@ export const maritimeChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Board the enemy ship (Het schip...)',
           target: 'Het schip enteren',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -8272,7 +8272,7 @@ export const maritimeChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Competitors / rivals lurking (Kapers...)',
           target: 'Er zijn kapers op de kust',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'idiomatic']
         },
         {
@@ -8464,7 +8464,7 @@ export const footballCruyffChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Every disadvantage has its advantage (Elk nadeel...)',
           target: "Elk nadeel heb z'n voordeel",
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'idiomatic']
         },
         {
@@ -8472,7 +8472,7 @@ export const footballCruyffChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'If we have the ball, they cannot score (Als wij...)',
           target: 'Als wij de bal hebben, kunnen zij niet scoren',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'idiomatic']
         },
         {
@@ -8480,7 +8480,7 @@ export const footballCruyffChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Rapid short-passing triangle combinations in tiki-taka (Snelle driehoekscombinaties...)',
           target: 'Snelle driehoekscombinaties en positiespel',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {
@@ -8488,7 +8488,7 @@ export const footballCruyffChapter: Chapter = {
           kind: 'speed-drill',
           prompt: 'Finding the third man in open space (De derde man...)',
           target: 'De derde man vinden in de vrije ruimte',
-          automaticitySeconds: 4,
+          automaticitySeconds: 10,
           skills: ['automaticity', 'production']
         },
         {

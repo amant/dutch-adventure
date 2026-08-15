@@ -446,6 +446,7 @@ function next() { feedback.value = undefined; session.advance() }
 
       <div v-else-if="session.exercise.value.kind === 'speed-drill'" class="renderer">
         <SpeedDrill 
+          :key="`${session.exercise.value.id}-${feedback ? 'feedback' : 'active'}`"
           :exercise="session.exercise.value" 
           v-model="session.response.value"
           :feedback="feedback"
