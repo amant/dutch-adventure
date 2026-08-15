@@ -1,67 +1,73 @@
 <script setup lang="ts">
 const props = defineProps<{
-  active?: boolean
-}>()
+  active?: boolean;
+}>();
 
-const emit = defineEmits(['result', 'start', 'stop', 'error'])
+const emit = defineEmits(['result', 'start', 'stop', 'error']);
 
-const isListening = ref(false)
-const isSupported = ref(false)
-let recognition: any = null
+const isListening = ref(false);
+const isSupported = ref(false);
+let recognition: any = null;
 
 onMounted(() => {
-  const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+  const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
   if (SpeechRecognition) {
-    isSupported.value = true
-    recognition = new SpeechRecognition()
-    recognition.lang = 'nl-NL'
-    recognition.continuous = false
-    recognition.interimResults = false
+    isSupported.value = true;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'nl-NL';
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
     recognition.onstart = () => {
-      isListening.value = true
-      emit('start')
-    }
+      isListening.value = true;
+      emit('start');
+    };
 
     recognition.onend = () => {
-      isListening.value = false
-      emit('stop')
-    }
+      isListening.value = false;
+      emit('stop');
+    };
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript
-      emit('result', transcript)
-    }
+      const transcript = event.results[0][0].transcript;
+      emit('result', transcript);
+    };
 
     recognition.onerror = (event: any) => {
-      console.error('Speech recognition error', event.error)
-      emit('error', event.error)
-      isListening.value = false
-    }
+      console.error('Speech recognition error', event.error);
+      emit('error', event.error);
+      isListening.value = false;
+    };
   }
-})
+});
 
 function toggleListening() {
-  if (!recognition) return
+  if (!recognition) return;
   if (isListening.value) {
-    recognition.stop()
+    recognition.stop();
   } else {
-    recognition.start()
+    recognition.start();
   }
 }
 </script>
 
 <template>
-  <div v-if="isSupported" class="voice-input">
-    <button 
+  <div
+    v-if="isSupported"
+    class="voice-input"
+  >
+    <button
       type="button"
-      class="mic-button" 
+      class="mic-button"
       :class="{ listening: isListening, active: active }"
-      @click="toggleListening"
       title="Speak your response"
+      @click="toggleListening"
     >
       <span class="icon">{{ isListening ? '⏹' : '🎤' }}</span>
-      <div v-if="isListening" class="pulse"></div>
+      <div
+        v-if="isListening"
+        class="pulse"
+      />
     </button>
   </div>
 </template>

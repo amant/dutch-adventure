@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { diffStrings } from '~/utils/diffStrings'
+import { computed } from 'vue';
+import { diffStrings } from '~/utils/diffStrings';
 
 const props = defineProps<{
-  original: string
-  corrected: string
-}>()
+  original: string;
+  corrected: string;
+}>();
 
-const diff = computed(() => diffStrings(props.original, props.corrected))
+const diff = computed(() => diffStrings(props.original, props.corrected));
 </script>
 
 <template>
   <div class="teacher-redline card">
-    <div class="eyebrow red">Teacher's Redline</div>
+    <div class="eyebrow red">
+      Teacher's Redline
+    </div>
     <div class="diff-view">
-      <template v-for="(part, idx) in diff" :key="idx">
+      <template
+        v-for="(part, idx) in diff"
+        :key="idx"
+      >
         <span :class="part.type">{{ part.value }}</span>
       </template>
     </div>

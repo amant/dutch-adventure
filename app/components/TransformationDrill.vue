@@ -1,40 +1,53 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'retry'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next', 'retry']);
+const response = defineModel<string>();
 
 const parts = computed(() => {
-  if (!props.exercise.context) return []
-  return props.exercise.context.split('\n')
-})
+  if (!props.exercise.context) return [];
+  return props.exercise.context.split('\n');
+});
 </script>
 
 <template>
   <div class="transformation-drill">
     <div class="instruction card">
-      <div class="eyebrow">Original</div>
-      <p class="original">{{ parts[0] }}</p>
-      
+      <div class="eyebrow">
+        Original
+      </div>
+      <p class="original">
+        {{ parts[0] }}
+      </p>
+
       <div class="change-instruction">
         <span class="icon">➔</span>
         <span>{{ exercise.prompt }}</span>
       </div>
     </div>
 
-    <form v-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
-      <textarea 
-        v-model="response" 
-        :placeholder="exercise.placeholder || 'Type the modified sentence...'" 
-        rows="3" 
-        autofocus 
+    <form
+      v-if="!feedback"
+      class="input-area"
+      @submit.prevent="emit('submit')"
+    >
+      <textarea
+        v-model="response"
+        :placeholder="exercise.placeholder || 'Type the modified sentence...'"
+        rows="3"
+        autofocus
       />
-      <button class="button" type="submit">Check transformation</button>
+      <button
+        class="button"
+        type="submit"
+      >
+        Check transformation
+      </button>
     </form>
   </div>
 </template>

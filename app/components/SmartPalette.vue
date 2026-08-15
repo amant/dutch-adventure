@@ -1,49 +1,52 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps<{
-  userText: string
-  targetVocabulary?: string[]
-  targetGrammar?: string[]
-  frontierConcepts?: { key: string, kind: string }[]
-}>()
+  userText: string;
+  targetVocabulary?: string[];
+  targetGrammar?: string[];
+  frontierConcepts?: { key: string; kind: string }[];
+}>();
 
 const isUsed = (concept: string) => {
-  const normalized = props.userText.toLowerCase()
-  return normalized.includes(concept.toLowerCase())
-}
+  const normalized = props.userText.toLowerCase();
+  return normalized.includes(concept.toLowerCase());
+};
 
 const allTargets = computed(() => {
-  const items: { label: string, kind: 'vocabulary' | 'grammar' | 'frontier', isUsed: boolean }[] = []
-  
-  props.targetVocabulary?.forEach(v => items.push({ label: v, kind: 'vocabulary', isUsed: isUsed(v) }))
-  props.targetGrammar?.forEach(g => items.push({ label: g, kind: 'grammar', isUsed: isUsed(g) }))
-  props.frontierConcepts?.forEach(f => {
+  const items: { label: string; kind: 'vocabulary' | 'grammar' | 'frontier'; isUsed: boolean }[] = [];
+
+  props.targetVocabulary?.forEach(v => items.push({ label: v, kind: 'vocabulary', isUsed: isUsed(v) }));
+  props.targetGrammar?.forEach(g => items.push({ label: g, kind: 'grammar', isUsed: isUsed(g) }));
+  props.frontierConcepts?.forEach((f) => {
     // Avoid duplicates if a frontier concept is already a target
     if (!items.some(i => i.label.toLowerCase() === f.key.toLowerCase())) {
-      items.push({ label: f.key, kind: 'frontier', isUsed: isUsed(f.key) })
+      items.push({ label: f.key, kind: 'frontier', isUsed: isUsed(f.key) });
     }
-  })
-  
-  return items
-})
+  });
+
+  return items;
+});
 </script>
 
 <template>
-  <div v-if="allTargets.length > 0" class="smart-palette">
+  <div
+    v-if="allTargets.length > 0"
+    class="smart-palette"
+  >
     <div class="palette-header">
       <span class="p-title">Building Blocks</span>
       <span class="p-count">{{ allTargets.filter(t => t.isUsed).length }} / {{ allTargets.length }} used</span>
     </div>
-    
+
     <div class="palette-chips">
-      <div 
-        v-for="item in allTargets" 
-        :key="item.label" 
+      <div
+        v-for="item in allTargets"
+        :key="item.label"
         class="chip"
         :class="[item.kind, { used: item.isUsed }]"
       >
-        <span class="status-dot"></span>
+        <span class="status-dot" />
         <span class="label">{{ item.label }}</span>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 useHead({
   title: 'Netherlands Taal Avonturen | Grand Line Dutch Learning',
@@ -9,12 +9,12 @@ useHead({
   link: [
     { rel: 'icon', type: 'image/svg+xml', href: `/favicon.svg` },
   ],
-})
+});
 
-const isMobileNavOpen = ref(false)
+const isMobileNavOpen = ref(false);
 const toggleMobileNav = () => {
-  isMobileNavOpen.value = !isMobileNavOpen.value
-}
+  isMobileNavOpen.value = !isMobileNavOpen.value;
+};
 
 const navLinks = [
   { to: '/graph', label: 'Graph', icon: '🗺️' },
@@ -27,17 +27,20 @@ const navLinks = [
   { to: '/vocabulary', label: 'Vocabulary', icon: '⚡' },
   { to: '/grammar', label: 'Grammar', icon: '⚓' },
   { to: '/progress', label: 'Progress', icon: '🏆' },
-]
+];
 </script>
 
 <template>
   <div class="app-shell">
     <NuxtRouteAnnouncer />
-    
+
     <!-- Top Adventure Header -->
     <header class="topbar">
       <div class="topbar-inner">
-        <NuxtLink to="/" class="brand">
+        <NuxtLink
+          to="/"
+          class="brand"
+        >
           <span class="brand-emblem">⚓</span>
           <div class="brand-text">
             <span class="brand-title">Netherlands Taal Avonturen</span>
@@ -47,9 +50,9 @@ const navLinks = [
 
         <!-- Desktop Navigation -->
         <nav class="desktop-nav">
-          <NuxtLink 
-            v-for="link in navLinks" 
-            :key="link.to" 
+          <NuxtLink
+            v-for="link in navLinks"
+            :key="link.to"
             :to="link.to"
             class="nav-item"
           >
@@ -59,24 +62,27 @@ const navLinks = [
         </nav>
 
         <!-- Mobile Menu Toggle Button -->
-        <button 
-          class="mobile-toggle" 
+        <button
+          class="mobile-toggle"
           :class="{ active: isMobileNavOpen }"
-          @click="toggleMobileNav"
           aria-label="Toggle navigation menu"
+          @click="toggleMobileNav"
         >
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+          <span class="bar" />
+          <span class="bar" />
+          <span class="bar" />
         </button>
       </div>
 
       <!-- Mobile Dropdown Navigation -->
       <transition name="anime-drop">
-        <nav v-if="isMobileNavOpen" class="mobile-nav">
-          <NuxtLink 
-            v-for="link in navLinks" 
-            :key="link.to" 
+        <nav
+          v-if="isMobileNavOpen"
+          class="mobile-nav"
+        >
+          <NuxtLink
+            v-for="link in navLinks"
+            :key="link.to"
             :to="link.to"
             class="mobile-nav-item"
             @click="isMobileNavOpen = false"

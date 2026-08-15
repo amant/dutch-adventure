@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { chapters } from '~/data/chapters'
-import { getFamilyForWord } from '~/data/wordFamilies'
-import type { SkillDimension } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { chapters } from '~/data/chapters';
+import { getFamilyForWord } from '~/data/wordFamilies';
+import type { SkillDimension } from '~/types/learning';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
-const dimensions: { id: SkillDimension, label: string }[] = [
+const dimensions: { id: SkillDimension; label: string }[] = [
   { id: 'recognition', label: 'Recognition' },
   { id: 'meaning', label: 'Meaning' },
   { id: 'listening', label: 'Listening' },
@@ -16,121 +16,155 @@ const dimensions: { id: SkillDimension, label: string }[] = [
   { id: 'speaking', label: 'Speaking' },
   { id: 'automaticity', label: 'Automaticity' },
   { id: 'coherence', label: 'Coherence' },
-  { id: 'idiomatic', label: 'Idiomatic' }
-]
+  { id: 'idiomatic', label: 'Idiomatic' },
+];
 
 const words = computed(() => {
-  return Object.entries(memory.value.vocabulary).sort(([a], [b]) => a.localeCompare(b))
-})
+  return Object.entries(memory.value.vocabulary).sort(([a], [b]) => a.localeCompare(b));
+});
 
-const selectedWord = ref<string | null>(null)
-const selectedState = computed(() => selectedWord.value ? memory.value.vocabulary[selectedWord.value] : null)
+const selectedWord = ref<string | null>(null);
+const selectedState = computed(() => selectedWord.value ? memory.value.vocabulary[selectedWord.value] : null);
 
-const corpusSearch = ref('')
+const corpusSearch = ref('');
 
 const filteredWords = computed(() => {
-  if (!corpusSearch.value) return words.value
-  const q = corpusSearch.value.toLowerCase()
+  if (!corpusSearch.value) return words.value;
+  const q = corpusSearch.value.toLowerCase();
   return words.value.filter(([word, state]) => {
-    const inWord = word.toLowerCase().includes(q)
-    const inHistory = state.usageHistory?.some(h => h.snippet.toLowerCase().includes(q))
-    return inWord || inHistory
-  })
-})
+    const inWord = word.toLowerCase().includes(q);
+    const inHistory = state.usageHistory?.some(h => h.snippet.toLowerCase().includes(q));
+    return inWord || inHistory;
+  });
+});
 
 const allUsageSnippets = computed(() => {
-  if (!corpusSearch.value) return []
-  const q = corpusSearch.value.toLowerCase()
-  const snippets: { word: string, snippet: string, date: string }[] = []
-  
+  if (!corpusSearch.value) return [];
+  const q = corpusSearch.value.toLowerCase();
+  const snippets: { word: string; snippet: string; date: string }[] = [];
+
   words.value.forEach(([word, state]) => {
-    state.usageHistory?.forEach(h => {
+    state.usageHistory?.forEach((h) => {
       if (h.snippet.toLowerCase().includes(q) || word.toLowerCase().includes(q)) {
-        snippets.push({ word, ...h })
+        snippets.push({ word, ...h });
       }
-    })
-  })
-  
-  return snippets.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-})
+    });
+  });
+
+  return snippets.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+});
 
 const relatedChapters = computed(() => {
-  if (!selectedWord.value) return []
-  const w = selectedWord.value.toLowerCase()
-  return chapters.filter(c => 
-    c.stages.some(s => 
-      s.exercises.some(e => e.vocabulary?.some(vocab => vocab.toLowerCase() === w))
-    )
-  )
-})
+  if (!selectedWord.value) return [];
+  const w = selectedWord.value.toLowerCase();
+  return chapters.filter(c =>
+    c.stages.some(s =>
+      s.exercises.some(e => e.vocabulary?.some(vocab => vocab.toLowerCase() === w)),
+    ),
+  );
+});
 
 const collocations = computed(() => {
-  if (!selectedWord.value) return []
-  const w = selectedWord.value.toLowerCase()
-  const found: string[] = []
-  
-  chapters.forEach(c => {
-    c.stages.forEach(s => {
-      s.exercises.forEach(e => {
+  if (!selectedWord.value) return [];
+  const w = selectedWord.value.toLowerCase();
+  const found: string[] = [];
+
+  chapters.forEach((c) => {
+    c.stages.forEach((s) => {
+      s.exercises.forEach((e) => {
         if (e.kind === 'collocation-drill' && e.context?.toLowerCase().includes(w)) {
           // If the word we selected is the noun, the collocation is target + noun
           if (e.target) {
-            found.push(`${e.target} ${e.context}`)
+            found.push(`${e.target} ${e.context}`);
           }
         }
         // Also check if it's explicitly listed in info contexts
         if (e.context?.toLowerCase().includes(w) && e.context.includes(' + ')) {
-          const lines = e.context.split('\n')
-          lines.forEach(line => {
+          const lines = e.context.split('\n');
+          lines.forEach((line) => {
             if (line.toLowerCase().includes(w) && line.includes(' ')) {
-               found.push(line.replace(/^- /, ''))
+              found.push(line.replace(/^- /, ''));
             }
-          })
+          });
         }
-      })
-    })
-  })
-  
-  return [...new Set(found)].slice(0, 5)
-})
+      });
+    });
+  });
+
+  return [...new Set(found)].slice(0, 5);
+});
 
 const wordFamily = computed(() => {
-  if (!selectedWord.value) return null
-  return getFamilyForWord(selectedWord.value)
-})
+  if (!selectedWord.value) return null;
+  return getFamilyForWord(selectedWord.value);
+});
 </script>
 
 <template>
   <section class="vocabulary-view">
-    <div class="eyebrow">Language Graph</div>
+    <div class="eyebrow">
+      Language Graph
+    </div>
     <h1>Vocabulary Library</h1>
-    <p class="muted">Every word you've encountered and your current mastery across all dimensions.</p>
+    <p class="muted">
+      Every word you've encountered and your current mastery across all dimensions.
+    </p>
 
     <div class="search-corpus card">
-      <input v-model="corpusSearch" placeholder="Search words or your own sentences..." class="corpus-input" />
-      <div v-if="corpusSearch" class="search-meta">Found {{ filteredWords.length }} words and {{ allUsageSnippets.length }} snippets</div>
+      <input
+        v-model="corpusSearch"
+        placeholder="Search words or your own sentences..."
+        class="corpus-input"
+      >
+      <div
+        v-if="corpusSearch"
+        class="search-meta"
+      >
+        Found {{ filteredWords.length }} words and {{ allUsageSnippets.length }} snippets
+      </div>
     </div>
 
-    <div v-if="words.length === 0" class="empty-state">
+    <div
+      v-if="words.length === 0"
+      class="empty-state"
+    >
       <p>You haven't encountered any words yet. Start a chapter to build your vocabulary!</p>
-      <NuxtLink to="/" class="button">Browse chapters</NuxtLink>
+      <NuxtLink
+        to="/"
+        class="button"
+      >Browse chapters</NuxtLink>
     </div>
 
-    <div v-else class="layout">
+    <div
+      v-else
+      class="layout"
+    >
       <div class="main-content">
-        <div v-if="corpusSearch && allUsageSnippets.length > 0" class="corpus-results">
+        <div
+          v-if="corpusSearch && allUsageSnippets.length > 0"
+          class="corpus-results"
+        >
           <div class="corpus-header">
-            <div class="eyebrow">Personal Sentence Corpus</div>
-            <NuxtLink 
-              :to="{ path: '/smart-review', query: { mode: 'fluency' } }" 
+            <div class="eyebrow">
+              Personal Sentence Corpus
+            </div>
+            <NuxtLink
+              :to="{ path: '/smart-review', query: { mode: 'fluency' } }"
               class="button secondary small"
             >
               Practice My Phrases
             </NuxtLink>
           </div>
           <div class="usage-grid">
-            <div v-for="(h, idx) in allUsageSnippets" :key="idx" class="card usage-card" @click="selectedWord = h.word">
-              <p class="snippet">"{{ h.snippet }}"</p>
+            <div
+              v-for="(h, idx) in allUsageSnippets"
+              :key="idx"
+              class="card usage-card"
+              @click="selectedWord = h.word"
+            >
+              <p class="snippet">
+                "{{ h.snippet }}"
+              </p>
               <div class="usage-meta">
                 <span class="word-link">{{ h.word }}</span>
                 <span class="date">{{ new Date(h.date).toLocaleDateString() }}</span>
@@ -140,83 +174,128 @@ const wordFamily = computed(() => {
         </div>
 
         <div class="word-grid">
-          <div 
-            v-for="[word, state] in filteredWords" 
-          :key="word" 
-          class="card word-card"
-          :class="{ active: selectedWord === word }"
-          @click="selectedWord = word"
-        >
-          <div class="word-header">
-            <div>
-              <h3>{{ word }}</h3>
-              <div v-if="state.lastEncountered" class="last-seen">
-                Seen {{ new Date(state.lastEncountered).toLocaleDateString() }}
+          <div
+            v-for="[word, state] in filteredWords"
+            :key="word"
+            class="card word-card"
+            :class="{ active: selectedWord === word }"
+            @click="selectedWord = word"
+          >
+            <div class="word-header">
+              <div>
+                <h3>{{ word }}</h3>
+                <div
+                  v-if="state.lastEncountered"
+                  class="last-seen"
+                >
+                  Seen {{ new Date(state.lastEncountered).toLocaleDateString() }}
+                </div>
+              </div>
+              <div class="encounter-badge">
+                {{ state.successes }}/{{ state.encounters }} hits
               </div>
             </div>
-            <div class="encounter-badge">{{ state.successes }}/{{ state.encounters }} hits</div>
-          </div>
-          <div class="mini-graph">
-            <div 
-              v-for="dim in dimensions" 
-              :key="dim.id" 
-              class="mini-bar" 
-              :style="{ height: `${state[dim.id] || 0}%`, opacity: 0.3 + ((state[dim.id] || 0) / 150) }"
-              :title="dim.label"
-            ></div>
+            <div class="mini-graph">
+              <div
+                v-for="dim in dimensions"
+                :key="dim.id"
+                class="mini-bar"
+                :style="{ height: `${state[dim.id] || 0}%`, opacity: 0.3 + ((state[dim.id] || 0) / 150) }"
+                :title="dim.label"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <aside v-if="selectedWord && selectedState" class="detail-panel card">
+      <aside
+        v-if="selectedWord && selectedState"
+        class="detail-panel card"
+      >
         <div class="detail-header">
           <h2>{{ selectedWord }}</h2>
-          <button class="close-btn" @click="selectedWord = null">×</button>
+          <button
+            class="close-btn"
+            @click="selectedWord = null"
+          >
+            ×
+          </button>
         </div>
 
         <div class="dimensions-detail">
-          <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
+          <div
+            v-for="dim in dimensions"
+            :key="dim.id"
+            class="dimension-row"
+          >
             <span class="dim-label">{{ dim.label }}</span>
             <div class="dim-bar-container">
-              <div class="dim-bar" :style="{ width: `${selectedState[dim.id] || 0}%` }"></div>
+              <div
+                class="dim-bar"
+                :style="{ width: `${selectedState[dim.id] || 0}%` }"
+              />
             </div>
             <span class="dim-value">{{ selectedState[dim.id] || 0 }}%</span>
           </div>
         </div>
 
-        <div v-if="selectedState.usageHistory && selectedState.usageHistory.length > 0" class="history-section">
+        <div
+          v-if="selectedState.usageHistory && selectedState.usageHistory.length > 0"
+          class="history-section"
+        >
           <div class="section-header">
-            <div class="eyebrow">Usage History</div>
-            <NuxtLink 
-              :to="{ path: '/smart-review', query: { mode: 'fluency' } }" 
+            <div class="eyebrow">
+              Usage History
+            </div>
+            <NuxtLink
+              :to="{ path: '/smart-review', query: { mode: 'fluency' } }"
               class="practice-link"
             >
               Automate this word
             </NuxtLink>
           </div>
           <ul class="usage-list">
-            <li v-for="(h, idx) in selectedState.usageHistory" :key="idx" class="usage-item">
-              <p class="snippet">"{{ h.snippet }}"</p>
+            <li
+              v-for="(h, idx) in selectedState.usageHistory"
+              :key="idx"
+              class="usage-item"
+            >
+              <p class="snippet">
+                "{{ h.snippet }}"
+              </p>
               <span class="date">{{ new Date(h.date).toLocaleDateString() }}</span>
             </li>
           </ul>
         </div>
 
-        <div v-if="collocations.length > 0" class="collocations-section">
-          <div class="eyebrow">Common Collocations</div>
+        <div
+          v-if="collocations.length > 0"
+          class="collocations-section"
+        >
+          <div class="eyebrow">
+            Common Collocations
+          </div>
           <div class="coll-list">
-            <div v-for="coll in collocations" :key="coll" class="coll-item">
+            <div
+              v-for="coll in collocations"
+              :key="coll"
+              class="coll-item"
+            >
               {{ coll }}
             </div>
           </div>
         </div>
 
-        <div v-if="wordFamily" class="family-section">
-          <div class="eyebrow">Word Family</div>
+        <div
+          v-if="wordFamily"
+          class="family-section"
+        >
+          <div class="eyebrow">
+            Word Family
+          </div>
           <div class="family-grid">
-            <div 
-              v-for="member in wordFamily.members" 
+            <div
+              v-for="member in wordFamily.members"
               :key="member.word"
               class="family-member"
               :class="{ current: member.word.toLowerCase() === selectedWord.toLowerCase() }"
@@ -226,20 +305,31 @@ const wordFamily = computed(() => {
               <span class="member-role">{{ member.role }}</span>
             </div>
           </div>
-          <div v-if="wordFamily.synonyms" class="synonyms mt-3">
+          <div
+            v-if="wordFamily.synonyms"
+            class="synonyms mt-3"
+          >
             <span class="muted">Synonyms: </span>
-            <span v-for="(s, idx) in wordFamily.synonyms" :key="s">
+            <span
+              v-for="(s, idx) in wordFamily.synonyms"
+              :key="s"
+            >
               {{ s }}{{ idx < wordFamily.synonyms.length - 1 ? ', ' : '' }}
             </span>
           </div>
         </div>
 
-        <div v-if="relatedChapters.length > 0" class="related-section">
-          <div class="eyebrow">Found in Chapters</div>
+        <div
+          v-if="relatedChapters.length > 0"
+          class="related-section"
+        >
+          <div class="eyebrow">
+            Found in Chapters
+          </div>
           <div class="chapter-tags">
-            <NuxtLink 
-              v-for="c in relatedChapters" 
-              :key="c.slug" 
+            <NuxtLink
+              v-for="c in relatedChapters"
+              :key="c.slug"
               :to="`/chapter/${c.slug}`"
               class="chapter-tag"
             >
@@ -516,12 +606,12 @@ const wordFamily = computed(() => {
 
 .collocations-section { margin-top: 24px; }
 .coll-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-.coll-item { 
-  font-size: 14px; 
-  color: $ink-dark; 
-  background: $ocean-ice; 
-  padding: 8px 12px; 
-  border-radius: $radius-sm; 
+.coll-item {
+  font-size: 14px;
+  color: $ink-dark;
+  background: $ocean-ice;
+  padding: 8px 12px;
+  border-radius: $radius-sm;
   border: 1px solid $ocean-border;
   font-weight: 600;
 }

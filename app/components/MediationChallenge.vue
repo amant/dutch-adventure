@@ -1,46 +1,60 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit']);
+const response = defineModel<string>();
 
-const achievedPointIds = computed(() => props.feedback?.mediationPointsAchieved || [])
+const achievedPointIds = computed(() => props.feedback?.mediationPointsAchieved || []);
 
 const isPointAchieved = (point: any) => {
-  if (achievedPointIds.value.includes(point.id)) return true
-  if (!response.value) return false
-  return point.keywords.some((k: string) => response.value?.toLowerCase().includes(k.toLowerCase()))
-}
+  if (achievedPointIds.value.includes(point.id)) return true;
+  if (!response.value) return false;
+  return point.keywords.some((k: string) => response.value?.toLowerCase().includes(k.toLowerCase()));
+};
 </script>
 
 <template>
   <div class="mediation-challenge">
-    <div v-if="exercise.mediationSource" class="source-card card">
-      <div class="eyebrow">Source Material ({{ exercise.mediationSource.language.toUpperCase() }})</div>
+    <div
+      v-if="exercise.mediationSource"
+      class="source-card card"
+    >
+      <div class="eyebrow">
+        Source Material ({{ exercise.mediationSource.language.toUpperCase() }})
+      </div>
       <h3>{{ exercise.mediationSource.title }}</h3>
-      <p class="source-content">{{ exercise.mediationSource.content }}</p>
+      <p class="source-content">
+        {{ exercise.mediationSource.content }}
+      </p>
     </div>
 
     <div class="task-card">
-      <div class="icon">🔄</div>
+      <div class="icon">
+        🔄
+      </div>
       <div class="content">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Mediate this information for someone else in Dutch.</p>
+        <p class="muted">
+          Mediate this information for someone else in Dutch.
+        </p>
       </div>
     </div>
 
-    <div v-if="exercise.mediationPoints" class="points-tracker">
+    <div
+      v-if="exercise.mediationPoints"
+      class="points-tracker"
+    >
       <span class="eyebrow">Key points to include:</span>
       <div class="points-grid">
-        <div 
-          v-for="point in exercise.mediationPoints" 
-          :key="point.id" 
+        <div
+          v-for="point in exercise.mediationPoints"
+          :key="point.id"
           class="point-item"
           :class="{ achieved: isPointAchieved(point) }"
         >
@@ -50,16 +64,28 @@ const isPointAchieved = (point: any) => {
       </div>
     </div>
 
-    <div v-if="!feedback" class="input-area">
-      <textarea 
-        v-model="response" 
-        :placeholder="exercise.placeholder || 'Explain the situation in Dutch...'" 
-        rows="5" 
-        autofocus 
+    <div
+      v-if="!feedback"
+      class="input-area"
+    >
+      <textarea
+        v-model="response"
+        :placeholder="exercise.placeholder || 'Explain the situation in Dutch...'"
+        rows="5"
+        autofocus
       />
       <div class="footer">
-        <VoiceInput v-model="response" @submit="emit('submit')" />
-        <button class="button" @click="emit('submit')" :disabled="!response">Submit Mediation</button>
+        <VoiceInput
+          v-model="response"
+          @submit="emit('submit')"
+        />
+        <button
+          class="button"
+          :disabled="!response"
+          @click="emit('submit')"
+        >
+          Submit Mediation
+        </button>
       </div>
     </div>
   </div>

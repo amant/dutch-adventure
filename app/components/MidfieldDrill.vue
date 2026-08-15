@@ -1,44 +1,49 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const ruleBadge = computed(() => {
   switch (props.exercise.midfieldData?.focusRule) {
-    case 'tmp-order': return 'TMP-Volgorde (Tijd ⏱️ → Manier ⚙️ → Plaats 📍)'
-    case 'definite-vs-indefinite-object': return 'Objectpositie (Bepalend vóór TMP / Onbepaald ná TMP)'
-    case 'indirect-direct-object': return 'Meewerkend vs Lijdend Voorwerp'
-    case 'negation-placement': return 'Negatieplaatsing (Niet / Geen in het Middenveld)'
-    case 'modal-adverb-tmp': return 'Modale Bepalingen & TMP-Syntaxis'
-    default: return 'Middenveld-Syntaxis'
+    case 'tmp-order': return 'TMP-Volgorde (Tijd ⏱️ → Manier ⚙️ → Plaats 📍)';
+    case 'definite-vs-indefinite-object': return 'Objectpositie (Bepalend vóór TMP / Onbepaald ná TMP)';
+    case 'indirect-direct-object': return 'Meewerkend vs Lijdend Voorwerp';
+    case 'negation-placement': return 'Negatieplaatsing (Niet / Geen in het Middenveld)';
+    case 'modal-adverb-tmp': return 'Modale Bepalingen & TMP-Syntaxis';
+    default: return 'Middenveld-Syntaxis';
   }
-})
+});
 </script>
 
 <template>
   <div class="midfield-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Midfield Word Order &amp; Syntactic Architecture</div>
-        <div class="badge" :class="exercise.midfieldData?.focusRule">
+        <div class="eyebrow">
+          B2 Midfield Word Order &amp; Syntactic Architecture
+        </div>
+        <div
+          class="badge"
+          :class="exercise.midfieldData?.focusRule"
+        >
           {{ ruleBadge }}
         </div>
       </div>
@@ -46,61 +51,97 @@ const ruleBadge = computed(() => {
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          In the Dutch <em>middenveld</em> (between V2 finite verb and final verb cluster), adjuncts strictly follow 
-          <strong>Tijd (Time) &rarr; Wijze/Manier (Manner) &rarr; Plaats (Place)</strong>. 
+          In the Dutch <em>middenveld</em> (between V2 finite verb and final verb cluster), adjuncts strictly follow
+          <strong>Tijd (Time) &rarr; Wijze/Manier (Manner) &rarr; Plaats (Place)</strong>.
           Definite objects (<em>het/de</em>) precede TMP and negation; indefinite objects (<em>een/geen</em>) follow TMP.
         </p>
       </div>
 
       <div class="drill-sources-view mt-6">
         <!-- Structural Slot Blueprint Breakdown -->
-        <div v-if="exercise.midfieldData?.slots" class="slots-blueprint-grid">
-          <div v-if="exercise.midfieldData.slots.directObject?.isDefinite" class="slot-pill definite-obj">
+        <div
+          v-if="exercise.midfieldData?.slots"
+          class="slots-blueprint-grid"
+        >
+          <div
+            v-if="exercise.midfieldData.slots.directObject?.isDefinite"
+            class="slot-pill definite-obj"
+          >
             <span class="slot-tag">Bepalend Object</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.directObject.text }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.indirectObject" class="slot-pill indirect-obj">
+          <div
+            v-if="exercise.midfieldData.slots.indirectObject"
+            class="slot-pill indirect-obj"
+          >
             <span class="slot-tag">Meewerkend Vw</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.indirectObject.text }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.time" class="slot-pill time-slot">
+          <div
+            v-if="exercise.midfieldData.slots.time"
+            class="slot-pill time-slot"
+          >
             <span class="slot-tag">⏱️ Tijd</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.time }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.manner" class="slot-pill manner-slot">
+          <div
+            v-if="exercise.midfieldData.slots.manner"
+            class="slot-pill manner-slot"
+          >
             <span class="slot-tag">⚙️ Manier / Wijze</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.manner }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.negation && exercise.midfieldData.slots.negation !== 'geen'" class="slot-pill negation-slot">
+          <div
+            v-if="exercise.midfieldData.slots.negation && exercise.midfieldData.slots.negation !== 'geen'"
+            class="slot-pill negation-slot"
+          >
             <span class="slot-tag">🚫 Negatie</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.negation }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.place" class="slot-pill place-slot">
+          <div
+            v-if="exercise.midfieldData.slots.place"
+            class="slot-pill place-slot"
+          >
             <span class="slot-tag">📍 Plaats / Richting</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.place }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.directObject && !exercise.midfieldData.slots.directObject.isDefinite" class="slot-pill indefinite-obj">
+          <div
+            v-if="exercise.midfieldData.slots.directObject && !exercise.midfieldData.slots.directObject.isDefinite"
+            class="slot-pill indefinite-obj"
+          >
             <span class="slot-tag">Onbepaald Object</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.directObject.text }}</span>
           </div>
-          <div v-if="exercise.midfieldData.slots.predicateOrPrepObject" class="slot-pill prep-obj">
+          <div
+            v-if="exercise.midfieldData.slots.predicateOrPrepObject"
+            class="slot-pill prep-obj"
+          >
             <span class="slot-tag">Vaste Bepaling / Predicaat</span>
             <span class="slot-val">{{ exercise.midfieldData.slots.predicateOrPrepObject }}</span>
           </div>
         </div>
 
         <div class="source-box context-box">
-          <div class="box-label">Context / Situatie (Prompt Context)</div>
-          <p class="source-text">{{ exercise.midfieldData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context / Situatie (Prompt Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.midfieldData?.contextPrompt }}
+          </p>
         </div>
 
         <!-- Available Elements / Scrambled Components -->
-        <div v-if="exercise.midfieldData?.providedElements?.length" class="elements-pool-card">
-          <div class="pool-label">Bouwstenen van de zin (Elements to integrate):</div>
+        <div
+          v-if="exercise.midfieldData?.providedElements?.length"
+          class="elements-pool-card"
+        >
+          <div class="pool-label">
+            Bouwstenen van de zin (Elements to integrate):
+          </div>
           <div class="tokens-list">
-            <span 
-              v-for="(tok, idx) in exercise.midfieldData.providedElements" 
-              :key="idx" 
+            <span
+              v-for="(tok, idx) in exercise.midfieldData.providedElements"
+              :key="idx"
               class="token-chip"
             >
               {{ tok }}
@@ -108,8 +149,13 @@ const ruleBadge = computed(() => {
           </div>
         </div>
 
-        <div v-if="exercise.midfieldData?.structureFormula" class="formula-blueprint-container">
-          <div class="blueprint-label">Syntactisch Constructieschema (Structural Blueprint):</div>
+        <div
+          v-if="exercise.midfieldData?.structureFormula"
+          class="formula-blueprint-container"
+        >
+          <div class="blueprint-label">
+            Syntactisch Constructieschema (Structural Blueprint):
+          </div>
           <div class="blueprint-pills">
             <span class="pill formula">
               Formule: <code>{{ exercise.midfieldData.structureFormula }}</code>
@@ -118,13 +164,20 @@ const ruleBadge = computed(() => {
         </div>
 
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="source-box combined-target">
-          <div class="box-label">Jouw Zin (Doelzin met Correcte Middenveld-Volgorde)</div>
+          <div class="box-label">
+            Jouw Zin (Doelzin met Correcte Middenveld-Volgorde)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -133,17 +186,23 @@ const ruleBadge = computed(() => {
               placeholder="Typ hier de volledige natuurlijke Nederlandse zin..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.midfieldData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.midfieldData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.midfieldData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -152,37 +211,64 @@ const ruleBadge = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Natural Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Natural Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

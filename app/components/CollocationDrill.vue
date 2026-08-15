@@ -1,47 +1,59 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Exercise } from '~/types/learning'
+import { ref } from 'vue';
+import type { Exercise } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const userText = ref('')
-const options = computed<string[]>(() => (props.exercise.options || []).map(opt => typeof opt === 'string' ? opt : opt.text))
+const userText = ref('');
+const options = computed<string[]>(() => (props.exercise.options || []).map(opt => typeof opt === 'string' ? opt : opt.text));
 
 const selectOption = (opt: string) => {
-  userText.value = opt
-  submit()
-}
+  userText.value = opt;
+  submit();
+};
 
 const submit = () => {
-  emit('submit', userText.value)
-}
+  emit('submit', userText.value);
+};
 </script>
 
 <template>
   <div class="collocation-drill">
     <div class="drill-header">
-      <div class="icon">🧩</div>
+      <div class="icon">
+        🧩
+      </div>
       <div class="header-text">
         <h4>Collocation Precision</h4>
-        <p class="muted">Native speakers pair certain words together. Choose the most natural companion for the highlighted word.</p>
+        <p class="muted">
+          Native speakers pair certain words together. Choose the most natural companion for the highlighted word.
+        </p>
       </div>
     </div>
 
     <div class="prompt-box">
-      <div class="label">Sentence</div>
-      <div class="prompt-text" v-html="exercise.prompt.replace('{target}', '<span class=\'target\'>' + (exercise.context || '...') + '</span>')"></div>
+      <div class="label">
+        Sentence
+      </div>
+      <div
+        class="prompt-text"
+        v-html="exercise.prompt.replace('{target}', '<span class=\'target\'>' + (exercise.context || '...') + '</span>')"
+      />
     </div>
 
-    <div v-if="options.length > 0" class="options-grid">
-      <button 
-        v-for="opt in options" 
-        :key="opt" 
+    <div
+      v-if="options.length > 0"
+      class="options-grid"
+    >
+      <button
+        v-for="opt in options"
+        :key="opt"
         class="opt-btn"
         @click="selectOption(opt)"
       >
@@ -49,17 +61,22 @@ const submit = () => {
       </button>
     </div>
 
-    <div v-else class="manual-input">
-      <div class="label">Your Answer</div>
-      <input 
-        v-model="userText" 
-        type="text" 
-        class="input-field" 
+    <div
+      v-else
+      class="manual-input"
+    >
+      <div class="label">
+        Your Answer
+      </div>
+      <input
+        v-model="userText"
+        type="text"
+        class="input-field"
         placeholder="Which word fits best?"
         @keyup.enter="submit"
-      />
-      <button 
-        class="button primary full-width mt-4" 
+      >
+      <button
+        class="button primary full-width mt-4"
         :disabled="!userText.trim()"
         @click="submit"
       >

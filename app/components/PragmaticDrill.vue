@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit']);
 
-const selectedIndex = ref<number | null>(null)
+const selectedIndex = ref<number | null>(null);
 
 function select(index: number) {
-  if (props.feedback || !props.exercise.pragmaticOptions) return
-  selectedIndex.value = index
-  const option = props.exercise.pragmaticOptions[index]
+  if (props.feedback || !props.exercise.pragmaticOptions) return;
+  selectedIndex.value = index;
+  const option = props.exercise.pragmaticOptions[index];
   if (option) {
-    emit('submit', option.text)
+    emit('submit', option.text);
   }
 }
 </script>
@@ -23,32 +23,49 @@ function select(index: number) {
 <template>
   <div class="pragmatic-drill">
     <div class="scenario card">
-      <div class="eyebrow">The Scenario</div>
-      <p class="prompt">{{ exercise.prompt }}</p>
-      <div v-if="exercise.context" class="context-box">{{ exercise.context }}</div>
+      <div class="eyebrow">
+        The Scenario
+      </div>
+      <p class="prompt">
+        {{ exercise.prompt }}
+      </p>
+      <div
+        v-if="exercise.context"
+        class="context-box"
+      >
+        {{ exercise.context }}
+      </div>
     </div>
 
     <div class="options-grid">
-      <button 
-        v-for="(option, idx) in exercise.pragmaticOptions" 
+      <button
+        v-for="(option, idx) in exercise.pragmaticOptions"
         :key="idx"
         class="card option-card"
-        :class="{ 
-          selected: selectedIndex === idx, 
+        :class="{
+          selected: selectedIndex === idx,
           best: feedback && option.isBest,
           wrong: feedback && selectedIndex === idx && !option.isBest,
-          disabled: !!feedback
+          disabled: !!feedback,
         }"
         @click="select(idx)"
       >
         <div class="option-content">
           <span class="context-tag">{{ option.context }}</span>
-          <p class="option-text">"{{ option.text }}"</p>
-          <p v-if="feedback && (selectedIndex === idx || option.isBest)" class="option-explanation">
+          <p class="option-text">
+            "{{ option.text }}"
+          </p>
+          <p
+            v-if="feedback && (selectedIndex === idx || option.isBest)"
+            class="option-explanation"
+          >
             {{ option.explanation }}
           </p>
         </div>
-        <div v-if="feedback" class="status-icon">
+        <div
+          v-if="feedback"
+          class="status-icon"
+        >
           {{ option.isBest ? '✅' : selectedIndex === idx ? '❌' : '' }}
         </div>
       </button>

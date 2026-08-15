@@ -1,64 +1,79 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import { ref, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next']);
+const response = defineModel<string>();
 
-const isSpeaking = ref(false)
+const isSpeaking = ref(false);
 
 function handleSubmit() {
-  emit('submit', response.value)
+  emit('submit', response.value);
 }
 
 function handleVoiceResult(text: string) {
-  response.value = text
-  handleSubmit()
+  response.value = text;
+  handleSubmit();
 }
 
-const lazyWord = computed(() => props.exercise.context?.split(' -> ')[0] || 'word')
-const preciseWord = computed(() => props.exercise.context?.split(' -> ')[1] || 'better word')
+const lazyWord = computed(() => props.exercise.context?.split(' -> ')[0] || 'word');
+const preciseWord = computed(() => props.exercise.context?.split(' -> ')[1] || 'better word');
 </script>
 
 <template>
   <div class="precision-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">Vocabulary Precision</div>
-        <div class="badge">B2 Skill</div>
+        <div class="eyebrow">
+          Vocabulary Precision
+        </div>
+        <div class="badge">
+          B2 Skill
+        </div>
       </div>
-      
+
       <div class="transformation-box">
         <div class="word-path">
           <span class="lazy">{{ lazyWord }}</span>
           <span class="arrow">→</span>
           <span class="precise">{{ preciseWord }}</span>
         </div>
-        <p class="instruction">Rewrite the sentence using <strong>{{ preciseWord }}</strong> to sound more professional.</p>
+        <p class="instruction">
+          Rewrite the sentence using <strong>{{ preciseWord }}</strong> to sound more professional.
+        </p>
       </div>
 
       <div class="original-sentence card">
-        <div class="eyebrow">Original:</div>
-        <p class="prompt-text">"{{ exercise.prompt }}"</p>
+        <div class="eyebrow">
+          Original:
+        </div>
+        <p class="prompt-text">
+          "{{ exercise.prompt }}"
+        </p>
       </div>
 
       <div class="input-area mt-6">
         <div class="input-wrapper">
-          <input 
-            v-model="response" 
-            placeholder="Type the precise version..." 
-            @keyup.enter="handleSubmit"
+          <input
+            v-model="response"
+            placeholder="Type the precise version..."
             autofocus
-          />
-          <button class="button primary" @click="handleSubmit">Submit</button>
+            @keyup.enter="handleSubmit"
+          >
+          <button
+            class="button primary"
+            @click="handleSubmit"
+          >
+            Submit
+          </button>
         </div>
-        
+
         <div class="voice-toggle mt-4">
           <VoiceInput @result="handleVoiceResult" />
           <span class="muted small ml-2">Or speak your answer</span>
@@ -66,21 +81,43 @@ const preciseWord = computed(() => props.exercise.context?.split(' -> ')[1] || '
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
-        <div class="outcome-badge">{{ feedback.outcome }}</div>
-        <p class="feedback-message">{{ feedback.message }}</p>
-        
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
+        <div class="outcome-badge">
+          {{ feedback.outcome }}
+        </div>
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <h3>{{ feedback.miniLesson.title }}</h3>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="examples">
-            <div class="ex wrong">❌ {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex right">✅ {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex wrong">
+              ❌ {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex right">
+              ✅ {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue
+        </button>
       </div>
     </div>
   </div>

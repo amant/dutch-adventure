@@ -1,7 +1,7 @@
-import type { Exercise, Feedback } from '~/types/learning'
-import type { EvaluationContext } from '~/utils/evaluateResponse'
-import type { EvaluationInput } from '~/utils/evaluateExercise'
-import { normalizeAnswer } from '~/utils/evaluationHelpers'
+import type { Exercise, Feedback } from '~/types/learning';
+import type { EvaluationContext } from '~/utils/evaluateResponse';
+import type { EvaluationInput } from '~/utils/evaluateExercise';
+import { normalizeAnswer } from '~/utils/evaluationHelpers';
 
 /**
  * Builds a minimal Exercise. Mirrors the helper used by the other
@@ -15,7 +15,7 @@ export function makeExercise(overrides: Partial<Exercise> = {}): Exercise {
     prompt: 'Schrijf de zin in het Nederlands.',
     skills: ['production'],
     ...overrides,
-  }
+  };
 }
 
 /**
@@ -24,8 +24,8 @@ export function makeExercise(overrides: Partial<Exercise> = {}): Exercise {
  * exercise the same contract as the dispatcher.
  */
 export function makeInput(exercise: Exercise, answer: string, context?: EvaluationContext): EvaluationInput {
-  const target = exercise.target
-  const normalized = normalizeAnswer(answer)
+  const target = exercise.target;
+  const normalized = normalizeAnswer(answer);
   const base: Feedback = {
     outcome: 'retry',
     message: '',
@@ -36,6 +36,6 @@ export function makeInput(exercise: Exercise, answer: string, context?: Evaluati
     grammar: exercise.grammar,
     idioms: exercise.idioms,
     changeModifier: 0,
-  }
-  return { exercise, normalized, context, target, base }
+  };
+  return { exercise, normalized, context, target, base };
 }

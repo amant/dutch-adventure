@@ -1,6 +1,6 @@
-import type { LearnerMemory, SkillDimension, ConceptState } from '~/types/learning'
+import type { LearnerMemory, SkillDimension, ConceptState } from '~/types/learning';
 
-const storageKey = 'dutch-adventure-memory'
+const storageKey = 'dutch-adventure-memory';
 
 const emptyConcept = (): ConceptState => ({
   recognition: 0,
@@ -20,8 +20,8 @@ const emptyConcept = (): ConceptState => ({
   interaction: 0,
   analysis: 0,
   encounters: 0,
-  successes: 0
-})
+  successes: 0,
+});
 
 const emptyMemory = (): LearnerMemory => ({
   overall: {
@@ -40,41 +40,41 @@ const emptyMemory = (): LearnerMemory => ({
     reading: 0,
     flexibility: 0,
     interaction: 0,
-    analysis: 0
+    analysis: 0,
   },
   vocabulary: {},
   grammar: {},
   idioms: {},
-  recentRedlines: []
-})
+  recentRedlines: [],
+});
 
 export function useLearnerMemory() {
-  const memory = useState<LearnerMemory>('learner-memory', emptyMemory)
-  const hydrated = useState('learner-memory-hydrated', () => false)
+  const memory = useState<LearnerMemory>('learner-memory', emptyMemory);
+  const hydrated = useState('learner-memory-hydrated', () => false);
 
   function hydrate() {
-    if (hydrated.value || !import.meta.client) return
+    if (hydrated.value || !import.meta.client) return;
     try {
-      const stored = localStorage.getItem(storageKey)
+      const stored = localStorage.getItem(storageKey);
       if (stored) {
-        const parsed = JSON.parse(stored)
+        const parsed = JSON.parse(stored);
         // Migration/Sanitization
-        const fresh = emptyMemory()
+        const fresh = emptyMemory();
         if (parsed.overall) {
           for (const skill of Object.keys(fresh.overall) as SkillDimension[]) {
             if (typeof parsed.overall[skill] === 'number') {
-              fresh.overall[skill] = Math.max(0, Math.min(100, parsed.overall[skill]))
+              fresh.overall[skill] = Math.max(0, Math.min(100, parsed.overall[skill]));
             }
           }
         }
-        if (parsed.vocabulary) fresh.vocabulary = parsed.vocabulary
-        if (parsed.grammar) fresh.grammar = parsed.grammar
-        if (parsed.idioms) fresh.idioms = parsed.idioms
-        if (parsed.recentRedlines) fresh.recentRedlines = parsed.recentRedlines
-        memory.value = fresh
+        if (parsed.vocabulary) fresh.vocabulary = parsed.vocabulary;
+        if (parsed.grammar) fresh.grammar = parsed.grammar;
+        if (parsed.idioms) fresh.idioms = parsed.idioms;
+        if (parsed.recentRedlines) fresh.recentRedlines = parsed.recentRedlines;
+        memory.value = fresh;
       }
     } catch { /* Fail safe */ }
-    hydrated.value = true
+    hydrated.value = true;
   }
 
   function record(
@@ -87,11 +87,11 @@ export function useLearnerMemory() {
     snippet?: string,
     prompt?: string,
     feedback?: any,
-    responseTime?: number
+    responseTime?: number,
   ) {
-    let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2
-    change = Math.max(1, change + changeModifier)
-    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
+    let change = outcome === 'correct' ? 12 : outcome === 'acceptable' ? 8 : 2;
+    change = Math.max(1, change + changeModifier);
+    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory;
 
     // Update redlines if needed
     if (feedback && (outcome === 'acceptable' || outcome === 'retry') && (feedback.teacherCorrection || feedback.correction) && prompt && snippet) {
@@ -104,124 +104,124 @@ export function useLearnerMemory() {
         explanation: feedback.teacherCorrection?.explanation || feedback.explanation || feedback.message || '',
         date: new Date().toISOString(),
         vocabulary,
-        grammar
-      }
-      if (!next.recentRedlines) next.recentRedlines = []
-      next.recentRedlines.unshift(redline)
-      if (next.recentRedlines.length > 10) next.recentRedlines.pop()
+        grammar,
+      };
+      if (!next.recentRedlines) next.recentRedlines = [];
+      next.recentRedlines.unshift(redline);
+      if (next.recentRedlines.length > 10) next.recentRedlines.pop();
 
       // Also add to concepts
       const addToConceptRedline = (key: string, dict: Record<string, ConceptState>) => {
-        if (!dict[key]) dict[key] = emptyConcept()
-        if (!dict[key].redlineHistory) dict[key].redlineHistory = []
-        dict[key].redlineHistory!.unshift({ 
-          userAnswer: snippet, 
-          naturalCorrection: redline.naturalCorrection, 
-          date: redline.date 
-        })
-        if (dict[key].redlineHistory!.length > 5) dict[key].redlineHistory!.pop()
-      }
-      vocabulary?.forEach(v => addToConceptRedline(v, next.vocabulary))
-      grammar?.forEach(g => addToConceptRedline(g, next.grammar))
-      idioms?.forEach(i => addToConceptRedline(i, next.idioms))
+        if (!dict[key]) dict[key] = emptyConcept();
+        if (!dict[key].redlineHistory) dict[key].redlineHistory = [];
+        dict[key].redlineHistory!.unshift({
+          userAnswer: snippet,
+          naturalCorrection: redline.naturalCorrection,
+          date: redline.date,
+        });
+        if (dict[key].redlineHistory!.length > 5) dict[key].redlineHistory!.pop();
+      };
+      vocabulary?.forEach(v => addToConceptRedline(v, next.vocabulary));
+      grammar?.forEach(g => addToConceptRedline(g, next.grammar));
+      idioms?.forEach(i => addToConceptRedline(i, next.idioms));
     }
 
     // Update overall
     for (const skill of skills) {
-      next.overall[skill] = Math.min(100, (next.overall[skill] || 0) + change)
+      next.overall[skill] = Math.min(100, (next.overall[skill] || 0) + change);
     }
 
     // Update concepts
     const updateConcept = (key: string, dict: Record<string, ConceptState>) => {
-      if (!dict[key]) dict[key] = emptyConcept()
-      
-      dict[key].encounters++
-      dict[key].lastEncountered = new Date().toISOString()
+      if (!dict[key]) dict[key] = emptyConcept();
+
+      dict[key].encounters++;
+      dict[key].lastEncountered = new Date().toISOString();
 
       if (responseTime !== undefined) {
-        if (!dict[key].responseTimes) dict[key].responseTimes = []
-        dict[key].responseTimes!.unshift(responseTime)
-        if (dict[key].responseTimes!.length > 10) dict[key].responseTimes!.pop()
+        if (!dict[key].responseTimes) dict[key].responseTimes = [];
+        dict[key].responseTimes!.unshift(responseTime);
+        if (dict[key].responseTimes!.length > 10) dict[key].responseTimes!.pop();
       }
-      
+
       if (snippet && (outcome === 'correct' || outcome === 'acceptable')) {
-        if (!dict[key].usageHistory) dict[key].usageHistory = []
+        if (!dict[key].usageHistory) dict[key].usageHistory = [];
         if (!dict[key].usageHistory!.some(u => u.snippet === snippet)) {
-          dict[key].usageHistory!.unshift({ 
-            snippet, 
+          dict[key].usageHistory!.unshift({
+            snippet,
             prompt: prompt || '',
             date: new Date().toISOString(),
-            pragmaticScore: feedback?.pragmaticScore 
-          })
-          if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop()
+            pragmaticScore: feedback?.pragmaticScore,
+          });
+          if (dict[key].usageHistory!.length > 5) dict[key].usageHistory!.pop();
         }
       }
 
       if (outcome === 'correct' || outcome === 'acceptable') {
-        dict[key].successes++
+        dict[key].successes++;
       }
 
       for (const skill of skills) {
-        const currentVal = dict[key][skill]
+        const currentVal = dict[key][skill];
         if (typeof currentVal === 'number') {
-          dict[key][skill] = Math.min(100, currentVal + change)
+          dict[key][skill] = Math.min(100, currentVal + change);
         }
       }
-    }
+    };
 
-    if (vocabulary) vocabulary.forEach(v => updateConcept(v, next.vocabulary))
-    if (grammar) grammar.forEach(g => updateConcept(g, next.grammar))
-    if (idioms) idioms.forEach(i => updateConcept(i, next.idioms))
+    if (vocabulary) vocabulary.forEach(v => updateConcept(v, next.vocabulary));
+    if (grammar) grammar.forEach(g => updateConcept(g, next.grammar));
+    if (idioms) idioms.forEach(i => updateConcept(i, next.idioms));
 
-    memory.value = next
-    if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))
+    memory.value = next;
+    if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next));
   }
 
   function recordExposure(word: string, skills: SkillDimension[] = ['recognition', 'meaning']) {
-    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory
-    if (!next.vocabulary[word]) next.vocabulary[word] = emptyConcept()
-    
-    next.vocabulary[word].encounters++
-    next.vocabulary[word].successes++ // Exposure counts as success for recognition
-    next.vocabulary[word].lastEncountered = new Date().toISOString()
+    const next = JSON.parse(JSON.stringify(memory.value)) as LearnerMemory;
+    if (!next.vocabulary[word]) next.vocabulary[word] = emptyConcept();
+
+    next.vocabulary[word].encounters++;
+    next.vocabulary[word].successes++; // Exposure counts as success for recognition
+    next.vocabulary[word].lastEncountered = new Date().toISOString();
 
     for (const skill of skills) {
-      const currentVal = next.vocabulary[word][skill]
+      const currentVal = next.vocabulary[word][skill];
       if (typeof currentVal === 'number') {
-        next.vocabulary[word][skill] = Math.min(100, currentVal + 5)
+        next.vocabulary[word][skill] = Math.min(100, currentVal + 5);
       }
     }
-    memory.value = next
-    if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next))
+    memory.value = next;
+    if (import.meta.client) localStorage.setItem(storageKey, JSON.stringify(next));
   }
 
   function reset() {
-    memory.value = emptyMemory()
-    if (import.meta.client) localStorage.removeItem(storageKey)
+    memory.value = emptyMemory();
+    if (import.meta.client) localStorage.removeItem(storageKey);
   }
 
   function getWeakConcepts(limit = 5) {
     const vList = Object.entries(memory.value.vocabulary)
-      .map(([key, state]) => ({ 
-        key, 
+      .map(([key, state]) => ({
+        key,
         score: (state.production + state.automaticity) / 2,
-        ratio: state.encounters > 0 ? state.successes / state.encounters : 1
+        ratio: state.encounters > 0 ? state.successes / state.encounters : 1,
       }))
       .sort((a, b) => a.score - b.score || a.ratio - b.ratio)
       .slice(0, limit)
-      .map(i => i.key)
+      .map(i => i.key);
 
     const gList = Object.entries(memory.value.grammar)
-      .map(([key, state]) => ({ 
-        key, 
+      .map(([key, state]) => ({
+        key,
         score: (state.production + state.automaticity) / 2,
-        ratio: state.encounters > 0 ? state.successes / state.encounters : 1
+        ratio: state.encounters > 0 ? state.successes / state.encounters : 1,
       }))
       .sort((a, b) => a.score - b.score || a.ratio - b.ratio)
       .slice(0, Math.ceil(limit / 2))
-      .map(i => i.key)
+      .map(i => i.key);
 
-    return { vocabulary: vList, grammar: gList }
+    return { vocabulary: vList, grammar: gList };
   }
 
   function getFrontierConcepts(limit = 3) {
@@ -231,8 +231,8 @@ export function useLearnerMemory() {
         key,
         kind: 'vocabulary',
         passive: state.recognition,
-        active: state.production
-      }))
+        active: state.production,
+      }));
 
     const gList = Object.entries(memory.value.grammar)
       .filter(([_, state]) => state.recognition > 60 && state.production < 30)
@@ -240,22 +240,22 @@ export function useLearnerMemory() {
         key,
         kind: 'grammar',
         passive: state.recognition,
-        active: state.production
-      }))
+        active: state.production,
+      }));
 
     return [...vList, ...gList]
       .sort((a, b) => b.passive - a.passive)
-      .slice(0, limit)
+      .slice(0, limit);
   }
 
   function getWordState(word: string) {
-    const state = memory.value.vocabulary[word.toLowerCase().replace(/[.,!?;:()]/g, '').trim()]
-    if (!state) return 'new'
-    if (state.production > 80) return 'mastered'
-    if (state.recognition > 60 && state.production < 30) return 'frontier'
-    if (state.recognition > 40) return 'recognized'
-    return 'new'
+    const state = memory.value.vocabulary[word.toLowerCase().replace(/[.,!?;:()]/g, '').trim()];
+    if (!state) return 'new';
+    if (state.production > 80) return 'mastered';
+    if (state.recognition > 60 && state.production < 30) return 'frontier';
+    if (state.recognition > 40) return 'recognized';
+    return 'new';
   }
 
-  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts, getFrontierConcepts, getWordState }
+  return { memory, hydrated, hydrate, record, recordExposure, reset, getWeakConcepts, getFrontierConcepts, getWordState };
 }

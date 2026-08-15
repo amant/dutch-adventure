@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
+const answer = ref('');
 
 const capturedPoints = computed(() => {
-  if (!props.exercise.summaryPoints) return []
-  const text = answer.value.toLowerCase()
-  return props.exercise.summaryPoints.filter(point => 
-    point.keywords.some(k => text.includes(k.toLowerCase()))
-  )
-})
+  if (!props.exercise.summaryPoints) return [];
+  const text = answer.value.toLowerCase();
+  return props.exercise.summaryPoints.filter(point =>
+    point.keywords.some(k => text.includes(k.toLowerCase())),
+  );
+});
 
 const progressPercent = computed(() => {
-  if (!props.exercise.summaryPoints?.length) return 0
-  return Math.round((capturedPoints.value.length / props.exercise.summaryPoints.length) * 100)
-})
+  if (!props.exercise.summaryPoints?.length) return 0;
+  return Math.round((capturedPoints.value.length / props.exercise.summaryPoints.length) * 100);
+});
 
 function handleSubmit() {
-  if (!answer.value.trim()) return
-  emit('submit', answer.value)
+  if (!answer.value.trim()) return;
+  emit('submit', answer.value);
 }
 </script>
 
@@ -34,21 +34,32 @@ function handleSubmit() {
   <div class="summary-challenge">
     <div class="card challenge-card">
       <div class="header">
-        <div class="eyebrow">B2 Summarisation Mastery</div>
-        <div class="badge">Advanced Writing</div>
+        <div class="eyebrow">
+          B2 Summarisation Mastery
+        </div>
+        <div class="badge">
+          Advanced Writing
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
-        <p v-if="exercise.context" class="muted">{{ exercise.context }}</p>
+        <p
+          v-if="exercise.context"
+          class="muted"
+        >
+          {{ exercise.context }}
+        </p>
       </div>
 
       <div class="goals-checklist">
-        <div class="eyebrow small">Required Key Points:</div>
+        <div class="eyebrow small">
+          Required Key Points:
+        </div>
         <div class="points-grid">
-          <div 
-            v-for="point in exercise.summaryPoints" 
-            :key="point.id" 
+          <div
+            v-for="point in exercise.summaryPoints"
+            :key="point.id"
             class="point-item"
             :class="{ 'is-captured': capturedPoints.find(p => p.id === point.id) }"
           >
@@ -57,7 +68,10 @@ function handleSubmit() {
           </div>
         </div>
         <div class="progress-bar-container">
-          <div class="progress-bar" :style="{ width: progressPercent + '%' }"></div>
+          <div
+            class="progress-bar"
+            :style="{ width: progressPercent + '%' }"
+          />
         </div>
       </div>
 
@@ -68,22 +82,28 @@ function handleSubmit() {
           placeholder="Schrijf hier je samenvatting in het Nederlands..."
           :disabled="!!feedback"
           rows="5"
-        ></textarea>
-        
+        />
+
         <div class="input-meta">
-          <span class="char-count" :class="{ 'warning': answer.length < (exercise.minimumLength || 0) }">
+          <span
+            class="char-count"
+            :class="{ warning: answer.length < (exercise.minimumLength || 0) }"
+          >
             {{ answer.length }} characters (Min: {{ exercise.minimumLength || 0 }})
           </span>
-          <VoiceInput 
-            v-if="!feedback" 
-            @result="answer = $event" 
+          <VoiceInput
+            v-if="!feedback"
+            @result="answer = $event"
           />
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-6">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-6"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim() || answer.length < (exercise.minimumLength || 0)"
           @click="handleSubmit"
         >
@@ -92,29 +112,52 @@ function handleSubmit() {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="redline-box mt-4">
-          <div class="eyebrow">Natural Paraphrase:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="redline-box mt-4"
+        >
+          <div class="eyebrow">
+            Natural Paraphrase:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
         </div>
 
-        <div v-if="feedback.explanation" class="explanation-box mt-4">
-          <div class="eyebrow">Teacher's Note:</div>
+        <div
+          v-if="feedback.explanation"
+          class="explanation-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Note:
+          </div>
           <p>{{ feedback.explanation }}</p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Exploring</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Exploring
+        </button>
       </div>
     </div>
   </div>
@@ -138,12 +181,12 @@ function handleSubmit() {
 .progress-bar-container { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
 .progress-bar { height: 100%; background: #176b5b; transition: width 0.5s ease-out; }
 
-.summary-input { 
-  width: 100%; 
-  padding: 16px; 
-  border: 2px solid #e2e8f0; 
-  border-radius: 12px; 
-  font-size: 16px; 
+.summary-input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
   font-family: inherit;
   line-height: 1.6;
   resize: vertical;

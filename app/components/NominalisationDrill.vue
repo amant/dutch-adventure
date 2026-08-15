@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 </script>
 
@@ -26,29 +26,44 @@ function handleSubmit() {
   <div class="nominalisation-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Academic & Professional Dutch</div>
-        <div class="badge">Nominalisation</div>
+        <div class="eyebrow">
+          B2 Academic & Professional Dutch
+        </div>
+        <div class="badge">
+          Nominalisation
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Transform the verbal expression into a noun-based formal construction.</p>
+        <p class="muted">
+          Transform the verbal expression into a noun-based formal construction.
+        </p>
       </div>
 
       <div class="transformation-view mt-6">
         <div class="box verbal">
-          <div class="box-label">Verbal (Less Formal)</div>
+          <div class="box-label">
+            Verbal (Less Formal)
+          </div>
           <p>{{ exercise.nominalisationData?.verbalSentence }}</p>
         </div>
-        
+
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="box nominal">
-          <div class="box-label">Nominal (Formal / B2+)</div>
+          <div class="box-label">
+            Nominal (Formal / B2+)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -57,17 +72,23 @@ function handleSubmit() {
               placeholder="E.g. De verlaging van..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.nominalisationData?.targetNoun" class="target-hint">
+            />
+            <div
+              v-if="exercise.nominalisationData?.targetNoun"
+              class="target-hint"
+            >
               Target noun: <span>{{ exercise.nominalisationData.targetNoun }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -76,37 +97,64 @@ function handleSubmit() {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Formal Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Formal Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Verb: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Noun: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Verb: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Noun: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

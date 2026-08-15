@@ -1,46 +1,62 @@
 <script setup lang="ts">
-import type { Exercise } from '~/types/learning'
+import type { Exercise } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const selectedOption = ref<string | null>(null)
+const selectedOption = ref<string | null>(null);
 
 const submit = () => {
   if (selectedOption.value) {
-    emit('submit', selectedOption.value)
+    emit('submit', selectedOption.value);
   }
-}
+};
 </script>
 
 <template>
   <div class="pattern-induction">
     <div class="discovery-header">
-      <div class="icon">💡</div>
+      <div class="icon">
+        💡
+      </div>
       <div class="header-text">
         <h4>Pattern Discovery</h4>
-        <p class="muted">Notice how the language changes in these examples. Can you identify the rule?</p>
+        <p class="muted">
+          Notice how the language changes in these examples. Can you identify the rule?
+        </p>
       </div>
     </div>
 
     <div class="examples-grid">
-      <div v-for="(ex, i) in exercise.inductionData?.examples" :key="i" class="example-row">
-        <div class="ex-prompt">{{ ex.prompt }}</div>
-        <div class="ex-arrow">→</div>
-        <div class="ex-answer">{{ ex.answer }}</div>
+      <div
+        v-for="(ex, i) in exercise.inductionData?.examples"
+        :key="i"
+        class="example-row"
+      >
+        <div class="ex-prompt">
+          {{ ex.prompt }}
+        </div>
+        <div class="ex-arrow">
+          →
+        </div>
+        <div class="ex-answer">
+          {{ ex.answer }}
+        </div>
       </div>
     </div>
 
     <div class="challenge-box">
-      <p class="challenge-label">{{ exercise.inductionData?.ruleChallenge }}</p>
+      <p class="challenge-label">
+        {{ exercise.inductionData?.ruleChallenge }}
+      </p>
       <div class="options-list">
-        <button 
-          v-for="opt in exercise.inductionData?.options" 
+        <button
+          v-for="opt in exercise.inductionData?.options"
           :key="opt.text"
           class="option-button"
           :class="{ selected: selectedOption === opt.text }"
@@ -51,8 +67,8 @@ const submit = () => {
       </div>
     </div>
 
-    <button 
-      class="button primary full-width" 
+    <button
+      class="button primary full-width"
       :disabled="!selectedOption"
       @click="submit"
     >

@@ -1,169 +1,178 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import VoiceInput from './VoiceInput.vue'
+import type { Exercise, Feedback } from '~/types/learning';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'retry'])
+const emit = defineEmits(['submit', 'next', 'retry']);
 
-const { recordExposure } = useLearnerMemory()
-const showTranscript = ref(false)
-const response = defineModel<string>()
-const selectedOption = ref<number | null>(null)
-const hasAttempted = ref(false)
-const isShadowing = ref(false)
-const shadowingResult = ref('')
+const { recordExposure } = useLearnerMemory();
+const showTranscript = ref(false);
+const response = defineModel<string>();
+const selectedOption = ref<number | null>(null);
+const hasAttempted = ref(false);
+const isShadowing = ref(false);
+const shadowingResult = ref('');
 
-type ClozePart = { type: 'gap'; index: number } | { type: 'text'; text: string }
+type ClozePart = { type: 'gap'; index: number } | { type: 'text'; text: string };
 
 // Cloze state
-const clozeAnswers = ref<string[]>([])
+const clozeAnswers = ref<string[]>([]);
 const initCloze = () => {
   if (props.exercise.kind === 'listening-cloze' && props.exercise.clozeData) {
-    clozeAnswers.value = new Array(props.exercise.clozeData.answers.length).fill('')
+    clozeAnswers.value = new Array(props.exercise.clozeData.answers.length).fill('');
   }
-}
+};
 
 const clozeParts = computed<ClozePart[]>(() => {
-  if (props.exercise.kind !== 'listening-cloze' || !props.exercise.clozeData) return []
-  const parts = props.exercise.clozeData.textWithGaps.split(/(\[..\])/)
-  let gapIndex = 0
-  return parts.map(part => {
+  if (props.exercise.kind !== 'listening-cloze' || !props.exercise.clozeData) return [];
+  const parts = props.exercise.clozeData.textWithGaps.split(/(\[..\])/);
+  let gapIndex = 0;
+  return parts.map((part) => {
     if (part === '[..]') {
-      return { type: 'gap', index: gapIndex++ }
+      return { type: 'gap', index: gapIndex++ };
     }
-    return { type: 'text', text: part }
-  })
-})
+    return { type: 'text', text: part };
+  });
+});
 
-const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
+const selectedWord = ref<{ word: string; meaning: string; category?: string } | null>(null);
 
 const tokens = computed(() => {
-  const text = props.exercise.transcript || props.exercise.target || ''
-  if (!text) return []
-  
+  const text = props.exercise.transcript || props.exercise.target || '';
+  if (!text) return [];
+
   // Split by whitespace but keep it
-  const rawTokens = text.split(/(\s+)/)
-  
-  return rawTokens.map(token => {
-    if (token.match(/^\s+$/)) return { text: token, isInteractable: false }
-    
-    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    const hint = props.exercise.wordHints?.[cleanWord]
+  const rawTokens = text.split(/(\s+)/);
+
+  return rawTokens.map((token) => {
+    if (token.match(/^\s+$/)) return { text: token, isInteractable: false };
+
+    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    const hint = props.exercise.wordHints?.[cleanWord];
     return {
       text: token,
       isInteractable: true,
-      hint
-    }
-  })
-})
+      hint,
+    };
+  });
+});
 
 const onTokenClick = (token: any) => {
   if (token.hint) {
-    showHint(token)
+    showHint(token);
   }
-  speakWord(token.text)
-}
+  speakWord(token.text);
+};
 
 const showHint = (token: any) => {
   if (token.hint) {
-    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint }
-    const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    recordExposure(cleanWord)
+    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint };
+    const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    recordExposure(cleanWord);
   }
-}
+};
 
-const difficulty = ref(1) // 1 to 5
+const difficulty = ref(1); // 1 to 5
 const rate = computed(() => {
   // Speed decreases as difficulty increases
   // Level 1: 0.9 (Normal-ish)
-  // Level 5: 1.4 (Fast/Colloquial) or 0.7 (Slow)? 
+  // Level 5: 1.4 (Fast/Colloquial) or 0.7 (Slow)?
   // Wait, Level 1 should be slow, Level 4-5 should be fast.
-  return 0.6 + (difficulty.value * 0.2)
-})
+  return 0.6 + (difficulty.value * 0.2);
+});
 
-const voices = ref<SpeechSynthesisVoice[]>([])
+const voices = ref<SpeechSynthesisVoice[]>([]);
 const loadVoices = () => {
-  voices.value = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('nl'))
-}
+  voices.value = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('nl'));
+};
 
 onMounted(() => {
-  loadVoices()
-  initCloze()
+  loadVoices();
+  initCloze();
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = loadVoices
+    window.speechSynthesis.onvoiceschanged = loadVoices;
   }
-})
+});
 
 const speak = async () => {
-  if (!window.speechSynthesis) return
-  window.speechSynthesis.cancel() 
-  
-  const text = props.exercise.transcript || props.exercise.target || ''
-  
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+
+  const text = props.exercise.transcript || props.exercise.target || '';
+
   // Check if it's a dialogue
   if (text.includes('A:') && text.includes('B:')) {
-    const lines = text.split('\n').filter(l => l.trim())
+    const lines = text.split('\n').filter(l => l.trim());
     for (const line of lines) {
-      const msg = new SpeechSynthesisUtterance()
-      const content = line.replace(/^[AB]:\s*/, '').trim()
-      msg.text = content
-      msg.lang = 'nl-NL'
-      msg.rate = rate.value
-      
+      const msg = new SpeechSynthesisUtterance();
+      const content = line.replace(/^[AB]:\s*/, '').trim();
+      msg.text = content;
+      msg.lang = 'nl-NL';
+      msg.rate = rate.value;
+
       // Try to switch voices or pitch
       if (line.startsWith('A:')) {
-        msg.voice = voices.value[0] || null
-        msg.pitch = 1
+        msg.voice = voices.value[0] || null;
+        msg.pitch = 1;
       } else {
-        msg.voice = voices.value[1] || voices.value[0] || null
-        msg.pitch = voices.value[1] ? 1 : 1.2 // Higher pitch if same voice
+        msg.voice = voices.value[1] || voices.value[0] || null;
+        msg.pitch = voices.value[1] ? 1 : 1.2; // Higher pitch if same voice
       }
-      
-      window.speechSynthesis.speak(msg)
-      
+
+      window.speechSynthesis.speak(msg);
+
       // Wait for the line to finish before next one
-      await new Promise(resolve => {
-        msg.onend = resolve
-      })
+      await new Promise((resolve) => {
+        msg.onend = resolve;
+      });
     }
   } else {
-    const msg = new SpeechSynthesisUtterance()
-    msg.text = text
-    msg.lang = 'nl-NL'
-    msg.rate = rate.value
-    msg.voice = voices.value[0] || null
-    window.speechSynthesis.speak(msg)
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = text;
+    msg.lang = 'nl-NL';
+    msg.rate = rate.value;
+    msg.voice = voices.value[0] || null;
+    window.speechSynthesis.speak(msg);
   }
-}
+};
 
 const speakWord = (word: string) => {
-  if (!window.speechSynthesis) return
-  window.speechSynthesis.cancel()
-  const msg = new SpeechSynthesisUtterance()
-  msg.text = word.replace(/[.,!?;:()]/g, '').trim()
-  msg.lang = 'nl-NL'
-  msg.rate = 0.8 // A bit slower for individual words
-  msg.voice = voices.value[0] || null
-  window.speechSynthesis.speak(msg)
-}
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const msg = new SpeechSynthesisUtterance();
+  msg.text = word.replace(/[.,!?;:()]/g, '').trim();
+  msg.lang = 'nl-NL';
+  msg.rate = 0.8; // A bit slower for individual words
+  msg.voice = voices.value[0] || null;
+  window.speechSynthesis.speak(msg);
+};
 
 const toggleTranscript = () => {
-  showTranscript.value = !showTranscript.value
-}
+  showTranscript.value = !showTranscript.value;
+};
 </script>
 
 <template>
-  <div class="listening-ladder" :class="`difficulty-${difficulty}`">
+  <div
+    class="listening-ladder"
+    :class="`difficulty-${difficulty}`"
+  >
     <div class="audio-control">
       <div class="ladder-controls">
         <label>
           <span class="eyebrow">Listening Level</span>
-          <input type="range" v-model.number="difficulty" min="1" max="5" step="1" />
+          <input
+            v-model.number="difficulty"
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+          >
           <div class="difficulty-labels">
             <span>Slow</span>
             <span>Natural</span>
@@ -172,7 +181,10 @@ const toggleTranscript = () => {
         </label>
       </div>
 
-      <button class="button audio-button" @click="speak">
+      <button
+        class="button audio-button"
+        @click="speak"
+      >
         <span class="icon">🔊</span> Play Audio
       </button>
       <p class="muted">
@@ -182,21 +194,31 @@ const toggleTranscript = () => {
       </p>
     </div>
 
-    <div v-if="difficulty === 5" class="noise-overlay" />
+    <div
+      v-if="difficulty === 5"
+      class="noise-overlay"
+    />
 
-    <div v-if="exercise.listeningQuestion" class="comprehension-area">
+    <div
+      v-if="exercise.listeningQuestion"
+      class="comprehension-area"
+    >
       <div class="card question-card">
-        <div class="eyebrow">Comprehension Check</div>
-        <p class="question-text">{{ exercise.listeningQuestion }}</p>
+        <div class="eyebrow">
+          Comprehension Check
+        </div>
+        <p class="question-text">
+          {{ exercise.listeningQuestion }}
+        </p>
         <div class="options-grid">
-          <button 
-            v-for="(opt, idx) in exercise.listeningOptions" 
+          <button
+            v-for="(opt, idx) in exercise.listeningOptions"
             :key="idx"
             class="option-button"
-            :class="{ 
+            :class="{
               selected: selectedOption === idx,
               correct: hasAttempted && opt.isCorrect,
-              wrong: hasAttempted && selectedOption === idx && !opt.isCorrect
+              wrong: hasAttempted && selectedOption === idx && !opt.isCorrect,
             }"
             :disabled="hasAttempted && feedback?.outcome !== 'retry'"
             @click="selectedOption = idx"
@@ -204,9 +226,12 @@ const toggleTranscript = () => {
             {{ opt.text }}
           </button>
         </div>
-        <div v-if="!hasAttempted || (feedback && feedback.outcome === 'retry')" class="actions">
-          <button 
-            class="button" 
+        <div
+          v-if="!hasAttempted || (feedback && feedback.outcome === 'retry')"
+          class="actions"
+        >
+          <button
+            class="button"
             :disabled="selectedOption === null"
             @click="hasAttempted = true; selectedOption !== null && exercise.listeningOptions && emit('submit', { answer: exercise.listeningOptions[selectedOption]?.text || '' })"
           >
@@ -216,26 +241,39 @@ const toggleTranscript = () => {
       </div>
     </div>
 
-    <div v-else-if="exercise.kind === 'listening-cloze'" class="cloze-area card">
-      <div class="eyebrow">Gap Fill</div>
-      <p class="instruction">Listen and fill in the missing words.</p>
-      
+    <div
+      v-else-if="exercise.kind === 'listening-cloze'"
+      class="cloze-area card"
+    >
+      <div class="eyebrow">
+        Gap Fill
+      </div>
+      <p class="instruction">
+        Listen and fill in the missing words.
+      </p>
+
       <div class="cloze-text">
-        <template v-for="(part, idx) in clozeParts" :key="idx">
+        <template
+          v-for="(part, idx) in clozeParts"
+          :key="idx"
+        >
           <span v-if="part.type === 'text'">{{ part.text }}</span>
-          <input 
-            v-else-if="part.type === 'gap'" 
-            v-model="clozeAnswers[part.index]" 
-            class="cloze-input" 
+          <input
+            v-else-if="part.type === 'gap'"
+            v-model="clozeAnswers[part.index]"
+            class="cloze-input"
             :placeholder="`...`"
             :disabled="feedback?.outcome === 'correct'"
-          />
+          >
         </template>
       </div>
 
-      <div v-if="!feedback || feedback.outcome === 'retry'" class="actions">
-        <button 
-          class="button" 
+      <div
+        v-if="!feedback || feedback.outcome === 'retry'"
+        class="actions"
+      >
+        <button
+          class="button"
           @click="emit('submit', { clozeAnswers: clozeAnswers })"
         >
           Check Transcription
@@ -243,33 +281,52 @@ const toggleTranscript = () => {
       </div>
     </div>
 
-    <form v-else-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
-      <textarea 
-        v-model="response" 
-        :placeholder="exercise.placeholder || 'What did you hear? (or translate to English)'" 
-        rows="3" 
-        autofocus 
+    <form
+      v-else-if="!feedback"
+      class="input-area"
+      @submit.prevent="emit('submit')"
+    >
+      <textarea
+        v-model="response"
+        :placeholder="exercise.placeholder || 'What did you hear? (or translate to English)'"
+        rows="3"
+        autofocus
       />
       <div class="actions">
-        <button class="button" type="submit">Check answer</button>
-        <button type="button" class="button secondary" @click="toggleTranscript">
+        <button
+          class="button"
+          type="submit"
+        >
+          Check answer
+        </button>
+        <button
+          type="button"
+          class="button secondary"
+          @click="toggleTranscript"
+        >
           {{ showTranscript ? 'Hide' : 'Show' }} Transcript
         </button>
       </div>
     </form>
 
-    <div v-if="showTranscript || (hasAttempted && feedback?.outcome === 'correct')" class="transcript-box card">
+    <div
+      v-if="showTranscript || (hasAttempted && feedback?.outcome === 'correct')"
+      class="transcript-box card"
+    >
       <h4>Transcript</h4>
       <div class="dutch">
-        <template v-for="(token, idx) in tokens" :key="idx">
-          <span 
-            v-if="token.isInteractable" 
-            class="word interactable" 
-            @click="onTokenClick(token)"
-            :class="{ 
-              active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim(),
-              'has-hint': !!token.hint 
+        <template
+          v-for="(token, idx) in tokens"
+          :key="idx"
+        >
+          <span
+            v-if="token.isInteractable"
+            class="word interactable"
+            :class="{
+              'active': selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim(),
+              'has-hint': !!token.hint,
             }"
+            @click="onTokenClick(token)"
           >
             {{ token.text }}
           </span>
@@ -277,34 +334,67 @@ const toggleTranscript = () => {
         </template>
       </div>
 
-      <div v-if="selectedWord" class="hint-popup card inline-hint">
+      <div
+        v-if="selectedWord"
+        class="hint-popup card inline-hint"
+      >
         <div class="hint-header">
           <span class="word-label">{{ selectedWord.word }}</span>
-          <button class="close-btn" @click="selectedWord = null">×</button>
+          <button
+            class="close-btn"
+            @click="selectedWord = null"
+          >
+            ×
+          </button>
         </div>
-        <p class="meaning">{{ selectedWord.meaning }}</p>
+        <p class="meaning">
+          {{ selectedWord.meaning }}
+        </p>
       </div>
 
       <div v-if="exercise.translation">
         <h4>Translation</h4>
-        <p class="muted">{{ exercise.translation }}</p>
+        <p class="muted">
+          {{ exercise.translation }}
+        </p>
       </div>
 
-      <div v-if="!isShadowing && feedback?.outcome === 'correct'" class="shadowing-promo">
+      <div
+        v-if="!isShadowing && feedback?.outcome === 'correct'"
+        class="shadowing-promo"
+      >
         <p><strong>B2 Challenge:</strong> Practice your automaticity by shadowing this sentence.</p>
-        <button class="button secondary" @click="isShadowing = true">Start Shadowing</button>
+        <button
+          class="button secondary"
+          @click="isShadowing = true"
+        >
+          Start Shadowing
+        </button>
       </div>
 
-      <div v-if="isShadowing" class="shadowing-area card">
-        <div class="eyebrow">Shadowing Mode</div>
-        <p class="instruction">Repeat the sentence clearly. We'll check your flow.</p>
-        
-        <VoiceInput 
-          @result="(text: string) => { shadowingResult = text; emit('submit', { answer: text, isShadowing: true }) }" 
+      <div
+        v-if="isShadowing"
+        class="shadowing-area card"
+      >
+        <div class="eyebrow">
+          Shadowing Mode
+        </div>
+        <p class="instruction">
+          Repeat the sentence clearly. We'll check your flow.
+        </p>
+
+        <VoiceInput
+          @result="(text: string) => { shadowingResult = text; emit('submit', { answer: text, isShadowing: true }) }"
         />
       </div>
 
-      <button v-if="feedback && feedback.outcome !== 'retry' && !isShadowing" class="button" @click="emit('next')">Continue</button>
+      <button
+        v-if="feedback && feedback.outcome !== 'retry' && !isShadowing"
+        class="button"
+        @click="emit('next')"
+      >
+        Continue
+      </button>
     </div>
   </div>
 </template>

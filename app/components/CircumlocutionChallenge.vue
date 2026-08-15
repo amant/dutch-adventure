@@ -1,49 +1,66 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import { ref, computed } from 'vue';
+import type { Exercise } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const userText = ref('')
-const concept = computed(() => props.exercise.circumlocutionData?.concept || 'Unknown Concept')
-const forbidden = computed(() => props.exercise.forbiddenWords || [])
+const userText = ref('');
+const concept = computed(() => props.exercise.circumlocutionData?.concept || 'Unknown Concept');
+const forbidden = computed(() => props.exercise.forbiddenWords || []);
 
 const submit = () => {
-  emit('submit', userText.value)
-}
+  emit('submit', userText.value);
+};
 
 const onVoiceResult = (text: string) => {
-  userText.value = text
-  submit()
-}
+  userText.value = text;
+  submit();
+};
 </script>
 
 <template>
   <div class="circumlocution-challenge">
     <div class="challenge-header">
-      <div class="icon">🤐</div>
+      <div class="icon">
+        🤐
+      </div>
       <div class="header-text">
         <h4>Circumlocution Challenge</h4>
-        <p class="muted">Describe the concept below without using the word itself or any of the forbidden terms.</p>
+        <p class="muted">
+          Describe the concept below without using the word itself or any of the forbidden terms.
+        </p>
       </div>
     </div>
 
     <div class="target-card">
-      <div class="label">Target Concept</div>
-      <div class="concept-name">{{ concept }}</div>
+      <div class="label">
+        Target Concept
+      </div>
+      <div class="concept-name">
+        {{ concept }}
+      </div>
     </div>
 
-    <div v-if="forbidden.length > 0" class="forbidden-box">
-      <div class="label">Forbidden Words</div>
+    <div
+      v-if="forbidden.length > 0"
+      class="forbidden-box"
+    >
+      <div class="label">
+        Forbidden Words
+      </div>
       <div class="forbidden-list">
-        <span v-for="word in forbidden" :key="word" class="forbidden-tag">
+        <span
+          v-for="word in forbidden"
+          :key="word"
+          class="forbidden-tag"
+        >
           {{ word }}
         </span>
       </div>
@@ -54,13 +71,13 @@ const onVoiceResult = (text: string) => {
         <span>Your Description</span>
         <span class="char-count">{{ userText.length }} chars</span>
       </div>
-      <textarea 
-        v-model="userText" 
-        class="editor" 
+      <textarea
+        v-model="userText"
+        class="editor"
         rows="5"
         placeholder="Explain what it is in your own words..."
-      ></textarea>
-      
+      />
+
       <div class="voice-row">
         <VoiceInput @result="onVoiceResult" />
         <span class="voice-hint">Or speak your description</span>
@@ -68,8 +85,8 @@ const onVoiceResult = (text: string) => {
     </div>
 
     <div class="actions">
-      <button 
-        class="button primary full-width" 
+      <button
+        class="button primary full-width"
         :disabled="!userText.trim()"
         @click="submit"
       >

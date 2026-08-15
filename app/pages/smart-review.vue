@@ -1,72 +1,72 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter, createFluencyChapter } from '~/utils/exerciseGenerator'
-import { useChapterSession } from '~/composables/useChapterSession'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter, createFluencyChapter } from '~/utils/exerciseGenerator';
+import { useChapterSession } from '~/composables/useChapterSession';
 
-const { getWeakConcepts, getFrontierConcepts, hydrate, memory } = useLearnerMemory()
-const route = useRoute()
+const { getWeakConcepts, getFrontierConcepts, hydrate, memory } = useLearnerMemory();
+const route = useRoute();
 
-const chapter = ref<any>(null)
+const chapter = ref<any>(null);
 // Must be a shallowRef: ref() would wrap the session object in reactive(),
 // which unwraps the nested state/stage/exercise refs and breaks
 // `session.stage?.value` access in the template.
-const session = shallowRef<any>(null)
-const feedback = ref<any>()
+const session = shallowRef<any>(null);
+const feedback = ref<any>();
 
-const timeLeft = ref<number | null>(null)
-let timerInterval: any = null
+const timeLeft = ref<number | null>(null);
+let timerInterval: any = null;
 
 const startTimer = () => {
-  if (timerInterval) clearInterval(timerInterval)
+  if (timerInterval) clearInterval(timerInterval);
   if (session.value?.exercise.value?.automaticitySeconds) {
-    timeLeft.value = session.value.exercise.value.automaticitySeconds
+    timeLeft.value = session.value.exercise.value.automaticitySeconds;
     timerInterval = setInterval(() => {
       if (timeLeft.value !== null && timeLeft.value > 0) {
-        timeLeft.value--
+        timeLeft.value--;
       } else {
-        clearInterval(timerInterval)
+        clearInterval(timerInterval);
       }
-    }, 1000)
+    }, 1000);
   } else {
-    timeLeft.value = null
+    timeLeft.value = null;
   }
-}
+};
 
 watch([() => session?.value?.exerscise?.value?.id, feedback], () => {
   if (session.value?.exercise?.value && !feedback.value) {
-    startTimer()
+    startTimer();
   } else {
-    clearInterval(timerInterval)
-    timeLeft.value = null
+    clearInterval(timerInterval);
+    timeLeft.value = null;
   }
-}, { immediate: true })
+}, { immediate: true });
 
-onUnmounted(() => clearInterval(timerInterval))
+onUnmounted(() => clearInterval(timerInterval));
 
 onMounted(() => {
-  hydrate()
-  
+  hydrate();
+
   if (route.query.mode === 'activation') {
-    const frontier = getFrontierConcepts(3)
-    chapter.value = createActivationChapter(frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
+    const frontier = getFrontierConcepts(3);
+    chapter.value = createActivationChapter(frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })));
   } else if (route.query.mode === 'fluency') {
-    const history: { key: string, prompt: string, snippet: string, type: 'vocabulary' | 'grammar' }[] = []
+    const history: { key: string; prompt: string; snippet: string; type: 'vocabulary' | 'grammar' }[] = [];
     Object.entries(memory.value.vocabulary).forEach(([key, state]) => {
-      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'vocabulary' }))
-    })
+      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'vocabulary' }));
+    });
     Object.entries(memory.value.grammar).forEach(([key, state]) => {
-      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'grammar' }))
-    })
-    chapter.value = createFluencyChapter(history.sort(() => 0.5 - Math.random()).slice(0, 5))
+      state.usageHistory?.forEach(h => history.push({ key, ...h, type: 'grammar' }));
+    });
+    chapter.value = createFluencyChapter(history.sort(() => 0.5 - Math.random()).slice(0, 5));
   } else if (route.query.mode === 'speed') {
-    const { vocabulary, grammar } = getWeakConcepts(5)
-    chapter.value = createSpeedChapter(vocabulary, grammar)
+    const { vocabulary, grammar } = getWeakConcepts(5);
+    chapter.value = createSpeedChapter(vocabulary, grammar);
   } else if (route.query.mode === 'sandbox') {
-    const scenario = (route.query.scenario as string) || 'Buying coffee'
-    const frontier = getFrontierConcepts(5)
-    chapter.value = createScenarioMission(scenario, frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })))
+    const scenario = (route.query.scenario as string) || 'Buying coffee';
+    const frontier = getFrontierConcepts(5);
+    chapter.value = createScenarioMission(scenario, frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })));
   } else if (route.query.mode === 'custom') {
-    const customExercise = JSON.parse(sessionStorage.getItem('custom-review-exercise') || '{}')
+    const customExercise = JSON.parse(sessionStorage.getItem('custom-review-exercise') || '{}');
     if (customExercise.id) {
       chapter.value = {
         slug: 'custom-review',
@@ -80,105 +80,146 @@ onMounted(() => {
           title: 'Stage 6 — Recall',
           kind: 'personalise',
           intro: 'Retrieve this expression you used a few days ago.',
-          exercises: [customExercise]
-        }]
-      }
+          exercises: [customExercise],
+        }],
+      };
     }
   } else {
-    const { vocabulary, grammar } = getWeakConcepts(4)
+    const { vocabulary, grammar } = getWeakConcepts(4);
     if (vocabulary.length === 0 && grammar.length === 0) {
       // Fallback if memory is empty
-      chapter.value = createSmartReviewChapter(['zijn', 'wonen'], ['word-order'])
+      chapter.value = createSmartReviewChapter(['zijn', 'wonen'], ['word-order']);
     } else {
-      chapter.value = createSmartReviewChapter(vocabulary, grammar)
+      chapter.value = createSmartReviewChapter(vocabulary, grammar);
     }
   }
-  
-  session.value = useChapterSession(chapter.value)
-  session.value.hydrate()
-})
 
-function submit() { 
-  feedback.value = session.value.submit(undefined, { timeLeft: timeLeft.value ?? undefined }) 
+  session.value = useChapterSession(chapter.value);
+  session.value.hydrate();
+});
+
+function submit() {
+  feedback.value = session.value.submit(undefined, { timeLeft: timeLeft.value ?? undefined });
 }
-function next() { 
-  feedback.value = undefined
-  session.value.advance() 
+function next() {
+  feedback.value = undefined;
+  session.value.advance();
 }
 </script>
 
 <template>
   <div v-if="session">
     <h3>Smart Review</h3>
-    <section v-if="session.state?.value?.completed" class="card completion">
-      <div class="eyebrow">Smart Review complete</div>
+    <section
+      v-if="session.state?.value?.completed"
+      class="card completion"
+    >
+      <div class="eyebrow">
+        Smart Review complete
+      </div>
       <h1>You strengthened your foundations.</h1>
-      <p class="muted">These weak concepts have been moved further into your long-term memory.</p>
-      <NuxtLink class="button" to="/progress">See your progress</NuxtLink>
+      <p class="muted">
+        These weak concepts have been moved further into your long-term memory.
+      </p>
+      <NuxtLink
+        class="button"
+        to="/progress"
+      >See your progress</NuxtLink>
     </section>
-    <section v-else-if="session.stage?.value && session.exercise?.value" class="session">
+    <section
+      v-else-if="session.stage?.value && session.exercise?.value"
+      class="session"
+    >
       <div class="session-head">
         <span class="eyebrow">Stage {{ session.state.value.stageIndex + 1 }} of {{ chapter.stages.length }}</span>
-        <div v-if="timeLeft !== null" class="timer" :class="{ urgent: timeLeft < 5 }">
+        <div
+          v-if="timeLeft !== null"
+          class="timer"
+          :class="{ urgent: timeLeft < 5 }"
+        >
           <span class="icon">⏱️</span> {{ timeLeft }}s
         </div>
         <span>{{ session.stage.value.title }}</span>
       </div>
-      <div class="progress-track"><div :style="{ width: `${((session.state.value.stageIndex + 1) / chapter.stages.length) * 100}%` }" /></div>
-      
+      <div class="progress-track">
+        <div :style="{ width: `${((session.state.value.stageIndex + 1) / chapter.stages.length) * 100}%` }" />
+      </div>
+
       <article class="card exercise">
-        <div class="eyebrow">{{ session.stage.value.kind }}</div>
-        <p class="muted">{{ session.stage.value.intro }}</p>
-        
-        <div v-if="session.exercise.value.kind === 'conversation'" class="renderer">
-          <MissionSimulator 
-            :exercise="session.exercise.value" 
+        <div class="eyebrow">
+          {{ session.stage.value.kind }}
+        </div>
+        <p class="muted">
+          {{ session.stage.value.intro }}
+        </p>
+
+        <div
+          v-if="session.exercise.value.kind === 'conversation'"
+          class="renderer"
+        >
+          <MissionSimulator
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'personalise'" class="renderer">
-          <PersonalisationExercise 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'personalise'"
+          class="renderer"
+        >
+          <PersonalisationExercise
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'speed-drill'" class="renderer">
-          <SpeedDrill 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'speed-drill'"
+          class="renderer"
+        >
+          <SpeedDrill
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'mediation'" class="renderer">
-          <MediationChallenge 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'mediation'"
+          class="renderer"
+        >
+          <MediationChallenge
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'connector-drill'" class="renderer">
-          <ConnectorDrill 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'connector-drill'"
+          class="renderer"
+        >
+          <ConnectorDrill
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'fluency-challenge'" class="renderer">
-          <FluencyChallenge 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'fluency-challenge'"
+          class="renderer"
+        >
+          <FluencyChallenge
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
             @next="next"
@@ -186,75 +227,136 @@ function next() {
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'recombination-drill'" class="renderer">
-          <RecombinationDrill 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'recombination-drill'"
+          class="renderer"
+        >
+          <RecombinationDrill
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'mirroring'" class="renderer">
-          <NativeMirroring 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'mirroring'"
+          class="renderer"
+        >
+          <NativeMirroring
             v-model="session.response.value"
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
             @next="next"
           />
         </div>
 
-        <div v-else-if="session.exercise.value.kind === 'pragmatic-drill'" class="renderer">
-          <PragmaticDrill 
-            :exercise="session.exercise.value" 
+        <div
+          v-else-if="session.exercise.value.kind === 'pragmatic-drill'"
+          class="renderer"
+        >
+          <PragmaticDrill
+            :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="(val) => { session.response.value = val; submit() }"
           />
         </div>
 
-        <div v-else class="default-renderer">
+        <div
+          v-else
+          class="default-renderer"
+        >
           <h2>{{ session.exercise.value.prompt }}</h2>
           <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>
-          
-          <form v-if="session.exercise.value.kind === 'typed' && !feedback" @submit.prevent="submit">
-            <textarea v-model="session.response.value" :placeholder="session.exercise.value.placeholder" rows="4" autofocus />
-            <button class="button" type="submit">Check answer</button>
+
+          <form
+            v-if="session.exercise.value.kind === 'typed' && !feedback"
+            @submit.prevent="submit"
+          >
+            <textarea
+              v-model="session.response.value"
+              :placeholder="session.exercise.value.placeholder"
+              rows="4"
+              autofocus
+            />
+            <button
+              class="button"
+              type="submit"
+            >
+              Check answer
+            </button>
           </form>
-          
-          <button v-else-if="!feedback" class="button" @click="next">I’m ready to continue</button>
+
+          <button
+            v-else-if="!feedback"
+            class="button"
+            @click="next"
+          >
+            I’m ready to continue
+          </button>
         </div>
 
-        <div v-if="feedback" class="feedback" :class="feedback.outcome">
+        <div
+          v-if="feedback"
+          class="feedback"
+          :class="feedback.outcome"
+        >
           <strong>{{ feedback.outcome === 'retry' ? 'Try once more' : feedback.outcome === 'acceptable' ? 'That works' : 'Correct' }}</strong>
           <p>{{ feedback.message }}</p>
-          <p v-if="feedback.target"><b>Useful answer:</b> {{ feedback.target }}</p>
-          
-          <div v-if="feedback.miniLesson" class="mini-lesson card">
-            <div class="tag">60-second Lesson</div>
+          <p v-if="feedback.target">
+            <b>Useful answer:</b> {{ feedback.target }}
+          </p>
+
+          <div
+            v-if="feedback.miniLesson"
+            class="mini-lesson card"
+          >
+            <div class="tag">
+              60-second Lesson
+            </div>
             <h3>{{ feedback.miniLesson.title }}</h3>
             <p>{{ feedback.miniLesson.content }}</p>
           </div>
 
-          <PragmaticIndicator 
-            v-if="feedback.pragmaticScore !== undefined" 
-            :score="feedback.pragmaticScore" 
-            :feedback="feedback.pragmaticFeedback" 
+          <PragmaticIndicator
+            v-if="feedback.pragmaticScore !== undefined"
+            :score="feedback.pragmaticScore"
+            :feedback="feedback.pragmaticFeedback"
           />
 
-          <div v-if="feedback.teacherCorrection" class="teacher-correction card">
-            <div class="tag">Teacher's Tip</div>
+          <div
+            v-if="feedback.teacherCorrection"
+            class="teacher-correction card"
+          >
+            <div class="tag">
+              Teacher's Tip
+            </div>
             <h3>A more natural way to say it:</h3>
-            <TeacherRedline 
-              :original="session.response.value" 
-              :corrected="feedback.teacherCorrection.natural" 
+            <TeacherRedline
+              :original="session.response.value"
+              :corrected="feedback.teacherCorrection.natural"
             />
-            <p class="muted">{{ feedback.teacherCorrection.explanation }}</p>
+            <p class="muted">
+              {{ feedback.teacherCorrection.explanation }}
+            </p>
           </div>
 
           <div class="actions">
-            <button v-if="feedback.outcome !== 'retry'" class="button" @click="next">Continue</button>
-            <button v-else class="button secondary" @click="feedback = undefined">Retry</button>
+            <button
+              v-if="feedback.outcome !== 'retry'"
+              class="button"
+              @click="next"
+            >
+              Continue
+            </button>
+            <button
+              v-else
+              class="button secondary"
+              @click="feedback = undefined"
+            >
+              Retry
+            </button>
           </div>
         </div>
       </article>

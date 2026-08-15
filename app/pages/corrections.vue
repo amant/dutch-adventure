@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { evaluateResponse } from '~/utils/evaluateResponse'
-import type { Redline, Exercise, Feedback } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { evaluateResponse } from '~/utils/evaluateResponse';
+import type { Redline, Exercise, Feedback } from '~/types/learning';
 
-const { memory, hydrate, record } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate, record } = useLearnerMemory();
+onMounted(hydrate);
 
-const activeRedline = ref<Redline | null>(null)
-const response = ref('')
-const feedback = ref<Feedback | null>(null)
+const activeRedline = ref<Redline | null>(null);
+const response = ref('');
+const feedback = ref<Feedback | null>(null);
 
-const recentRedlines = computed(() => memory.value.recentRedlines || [])
+const recentRedlines = computed(() => memory.value.recentRedlines || []);
 
 function startRetry(redline: Redline) {
-  activeRedline.value = redline
-  response.value = ''
-  feedback.value = null
+  activeRedline.value = redline;
+  response.value = '';
+  feedback.value = null;
 }
 
 function submitRetry() {
-  if (!activeRedline.value) return
-  
+  if (!activeRedline.value) return;
+
   // Create a temporary exercise from the redline
   const tempExercise: Exercise = {
     id: `retry-${activeRedline.value.id}`,
@@ -29,12 +29,12 @@ function submitRetry() {
     target: activeRedline.value.naturalCorrection,
     skills: ['production', 'automaticity'],
     vocabulary: activeRedline.value.vocabulary,
-    grammar: activeRedline.value.grammar
-  }
-  
-  const result = evaluateResponse(tempExercise, response.value)
-  feedback.value = result
-  
+    grammar: activeRedline.value.grammar,
+  };
+
+  const result = evaluateResponse(tempExercise, response.value);
+  feedback.value = result;
+
   // Record progress
   record(
     result.skills,
@@ -45,76 +45,138 @@ function submitRetry() {
     result.changeModifier,
     response.value,
     activeRedline.value.prompt,
-    result
-  )
+    result,
+  );
 }
 
 function closeRetry() {
-  activeRedline.value = null
-  response.value = ''
-  feedback.value = null
+  activeRedline.value = null;
+  response.value = '';
+  feedback.value = null;
 }
 </script>
 
 <template>
   <div class="corrections-page">
     <div class="hero">
-      <div class="eyebrow red">REDLINE TACTICAL LOG</div>
+      <div class="eyebrow red">
+        REDLINE TACTICAL LOG
+      </div>
       <h1>Teacher's Redlines & Corrections</h1>
-      <p class="muted">Review and re-engage sentences where you received a "Teacher's Redline". This is where passive correction becomes active conversational reflex.</p>
+      <p class="muted">
+        Review and re-engage sentences where you received a "Teacher's Redline". This is where passive correction becomes active conversational reflex.
+      </p>
     </div>
 
     <!-- Active Re-try Modal Overlay -->
-    <div v-if="activeRedline" class="retry-overlay">
+    <div
+      v-if="activeRedline"
+      class="retry-overlay"
+    >
       <div class="card retry-card">
-        <button class="close-btn" @click="closeRetry" aria-label="Close">×</button>
-        <div class="eyebrow gold">BATTLE RETRY CHALLENGE</div>
+        <button
+          class="close-btn"
+          aria-label="Close"
+          @click="closeRetry"
+        >
+          ×
+        </button>
+        <div class="eyebrow gold">
+          BATTLE RETRY CHALLENGE
+        </div>
         <h2>{{ activeRedline.prompt }}</h2>
-        
-        <div v-if="!feedback" class="previous-attempt">
-          <div class="label">Your previous attempt:</div>
-          <div class="text stiff">{{ activeRedline.userAnswer }}</div>
+
+        <div
+          v-if="!feedback"
+          class="previous-attempt"
+        >
+          <div class="label">
+            Your previous attempt:
+          </div>
+          <div class="text stiff">
+            {{ activeRedline.userAnswer }}
+          </div>
         </div>
 
         <div class="input-area">
-          <textarea 
-            v-model="response" 
+          <textarea
+            v-model="response"
             placeholder="Try saying it more naturally with authentic Dutch flow..."
             :disabled="!!feedback"
             class="retry-input"
-          ></textarea>
-          
-          <div v-if="!feedback" class="actions">
-            <button class="button gold" @click="submitRetry" :disabled="!response">
+          />
+
+          <div
+            v-if="!feedback"
+            class="actions"
+          >
+            <button
+              class="button gold"
+              :disabled="!response"
+              @click="submitRetry"
+            >
               <span>⚔️ Check Naturalness</span>
             </button>
           </div>
         </div>
 
-        <div v-if="feedback" class="feedback-box" :class="feedback.outcome">
-          <p class="outcome-message">{{ feedback.message }}</p>
-          <div v-if="feedback.teacherCorrection || feedback.correction" class="natural-example">
-            <div class="label">Authentic Native Dutch:</div>
-            <div class="text">{{ feedback.teacherCorrection?.natural || feedback.correction }}</div>
+        <div
+          v-if="feedback"
+          class="feedback-box"
+          :class="feedback.outcome"
+        >
+          <p class="outcome-message">
+            {{ feedback.message }}
+          </p>
+          <div
+            v-if="feedback.teacherCorrection || feedback.correction"
+            class="natural-example"
+          >
+            <div class="label">
+              Authentic Native Dutch:
+            </div>
+            <div class="text">
+              {{ feedback.teacherCorrection?.natural || feedback.correction }}
+            </div>
           </div>
-          <button class="button secondary mt-4" @click="closeRetry">Done with this mission</button>
+          <button
+            class="button secondary mt-4"
+            @click="closeRetry"
+          >
+            Done with this mission
+          </button>
         </div>
       </div>
     </div>
 
     <!-- List of Recent Redlines -->
-    <div v-if="recentRedlines.length > 0" class="redlines-list">
-      <div v-for="redline in recentRedlines" :key="redline.id" class="card redline-item">
+    <div
+      v-if="recentRedlines.length > 0"
+      class="redlines-list"
+    >
+      <div
+        v-for="redline in recentRedlines"
+        :key="redline.id"
+        class="card redline-item"
+      >
         <div class="redline-meta">
           <span class="date">{{ new Date(redline.date).toLocaleDateString() }}</span>
           <div class="tags">
-            <span v-for="v in redline.vocabulary" :key="v" class="tag vocabulary">{{ v }}</span>
-            <span v-for="g in redline.grammar" :key="g" class="tag grammar">{{ g }}</span>
+            <span
+              v-for="v in redline.vocabulary"
+              :key="v"
+              class="tag vocabulary"
+            >{{ v }}</span>
+            <span
+              v-for="g in redline.grammar"
+              :key="g"
+              class="tag grammar"
+            >{{ g }}</span>
           </div>
         </div>
-        
+
         <h3>{{ redline.prompt }}</h3>
-        
+
         <div class="diff-view">
           <div class="version">
             <span class="v-label">Stiff / Literal:</span>
@@ -126,19 +188,34 @@ function closeRetry() {
           </div>
         </div>
 
-        <p class="explanation">{{ redline.explanation }}</p>
-        
-        <button class="button secondary full-width" @click="startRetry(redline)">
+        <p class="explanation">
+          {{ redline.explanation }}
+        </p>
+
+        <button
+          class="button secondary full-width"
+          @click="startRetry(redline)"
+        >
           <span>⚡ Try Re-producing</span>
         </button>
       </div>
     </div>
 
-    <div v-else class="empty-state card">
-      <div class="empty-icon">🎯</div>
+    <div
+      v-else
+      class="empty-state card"
+    >
+      <div class="empty-icon">
+        🎯
+      </div>
       <h3>No Redlines Logged Yet!</h3>
-      <p class="muted">Keep practicing in chapter missions and drills to unlock personalized feedback and teacher corrections.</p>
-      <NuxtLink to="/" class="button gold"><span>⚔️ Explore Chapters</span></NuxtLink>
+      <p class="muted">
+        Keep practicing in chapter missions and drills to unlock personalized feedback and teacher corrections.
+      </p>
+      <NuxtLink
+        to="/"
+        class="button gold"
+      ><span>⚔️ Explore Chapters</span></NuxtLink>
     </div>
   </div>
 </template>

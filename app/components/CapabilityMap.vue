@@ -1,74 +1,89 @@
 <script setup lang="ts">
-import { chapters } from '~/data/chapters'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { chapters } from '~/data/chapters';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
-const { memory } = useLearnerMemory()
+const { memory } = useLearnerMemory();
 
-const levels = ['A1', 'A2', 'B1', 'B2'] as const
+const levels = ['A1', 'A2', 'B1', 'B2'] as const;
 
 const getCapabilityStatus = (chapter: typeof chapters[0]) => {
-  const vocab = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.vocabulary || []))
-  const grammar = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.grammar || []))
-  
-  if (vocab.length === 0 && grammar.length === 0) return 'not-started'
-  
-  const scores: number[] = []
-  vocab.forEach(v => {
+  const vocab = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.vocabulary || []));
+  const grammar = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.grammar || []));
+
+  if (vocab.length === 0 && grammar.length === 0) return 'not-started';
+
+  const scores: number[] = [];
+  vocab.forEach((v) => {
     if (memory.value.vocabulary[v]) {
-      scores.push((memory.value.vocabulary[v].production + memory.value.vocabulary[v].automaticity) / 2)
+      scores.push((memory.value.vocabulary[v].production + memory.value.vocabulary[v].automaticity) / 2);
     }
-  })
-  grammar.forEach(g => {
+  });
+  grammar.forEach((g) => {
     if (memory.value.grammar[g]) {
-      scores.push((memory.value.grammar[g].production + memory.value.grammar[g].automaticity) / 2)
+      scores.push((memory.value.grammar[g].production + memory.value.grammar[g].automaticity) / 2);
     }
-  })
-  
-  if (scores.length === 0) return 'not-started'
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length
-  
-  if (avg > 80) return 'mastered'
-  if (avg > 20) return 'in-progress'
-  return 'not-started'
-}
+  });
+
+  if (scores.length === 0) return 'not-started';
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+
+  if (avg > 80) return 'mastered';
+  if (avg > 20) return 'in-progress';
+  return 'not-started';
+};
 
 const chaptersByLevel = computed(() => {
-  const map: Record<string, typeof chapters> = {}
-  levels.forEach(l => {
-    map[l] = chapters.filter(c => c.level === l)
-  })
-  return map
-})
+  const map: Record<string, typeof chapters> = {};
+  levels.forEach((l) => {
+    map[l] = chapters.filter(c => c.level === l);
+  });
+  return map;
+});
 </script>
 
 <template>
   <div class="capability-map card">
     <div class="header">
-      <div class="eyebrow gold">GRAND LINE NAVIGATION</div>
+      <div class="eyebrow gold">
+        GRAND LINE NAVIGATION
+      </div>
       <h2>Your Capability Map</h2>
-      <p class="muted">Master these real-world mission capabilities to conquer the B2 language frontier.</p>
+      <p class="muted">
+        Master these real-world mission capabilities to conquer the B2 language frontier.
+      </p>
     </div>
-    
+
     <div class="levels-grid">
-      <div v-for="level in levels" :key="level" class="level-column">
+      <div
+        v-for="level in levels"
+        :key="level"
+        class="level-column"
+      >
         <div class="level-header">
-          <span class="level-badge" :class="level.toLowerCase()">{{ level }}</span>
+          <span
+            class="level-badge"
+            :class="level.toLowerCase()"
+          >{{ level }}</span>
           <div class="level-meta">
             <span class="level-label">{{ level === 'A1' ? 'East Blue Survival' : level === 'A2' ? 'Everyday Voyage' : level === 'B1' ? 'Grand Line Independence' : 'New World Mastery' }}</span>
           </div>
         </div>
-        
+
         <div class="capabilities-list">
-          <NuxtLink 
-            v-for="chapter in chaptersByLevel[level]" 
+          <NuxtLink
+            v-for="chapter in chaptersByLevel[level]"
             :key="chapter.slug"
             :to="`/chapter/${chapter.slug}`"
             class="capability-item"
             :class="[getCapabilityStatus(chapter), { 'is-capstone': chapter.isCapstone }]"
           >
-            <div class="dot"></div>
+            <div class="dot" />
             <span class="title">{{ chapter.title }}</span>
-            <span v-if="chapter.isCapstone" class="capstone-icon" title="Capstone Mission">🏆</span>
+            <span
+              v-if="chapter.isCapstone"
+              class="capstone-icon"
+              title="Capstone Mission"
+            >🏆</span>
           </NuxtLink>
         </div>
       </div>

@@ -1,61 +1,93 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit']);
+const response = defineModel<string>();
 
 const isUsed = (word: string) => {
-  if (!response.value) return false
-  return response.value.toLowerCase().includes(word.toLowerCase())
-}
+  if (!response.value) return false;
+  return response.value.toLowerCase().includes(word.toLowerCase());
+};
 </script>
 
 <template>
   <div class="recombination-drill">
     <div class="targets-container card">
-      <div class="eyebrow">Combine these concepts:</div>
+      <div class="eyebrow">
+        Combine these concepts:
+      </div>
       <div class="targets-list">
-        <div 
-          v-for="word in exercise.requiredWords" 
-          :key="word" 
+        <div
+          v-for="word in exercise.requiredWords"
+          :key="word"
           class="target-tag"
-          :class="{ used: isUsed(word), 'correct': feedback?.outcome === 'correct' }"
+          :class="{ used: isUsed(word), correct: feedback?.outcome === 'correct' }"
         >
           {{ word }}
-          <span v-if="isUsed(word)" class="check">✓</span>
+          <span
+            v-if="isUsed(word)"
+            class="check"
+          >✓</span>
         </div>
       </div>
     </div>
 
     <div class="prompt-container">
       <h3>{{ exercise.prompt }}</h3>
-      <p v-if="exercise.context" class="context">{{ exercise.context }}</p>
+      <p
+        v-if="exercise.context"
+        class="context"
+      >
+        {{ exercise.context }}
+      </p>
     </div>
 
     <div class="input-container">
-      <textarea 
-        v-model="response" 
-        class="input-area" 
+      <textarea
+        v-model="response"
+        class="input-area"
         placeholder="Type your Dutch sentence here..."
         :disabled="!!feedback"
         @keydown.enter.prevent="emit('submit')"
-      ></textarea>
-      
-      <div v-if="!feedback" class="controls">
-        <button class="button" @click="emit('submit')" :disabled="!response">Check Recombination</button>
+      />
+
+      <div
+        v-if="!feedback"
+        class="controls"
+      >
+        <button
+          class="button"
+          :disabled="!response"
+          @click="emit('submit')"
+        >
+          Check Recombination
+        </button>
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-extra card" :class="feedback.outcome">
-      <p v-if="feedback.message">{{ feedback.message }}</p>
-      <div v-if="feedback.teacherCorrection" class="correction">
-        <div class="label">Natural:</div>
-        <div class="text">{{ feedback.teacherCorrection.natural }}</div>
+    <div
+      v-if="feedback"
+      class="feedback-extra card"
+      :class="feedback.outcome"
+    >
+      <p v-if="feedback.message">
+        {{ feedback.message }}
+      </p>
+      <div
+        v-if="feedback.teacherCorrection"
+        class="correction"
+      >
+        <div class="label">
+          Natural:
+        </div>
+        <div class="text">
+          {{ feedback.teacherCorrection.natural }}
+        </div>
       </div>
     </div>
   </div>

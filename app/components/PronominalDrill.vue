@@ -1,44 +1,44 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const baseWord = ref<string | null>(null)
-const selectedPreposition = ref(false)
+const baseWord = ref<string | null>(null);
+const selectedPreposition = ref(false);
 
 const result = computed(() => {
-  if (!baseWord.value) return ''
-  if (!selectedPreposition.value) return baseWord.value
-  
-  const prep = props.exercise.pronominalData?.preposition || ''
-  
+  if (!baseWord.value) return '';
+  if (!selectedPreposition.value) return baseWord.value;
+
+  const prep = props.exercise.pronominalData?.preposition || '';
+
   // Rules for Dutch pronominal adverbs:
   // 1. met -> mee
   // 2. tot -> toe
   // 3. naar -> naartoe (sometimes, but usually just naar)
   // 4. spelling: if prep starts with vowel, maybe 'er' + prep is fine, but some have changes.
-  
-  let adjustedPrep = prep
-  if (prep === 'met') adjustedPrep = 'mee'
-  if (prep === 'tot') adjustedPrep = 'toe'
-  
-  return baseWord.value + adjustedPrep
-})
+
+  let adjustedPrep = prep;
+  if (prep === 'met') adjustedPrep = 'mee';
+  if (prep === 'tot') adjustedPrep = 'toe';
+
+  return baseWord.value + adjustedPrep;
+});
 
 function handleSubmit() {
-  if (!result.value) return
-  emit('submit', result.value)
+  if (!result.value) return;
+  emit('submit', result.value);
 }
 
 function reset() {
-  baseWord.value = null
-  selectedPreposition.value = false
+  baseWord.value = null;
+  selectedPreposition.value = false;
 }
 </script>
 
@@ -46,17 +46,25 @@ function reset() {
   <div class="pronominal-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B1/B2 Logical Connection</div>
-        <div class="badge">Pronominal Adverbs</div>
+        <div class="eyebrow">
+          B1/B2 Logical Connection
+        </div>
+        <div class="badge">
+          Pronominal Adverbs
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Replace the direct object construction with a combined pronominal adverb.</p>
+        <p class="muted">
+          Replace the direct object construction with a combined pronominal adverb.
+        </p>
       </div>
 
       <div class="sentence-box mt-6">
-        <div class="blunt-label">Original Sentence:</div>
+        <div class="blunt-label">
+          Original Sentence:
+        </div>
         <p class="sentence">
           {{ exercise.pronominalData?.sentence }}
         </p>
@@ -70,33 +78,40 @@ function reset() {
           <div class="merger-column">
             <span class="column-label">Select Reference</span>
             <div class="choice-group">
-              <button 
-                v-for="b in ['er', 'hier', 'daar', 'waar']" 
+              <button
+                v-for="b in ['er', 'hier', 'daar', 'waar']"
                 :key="b"
                 class="choice-btn"
-                :class="{ 'active': baseWord === b }"
+                :class="{ active: baseWord === b }"
                 :disabled="!!feedback"
                 @click="baseWord = b"
               >
                 {{ b }}
               </button>
             </div>
-            <p class="choice-hint">{{ baseWord === 'er' ? 'Unspecified/Weak' : baseWord === 'hier' ? 'Close to speaker' : baseWord === 'daar' ? 'Further away' : baseWord === 'waar' ? 'Relative/Question' : '' }}</p>
+            <p class="choice-hint">
+              {{ baseWord === 'er' ? 'Unspecified/Weak' : baseWord === 'hier' ? 'Close to speaker' : baseWord === 'daar' ? 'Further away' : baseWord === 'waar' ? 'Relative/Question' : '' }}
+            </p>
           </div>
-          
-          <div class="plus">+</div>
+
+          <div class="plus">
+            +
+          </div>
 
           <div class="merger-column">
             <span class="column-label">Preposition</span>
-            <button 
+            <button
               class="choice-btn prep-btn"
-              :class="{ 'active': selectedPreposition }"
+              :class="{ active: selectedPreposition }"
               :disabled="!!feedback"
               @click="selectedPreposition = !selectedPreposition"
             >
               {{ exercise.pronominalData?.preposition }}
             </button>
-            <p v-if="selectedPreposition && (exercise.pronominalData?.preposition === 'met' || exercise.pronominalData?.preposition === 'tot')" class="choice-hint shift">
+            <p
+              v-if="selectedPreposition && (exercise.pronominalData?.preposition === 'met' || exercise.pronominalData?.preposition === 'tot')"
+              class="choice-hint shift"
+            >
               Form shifts to <b>{{ exercise.pronominalData?.preposition === 'met' ? 'mee' : 'toe' }}</b>
             </p>
           </div>
@@ -104,15 +119,21 @@ function reset() {
 
         <div class="result-preview mt-8">
           <span class="column-label">Resulting Adverb:</span>
-          <div class="result-box" :class="{ 'empty': !result, 'submitted': !!feedback }">
+          <div
+            class="result-box"
+            :class="{ empty: !result, submitted: !!feedback }"
+          >
             {{ result || '???' }}
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!baseWord || !selectedPreposition"
           @click="handleSubmit"
         >
@@ -121,21 +142,39 @@ function reset() {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.explanation || exercise.explanation" class="explanation-box mt-4">
-          <div class="eyebrow">Grammar Assistant:</div>
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.explanation || exercise.explanation"
+          class="explanation-box mt-4"
+        >
+          <div class="eyebrow">
+            Grammar Assistant:
+          </div>
           <p>{{ feedback.explanation || exercise.explanation }}</p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Next Exercise</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Next Exercise
+        </button>
       </div>
     </div>
   </div>

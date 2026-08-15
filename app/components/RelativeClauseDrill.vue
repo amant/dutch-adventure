@@ -1,56 +1,69 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const typeBadge = computed(() => {
   switch (props.exercise.relativeClauseData?.antecedentType) {
-    case 'de-word': return 'De-woord (die)'
-    case 'het-word': return 'Het-woord (dat)'
-    case 'person-prep': return 'Persoon + Voorzetsel (voorzetsel + wie)'
-    case 'thing-prep': return 'Zaak + Voorzetsel (waar + voorzetsel)'
-    case 'general-wat': return 'Algemeen / Hele zin (wat)'
-    default: return 'Betrekkelijke Bijzin'
+    case 'de-word': return 'De-woord (die)';
+    case 'het-word': return 'Het-woord (dat)';
+    case 'person-prep': return 'Persoon + Voorzetsel (voorzetsel + wie)';
+    case 'thing-prep': return 'Zaak + Voorzetsel (waar + voorzetsel)';
+    case 'general-wat': return 'Algemeen / Hele zin (wat)';
+    default: return 'Betrekkelijke Bijzin';
   }
-})
+});
 </script>
 
 <template>
   <div class="relative-clause-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Complex Sentences & Cohesion</div>
-        <div class="badge">{{ typeBadge }}</div>
+        <div class="eyebrow">
+          B2 Complex Sentences & Cohesion
+        </div>
+        <div class="badge">
+          {{ typeBadge }}
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Combine the two statements into one elegant complex sentence using the correct relative pronoun and subclause word order.</p>
+        <p class="muted">
+          Combine the two statements into one elegant complex sentence using the correct relative pronoun and subclause word order.
+        </p>
       </div>
 
       <div class="clause-sources-view mt-6">
         <div class="source-box main-clause">
-          <div class="box-label">Hoofdzin (Main statement)</div>
-          <p class="source-text">{{ exercise.relativeClauseData?.mainClause }}</p>
-          <div v-if="exercise.relativeClauseData?.antecedent" class="antecedent-tag">
+          <div class="box-label">
+            Hoofdzin (Main statement)
+          </div>
+          <p class="source-text">
+            {{ exercise.relativeClauseData?.mainClause }}
+          </p>
+          <div
+            v-if="exercise.relativeClauseData?.antecedent"
+            class="antecedent-tag"
+          >
             Antecedent: <strong>{{ exercise.relativeClauseData.antecedent }}</strong>
           </div>
         </div>
@@ -60,18 +73,29 @@ const typeBadge = computed(() => {
         </div>
 
         <div class="source-box sub-info">
-          <div class="box-label">In te voegen informatie (Relative info)</div>
-          <p class="source-text">{{ exercise.relativeClauseData?.subordinateInfo }}</p>
+          <div class="box-label">
+            In te voegen informatie (Relative info)
+          </div>
+          <p class="source-text">
+            {{ exercise.relativeClauseData?.subordinateInfo }}
+          </p>
         </div>
 
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="source-box combined-target">
-          <div class="box-label">Gecombineerde zin (Relative Clause)</div>
+          <div class="box-label">
+            Gecombineerde zin (Relative Clause)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -80,17 +104,23 @@ const typeBadge = computed(() => {
               placeholder="Typ de samengestelde zin met betrekkelijk voornaamwoord..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.relativeClauseData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.relativeClauseData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.relativeClauseData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -99,37 +129,64 @@ const typeBadge = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Natural Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Natural Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

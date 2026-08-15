@@ -1,52 +1,82 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import type { SkillDimension } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import type { SkillDimension } from '~/types/learning';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
-const dimensions: { id: SkillDimension, label: string }[] = [
+const dimensions: { id: SkillDimension; label: string }[] = [
   { id: 'recognition', label: 'Recognition' },
   { id: 'meaning', label: 'Meaning' },
   { id: 'listening', label: 'Listening' },
   { id: 'production', label: 'Production' },
   { id: 'automaticity', label: 'Fluency' },
-  { id: 'coherence', label: 'Coherence' }
-]
+  { id: 'coherence', label: 'Coherence' },
+];
 
 const grammarPoints = computed(() => {
-  return Object.entries(memory.value.grammar).sort(([a], [b]) => a.localeCompare(b))
-})
+  return Object.entries(memory.value.grammar).sort(([a], [b]) => a.localeCompare(b));
+});
 
 const formatKey = (key: string) => {
-  return key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-}
+  return key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+};
 </script>
 
 <template>
   <section class="grammar-view">
-    <div class="eyebrow gold">STRUCTURAL LOG POSE</div>
+    <div class="eyebrow gold">
+      STRUCTURAL LOG POSE
+    </div>
     <h1>Grammar Command Deck</h1>
-    <p class="muted">Structural sentence patterns you've encountered and your current battle readiness across each dimension.</p>
+    <p class="muted">
+      Structural sentence patterns you've encountered and your current battle readiness across each dimension.
+    </p>
 
-    <div v-if="grammarPoints.length === 0" class="empty-state card">
-      <div class="empty-icon">⚓</div>
+    <div
+      v-if="grammarPoints.length === 0"
+      class="empty-state card"
+    >
+      <div class="empty-icon">
+        ⚓
+      </div>
       <h3>No Grammar Patterns Logged Yet</h3>
-      <p class="muted">Patterns will be automatically recorded as you embark on chapter missions and tactical drills.</p>
-      <NuxtLink to="/" class="button gold"><span>⚔️ Browse Chapter Missions</span></NuxtLink>
+      <p class="muted">
+        Patterns will be automatically recorded as you embark on chapter missions and tactical drills.
+      </p>
+      <NuxtLink
+        to="/"
+        class="button gold"
+      ><span>⚔️ Browse Chapter Missions</span></NuxtLink>
     </div>
 
-    <div v-else class="grammar-grid">
-      <div v-for="[point, state] in grammarPoints" :key="point" class="card grammar-card">
+    <div
+      v-else
+      class="grammar-grid"
+    >
+      <div
+        v-for="[point, state] in grammarPoints"
+        :key="point"
+        class="card grammar-card"
+      >
         <div class="grammar-header">
           <h3>{{ formatKey(point) }}</h3>
-          <div class="encounter-badge">{{ state.successes }}/{{ state.encounters }} hits</div>
+          <div class="encounter-badge">
+            {{ state.successes }}/{{ state.encounters }} hits
+          </div>
         </div>
         <div class="dimensions">
-          <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
+          <div
+            v-for="dim in dimensions"
+            :key="dim.id"
+            class="dimension-row"
+          >
             <span class="dim-label">{{ dim.label }}</span>
             <div class="dim-bar-container">
-              <div class="dim-bar" :style="{ width: `${state[dim.id as keyof typeof state]}%` }"></div>
+              <div
+                class="dim-bar"
+                :style="{ width: `${state[dim.id as keyof typeof state]}%` }"
+              />
             </div>
             <span class="dim-value">{{ state[dim.id as keyof typeof state] }}%</span>
           </div>

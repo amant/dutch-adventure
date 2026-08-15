@@ -1,59 +1,59 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'next-step'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next', 'next-step']);
+const response = defineModel<string>();
 
-const currentStepIndex = ref(0)
-const steps = computed(() => props.exercise.morphingData?.steps || [])
-const currentStep = computed(() => steps.value[currentStepIndex.value])
-const baseSentence = computed(() => props.exercise.morphingData?.baseSentence || '')
+const currentStepIndex = ref(0);
+const steps = computed(() => props.exercise.morphingData?.steps || []);
+const currentStep = computed(() => steps.value[currentStepIndex.value]);
+const baseSentence = computed(() => props.exercise.morphingData?.baseSentence || '');
 
-const completedSteps = ref<string[]>([])
+const completedSteps = ref<string[]>([]);
 
 const lastSentence = computed(() => {
-  if (currentStepIndex.value === 0) return baseSentence.value
-  return completedSteps.value[currentStepIndex.value - 1]
-})
+  if (currentStepIndex.value === 0) return baseSentence.value;
+  return completedSteps.value[currentStepIndex.value - 1];
+});
 
 function handleSubmit() {
-  if (!response.value) return
-  emit('submit', { morphingStepIndex: currentStepIndex.value })
+  if (!response.value) return;
+  emit('submit', { morphingStepIndex: currentStepIndex.value });
 }
 
 watch(() => props.feedback, (f) => {
   if (f?.outcome === 'correct') {
-    completedSteps.value[currentStepIndex.value] = response.value!
+    completedSteps.value[currentStepIndex.value] = response.value!;
     if (currentStepIndex.value < steps.value.length - 1) {
       // Not the final step, wait for user to click "Next Step"
     } else {
       // Final step correct! The parent [slug].vue will handle the final "Continue"
     }
   }
-})
+});
 
 function nextStep() {
-  currentStepIndex.value++
-  response.value = ''
+  currentStepIndex.value++;
+  response.value = '';
   // Clear feedback for the next step
-  emit('next-step') // We need to tell the parent to clear its feedback ref
+  emit('next-step'); // We need to tell the parent to clear its feedback ref
 }
 </script>
 
 <template>
   <div class="morphing-drill">
     <div class="steps-progress">
-      <div 
-        v-for="(s, i) in steps" 
-        :key="i" 
-        class="step-dot" 
+      <div
+        v-for="(s, i) in steps"
+        :key="i"
+        class="step-dot"
         :class="{ active: i === currentStepIndex, completed: i < currentStepIndex }"
-      ></div>
+      />
     </div>
 
     <div class="morph-container card">
@@ -62,13 +62,20 @@ function nextStep() {
           <span class="tag">Start</span>
           <p>{{ baseSentence }}</p>
         </div>
-        <div v-for="(done, idx) in completedSteps" :key="idx" class="history-item completed">
+        <div
+          v-for="(done, idx) in completedSteps"
+          :key="idx"
+          class="history-item completed"
+        >
           <span class="tag">Step {{ idx + 1 }}</span>
           <p>{{ done }}</p>
         </div>
       </div>
 
-      <div v-if="currentStep" class="current-task">
+      <div
+        v-if="currentStep"
+        class="current-task"
+      >
         <div class="instruction">
           <span class="icon">➔</span>
           <div class="instr-content">
@@ -77,22 +84,41 @@ function nextStep() {
           </div>
         </div>
 
-        <form v-if="!feedback || feedback.outcome === 'retry'" @submit.prevent="handleSubmit" class="input-area">
-          <textarea 
-            v-model="response" 
-            :placeholder="`Type the new sentence...`" 
-            rows="2" 
-            autofocus 
+        <form
+          v-if="!feedback || feedback.outcome === 'retry'"
+          class="input-area"
+          @submit.prevent="handleSubmit"
+        >
+          <textarea
+            v-model="response"
+            :placeholder="`Type the new sentence...`"
+            rows="2"
+            autofocus
           />
           <div class="actions">
             <VoiceInput @result="(t) => { response = t; handleSubmit() }" />
-            <button class="button" type="submit">Verify Change</button>
+            <button
+              class="button"
+              type="submit"
+            >
+              Verify Change
+            </button>
           </div>
         </form>
 
-        <div v-else-if="currentStepIndex < steps.length - 1" class="step-success">
-          <p class="success-msg">Nice! You evolved the sentence correctly.</p>
-          <button class="button secondary" @click="nextStep">Next Change</button>
+        <div
+          v-else-if="currentStepIndex < steps.length - 1"
+          class="step-success"
+        >
+          <p class="success-msg">
+            Nice! You evolved the sentence correctly.
+          </p>
+          <button
+            class="button secondary"
+            @click="nextStep"
+          >
+            Next Change
+          </button>
         </div>
       </div>
     </div>

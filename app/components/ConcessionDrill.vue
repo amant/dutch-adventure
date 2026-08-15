@@ -1,50 +1,54 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const typeBadge = computed(() => {
   switch (props.exercise.concessionData?.triggerType) {
-    case 'hoewel-ofschoon': return 'Toegevende Bijzin (Hoewel / Ofschoon)'
-    case 'ondanks-noun-vs-clause': return 'Prepositie vs Bijzin (Ondanks vs Ondanks dat)'
-    case 'al-inversion': return 'Inversie met "Al" (Al + V1 + Onderwerp)'
-    case 'hoe-ook-correlative': return 'Correlatief "Hoe ... ook"'
-    case 'weliswaar-maar': return 'Contrastcoördinatie (Weliswaar... maar)'
-    default: return 'Toegevend Verband & Contrast'
+    case 'hoewel-ofschoon': return 'Toegevende Bijzin (Hoewel / Ofschoon)';
+    case 'ondanks-noun-vs-clause': return 'Prepositie vs Bijzin (Ondanks vs Ondanks dat)';
+    case 'al-inversion': return 'Inversie met "Al" (Al + V1 + Onderwerp)';
+    case 'hoe-ook-correlative': return 'Correlatief "Hoe ... ook"';
+    case 'weliswaar-maar': return 'Contrastcoördinatie (Weliswaar... maar)';
+    default: return 'Toegevend Verband & Contrast';
   }
-})
+});
 </script>
 
 <template>
   <div class="concession-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Nuanced Discourse & Concessive Clauses</div>
-        <div class="badge">{{ typeBadge }}</div>
+        <div class="eyebrow">
+          B2 Nuanced Discourse & Concessive Clauses
+        </div>
+        <div class="badge">
+          {{ typeBadge }}
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          Combine the two premises into one cohesive Dutch sentence using the required concessive structure. 
+          Combine the two premises into one cohesive Dutch sentence using the required concessive structure.
           Pay close attention to word order, conjunctions, and inversion rules.
         </p>
       </div>
@@ -52,8 +56,12 @@ const typeBadge = computed(() => {
       <div class="drill-sources-view mt-6">
         <div class="premises-grid">
           <div class="source-box premise-box">
-            <div class="box-label">Stelling / Feit A (Premise A)</div>
-            <p class="source-text">{{ exercise.concessionData?.premiseA }}</p>
+            <div class="box-label">
+              Stelling / Feit A (Premise A)
+            </div>
+            <p class="source-text">
+              {{ exercise.concessionData?.premiseA }}
+            </p>
           </div>
 
           <div class="vs-divider">
@@ -61,31 +69,53 @@ const typeBadge = computed(() => {
           </div>
 
           <div class="source-box contrast-box">
-            <div class="box-label">Tegenstelling / Uitkomst B (Contrast / Outcome B)</div>
-            <p class="source-text">{{ exercise.concessionData?.contrastB }}</p>
+            <div class="box-label">
+              Tegenstelling / Uitkomst B (Contrast / Outcome B)
+            </div>
+            <p class="source-text">
+              {{ exercise.concessionData?.contrastB }}
+            </p>
           </div>
         </div>
 
-        <div v-if="exercise.concessionData?.structureFormula || exercise.concessionData?.connectorCue" class="formula-blueprint-container">
-          <div class="blueprint-label">Constructieschema (Structural Blueprint):</div>
+        <div
+          v-if="exercise.concessionData?.structureFormula || exercise.concessionData?.connectorCue"
+          class="formula-blueprint-container"
+        >
+          <div class="blueprint-label">
+            Constructieschema (Structural Blueprint):
+          </div>
           <div class="blueprint-pills">
-            <span v-if="exercise.concessionData?.connectorCue" class="pill cue">
+            <span
+              v-if="exercise.concessionData?.connectorCue"
+              class="pill cue"
+            >
               Verbindingswoord: <strong>{{ exercise.concessionData.connectorCue }}</strong>
             </span>
-            <span v-if="exercise.concessionData?.structureFormula" class="pill formula">
+            <span
+              v-if="exercise.concessionData?.structureFormula"
+              class="pill formula"
+            >
               Formule: <code>{{ exercise.concessionData.structureFormula }}</code>
             </span>
           </div>
         </div>
 
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="source-box combined-target">
-          <div class="box-label">Jouw Samengestelde Zin (Combined Concessive Sentence)</div>
+          <div class="box-label">
+            Jouw Samengestelde Zin (Combined Concessive Sentence)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -94,17 +124,23 @@ const typeBadge = computed(() => {
               placeholder="Typ hier de volledige samengestelde zin..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.concessionData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.concessionData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.concessionData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -113,37 +149,64 @@ const typeBadge = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Natural Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Natural Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

@@ -1,41 +1,41 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const activeLevelIdx = ref(0)
-const answers = ref<string[]>([])
-const activeAnswer = ref('')
+const activeLevelIdx = ref(0);
+const answers = ref<string[]>([]);
+const activeAnswer = ref('');
 
-const levels = computed(() => props.exercise.formalityLevels || [])
-const currentLevel = computed(() => levels.value[activeLevelIdx.value])
+const levels = computed(() => props.exercise.formalityLevels || []);
+const currentLevel = computed(() => levels.value[activeLevelIdx.value]);
 
 function nextLevel() {
-  answers.value[activeLevelIdx.value] = activeAnswer.value
+  answers.value[activeLevelIdx.value] = activeAnswer.value;
   if (activeLevelIdx.value < levels.value.length - 1) {
-    activeLevelIdx.value++
-    activeAnswer.value = answers.value[activeLevelIdx.value] || ''
+    activeLevelIdx.value++;
+    activeAnswer.value = answers.value[activeLevelIdx.value] || '';
   } else {
-    // Final submit - join answers or just submit the last one? 
-    // For simplicity, we'll submit the specific one that evaluateResponse expects, 
-    // or evaluateResponse can handle the array. 
+    // Final submit - join answers or just submit the last one?
+    // For simplicity, we'll submit the specific one that evaluateResponse expects,
+    // or evaluateResponse can handle the array.
     // Actually, let's submit them one by one or as a combined string.
     // The design: User must complete all 3.
-    emit('submit', answers.value.join(' | '))
+    emit('submit', answers.value.join(' | '));
   }
 }
 
 function prevLevel() {
   if (activeLevelIdx.value > 0) {
-    answers.value[activeLevelIdx.value] = activeAnswer.value
-    activeLevelIdx.value--
-    activeAnswer.value = answers.value[activeLevelIdx.value] || ''
+    answers.value[activeLevelIdx.value] = activeAnswer.value;
+    activeLevelIdx.value--;
+    activeAnswer.value = answers.value[activeLevelIdx.value] || '';
   }
 }
 </script>
@@ -43,14 +43,16 @@ function prevLevel() {
 <template>
   <div class="formality-drill">
     <div class="core-thought card">
-      <div class="eyebrow">Core Thought</div>
+      <div class="eyebrow">
+        Core Thought
+      </div>
       <p>{{ exercise.prompt }}</p>
     </div>
 
     <div class="levels-nav">
-      <div 
-        v-for="(lvl, idx) in levels" 
-        :key="idx" 
+      <div
+        v-for="(lvl, idx) in levels"
+        :key="idx"
         class="level-tab"
         :class="{ active: activeLevelIdx === idx, completed: !!answers[idx] }"
         @click="activeLevelIdx = idx; activeAnswer = answers[idx] || ''"
@@ -59,22 +61,36 @@ function prevLevel() {
       </div>
     </div>
 
-    <div v-if="currentLevel" class="drill-content card">
+    <div
+      v-if="currentLevel"
+      class="drill-content card"
+    >
       <div class="level-header">
         <h3>Express this {{ currentLevel.level }}ly</h3>
-        <p class="small muted">{{ currentLevel.prompt || `How would you say this in a ${currentLevel.level} context?` }}</p>
+        <p class="small muted">
+          {{ currentLevel.prompt || `How would you say this in a ${currentLevel.level} context?` }}
+        </p>
       </div>
 
-      <textarea 
-        v-model="activeAnswer" 
+      <textarea
+        v-model="activeAnswer"
         :placeholder="`Type your ${currentLevel.level} Dutch here...`"
         class="drill-input"
         @keydown.enter.prevent="nextLevel"
-      ></textarea>
+      />
 
       <div class="actions">
-        <button class="button secondary" @click="prevLevel" :disabled="activeLevelIdx === 0">Previous</button>
-        <button class="button" @click="nextLevel">
+        <button
+          class="button secondary"
+          :disabled="activeLevelIdx === 0"
+          @click="prevLevel"
+        >
+          Previous
+        </button>
+        <button
+          class="button"
+          @click="nextLevel"
+        >
           {{ activeLevelIdx === levels.length - 1 ? 'Finish Challenge' : 'Next Register' }}
         </button>
       </div>
@@ -89,7 +105,7 @@ function prevLevel() {
 
 .levels-nav { display: flex; gap: 10px; }
 .level-tab {
-  flex: 1; text-align: center; padding: 10px; background: white; 
+  flex: 1; text-align: center; padding: 10px; background: white;
   border: 1px solid #e1e8e4; border-radius: 10px; font-size: 12px;
   text-transform: uppercase; font-weight: 700; color: #8a9a94;
   cursor: pointer; transition: all 0.2s;

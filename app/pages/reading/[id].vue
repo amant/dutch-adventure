@@ -1,50 +1,50 @@
 <script setup lang="ts">
-import { articles } from '~/data/articles'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { evaluateResponse } from '~/utils/evaluateResponse'
-import type { Feedback } from '~/types/learning'
-import SummaryChallenge from '~/components/SummaryChallenge.vue'
-import TeacherRedline from '~/components/TeacherRedline.vue'
-import VoiceInput from '~/components/VoiceInput.vue'
+import { articles } from '~/data/articles';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { evaluateResponse } from '~/utils/evaluateResponse';
+import type { Feedback } from '~/types/learning';
+import SummaryChallenge from '~/components/SummaryChallenge.vue';
+import TeacherRedline from '~/components/TeacherRedline.vue';
+import VoiceInput from '~/components/VoiceInput.vue';
 
-const route = useRoute()
-const { memory, hydrate, recordExposure, record } = useLearnerMemory()
-onMounted(hydrate)
+const route = useRoute();
+const { memory, hydrate, recordExposure, record } = useLearnerMemory();
+onMounted(hydrate);
 
-const article = computed(() => articles.find(a => a.id === route.params.id))
+const article = computed(() => articles.find(a => a.id === route.params.id));
 
-const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
+const selectedWord = ref<{ word: string; meaning: string; category?: string } | null>(null);
 
 const tokens = computed(() => {
-  if (!article.value) return []
-  const rawTokens = article.value.content.split(/(\s+)/)
-  
-  return rawTokens.map(token => {
-    if (token.match(/^\s+$/)) return { text: token, isInteractable: false }
-    
-    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    const hint = article.value ? article.value.wordHints[cleanWord] : undefined
-    
+  if (!article.value) return [];
+  const rawTokens = article.value.content.split(/(\s+)/);
+
+  return rawTokens.map((token) => {
+    if (token.match(/^\s+$/)) return { text: token, isInteractable: false };
+
+    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    const hint = article.value ? article.value.wordHints[cleanWord] : undefined;
+
     // Check memory
-    const state = memory.value.vocabulary[cleanWord]
-    const mastery = state ? (state.recognition + state.meaning) / 2 : 0
-    
+    const state = memory.value.vocabulary[cleanWord];
+    const mastery = state ? (state.recognition + state.meaning) / 2 : 0;
+
     return {
       text: token,
       isInteractable: true,
       hint,
       mastery,
       isKnown: mastery > 50,
-      isWeak: mastery > 0 && mastery <= 50
-    }
-  })
-})
+      isWeak: mastery > 0 && mastery <= 50,
+    };
+  });
+});
 
 const handleWordClick = (token: any) => {
-  const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-  
+  const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+
   if (token.hint) {
-    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint }
+    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint };
   } else {
     // Fallback dictionary for common words not in hints
     const fallbackDict: Record<string, string> = {
@@ -68,43 +68,43 @@ const handleWordClick = (token: any) => {
       'gaat': 'goes',
       'regenen': 'to rain',
       'dat': 'that',
-      'nederlands': 'Dutch'
-    }
-    
-    selectedWord.value = { 
-      word: token.text.replace(/[.,!?;:()]/g, '').trim(), 
-      meaning: fallbackDict[cleanWord] || 'No definition found, but we recorded your encounter!'
-    }
-  }
-  
-  recordExposure(cleanWord)
-}
+      'nederlands': 'Dutch',
+    };
 
-const readingFinished = ref(false)
-const showChallenge = ref(false)
-const currentResponse = ref('')
-const feedback = ref<Feedback | undefined>(undefined)
+    selectedWord.value = {
+      word: token.text.replace(/[.,!?;:()]/g, '').trim(),
+      meaning: fallbackDict[cleanWord] || 'No definition found, but we recorded your encounter!',
+    };
+  }
+
+  recordExposure(cleanWord);
+};
+
+const readingFinished = ref(false);
+const showChallenge = ref(false);
+const currentResponse = ref('');
+const feedback = ref<Feedback | undefined>(undefined);
 
 const finishReading = () => {
-  readingFinished.value = true
-    if (article.value?.challenge) {
-    showChallenge.value = true
+  readingFinished.value = true;
+  if (article.value?.challenge) {
+    showChallenge.value = true;
     // Scroll to challenge if it's a summary challenge
     if (article.value.challenge.kind === 'summary-challenge') {
       setTimeout(() => {
-        document.querySelector('.summary-challenge-section')?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
+        document.querySelector('.summary-challenge-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
   }
-}
+};
 
 const handleChallengeSubmit = (response: string) => {
-  if (!article.value?.challenge) return
-  currentResponse.value = response
-  
-  const result = evaluateResponse(article.value.challenge, response)
-  feedback.value = result
-  
+  if (!article.value?.challenge) return;
+  currentResponse.value = response;
+
+  const result = evaluateResponse(article.value.challenge, response);
+  feedback.value = result;
+
   if (result.outcome === 'correct' || result.outcome === 'acceptable') {
     record(
       result.skills,
@@ -115,27 +115,36 @@ const handleChallengeSubmit = (response: string) => {
       result.changeModifier,
       response,
       article.value.challenge.prompt,
-      result
-    )
+      result,
+    );
   }
-}
+};
 
 const handleSubmitChallenge = () => {
-  handleChallengeSubmit(currentResponse.value)
-}
+  handleChallengeSubmit(currentResponse.value);
+};
 
 const handleNext = () => {
-  showChallenge.value = false
-  navigateTo('/reading')
-}
+  showChallenge.value = false;
+  navigateTo('/reading');
+};
 </script>
 
 <template>
-  <div v-if="article" class="article-page">
+  <div
+    v-if="article"
+    class="article-page"
+  >
     <header class="article-header">
-      <NuxtLink to="/reading" class="back-link">← Back to Feed</NuxtLink>
+      <NuxtLink
+        to="/reading"
+        class="back-link"
+      >← Back to Feed</NuxtLink>
       <div class="meta">
-        <span class="level-badge" :class="article.level">{{ article.level }}</span>
+        <span
+          class="level-badge"
+          :class="article.level"
+        >{{ article.level }}</span>
         <span class="source">{{ article.source }}</span>
       </div>
       <h1>{{ article.title }}</h1>
@@ -143,15 +152,18 @@ const handleNext = () => {
 
     <div class="content-container">
       <div class="article-content card">
-        <template v-for="(token, idx) in tokens" :key="idx">
-          <span 
-            v-if="token.isInteractable" 
-            class="word" 
-            :class="{ 
-              'known': token.isKnown, 
+        <template
+          v-for="(token, idx) in tokens"
+          :key="idx"
+        >
+          <span
+            v-if="token.isInteractable"
+            class="word"
+            :class="{
+              'known': token.isKnown,
               'weak': token.isWeak,
               'has-hint': !!token.hint,
-              'active': selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
+              'active': selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim(),
             }"
             @click="handleWordClick(token)"
           >
@@ -161,7 +173,10 @@ const handleNext = () => {
         </template>
       </div>
 
-      <div v-if="showChallenge && article.challenge?.kind === 'summary-challenge'" class="summary-challenge-section mt-10">
+      <div
+        v-if="showChallenge && article.challenge?.kind === 'summary-challenge'"
+        class="summary-challenge-section mt-10"
+      >
         <SummaryChallenge
           :exercise="article.challenge"
           :feedback="feedback"
@@ -171,19 +186,38 @@ const handleNext = () => {
       </div>
 
       <aside class="sidebar">
-        <div v-if="selectedWord" class="word-card card">
+        <div
+          v-if="selectedWord"
+          class="word-card card"
+        >
           <div class="header">
             <h3>{{ selectedWord.word }}</h3>
-            <span v-if="selectedWord.category" class="tag">{{ selectedWord.category }}</span>
+            <span
+              v-if="selectedWord.category"
+              class="tag"
+            >{{ selectedWord.category }}</span>
           </div>
-          <p class="meaning">{{ selectedWord.meaning }}</p>
+          <p class="meaning">
+            {{ selectedWord.meaning }}
+          </p>
           <div class="status-info">
-            <span v-if="(memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters ?? 0) > 1" class="encounters">
+            <span
+              v-if="(memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters ?? 0) > 1"
+              class="encounters"
+            >
               You've seen this {{ memory.vocabulary[selectedWord.word.toLowerCase()]?.encounters }} times
             </span>
-            <span v-else class="new">New word!</span>
+            <span
+              v-else
+              class="new"
+            >New word!</span>
           </div>
-          <button class="close-btn" @click="selectedWord = null">Close</button>
+          <button
+            class="close-btn"
+            @click="selectedWord = null"
+          >
+            Close
+          </button>
         </div>
 
         <div class="reading-stats card">
@@ -196,55 +230,89 @@ const handleNext = () => {
             <span class="label">New Words Seen</span>
             <span class="value">{{ tokens.filter(t => t.isInteractable && !t.isKnown && !t.isWeak).length }}</span>
           </div>
-          <button v-if="!readingFinished" class="button full-width" @click="finishReading">Finish Reading</button>
-          <div v-else class="finished-state">
+          <button
+            v-if="!readingFinished"
+            class="button full-width"
+            @click="finishReading"
+          >
+            Finish Reading
+          </button>
+          <div
+            v-else
+            class="finished-state"
+          >
             <span class="check">✓</span> Finished! Knowledge graph updated.
           </div>
         </div>
 
-        <div v-if="showChallenge && article.challenge && article.challenge.kind !== 'summary-challenge'" class="post-reading-challenge card">
-          <div class="eyebrow">Post-Reading Challenge</div>
+        <div
+          v-if="showChallenge && article.challenge && article.challenge.kind !== 'summary-challenge'"
+          class="post-reading-challenge card"
+        >
+          <div class="eyebrow">
+            Post-Reading Challenge
+          </div>
           <h3>{{ article.challenge.prompt }}</h3>
-          <p class="muted">{{ article.challenge.context }}</p>
-          
+          <p class="muted">
+            {{ article.challenge.context }}
+          </p>
+
           <div class="input-area">
-            <textarea 
-              v-model="currentResponse" 
+            <textarea
+              v-model="currentResponse"
               :placeholder="article.challenge.placeholder || 'Your response...'"
               rows="4"
               :disabled="feedback?.outcome === 'correct'"
             />
-            <button 
-              v-if="feedback?.outcome !== 'correct'" 
-              class="button full-width" 
+            <button
+              v-if="feedback?.outcome !== 'correct'"
+              class="button full-width"
               @click="handleSubmitChallenge"
             >
               Submit Answer
             </button>
           </div>
 
-          <div v-if="feedback" class="feedback card" :class="feedback.outcome">
+          <div
+            v-if="feedback"
+            class="feedback card"
+            :class="feedback.outcome"
+          >
             <div class="outcome-header">
               <span class="icon">{{ feedback.outcome === 'correct' ? '🎉' : '⚠️' }}</span>
               {{ feedback.message }}
             </div>
-            
-            <div v-if="feedback.correction" class="correction">
-              <TeacherRedline 
-                :original="currentResponse" 
-                :corrected="feedback.correction" 
+
+            <div
+              v-if="feedback.correction"
+              class="correction"
+            >
+              <TeacherRedline
+                :original="currentResponse"
+                :corrected="feedback.correction"
               />
             </div>
 
-            <div v-if="feedback.outcome === 'correct'" class="success-actions">
-              <button class="button secondary full-width" @click="showChallenge = false">Back to reading</button>
+            <div
+              v-if="feedback.outcome === 'correct'"
+              class="success-actions"
+            >
+              <button
+                class="button secondary full-width"
+                @click="showChallenge = false"
+              >
+                Back to reading
+              </button>
             </div>
           </div>
         </div>
       </aside>
     </div>
   </div>
-  <div v-else class="not-found">
+  <div
+    v-else
+    class="not-found"
+  >
     Article not found.
   </div>
 </template>
@@ -260,7 +328,7 @@ const handleNext = () => {
   margin-bottom: 36px;
 }
 
-.back-link { 
+.back-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -411,7 +479,7 @@ const handleNext = () => {
     margin-bottom: 16px;
   }
 
-  .close-btn { 
+  .close-btn {
     width: 100%;
     padding: 8px;
     border: 1px solid $ocean-border;
@@ -457,12 +525,12 @@ const handleNext = () => {
   margin-top: 10px;
 }
 
-.finished-state { 
+.finished-state {
   margin-top: 20px;
   text-align: center;
   color: $sea-emerald-dark;
   font-weight: 700;
-  font-size: 14px; 
+  font-size: 14px;
 }
 
 .check {

@@ -1,45 +1,50 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const ruleBadge = computed(() => {
   switch (props.exercise.aspectData?.aspectCategory) {
-    case 'posture-durative': return 'Houdingswerkwoord (Zitten/Staan/Liggen/Lopen te + inf)'
-    case 'progressive-aan-het': return 'Dynamisch Continu Aspect (Aan het + inf zijn)'
-    case 'imminent-op-het-punt': return 'Op Handen Zijnde Actie (Op het punt staan om te)'
-    case 'customary-plegen': return 'Gewoonte / Formeel Aspect (Plegen te + inf)'
-    case 'prospective-dreigen-beloven': return 'Dreiging / Belofte (Dreigen te / Beloven te)'
-    case 'perfect-posture-ipp': return 'Voltooide Tijd IPP (Heeft zitten kijken ipv gezeten)'
-    default: return 'Aspectuele Werkwoorden & Duur'
+    case 'posture-durative': return 'Houdingswerkwoord (Zitten/Staan/Liggen/Lopen te + inf)';
+    case 'progressive-aan-het': return 'Dynamisch Continu Aspect (Aan het + inf zijn)';
+    case 'imminent-op-het-punt': return 'Op Handen Zijnde Actie (Op het punt staan om te)';
+    case 'customary-plegen': return 'Gewoonte / Formeel Aspect (Plegen te + inf)';
+    case 'prospective-dreigen-beloven': return 'Dreiging / Belofte (Dreigen te / Beloven te)';
+    case 'perfect-posture-ipp': return 'Voltooide Tijd IPP (Heeft zitten kijken ipv gezeten)';
+    default: return 'Aspectuele Werkwoorden & Duur';
   }
-})
+});
 </script>
 
 <template>
   <div class="aspect-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Aspectual Verbs &amp; Durative Syntax</div>
-        <div class="badge" :class="exercise.aspectData?.aspectCategory">
+        <div class="eyebrow">
+          B2 Aspectual Verbs &amp; Durative Syntax
+        </div>
+        <div
+          class="badge"
+          :class="exercise.aspectData?.aspectCategory"
+        >
           {{ ruleBadge }}
         </div>
       </div>
@@ -47,8 +52,8 @@ const ruleBadge = computed(() => {
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          Dutch uses specific aspectual constructions to convey posture, ongoing action, imminence, or habit: 
-          <strong>zitten/staan/liggen/lopen te + inf</strong>, <strong>aan het + inf zijn</strong>, 
+          Dutch uses specific aspectual constructions to convey posture, ongoing action, imminence, or habit:
+          <strong>zitten/staan/liggen/lopen te + inf</strong>, <strong>aan het + inf zijn</strong>,
           <strong>op het punt staan om te</strong>, and <strong>plegen te</strong>. In perfect tenses, posture verbs trigger the IPP (double infinitive) rule.
         </p>
       </div>
@@ -73,23 +78,41 @@ const ruleBadge = computed(() => {
         </div>
 
         <div class="source-box">
-          <div class="box-label">Context / Situatie (Prompt Context)</div>
-          <p class="source-text">{{ exercise.aspectData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context / Situatie (Prompt Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.aspectData?.contextPrompt }}
+          </p>
         </div>
 
-        <div v-if="exercise.aspectData?.structureFormula" class="formula-box">
-          <div class="formula-label">Syntactisch Bouwplan (Aspectual Formula)</div>
+        <div
+          v-if="exercise.aspectData?.structureFormula"
+          class="formula-box"
+        >
+          <div class="formula-label">
+            Syntactisch Bouwplan (Aspectual Formula)
+          </div>
           <code class="formula-code">{{ exercise.aspectData.structureFormula }}</code>
         </div>
 
-        <div v-if="exercise.aspectData?.hint" class="hint-container">
+        <div
+          v-if="exercise.aspectData?.hint"
+          class="hint-container"
+        >
           <span class="hint-icon">💡</span>
           <span class="hint-text">{{ exercise.aspectData.hint }}</span>
         </div>
       </div>
 
-      <form class="production-form" @submit.prevent="handleSubmit">
-        <label class="form-label" for="aspect-input">
+      <form
+        class="production-form"
+        @submit.prevent="handleSubmit"
+      >
+        <label
+          class="form-label"
+          for="aspect-input"
+        >
           Formuleer de Nederlandse zin met de juiste aspectuele constructie:
         </label>
         <textarea
@@ -105,16 +128,16 @@ const ruleBadge = computed(() => {
 
         <div class="form-actions">
           <div class="input-helpers">
-            <VoiceInput 
+            <VoiceInput
               v-if="!feedback"
-              @result="(t) => { answer = t; handleSubmit() }" 
+              @result="(t) => { answer = t; handleSubmit() }"
             />
             <span class="shortcut-tip">Druk op <strong>Enter ↵</strong> om te controleren</span>
           </div>
 
-          <button 
-            v-if="!feedback" 
-            type="submit" 
+          <button
+            v-if="!feedback"
+            type="submit"
             class="button primary"
             :disabled="!answer.trim()"
           >
@@ -131,14 +154,14 @@ const ruleBadge = computed(() => {
 .drill-card { padding: 32px; border-top: 6px solid #d97706; }
 .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #d97706; }
-.badge { 
-  font-size: 12px; 
-  font-weight: 600; 
-  padding: 4px 10px; 
-  border-radius: 9999px; 
-  background: #fffbeb; 
-  color: #b45309; 
-  border: 1px solid #fde68a; 
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 .badge.posture-durative { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
 .badge.progressive-aan-het { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
@@ -217,25 +240,25 @@ const ruleBadge = computed(() => {
   color: #166534;
 }
 
-.source-box { 
-  background: #fdfcf9; 
-  border: 1px solid #e7e3da; 
-  border-radius: 12px; 
-  padding: 16px; 
+.source-box {
+  background: #fdfcf9;
+  border: 1px solid #e7e3da;
+  border-radius: 12px;
+  padding: 16px;
 }
-.box-label { 
-  font-size: 11px; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.04em; 
-  color: #8c827a; 
-  margin-bottom: 6px; 
+.box-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8c827a;
+  margin-bottom: 6px;
 }
-.source-text { 
-  font-size: 16px; 
-  line-height: 1.5; 
-  color: #2c2825; 
-  margin: 0; 
+.source-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2c2825;
+  margin: 0;
   font-weight: 500;
 }
 

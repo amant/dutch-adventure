@@ -1,24 +1,27 @@
 <script setup lang="ts">
 defineProps<{
-  score: number
-  feedback?: string
-}>()
+  score: number;
+  feedback?: string;
+}>();
 </script>
 
 <template>
   <div class="pragmatic-card card">
     <div class="header">
       <span class="tag">Pragmatic Naturalness</span>
-      <span class="score" :class="{ high: score > 80, mid: score > 60 && score <= 80, low: score <= 60 }">{{ score }}% Natural</span>
+      <span
+        class="score"
+        :class="{ high: score > 80, mid: score > 60 && score <= 80, low: score <= 60 }"
+      >{{ score }}% Natural</span>
     </div>
-    
+
     <div class="gauge-container">
       <div class="gauge-track">
-        <div 
-          class="gauge-fill" 
+        <div
+          class="gauge-fill"
           :style="{ width: `${score}%` }"
           :class="{ high: score > 80, mid: score > 60 && score <= 80, low: score <= 60 }"
-        ></div>
+        />
       </div>
       <div class="labels">
         <span>Literal</span>
@@ -27,7 +30,12 @@ defineProps<{
       </div>
     </div>
 
-    <p v-if="feedback" class="feedback-text">{{ feedback }}</p>
+    <p
+      v-if="feedback"
+      class="feedback-text"
+    >
+      {{ feedback }}
+    </p>
   </div>
 </template>
 

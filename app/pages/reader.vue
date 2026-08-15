@@ -1,44 +1,63 @@
 <script setup lang="ts">
-const inputText = ref('')
-const analyzedText = ref('')
+const inputText = ref('');
+const analyzedText = ref('');
 
 function analyze() {
   if (inputText.value.trim()) {
-    analyzedText.value = inputText.value
+    analyzedText.value = inputText.value;
   }
 }
 
 function reset() {
-  analyzedText.value = ''
-  inputText.value = ''
+  analyzedText.value = '';
+  inputText.value = '';
 }
 </script>
 
 <template>
   <div class="reader-container">
     <header class="page-header">
-      <div class="eyebrow gold">AUTHENTIC TEXT EXPLORER</div>
+      <div class="eyebrow gold">
+        AUTHENTIC TEXT EXPLORER
+      </div>
       <h1>Custom Dutch Reader</h1>
-      <p class="muted">Paste any Dutch text below (news, articles, stories, emails). We'll highlight words based on your current knowledge log and identify frontier vocabulary to activate.</p>
+      <p class="muted">
+        Paste any Dutch text below (news, articles, stories, emails). We'll highlight words based on your current knowledge log and identify frontier vocabulary to activate.
+      </p>
     </header>
 
-    <div v-if="!analyzedText" class="input-view card">
-      <textarea 
-        v-model="inputText" 
-        placeholder="Paste your Dutch text here (news articles, emails, stories, podcasts transcripts...)" 
+    <div
+      v-if="!analyzedText"
+      class="input-view card"
+    >
+      <textarea
+        v-model="inputText"
+        placeholder="Paste your Dutch text here (news articles, emails, stories, podcasts transcripts...)"
         rows="10"
         class="reader-input"
-      ></textarea>
+      />
       <div class="actions">
-        <button class="button gold large" :disabled="!inputText.trim()" @click="analyze">
+        <button
+          class="button gold large"
+          :disabled="!inputText.trim()"
+          @click="analyze"
+        >
           <span>⚡ Analyze & Decode Text</span>
         </button>
       </div>
     </div>
 
-    <div v-else class="analysis-view">
+    <div
+      v-else
+      class="analysis-view"
+    >
       <div class="view-header">
-        <button class="button secondary small" @click="reset">← Enter New Text</button>
+        <button
+          class="button secondary small"
+          @click="reset"
+        >
+          ← Enter New Text
+        </button>
       </div>
       <TextAnalyzer :text="analyzedText" />
     </div>

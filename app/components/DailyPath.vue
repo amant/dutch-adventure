@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
-const { memory, getFrontierConcepts } = useLearnerMemory()
+const { memory, getFrontierConcepts } = useLearnerMemory();
 
 const steps = computed(() => {
-  const items: { id: string, label: string, description: string, action: string, actionLabel: string, status: 'pending' | 'completed', icon: string }[] = []
+  const items: { id: string; label: string; description: string; action: string; actionLabel: string; status: 'pending' | 'completed'; icon: string }[] = [];
 
   // 1. Activation (Frontier)
-  const frontier = getFrontierConcepts(1)
+  const frontier = getFrontierConcepts(1);
   if (frontier.length > 0) {
     items.push({
       id: 'activation',
@@ -16,14 +16,14 @@ const steps = computed(() => {
       action: `/smart-review?mode=activation&target=${frontier[0]}`,
       actionLabel: 'Activate now',
       status: 'pending',
-      icon: '🧭'
-    })
+      icon: '🧭',
+    });
   }
 
   // 2. Maintenance (Weak spots)
   const weak = [...Object.entries(memory.value.vocabulary), ...Object.entries(memory.value.grammar)]
     .filter(([_, s]) => s.encounters > 0 && (s.successes / s.encounters < 0.7))
-    .sort((a, b) => (a[1].successes / a[1].encounters) - (b[1].successes / b[1].encounters))[0]
+    .sort((a, b) => (a[1].successes / a[1].encounters) - (b[1].successes / b[1].encounters))[0];
 
   if (weak) {
     items.push({
@@ -33,8 +33,8 @@ const steps = computed(() => {
       action: `/smart-review?mode=speed&target=${weak[0]}`,
       actionLabel: 'Reinforce',
       status: 'pending',
-      icon: '🛡️'
-    })
+      icon: '🛡️',
+    });
   }
 
   // 3. Fluency (Speed)
@@ -45,8 +45,8 @@ const steps = computed(() => {
     action: '/smart-review?mode=speed',
     actionLabel: 'Start Drill',
     status: 'pending',
-    icon: '⚡'
-  })
+    icon: '⚡',
+  });
 
   // 4. Authentic (Reading)
   items.push({
@@ -56,23 +56,31 @@ const steps = computed(() => {
     action: '/reader',
     actionLabel: 'Open Reader',
     status: 'pending',
-    icon: '📜'
-  })
+    icon: '📜',
+  });
 
-  return items.slice(0, 4)
-})
+  return items.slice(0, 4);
+});
 </script>
 
 <template>
   <div class="daily-path card">
     <div class="header">
-      <div class="eyebrow gold">EXPEDITION ROUTINE</div>
+      <div class="eyebrow gold">
+        EXPEDITION ROUTINE
+      </div>
       <h3>Today's Recommended Voyage</h3>
-      <p class="muted">A personalized 10-minute training loop designed to turn knowledge into active conversational reflexes.</p>
+      <p class="muted">
+        A personalized 10-minute training loop designed to turn knowledge into active conversational reflexes.
+      </p>
     </div>
 
     <div class="steps-grid">
-      <div v-for="(step, idx) in steps" :key="step.id" class="step-card">
+      <div
+        v-for="(step, idx) in steps"
+        :key="step.id"
+        class="step-card"
+      >
         <div class="step-header">
           <div class="step-badge">
             <span class="step-number">{{ idx + 1 }}</span>
@@ -80,9 +88,16 @@ const steps = computed(() => {
           <span class="step-icon">{{ step.icon }}</span>
         </div>
         <div class="step-content">
-          <div class="step-label">{{ step.label }}</div>
-          <p class="step-desc">{{ step.description }}</p>
-          <NuxtLink :to="step.action" class="button secondary small">{{ step.actionLabel }}</NuxtLink>
+          <div class="step-label">
+            {{ step.label }}
+          </div>
+          <p class="step-desc">
+            {{ step.description }}
+          </p>
+          <NuxtLink
+            :to="step.action"
+            class="button secondary small"
+          >{{ step.actionLabel }}</NuxtLink>
         </div>
       </div>
     </div>

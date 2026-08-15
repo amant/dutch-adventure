@@ -1,46 +1,51 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const ruleBadge = computed(() => {
   switch (props.exercise.topicalisationData?.focusType) {
-    case 'object-fronting-v2': return 'Lijdend/Meewerkend Voorwerp Vooraan (V2 Inversie)'
-    case 'infinitive-fronting-doen': return 'Infinitief Vooraan + Hulpwerkwoord Doen'
-    case 'participle-fronting': return 'Deelwoord Vooraan (Contrastieve Focus)'
-    case 'left-dislocation-resumptive': return 'Linkerdislocatie met Resumptief Pronomen'
-    case 'cleft-het-is-dat': return 'Cleft-Focusconstructie (Het is... dat)'
-    case 'cleft-het-is-die': return 'Cleft-Focusconstructie (Het is... die)'
-    case 'inverted-conditional-mocht': return 'Emfatische Inversie zonder Voegwoord (Mocht...)'
-    default: return 'Topicalisatie & Focus'
+    case 'object-fronting-v2': return 'Lijdend/Meewerkend Voorwerp Vooraan (V2 Inversie)';
+    case 'infinitive-fronting-doen': return 'Infinitief Vooraan + Hulpwerkwoord Doen';
+    case 'participle-fronting': return 'Deelwoord Vooraan (Contrastieve Focus)';
+    case 'left-dislocation-resumptive': return 'Linkerdislocatie met Resumptief Pronomen';
+    case 'cleft-het-is-dat': return 'Cleft-Focusconstructie (Het is... dat)';
+    case 'cleft-het-is-die': return 'Cleft-Focusconstructie (Het is... die)';
+    case 'inverted-conditional-mocht': return 'Emfatische Inversie zonder Voegwoord (Mocht...)';
+    default: return 'Topicalisatie & Focus';
   }
-})
+});
 </script>
 
 <template>
   <div class="topicalisation-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Focus Fronting &amp; Emphatic Word Order</div>
-        <div class="badge" :class="exercise.topicalisationData?.focusType">
+        <div class="eyebrow">
+          B2 Focus Fronting &amp; Emphatic Word Order
+        </div>
+        <div
+          class="badge"
+          :class="exercise.topicalisationData?.focusType"
+        >
           {{ ruleBadge }}
         </div>
       </div>
@@ -48,7 +53,7 @@ const ruleBadge = computed(() => {
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          In advanced Dutch, word order is strategically rearranged to highlight contrast, convey urgency, or package information. 
+          In advanced Dutch, word order is strategically rearranged to highlight contrast, convey urgency, or package information.
           Fronting elements requires strict adherence to the <strong>Verb Second (V2)</strong> rule, dummy auxiliary <strong>doen</strong> with infinitives, or <strong>resumptive pronouns</strong>.
         </p>
       </div>
@@ -61,39 +66,65 @@ const ruleBadge = computed(() => {
             <span class="focus-title">{{ exercise.topicalisationData?.frontedElement || 'Dát element' }}</span>
           </div>
 
-          <div v-if="exercise.topicalisationData?.resumptiveElement" class="focus-card resumptive-card">
+          <div
+            v-if="exercise.topicalisationData?.resumptiveElement"
+            class="focus-card resumptive-card"
+          >
             <span class="card-label">Resumptief Element</span>
             <span class="resumptive-badge">{{ exercise.topicalisationData.resumptiveElement }}</span>
           </div>
         </div>
 
         <!-- Neutral Base Sentence vs Focus Target -->
-        <div v-if="exercise.topicalisationData?.baseSentence" class="base-contrast-box">
+        <div
+          v-if="exercise.topicalisationData?.baseSentence"
+          class="base-contrast-box"
+        >
           <div class="base-row">
             <span class="base-tag">Neutrale Woordvolgorde (Basiszin):</span>
             <span class="base-text">"{{ exercise.topicalisationData.baseSentence }}"</span>
           </div>
-          <div class="focus-transform-arrow">➔ Herstructureer met emfatische focus / inversie:</div>
+          <div class="focus-transform-arrow">
+            ➔ Herstructureer met emfatische focus / inversie:
+          </div>
         </div>
 
         <div class="source-box">
-          <div class="box-label">Context &amp; Communicatief Doel</div>
-          <p class="source-text">{{ exercise.topicalisationData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context &amp; Communicatief Doel
+          </div>
+          <p class="source-text">
+            {{ exercise.topicalisationData?.contextPrompt }}
+          </p>
         </div>
 
-        <div v-if="exercise.topicalisationData?.structureFormula" class="formula-box">
-          <div class="formula-label">Syntactisch Focus Bouwplan (Word Order Formula)</div>
+        <div
+          v-if="exercise.topicalisationData?.structureFormula"
+          class="formula-box"
+        >
+          <div class="formula-label">
+            Syntactisch Focus Bouwplan (Word Order Formula)
+          </div>
           <code class="formula-code">{{ exercise.topicalisationData.structureFormula }}</code>
         </div>
 
-        <div v-if="exercise.topicalisationData?.hint" class="hint-container">
+        <div
+          v-if="exercise.topicalisationData?.hint"
+          class="hint-container"
+        >
           <span class="hint-icon">💡</span>
           <span class="hint-text">{{ exercise.topicalisationData.hint }}</span>
         </div>
       </div>
 
-      <form class="production-form" @submit.prevent="handleSubmit">
-        <label class="form-label" for="topicalisation-input">
+      <form
+        class="production-form"
+        @submit.prevent="handleSubmit"
+      >
+        <label
+          class="form-label"
+          for="topicalisation-input"
+        >
           Formuleer de zin met de vereiste focusconstructie en correcte inversie:
         </label>
         <textarea
@@ -109,16 +140,16 @@ const ruleBadge = computed(() => {
 
         <div class="form-actions">
           <div class="input-helpers">
-            <VoiceInput 
+            <VoiceInput
               v-if="!feedback"
-              @result="(t) => { answer = t; handleSubmit() }" 
+              @result="(t) => { answer = t; handleSubmit() }"
             />
             <span class="shortcut-tip">Druk op <strong>Enter ↵</strong> om te controleren</span>
           </div>
 
-          <button 
-            v-if="!feedback" 
-            type="submit" 
+          <button
+            v-if="!feedback"
+            type="submit"
             class="button primary"
             :disabled="!answer.trim()"
           >
@@ -135,14 +166,14 @@ const ruleBadge = computed(() => {
 .drill-card { padding: 32px; border-top: 6px solid #ea580c; }
 .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #ea580c; }
-.badge { 
-  font-size: 12px; 
-  font-weight: 600; 
-  padding: 4px 12px; 
-  border-radius: 9999px; 
-  background: #fff7ed; 
-  color: #c2410c; 
-  border: 1px solid #ffedd5; 
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
 }
 .badge.object-fronting-v2 { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 .badge.infinitive-fronting-doen { background: #fdf4ff; color: #86198f; border-color: #f5d0fe; }
@@ -230,25 +261,25 @@ const ruleBadge = computed(() => {
   margin-top: 4px;
 }
 
-.source-box { 
-  background: #fdfcf9; 
-  border: 1px solid #e7e3da; 
-  border-radius: 12px; 
-  padding: 16px; 
+.source-box {
+  background: #fdfcf9;
+  border: 1px solid #e7e3da;
+  border-radius: 12px;
+  padding: 16px;
 }
-.box-label { 
-  font-size: 11px; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.04em; 
-  color: #8c827a; 
-  margin-bottom: 6px; 
+.box-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8c827a;
+  margin-bottom: 6px;
 }
-.source-text { 
-  font-size: 16px; 
-  line-height: 1.5; 
-  color: #2c2825; 
-  margin: 0; 
+.source-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2c2825;
+  margin: 0;
   font-weight: 500;
 }
 

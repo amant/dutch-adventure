@@ -1,62 +1,65 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import type { Exercise, Feedback } from '~/types/learning';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'retry'])
-const { recordExposure, getWordState } = useLearnerMemory()
+const emit = defineEmits(['submit', 'next', 'retry']);
+const { recordExposure, getWordState } = useLearnerMemory();
 
-const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
+const selectedWord = ref<{ word: string; meaning: string; category?: string } | null>(null);
 
 const tokens = computed(() => {
-  if (!props.exercise.readingContent) return []
+  if (!props.exercise.readingContent) return [];
   // Split by whitespace but keep the whitespace tokens
-  const rawTokens = props.exercise.readingContent.split(/(\s+)/)
-  
-  return rawTokens.map(token => {
+  const rawTokens = props.exercise.readingContent.split(/(\s+)/);
+
+  return rawTokens.map((token) => {
     // If it's just whitespace, it's not a word
     if (token.match(/^\s+$/)) {
-      return { text: token, isInteractable: false }
+      return { text: token, isInteractable: false };
     }
 
-    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    const hint = props.exercise.wordHints?.[cleanWord]
-    const state = getWordState(cleanWord)
+    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    const hint = props.exercise.wordHints?.[cleanWord];
+    const state = getWordState(cleanWord);
 
     return {
       text: token,
       isInteractable: !!hint,
       hint,
-      state
-    }
-  })
-})
+      state,
+    };
+  });
+});
 
 const showHint = (token: any) => {
   if (token.hint) {
-    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint }
-    const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    recordExposure(cleanWord)
+    selectedWord.value = { word: token.text.replace(/[.,!?;:()]/g, '').trim(), ...token.hint };
+    const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    recordExposure(cleanWord);
   }
-}
+};
 </script>
 
 <template>
   <div class="reading-ladder">
     <div class="content-box card">
-      <template v-for="(token, idx) in tokens" :key="idx">
-        <span 
-          v-if="token.isInteractable" 
-          class="word interactable" 
-          @click="showHint(token)"
+      <template
+        v-for="(token, idx) in tokens"
+        :key="idx"
+      >
+        <span
+          v-if="token.isInteractable"
+          class="word interactable"
           :class="[
             token.state,
-            { active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }
+            { active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() },
           ]"
+          @click="showHint(token)"
         >
           {{ token.text }}
         </span>
@@ -64,18 +67,41 @@ const showHint = (token: any) => {
       </template>
     </div>
 
-    <div v-if="selectedWord" class="hint-popup card">
+    <div
+      v-if="selectedWord"
+      class="hint-popup card"
+    >
       <div class="hint-header">
         <span class="word-label">{{ selectedWord.word }}</span>
-        <span v-if="selectedWord.category" class="category-tag">{{ selectedWord.category }}</span>
-        <button class="close-btn" @click="selectedWord = null">×</button>
+        <span
+          v-if="selectedWord.category"
+          class="category-tag"
+        >{{ selectedWord.category }}</span>
+        <button
+          class="close-btn"
+          @click="selectedWord = null"
+        >
+          ×
+        </button>
       </div>
-      <p class="meaning">{{ selectedWord.meaning }}</p>
+      <p class="meaning">
+        {{ selectedWord.meaning }}
+      </p>
     </div>
 
-    <div class="mission-status" v-if="!feedback">
-      <p class="muted">Read the text above. Click on highlighted words to see their meaning.</p>
-      <button class="button" @click="emit('submit')">I've finished reading</button>
+    <div
+      v-if="!feedback"
+      class="mission-status"
+    >
+      <p class="muted">
+        Read the text above. Click on highlighted words to see their meaning.
+      </p>
+      <button
+        class="button"
+        @click="emit('submit')"
+      >
+        I've finished reading
+      </button>
     </div>
   </div>
 </template>

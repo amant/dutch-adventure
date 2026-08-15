@@ -1,117 +1,182 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import { ref, onMounted, onUnmounted } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'retry'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next', 'retry']);
+const response = defineModel<string>();
 
-const timeLeft = ref(15) // Default 15 seconds for the whole challenge
-const isRunning = ref(false)
-const isTimeUp = ref(false)
-let timer: any = null
+const timeLeft = ref(15); // Default 15 seconds for the whole challenge
+const isRunning = ref(false);
+const isTimeUp = ref(false);
+let timer: any = null;
 
 const startChallenge = () => {
-  isRunning.value = true
-  timeLeft.value = props.exercise.automaticitySeconds || 15
+  isRunning.value = true;
+  timeLeft.value = props.exercise.automaticitySeconds || 15;
   timer = setInterval(() => {
-    timeLeft.value -= 1
+    timeLeft.value -= 1;
     if (timeLeft.value <= 0) {
-      clearInterval(timer)
-      isTimeUp.value = true
-      isRunning.value = false
+      clearInterval(timer);
+      isTimeUp.value = true;
+      isRunning.value = false;
     }
-  }, 1000)
-}
+  }, 1000);
+};
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer)
-})
+  if (timer) clearInterval(timer);
+});
 
 function handleSubmit() {
-  if (timer) clearInterval(timer)
-  emit('submit', response.value)
+  if (timer) clearInterval(timer);
+  emit('submit', response.value);
 }
 
 function handleVoiceResult(text: string) {
-  response.value = text
-  handleSubmit()
+  response.value = text;
+  handleSubmit();
 }
 </script>
 
 <template>
   <div class="fluency-challenge">
-    <div v-if="!isRunning && !isTimeUp && !feedback" class="start-screen card">
-      <div class="timer-icon">⚡</div>
+    <div
+      v-if="!isRunning && !isTimeUp && !feedback"
+      class="start-screen card"
+    >
+      <div class="timer-icon">
+        ⚡
+      </div>
       <h3>Fluency Challenge</h3>
       <p>Speak the Dutch response as quickly as possible. You have {{ exercise.automaticitySeconds || 15 }} seconds!</p>
       <div class="prompt-preview mt-4">
         <span class="eyebrow">Prompt:</span>
         <p>"{{ exercise.prompt }}"</p>
       </div>
-      <button class="button primary mt-6" @click="startChallenge">Start Countdown</button>
+      <button
+        class="button primary mt-6"
+        @click="startChallenge"
+      >
+        Start Countdown
+      </button>
     </div>
 
-    <div v-else class="challenge-active">
+    <div
+      v-else
+      class="challenge-active"
+    >
       <div class="challenge-header">
         <div class="progress-container">
-          <div class="time-label">{{ timeLeft }}s remaining</div>
+          <div class="time-label">
+            {{ timeLeft }}s remaining
+          </div>
           <div class="progress-bar-bg">
-            <div 
-              class="progress-bar" 
+            <div
+              class="progress-bar"
               :style="{ width: `${(timeLeft / (exercise.automaticitySeconds || 15)) * 100}%` }"
               :class="{ warning: timeLeft < 5 }"
-            ></div>
+            />
           </div>
         </div>
       </div>
 
-      <div class="main-prompt card" :class="{ 'time-up': isTimeUp }">
-        <div class="eyebrow">Express this in Dutch:</div>
-        <h2 class="prompt-text">{{ exercise.prompt }}</h2>
-        <p v-if="exercise.context" class="context-hint">{{ exercise.context }}</p>
+      <div
+        class="main-prompt card"
+        :class="{ 'time-up': isTimeUp }"
+      >
+        <div class="eyebrow">
+          Express this in Dutch:
+        </div>
+        <h2 class="prompt-text">
+          {{ exercise.prompt }}
+        </h2>
+        <p
+          v-if="exercise.context"
+          class="context-hint"
+        >
+          {{ exercise.context }}
+        </p>
       </div>
 
-      <div v-if="!feedback && !isTimeUp" class="input-section">
-        <VoiceInput 
+      <div
+        v-if="!feedback && !isTimeUp"
+        class="input-section"
+      >
+        <VoiceInput
           v-if="isRunning"
-          @result="handleVoiceResult"
           placeholder="Speak now..."
+          @result="handleVoiceResult"
         />
         <div class="manual-input mt-4">
-          <input 
-            v-model="response" 
-            placeholder="Or type quickly..." 
-            @keyup.enter="handleSubmit"
+          <input
+            v-model="response"
+            placeholder="Or type quickly..."
             autofocus
-          />
-          <button class="button" @click="handleSubmit">Submit</button>
+            @keyup.enter="handleSubmit"
+          >
+          <button
+            class="button"
+            @click="handleSubmit"
+          >
+            Submit
+          </button>
         </div>
       </div>
 
-      <div v-if="isTimeUp && !feedback" class="time-up-message card">
+      <div
+        v-if="isTimeUp && !feedback"
+        class="time-up-message card"
+      >
         <h3>Time's Up!</h3>
         <p>You didn't quite make it this time. In B2, speed is key to flow.</p>
-        <button class="button secondary" @click="$emit('retry')">Try Again</button>
+        <button
+          class="button secondary"
+          @click="$emit('retry')"
+        >
+          Try Again
+        </button>
       </div>
 
-      <div v-if="feedback" class="feedback-container mt-6">
-        <div class="card feedback-card" :class="feedback.outcome">
-          <div class="outcome-badge">{{ feedback.outcome }}</div>
-          <p class="feedback-message">{{ feedback.message }}</p>
-          
-          <div v-if="feedback.teacherCorrection" class="teacher-tip mt-4">
+      <div
+        v-if="feedback"
+        class="feedback-container mt-6"
+      >
+        <div
+          class="card feedback-card"
+          :class="feedback.outcome"
+        >
+          <div class="outcome-badge">
+            {{ feedback.outcome }}
+          </div>
+          <p class="feedback-message">
+            {{ feedback.message }}
+          </p>
+
+          <div
+            v-if="feedback.teacherCorrection"
+            class="teacher-tip mt-4"
+          >
             <span class="eyebrow">Natural Flow</span>
-            <p class="natural-text">"{{ feedback.teacherCorrection.natural }}"</p>
-            <p class="tip-explanation">{{ feedback.teacherCorrection.explanation }}</p>
+            <p class="natural-text">
+              "{{ feedback.teacherCorrection.natural }}"
+            </p>
+            <p class="tip-explanation">
+              {{ feedback.teacherCorrection.explanation }}
+            </p>
           </div>
 
-          <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+          <button
+            class="button primary mt-6"
+            @click="$emit('next')"
+          >
+            Continue
+          </button>
         </div>
       </div>
     </div>

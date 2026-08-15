@@ -1,50 +1,55 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const stressBadge = computed(() => {
   if (props.exercise.prefixVerbData?.stressPattern === 'separable-stressed-prefix') {
-    return 'Scheidbaar (Klemtoon op Voorvoegsel)'
+    return 'Scheidbaar (Klemtoon op Voorvoegsel)';
   }
-  return 'Onscheidbaar (Klemtoon op Grondwoord)'
-})
+  return 'Onscheidbaar (Klemtoon op Grondwoord)';
+});
 
 const structureLabel = computed(() => {
   switch (props.exercise.prefixVerbData?.targetStructure) {
-    case 'present-main': return 'Onvoltooid Tegenwoordige Tijd (Hoofdzin)'
-    case 'present-subclause': return 'Ondergeschikte Bijzin (SOV)'
-    case 'perfect-tense': return 'Voltooid Tegenwoordige Tijd (Hulpwerkwoord + Deelwoord)'
-    case 'infinitive-te': return 'Infinitiefconstructie met (om...) te'
-    default: return 'Doelstructuur'
+    case 'present-main': return 'Onvoltooid Tegenwoordige Tijd (Hoofdzin)';
+    case 'present-subclause': return 'Ondergeschikte Bijzin (SOV)';
+    case 'perfect-tense': return 'Voltooid Tegenwoordige Tijd (Hulpwerkwoord + Deelwoord)';
+    case 'infinitive-te': return 'Infinitiefconstructie met (om...) te';
+    default: return 'Doelstructuur';
   }
-})
+});
 </script>
 
 <template>
   <div class="prefix-verb-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Prefix Verbs &amp; Stress Semantics</div>
-        <div class="badge" :class="exercise.prefixVerbData?.stressPattern">
+        <div class="eyebrow">
+          B2 Prefix Verbs &amp; Stress Semantics
+        </div>
+        <div
+          class="badge"
+          :class="exercise.prefixVerbData?.stressPattern"
+        >
           {{ stressBadge }}
         </div>
       </div>
@@ -65,16 +70,27 @@ const structureLabel = computed(() => {
             <span class="verb-stress">{{ exercise.prefixVerbData?.stressedForm }}</span>
             <span class="structure-badge">{{ structureLabel }}</span>
           </div>
-          <p class="meaning-def">{{ exercise.prefixVerbData?.meaningDefinition }}</p>
+          <p class="meaning-def">
+            {{ exercise.prefixVerbData?.meaningDefinition }}
+          </p>
         </div>
 
         <div class="source-box context-box">
-          <div class="box-label">Context / Situatieschets (Prompt Context)</div>
-          <p class="source-text">{{ exercise.prefixVerbData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context / Situatieschets (Prompt Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.prefixVerbData?.contextPrompt }}
+          </p>
         </div>
 
-        <div v-if="exercise.prefixVerbData?.structureFormula" class="formula-blueprint-container">
-          <div class="blueprint-label">Constructieschema (Structural Blueprint):</div>
+        <div
+          v-if="exercise.prefixVerbData?.structureFormula"
+          class="formula-blueprint-container"
+        >
+          <div class="blueprint-label">
+            Constructieschema (Structural Blueprint):
+          </div>
           <div class="blueprint-pills">
             <span class="pill formula">
               Formule: <code>{{ exercise.prefixVerbData.structureFormula }}</code>
@@ -83,13 +99,20 @@ const structureLabel = computed(() => {
         </div>
 
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="source-box combined-target">
-          <div class="box-label">Jouw Zin (Doelzin met Correcte Vervoeging)</div>
+          <div class="box-label">
+            Jouw Zin (Doelzin met Correcte Vervoeging)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -98,17 +121,23 @@ const structureLabel = computed(() => {
               placeholder="Typ hier de volledige Nederlandse zin..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.prefixVerbData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.prefixVerbData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.prefixVerbData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -117,37 +146,64 @@ const structureLabel = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Natural Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Natural Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

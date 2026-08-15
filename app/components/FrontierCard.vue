@@ -1,34 +1,57 @@
 <script setup lang="ts">
 defineProps<{
-  frontier: { key: string, kind: string, passive: number, active: number }[]
-}>()
+  frontier: { key: string; kind: string; passive: number; active: number }[];
+}>();
 
-const emit = defineEmits(['activate'])
+const emit = defineEmits(['activate']);
 </script>
 
 <template>
   <div class="frontier-card card">
     <div class="header">
-      <div class="eyebrow gold">FRONTIER ACTIVATION LAB</div>
+      <div class="eyebrow gold">
+        FRONTIER ACTIVATION LAB
+      </div>
       <h2>Turn Recognition into Battle Reflexes</h2>
-      <p class="muted">You recognize these concepts, but haven't unleashed them in active speech yet. Time to awaken them!</p>
+      <p class="muted">
+        You recognize these concepts, but haven't unleashed them in active speech yet. Time to awaken them!
+      </p>
     </div>
-    
+
     <div class="frontier-list">
-      <div v-for="item in frontier" :key="item.key" class="frontier-item">
+      <div
+        v-for="item in frontier"
+        :key="item.key"
+        class="frontier-item"
+      >
         <div class="info">
-          <span class="kind-badge" :class="item.kind">{{ item.kind }}</span>
+          <span
+            class="kind-badge"
+            :class="item.kind"
+          >{{ item.kind }}</span>
           <span class="key-name">{{ item.key }}</span>
           <span class="gap-text">Gap: {{ Math.round(item.passive - item.active) }}%</span>
         </div>
         <div class="gap-meter">
-          <div class="bar passive" :style="{ width: `${item.passive}%` }" title="Passive Recognition"></div>
-          <div class="bar active" :style="{ width: `${item.active}%` }" title="Active Production"></div>
+          <div
+            class="bar passive"
+            :style="{ width: `${item.passive}%` }"
+            title="Passive Recognition"
+          />
+          <div
+            class="bar active"
+            :style="{ width: `${item.active}%` }"
+            title="Active Production"
+          />
         </div>
       </div>
     </div>
 
-    <button v-if="frontier.length > 0" class="button gold full-width" @click="emit('activate')">
+    <button
+      v-if="frontier.length > 0"
+      class="button gold full-width"
+      @click="emit('activate')"
+    >
       <span>⚡ Launch Activation Mission</span>
     </button>
   </div>

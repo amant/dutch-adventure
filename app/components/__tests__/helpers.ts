@@ -1,5 +1,5 @@
-import type { Exercise, Feedback } from '~/types/learning'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import type { Exercise, Feedback } from '~/types/learning';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
 /** Minimal valid Exercise shared by every drill. */
 export const baseExercise: Exercise = {
@@ -8,31 +8,31 @@ export const baseExercise: Exercise = {
   prompt: 'Say: ik woon in Amsterdam.',
   target: 'Ik woon in Amsterdam.',
   skills: ['production'],
-}
+};
 
 export const correctFeedback: Feedback = {
   outcome: 'correct',
   message: 'That sounds perfectly natural!',
   skills: ['production'],
-}
+};
 
 export const retryFeedback: Feedback = {
   outcome: 'retry',
   message: 'Not quite. Try again.',
   skills: ['production'],
-}
+};
 
 export const acceptableFeedback: Feedback = {
   outcome: 'acceptable',
   message: 'Almost!',
   skills: ['production'],
-}
+};
 
 /** Reset the shared learner memory (and any localStorage) between tests. */
 export function resetLearnerMemory() {
-  const memory = useLearnerMemory()
-  memory.reset()
-  memory.hydrated.value = false
+  const memory = useLearnerMemory();
+  memory.reset();
+  memory.hydrated.value = false;
 }
 
 export const aspectExercise: Exercise = {
@@ -48,7 +48,7 @@ export const aspectExercise: Exercise = {
     structureFormula: '[Onderwerp] + [zijn] + aan het + [infinitief]',
     hint: 'Gebruik "aan het" + infinitief.',
   },
-}
+};
 
 export const causalityExercise: Exercise = {
   ...baseExercise,
@@ -62,7 +62,7 @@ export const causalityExercise: Exercise = {
     structureFormula: 'Doordat + [oorzaak], + [gevolg]',
     hint: 'Gebruik "doordat" voor een directe oorzaak.',
   },
-}
+};
 
 export const concessionExercise: Exercise = {
   ...baseExercise,
@@ -76,7 +76,7 @@ export const concessionExercise: Exercise = {
     structureFormula: 'Hoewel + [bijzin], + [hoofdzin]',
     hint: 'Na "hoewel" gaat de persoonsvorm naar het einde.',
   },
-}
+};
 
 export const conditionalExercise: Exercise = {
   ...baseExercise,
@@ -90,7 +90,7 @@ export const conditionalExercise: Exercise = {
     structureFormula: '[Hoofdzin] mits [voorwaarde]',
     hint: 'Gebruik "mits" = op voorwaarde dat.',
   },
-}
+};
 
 export const correlativeExercise: Exercise = {
   ...baseExercise,
@@ -104,7 +104,7 @@ export const correlativeExercise: Exercise = {
     structureFormula: 'zowel ... als ...',
     hint: 'Zowel A als B.',
   },
-}
+};
 
 export const doubleInfinitiveExercise: Exercise = {
   ...baseExercise,
@@ -119,7 +119,7 @@ export const doubleInfinitiveExercise: Exercise = {
     mainVerb: 'doen',
     hint: 'Gebruik "hebben" + infinitief + infinitief.',
   },
-}
+};
 
 export const infinitiveExercise: Exercise = {
   ...baseExercise,
@@ -132,8 +132,7 @@ export const infinitiveExercise: Exercise = {
     constructionType: 'purpose-om-te',
     hint: 'Gebruik "om te" + infinitief.',
   },
-}
-
+};
 
 export const participialExercise: Exercise = {
   ...baseExercise,
@@ -146,7 +145,7 @@ export const participialExercise: Exercise = {
     structureFormula: '[Tegenwoordig deelwoord] + [hoofdzin]',
     hint: 'Gebruik "fietsend" als bijwoordelijke bepaling.',
   },
-}
+};
 
 export const fixedPrepositionExercise: Exercise = {
   ...baseExercise,
@@ -161,7 +160,7 @@ export const fixedPrepositionExercise: Exercise = {
     structureFormula: 'twijfelen aan + [object]',
     hint: 'Twijfelen aan.',
   },
-}
+};
 
 export const prefixVerbExercise: Exercise = {
   ...baseExercise,
@@ -177,7 +176,7 @@ export const prefixVerbExercise: Exercise = {
     contextPrompt: 'Zeg: dat gebeurt soms.',
     hint: 'Gebruik "voor" + "komen" met klemtoon op "voor".',
   },
-}
+};
 
 export const midfieldExercise: Exercise = {
   ...baseExercise,
@@ -192,7 +191,7 @@ export const midfieldExercise: Exercise = {
     structureFormula: '[Onderwerp] + [PV] + Tijd + Manier + Plaats',
     hint: 'Tijd voor Manier voor Plaats.',
   },
-}
+};
 
 export const pronominalSplittingExercise: Exercise = {
   ...baseExercise,
@@ -209,7 +208,7 @@ export const pronominalSplittingExercise: Exercise = {
     structureFormula: 'daar + [werkwoord] + op',
     hint: 'Splits "daarop" in "daar ... op".',
   },
-}
+};
 
 export const modalParticleExercise: Exercise = {
   ...baseExercise,
@@ -225,7 +224,7 @@ export const modalParticleExercise: Exercise = {
     syntacticSlotHint: 'Plaats "toch maar" direct na de persoonsvorm.',
     hint: 'Gebruik "toch maar" voor een tegenzin-beslissing.',
   },
-}
+};
 
 export const topicalisationExercise: Exercise = {
   ...baseExercise,
@@ -240,7 +239,7 @@ export const topicalisationExercise: Exercise = {
     structureFormula: '[Object] + [PV] + [Onderwerp] + ...',
     hint: 'Zet het object vooraan en pas inversie toe.',
   },
-}
+};
 
 export const pronominalExercise: Exercise = {
   ...baseExercise,
@@ -253,7 +252,7 @@ export const pronominalExercise: Exercise = {
     object: 'het',
     hint: 'Gebruik "erop" of "daar ... op".',
   },
-}
+};
 
 export const passiveExercise: Exercise = {
   ...baseExercise,
@@ -265,7 +264,7 @@ export const passiveExercise: Exercise = {
     focus: 'process',
     agent: 'de kok',
   },
-}
+};
 
 export const nominalisationExercise: Exercise = {
   ...baseExercise,
@@ -277,7 +276,7 @@ export const nominalisationExercise: Exercise = {
     targetNoun: 'onderzoek',
     hint: 'Gebruik "het onderzoek van".',
   },
-}
+};
 
 export const reportedSpeechExercise: Exercise = {
   ...baseExercise,
@@ -291,7 +290,7 @@ export const reportedSpeechExercise: Exercise = {
     speaker: 'hij',
     hint: 'Na "dat" gaat de persoonsvorm naar het einde.',
   },
-}
+};
 
 export const relativeClauseExercise: Exercise = {
   ...baseExercise,
@@ -306,7 +305,7 @@ export const relativeClauseExercise: Exercise = {
     relativePronoun: 'dat',
     hint: 'Gebruik "dat" voor het-woorden.',
   },
-}
+};
 
 export const reframingExercise: Exercise = {
   ...baseExercise,
@@ -318,7 +317,7 @@ export const reframingExercise: Exercise = {
     softeningElements: ['misschien', 'zou', 'eventueel'],
     targetContext: 'Professional Meeting',
   },
-}
+};
 
 export const erDrillExercise: Exercise = {
   ...baseExercise,
@@ -333,7 +332,7 @@ export const erDrillExercise: Exercise = {
     ],
     explanation: 'Bij "denken aan" gebruik je "er ... aan".',
   },
-}
+};
 
 export const collocationExercise: Exercise = {
   ...baseExercise,
@@ -343,7 +342,7 @@ export const collocationExercise: Exercise = {
   context: 'besluit',
   options: ['nemen', 'maken', 'doen'],
   acceptedAnswers: ['nemen'],
-}
+};
 
 export const connectorExercise: Exercise = {
   ...baseExercise,
@@ -355,7 +354,7 @@ export const connectorExercise: Exercise = {
     { text: 'maar', isCorrect: true },
     { text: 'omdat', isCorrect: false },
   ],
-}
+};
 
 export const formalityExercise: Exercise = {
   ...baseExercise,
@@ -367,7 +366,7 @@ export const formalityExercise: Exercise = {
     { level: 'neutral', target: 'Wil je iets drinken?' },
     { level: 'formal', target: 'Wilt u iets drinken?' },
   ],
-}
+};
 
 export const pragmaticExercise: Exercise = {
   ...baseExercise,
@@ -378,7 +377,7 @@ export const pragmaticExercise: Exercise = {
     { text: 'Dank u wel!', context: 'café', isBest: true, explanation: 'Beleefd en natuurlijk.' },
     { text: 'Geef me maar.', context: 'café', isBest: false, explanation: 'Te direct.' },
   ],
-}
+};
 
 export const cohesionExercise: Exercise = {
   ...baseExercise,
@@ -387,7 +386,7 @@ export const cohesionExercise: Exercise = {
   prompt: 'Zet de zinnen in de juiste volgorde.',
   target: 'Eerst kom ik aan. Daarna ga ik naar binnen.',
   scrambledSentences: ['Daarna ga ik naar binnen.', 'Eerst kom ik aan.'],
-}
+};
 
 export const recombinationExercise: Exercise = {
   ...baseExercise,
@@ -395,7 +394,7 @@ export const recombinationExercise: Exercise = {
   kind: 'recombination-drill',
   prompt: 'Combineer de concepten in één zin.',
   requiredWords: ['omdat', 'gisteren'],
-}
+};
 
 export const summaryExercise: Exercise = {
   ...baseExercise,
@@ -406,7 +405,7 @@ export const summaryExercise: Exercise = {
     { id: 's1', label: 'De oorzaak', keywords: ['oorzaak'] },
     { id: 's2', label: 'De oplossing', keywords: ['oplossing'] },
   ],
-}
+};
 
 export const correctionExercise: Exercise = {
   ...baseExercise,
@@ -419,7 +418,7 @@ export const correctionExercise: Exercise = {
       { segment: 'koopt', correction: 'kocht', explanation: 'Verleden tijd.' },
     ],
   },
-}
+};
 
 export const inferenceExercise: Exercise = {
   ...baseExercise,
@@ -434,7 +433,7 @@ export const inferenceExercise: Exercise = {
     ],
     hint: 'Denk aan het dagritme.',
   },
-}
+};
 
 export const inductionExercise: Exercise = {
   ...baseExercise,
@@ -452,7 +451,7 @@ export const inductionExercise: Exercise = {
       { text: 'Niet waar.', isCorrect: false },
     ],
   },
-}
+};
 
 export const morphingExercise: Exercise = {
   ...baseExercise,
@@ -466,7 +465,7 @@ export const morphingExercise: Exercise = {
       { instruction: 'Maak de zin vragend.', target: 'Liep ik naar de winkel?', hint: 'Inversie.' },
     ],
   },
-}
+};
 
 export const listeningLadderExercise: Exercise = {
   ...baseExercise,
@@ -481,7 +480,7 @@ export const listeningLadderExercise: Exercise = {
     { text: 'de docent', isCorrect: true },
     { text: 'de student', isCorrect: false },
   ],
-}
+};
 
 export const readingLadderExercise: Exercise = {
   ...baseExercise,
@@ -491,10 +490,10 @@ export const readingLadderExercise: Exercise = {
   readingContent: 'Amsterdam is de hoofdstad van Nederland. De stad heeft veel grachten.',
   translation: 'Amsterdam is the capital of the Netherlands.',
   wordHints: {
-    'hoofdstad': { meaning: 'capital', category: 'noun' },
-    'grachten': { meaning: 'canals', category: 'noun' },
+    hoofdstad: { meaning: 'capital', category: 'noun' },
+    grachten: { meaning: 'canals', category: 'noun' },
   },
-}
+};
 
 export const fluencyExercise: Exercise = {
   ...baseExercise,
@@ -503,7 +502,7 @@ export const fluencyExercise: Exercise = {
   prompt: 'Herhaal snel na:',
   transcript: 'Ik woon al tien jaar in Amsterdam.',
   automaticitySeconds: 10,
-}
+};
 
 export const missionExercise: Exercise = {
   ...baseExercise,
@@ -515,7 +514,7 @@ export const missionExercise: Exercise = {
     { id: 'g1', label: 'Gebruik "overtuigen"', keywords: ['overtuigen'] },
     { id: 'g2', label: 'Noem een oplossing', keywords: ['oplossing'] },
   ],
-}
+};
 
 export const capstoneExercise: Exercise = {
   ...baseExercise,
@@ -526,7 +525,7 @@ export const capstoneExercise: Exercise = {
   missionGoals: [
     { id: 'g1', label: 'Stel een vraag', keywords: ['vraag'] },
   ],
-}
+};
 
 export const speedExercise: Exercise = {
   ...baseExercise,
@@ -534,7 +533,7 @@ export const speedExercise: Exercise = {
   kind: 'speed-drill',
   prompt: 'Type de Nederlandse vertaling zo snel mogelijk.',
   automaticitySeconds: 4,
-}
+};
 
 export const nuanceExercise: Exercise = {
   ...baseExercise,
@@ -542,7 +541,7 @@ export const nuanceExercise: Exercise = {
   kind: 'nuance-drill',
   prompt: 'Maak de zin natuurlijker met een modaal partikel.',
   target: 'Ik kom wel even langs.',
-}
+};
 
 export const understatementExercise: Exercise = {
   ...baseExercise,
@@ -550,7 +549,7 @@ export const understatementExercise: Exercise = {
   kind: 'understatement-drill',
   prompt: 'Verwoord dit op een understated manier.',
   target: 'Het valt wel mee.',
-}
+};
 
 export const precisionExercise: Exercise = {
   ...baseExercise,
@@ -561,7 +560,7 @@ export const precisionExercise: Exercise = {
     { text: 'verzoeken', isCorrect: true },
     { text: 'vragen', isCorrect: false },
   ],
-}
+};
 
 export const transformationExercise: Exercise = {
   ...baseExercise,
@@ -569,8 +568,7 @@ export const transformationExercise: Exercise = {
   kind: 'transformation',
   prompt: 'Vervorm de zin naar verleden tijd.',
   target: 'Ik fietste naar huis.',
-}
-
+};
 
 export const circumlocutionExercise: Exercise = {
   ...baseExercise,
@@ -583,7 +581,7 @@ export const circumlocutionExercise: Exercise = {
   },
   forbiddenWords: ['fiets'],
   minimumLength: 10,
-}
+};
 
 export const mediationExercise: Exercise = {
   ...baseExercise,
@@ -595,5 +593,4 @@ export const mediationExercise: Exercise = {
     { id: 'p1', label: 'Noem het probleem', keywords: ['probleem'] },
     { id: 'p2', label: 'Noem de oplossing', keywords: ['oplossing'] },
   ],
-}
-
+};

@@ -1,46 +1,60 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import type { Exercise, Feedback } from '~/types/learning';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit']);
+const response = defineModel<string>();
 
-const { getFrontierConcepts } = useLearnerMemory()
-const frontier = computed(() => getFrontierConcepts(3))
+const { getFrontierConcepts } = useLearnerMemory();
+const frontier = computed(() => getFrontierConcepts(3));
 </script>
 
 <template>
   <div class="personalisation-exercise">
     <div class="prompt-card">
-      <div class="icon">💬</div>
+      <div class="icon">
+        💬
+      </div>
       <div class="content">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Try to use your own life and experiences in your answer.</p>
+        <p class="muted">
+          Try to use your own life and experiences in your answer.
+        </p>
       </div>
     </div>
 
-    <SmartPalette 
+    <SmartPalette
       :user-text="response || ''"
       :target-vocabulary="exercise.vocabulary"
       :target-grammar="exercise.grammar"
       :frontier-concepts="frontier"
     />
 
-    <form v-if="!feedback" @submit.prevent="emit('submit')" class="input-area">
-      <textarea 
-        v-model="response" 
-        :placeholder="exercise.placeholder || 'Type your personal answer here...'" 
-        rows="4" 
-        autofocus 
+    <form
+      v-if="!feedback"
+      class="input-area"
+      @submit.prevent="emit('submit')"
+    >
+      <textarea
+        v-model="response"
+        :placeholder="exercise.placeholder || 'Type your personal answer here...'"
+        rows="4"
+        autofocus
       />
       <div class="footer">
         <span class="count">{{ response?.split(' ').filter(Boolean).length || 0 }} words</span>
-        <button class="button" type="submit" :disabled="!response">Check Answer</button>
+        <button
+          class="button"
+          type="submit"
+          :disabled="!response"
+        >
+          Check Answer
+        </button>
       </div>
     </form>
   </div>

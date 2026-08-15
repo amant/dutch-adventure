@@ -1,64 +1,78 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
-import MissionSimulator from './MissionSimulator.vue'
+import { ref, computed, watch } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
+import MissionSimulator from './MissionSimulator.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next', 'retry'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next', 'retry']);
+const response = defineModel<string>();
 
-const isCompleted = ref(false)
-const achievedGoalIds = ref<Set<string>>(new Set())
+const isCompleted = ref(false);
+const achievedGoalIds = ref<Set<string>>(new Set());
 
 // Track goals locally to show progress
 watch(() => props.feedback, (f) => {
   if (f?.achievedGoalIds) {
-    f.achievedGoalIds.forEach(id => achievedGoalIds.value.add(id))
+    f.achievedGoalIds.forEach(id => achievedGoalIds.value.add(id));
   }
-}, { immediate: true })
+}, { immediate: true });
 
-const achievedCount = computed(() => achievedGoalIds.value.size)
-const totalGoals = computed(() => props.exercise.missionGoals?.length || 0)
-const progressPercent = computed(() => totalGoals.value > 0 ? (achievedCount.value / totalGoals.value) * 100 : 0)
+const achievedCount = computed(() => achievedGoalIds.value.size);
+const totalGoals = computed(() => props.exercise.missionGoals?.length || 0);
+const progressPercent = computed(() => totalGoals.value > 0 ? (achievedCount.value / totalGoals.value) * 100 : 0);
 
 function handleNext() {
   if (progressPercent.value === 100) {
-    isCompleted.value = true
+    isCompleted.value = true;
   } else {
-    emit('next')
+    emit('next');
   }
 }
 
 function handleClaim() {
-  emit('next')
+  emit('next');
 }
 </script>
 
 <template>
   <div class="capstone-mission">
     <div class="capstone-header">
-      <div class="medal-icon">🏅</div>
+      <div class="medal-icon">
+        🏅
+      </div>
       <div class="header-text">
-        <div class="eyebrow">Level Capstone</div>
+        <div class="eyebrow">
+          Level Capstone
+        </div>
         <h3>Capability Assessment</h3>
       </div>
       <div class="overall-progress">
-        <div class="progress-label">{{ Math.round(progressPercent) }}% Success</div>
+        <div class="progress-label">
+          {{ Math.round(progressPercent) }}% Success
+        </div>
         <div class="progress-bar-bg">
-          <div class="progress-bar" :style="{ width: `${progressPercent}%` }"></div>
+          <div
+            class="progress-bar"
+            :style="{ width: `${progressPercent}%` }"
+          />
         </div>
       </div>
     </div>
 
-    <div v-if="isCompleted" class="capstone-completion">
-      <div class="celebration">🎉</div>
+    <div
+      v-if="isCompleted"
+      class="capstone-completion"
+    >
+      <div class="celebration">
+        🎉
+      </div>
       <h2>Capability Mastered!</h2>
       <p>You've successfully demonstrated your ability to handle this complex real-world scenario in Dutch.</p>
-      
+
       <div class="report-card card">
         <h4>Teacher's Report Card</h4>
         <div class="report-grid">
@@ -83,11 +97,16 @@ function handleClaim() {
           <p><strong>Note:</strong> You navigated the pushbacks with ease and used logical connectors effectively. This is true B2-level communication.</p>
         </div>
       </div>
-      
-      <button class="button primary large mt-6" @click="handleClaim">Claim Certificate & Exit</button>
+
+      <button
+        class="button primary large mt-6"
+        @click="handleClaim"
+      >
+        Claim Certificate & Exit
+      </button>
     </div>
 
-    <MissionSimulator 
+    <MissionSimulator
       v-else
       v-model="response"
       :exercise="exercise"

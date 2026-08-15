@@ -1,7 +1,7 @@
-import type { Exercise, ChapterStage, Chapter, ExerciseKind, SkillDimension } from '../types/learning'
+import type { Exercise, ChapterStage, Chapter, ExerciseKind, SkillDimension } from '../types/learning';
 
 // A small dictionary to help generate exercises if we don't have enough context
-const contextDictionary: Record<string, { target: string, prompt: string, explanation: string }> = {
+const contextDictionary: Record<string, { target: string; prompt: string; explanation: string }> = {
   'wonen': { prompt: 'I live in Amsterdam.', target: 'Ik woon in Amsterdam.', explanation: 'Use "wonen" for living in a place.' },
   'zijn': { prompt: 'I am a student.', target: 'Ik ben een student.', explanation: 'Use "zijn" for identity.' },
   'denken': { prompt: 'I think that it is good.', target: 'Ik denk dat het goed is.', explanation: 'Use "denken dat" for opinions.' },
@@ -105,41 +105,41 @@ const contextDictionary: Record<string, { target: string, prompt: string, explan
   'middenveld-syntaxis': { prompt: 'We are traveling to Brussels by train tomorrow.', target: 'Wij reizen morgen met de trein naar Brussel.', explanation: 'In the Dutch midfield, adverbial adjuncts follow strict Time -> Manner -> Place (TMP) order.' },
   'tmp-volgorde': { prompt: 'I am taking the high-speed train to Amsterdam tomorrow.', target: 'Ik reis morgen met de sneltrein naar Amsterdam.', explanation: 'TMP sequence: Tijd (morgen) -> Manier (met de sneltrein) -> Plaats (naar Amsterdam).' },
   'objectplaatsing': { prompt: 'I read the contract carefully yesterday.', target: 'Ik heb het contract gisteren aandachtig gelezen.', explanation: 'Definite direct objects precede Time and Manner in the Dutch midfield.' },
-  'negatie-scope': { prompt: 'The manager is not sending the report to the client today.', target: 'De manager stuurt het rapport vandaag niet naar de klant.', explanation: '"Niet" follows definite objects and time, preceding prepositional phrases.' }
-}
+  'negatie-scope': { prompt: 'The manager is not sending the report to the client today.', target: 'De manager stuurt het rapport vandaag niet naar de klant.', explanation: '"Niet" follows definite objects and time, preceding prepositional phrases.' },
+};
 
 export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'grammar', kind: ExerciseKind): Exercise {
   const info = contextDictionary[key] || {
     prompt: `Use the concept: ${key}`,
     target: `[Correct usage of ${key}]`,
-    explanation: `Practice using ${key} in a sentence.`
-  }
+    explanation: `Practice using ${key} in a sentence.`,
+  };
 
-  const skills: SkillDimension[] = []
-  if (kind === 'typed') skills.push('production', 'spelling')
-  if (kind === 'flexibility') skills.push('production', 'automaticity')
-  if (kind === 'conversation') skills.push('speaking', 'production')
-  if (kind === 'speed-drill') skills.push('automaticity', 'production')
-  if (kind === 'reframing-drill') skills.push('production', 'pragmatic')
-  if (kind === 'pronominal-drill') skills.push('production', 'grammar')
-  if (kind === 'nominalisation-drill') skills.push('production', 'grammar')
-  if (kind === 'passive-drill') skills.push('production', 'grammar')
-  if (kind === 'reported-speech-drill') skills.push('production', 'grammar')
-  if (kind === 'relative-clause-drill') skills.push('production', 'grammar')
-  if (kind === 'infinitive-drill') skills.push('production', 'grammar')
-  if (kind === 'double-infinitive-drill') skills.push('production', 'grammar')
-  if (kind === 'concession-drill') skills.push('production', 'grammar')
-  if (kind === 'participial-drill') skills.push('production', 'grammar')
-  if (kind === 'correlative-drill') skills.push('production', 'grammar')
-  if (kind === 'conditional-drill') skills.push('production', 'grammar')
-  if (kind === 'causality-drill') skills.push('production', 'grammar')
-  if (kind === 'prefix-verb-drill') skills.push('production', 'grammar')
-  if (kind === 'midfield-drill') skills.push('production', 'grammar')
-  if (kind === 'fixed-preposition-drill') skills.push('production', 'grammar')
-  if (kind === 'pronominal-splitting-drill') skills.push('production', 'grammar')
-  if (kind === 'aspect-drill') skills.push('production', 'grammar')
-  if (kind === 'modal-particle-drill') skills.push('production', 'pragmatic', 'grammar')
-  if (kind === 'topicalisation-drill') skills.push('production', 'grammar')
+  const skills: SkillDimension[] = [];
+  if (kind === 'typed') skills.push('production', 'spelling');
+  if (kind === 'flexibility') skills.push('production', 'automaticity');
+  if (kind === 'conversation') skills.push('speaking', 'production');
+  if (kind === 'speed-drill') skills.push('automaticity', 'production');
+  if (kind === 'reframing-drill') skills.push('production', 'pragmatic');
+  if (kind === 'pronominal-drill') skills.push('production', 'grammar');
+  if (kind === 'nominalisation-drill') skills.push('production', 'grammar');
+  if (kind === 'passive-drill') skills.push('production', 'grammar');
+  if (kind === 'reported-speech-drill') skills.push('production', 'grammar');
+  if (kind === 'relative-clause-drill') skills.push('production', 'grammar');
+  if (kind === 'infinitive-drill') skills.push('production', 'grammar');
+  if (kind === 'double-infinitive-drill') skills.push('production', 'grammar');
+  if (kind === 'concession-drill') skills.push('production', 'grammar');
+  if (kind === 'participial-drill') skills.push('production', 'grammar');
+  if (kind === 'correlative-drill') skills.push('production', 'grammar');
+  if (kind === 'conditional-drill') skills.push('production', 'grammar');
+  if (kind === 'causality-drill') skills.push('production', 'grammar');
+  if (kind === 'prefix-verb-drill') skills.push('production', 'grammar');
+  if (kind === 'midfield-drill') skills.push('production', 'grammar');
+  if (kind === 'fixed-preposition-drill') skills.push('production', 'grammar');
+  if (kind === 'pronominal-splitting-drill') skills.push('production', 'grammar');
+  if (kind === 'aspect-drill') skills.push('production', 'grammar');
+  if (kind === 'modal-particle-drill') skills.push('production', 'pragmatic', 'grammar');
+  if (kind === 'topicalisation-drill') skills.push('production', 'grammar');
 
   if (kind === 'reframing-drill') {
     return {
@@ -150,24 +150,24 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       reframingData: {
         bluntSentence: `Direct version of ${key}`,
         softeningElements: ['misschien', 'zou', 'eventueel'],
-        targetContext: 'Professional Meeting'
+        targetContext: 'Professional Meeting',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       correction: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'pronominal-drill') {
     const prepMap: Record<string, string> = {
-      'ermee': 'met',
-      'erop': 'op',
-      'eraan': 'aan',
-      'daarvoor': 'voor',
-      'daarmee': 'met'
-    }
-    const prep = prepMap[key] || 'op'
+      ermee: 'met',
+      erop: 'op',
+      eraan: 'aan',
+      daarvoor: 'voor',
+      daarmee: 'met',
+    };
+    const prep = prepMap[key] || 'op';
     return {
       id: `smart-${type}-${key}-${kind}`,
       kind,
@@ -176,13 +176,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       pronominalData: {
         sentence: info.target,
         preposition: prep,
-        object: key.startsWith('d') ? 'dat' : 'het'
+        object: key.startsWith('d') ? 'dat' : 'het',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: key,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'nominalisation-drill') {
@@ -193,13 +193,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       skills,
       nominalisationData: {
         verbalSentence: `De ${key} gebeurt nu.`,
-        targetNoun: key
+        targetNoun: key,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'passive-drill') {
@@ -210,13 +210,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
       skills,
       passiveData: {
         activeSentence: `Men ${key} het project.`,
-        focus: 'process'
+        focus: 'process',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'reported-speech-drill') {
@@ -229,13 +229,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         directQuote: `Ik zal ${key}.`,
         speaker: 'De collega',
         reportingClause: 'De collega zei dat...',
-        quoteType: 'statement'
+        quoteType: 'statement',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'relative-clause-drill') {
@@ -248,13 +248,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         mainClause: `Het onderwerp is belangrijk.`,
         subordinateInfo: `We bespreken ${key} vandaag.`,
         antecedent: key,
-        antecedentType: key === 'wat' ? 'general-wat' : key === 'met wie' ? 'person-prep' : key === 'waarmee' ? 'thing-prep' : 'het-word'
+        antecedentType: key === 'wat' ? 'general-wat' : key === 'met wie' ? 'person-prep' : key === 'waarmee' ? 'thing-prep' : 'het-word',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'infinitive-drill') {
@@ -267,13 +267,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         mainClause: 'Het is van groot belang voor het team.',
         infinitiveAction: `${key} volgens afspraak`,
         constructionType: 'purpose-om-te',
-        hint: 'Use (om...) te and place all verbal elements at the end.'
+        hint: 'Use (om...) te and place all verbal elements at the end.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'double-infinitive-drill') {
@@ -288,13 +288,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         governingVerb: key.includes('laten') ? 'laten' : key.includes('leren') ? 'leren' : key.includes('horen') ? 'horen' : 'moeten',
         governingType: key.includes('laten') ? 'causative-laten' : key.includes('leren') ? 'instruction-leren-helpen' : key.includes('horen') ? 'perception' : 'modal',
         mainVerb: key.replace('laten ', '').replace('leren ', '').replace('horen ', '').replace('moeten ', ''),
-        hint: 'Apply the Infinitivus Pro Participio (IPP) rule with double infinitive at the end.'
+        hint: 'Apply the Infinitivus Pro Participio (IPP) rule with double infinitive at the end.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'concession-drill') {
@@ -309,13 +309,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         contrastB: 'We zetten het plan desondanks succesvol voort.',
         connectorCue: key,
         structureFormula: 'Toegevende structuur met correcte woordvolgorde',
-        hint: 'Combine the statements with accurate conjunctions and word order.'
+        hint: 'Combine the statements with accurate conjunctions and word order.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'participial-drill') {
@@ -329,13 +329,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         baseClause: `De situatie met betrekking tot ${key}.`,
         participleCue: key,
         structureFormula: 'Deelwoordconstructie met correcte verbuiging en positie',
-        hint: 'Use the concise participial form.'
+        hint: 'Use the concise participial form.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'correlative-drill') {
@@ -350,13 +350,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         premiseB: `Tweede aspect van ${key}.`,
         pairCue: key,
         structureFormula: 'Correlatieve balansstructuur met parallelle woordvolgorde',
-        hint: 'Balance both parts using the correlative pair.'
+        hint: 'Balance both parts using the correlative pair.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'conditional-drill') {
@@ -371,13 +371,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         conditionPremise: `De specifieke voorwaarde of restrictie (${key}).`,
         connectorCue: key,
         structureFormula: 'Voorwaardelijke constructie met correcte bijzin-woordvolgorde',
-        hint: 'Combine both clauses with appropriate conditional conjunction and subordinate verb order.'
+        hint: 'Combine both clauses with appropriate conditional conjunction and subordinate verb order.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'causality-drill') {
@@ -392,17 +392,17 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         resultOrAction: `Het gevolg of de doelgerichte actie (${key}).`,
         connectorCue: key,
         structureFormula: 'Oorzakelijk, consecutief of doelgericht verband met correcte zinsstructuur',
-        hint: 'Combine both premises using the specified causal/consecutive connector.'
+        hint: 'Combine both premises using the specified causal/consecutive connector.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'prefix-verb-drill') {
-    const isSeparable = key.includes('scheidbare') || key === 'vóórkomen' || key === 'óndergaan' || key === 'óverleggen'
+    const isSeparable = key.includes('scheidbare') || key === 'vóórkomen' || key === 'óndergaan' || key === 'óverleggen';
     return {
       id: `smart-${type}-${key}-${kind}`,
       kind,
@@ -416,13 +416,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         targetStructure: 'present-main',
         contextPrompt: info.prompt,
         structureFormula: isSeparable ? '[Onderwerp] + [vorm] + [rest] + [voorvoegsel]' : '[Onderwerp] + [samengesteld werkwoord] + [rest]',
-        hint: isSeparable ? 'Het werkwoord splitst in de hoofdzin.' : 'Het werkwoord is onscheidbaar en splitst nooit.'
+        hint: isSeparable ? 'Het werkwoord splitst in de hoofdzin.' : 'Het werkwoord is onscheidbaar en splitst nooit.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'midfield-drill') {
@@ -436,31 +436,38 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         slots: {
           time: 'morgen',
           manner: 'met de trein',
-          place: 'naar kantoor'
+          place: 'naar kantoor',
         },
         contextPrompt: info.prompt,
         providedElements: ['Onderwerp', 'Tijd', 'Manier', 'Plaats'],
         structureFormula: '[Onderwerp] + [PV] + [Tijd] + [Manier] + [Plaats]',
-        hint: 'Respecteer de volgorde: Tijd -> Manier -> Plaats.'
+        hint: 'Respecteer de volgorde: Tijd -> Manier -> Plaats.',
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'fixed-preposition-drill') {
-    const isAdj = key.includes('opgewassen') || key.includes('verantwoordelijk') || key.includes('trots') || key.includes('gehecht')
-    const isNoun = key.includes('behoefte') || key.includes('bezwaar') || key.includes('gebrek') || key.includes('toegang')
-    const prep = key.includes('twijfelen') || key.includes('bijdragen') || key.includes('voldoen') || key.includes('behoefte') ? 'aan'
-      : key.includes('rekening houden') || key.includes('gepaard gaan') || key.includes('bemoeien') ? 'met'
-      : key.includes('bestand') || key.includes('opgewassen') || key.includes('bezwaar') || key.includes('verzetten') ? 'tegen'
-      : key.includes('neerleggen') || key.includes('betrokken') ? 'bij'
-      : key.includes('inspelen') || key.includes('trots') || key.includes('vertrouwen') ? 'op'
-      : key.includes('voorzien') || key.includes('geïnteresseerd') ? 'in'
-      : key.includes('verantwoordelijk') || key.includes('geschikt') ? 'voor'
-      : 'aan'
+    const isAdj = key.includes('opgewassen') || key.includes('verantwoordelijk') || key.includes('trots') || key.includes('gehecht');
+    const isNoun = key.includes('behoefte') || key.includes('bezwaar') || key.includes('gebrek') || key.includes('toegang');
+    const prep = key.includes('twijfelen') || key.includes('bijdragen') || key.includes('voldoen') || key.includes('behoefte')
+      ? 'aan'
+      : key.includes('rekening houden') || key.includes('gepaard gaan') || key.includes('bemoeien')
+        ? 'met'
+        : key.includes('bestand') || key.includes('opgewassen') || key.includes('bezwaar') || key.includes('verzetten')
+          ? 'tegen'
+          : key.includes('neerleggen') || key.includes('betrokken')
+            ? 'bij'
+            : key.includes('inspelen') || key.includes('trots') || key.includes('vertrouwen')
+              ? 'op'
+              : key.includes('voorzien') || key.includes('geïnteresseerd')
+                ? 'in'
+                : key.includes('verantwoordelijk') || key.includes('geschikt')
+                  ? 'voor'
+                  : 'aan';
 
     return {
       id: `smart-${type}-${key}-${kind}`,
@@ -474,18 +481,18 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         contextPrompt: info.prompt,
         commonTransferErrors: [`${key} over`, `${key} voor`],
         structureFormula: `[Onderwerp] + [${key}] + ${prep} + [Object]`,
-        hint: `Combineer '${key}' met het vaste voorzetsel '${prep}'.`
+        hint: `Combineer '${key}' met het vaste voorzetsel '${prep}'.`,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'pronominal-splitting-drill') {
-    const rWord = key.startsWith('d') ? 'daar' : key.startsWith('w') ? 'waar' : key.startsWith('h') ? 'hier' : 'er'
-    const prep = key.includes('over') ? 'over' : key.includes('aan') ? 'aan' : key.includes('mee') ? 'mee' : key.includes('naar') ? 'naar' : 'in'
+    const rWord = key.startsWith('d') ? 'daar' : key.startsWith('w') ? 'waar' : key.startsWith('h') ? 'hier' : 'er';
+    const prep = key.includes('over') ? 'over' : key.includes('aan') ? 'aan' : key.includes('mee') ? 'mee' : key.includes('naar') ? 'naar' : 'in';
     return {
       id: `smart-${type}-${key}-${kind}`,
       kind,
@@ -500,20 +507,20 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         providedElements: [rWord, prep, 'het onderwerp'],
         structureFormula: `[Onderwerp] + [PV] + ${rWord} + [Middenveld] + ${prep} + [Werkwoord(en)]`,
         splittingStatus: 'natural-split-preferred',
-        hint: `Plaats '${rWord}' vroeg in de zin en zet '${prep}' vlak vóór het werkwoord.`
+        hint: `Plaats '${rWord}' vroeg in de zin en zet '${prep}' vlak vóór het werkwoord.`,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'aspect-drill') {
-    const isAanHet = key.includes('aan het')
-    const isOpHetPunt = key.includes('op het punt')
-    const isPlegen = key.includes('plegen')
-    const isDreigen = key.includes('dreigen') || key.includes('beloven')
+    const isAanHet = key.includes('aan het');
+    const isOpHetPunt = key.includes('op het punt');
+    const isPlegen = key.includes('plegen');
+    const isDreigen = key.includes('dreigen') || key.includes('beloven');
 
     return {
       id: `smart-${type}-${key}-${kind}`,
@@ -527,20 +534,20 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         contextPrompt: info.prompt,
         clauseType: 'main-clause',
         structureFormula: isAanHet ? '[Onderwerp] + [zijn] + [Middenveld] + aan het + [infinitief]' : `[Onderwerp] + [${key}] + [Middenveld] + te + [infinitief]`,
-        hint: `Gebruik de juiste aspectuele constructie met '${key}'.`
+        hint: `Gebruik de juiste aspectuele constructie met '${key}'.`,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'modal-particle-drill') {
-    const isWelDegelijk = key.includes('wel degelijk')
-    const isNouEenmaal = key.includes('nou eenmaal') || key.includes('nu eenmaal')
-    const isTochMaar = key.includes('toch maar')
-    const isImmers = key.includes('immers')
+    const isWelDegelijk = key.includes('wel degelijk');
+    const isNouEenmaal = key.includes('nou eenmaal') || key.includes('nu eenmaal');
+    const isTochMaar = key.includes('toch maar');
+    const isImmers = key.includes('immers');
 
     return {
       id: `smart-${type}-${key}-${kind}`,
@@ -554,19 +561,19 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         contextPrompt: info.prompt,
         structureFormula: `[Onderwerp] + [PV] + ${key} + [Middenveld] + [Werkwoord(en)]`,
         syntacticSlotHint: `Plaats '${key}' direct na de persoonsvorm of het persoonlijk voornaamwoord in het binnenste middenveld.`,
-        hint: `Integreer '${key}' op de juiste positie in het middenveld.`
+        hint: `Integreer '${key}' op de juiste positie in het middenveld.`,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   if (kind === 'topicalisation-drill') {
-    const isDoen = key.includes('doen') || key.includes('twijfelen') || key.includes('weten')
-    const isMocht = key.startsWith('mocht')
-    const isCleft = key.startsWith('het is') || key.startsWith('het was')
+    const isDoen = key.includes('doen') || key.includes('twijfelen') || key.includes('weten');
+    const isMocht = key.startsWith('mocht');
+    const isCleft = key.startsWith('het is') || key.startsWith('het was');
 
     return {
       id: `smart-${type}-${key}-${kind}`,
@@ -579,13 +586,13 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
         baseSentence: info.target,
         contextPrompt: info.prompt,
         structureFormula: isDoen ? `${key} + doe/doet + [Onderwerp] + niet` : `${key} + [PV] + [Onderwerp] + ...`,
-        hint: `Begin de zin met '${key}' en pas strikte inversie (V2) toe.`
+        hint: `Begin de zin met '${key}' en pas strikte inversie (V2) toe.`,
       },
       vocabulary: type === 'vocabulary' ? [key] : [],
       grammar: type === 'grammar' ? [key] : [],
       target: info.target,
-      explanation: info.explanation
-    }
+      explanation: info.explanation,
+    };
   }
 
   return {
@@ -597,12 +604,12 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
     skills,
     vocabulary: type === 'vocabulary' ? [key] : [],
     grammar: type === 'grammar' ? [key] : [],
-    automaticitySeconds: kind === 'speed-drill' ? 4 : undefined
-  }
+    automaticitySeconds: kind === 'speed-drill' ? 4 : undefined,
+  };
 }
 
 export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: string[]): Chapter {
-  const stages: ChapterStage[] = []
+  const stages: ChapterStage[] = [];
 
   // Stage 1: Recognition / Discovery (for the ones you struggle with)
   if (vocabularyKeys.length > 0) {
@@ -617,16 +624,16 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
         prompt: `Remember: ${k}`,
         context: contextDictionary[k]?.target || `Usage example for ${k}`,
         skills: ['recognition', 'meaning'],
-        vocabulary: [k]
-      }))
-    })
+        vocabulary: [k],
+      })),
+    });
   }
 
   // Stage 2: Production
   const productionExercises: Exercise[] = [
     ...vocabularyKeys.slice(0, 2).map(k => generateExercisesForConcept(k, 'vocabulary', 'typed')),
-    ...grammarKeys.slice(0, 1).map(k => generateExercisesForConcept(k, 'grammar', 'typed'))
-  ]
+    ...grammarKeys.slice(0, 1).map(k => generateExercisesForConcept(k, 'grammar', 'typed')),
+  ];
 
   if (productionExercises.length > 0) {
     stages.push({
@@ -634,13 +641,13 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
       title: 'Active Retrieval',
       kind: 'retrieve',
       intro: 'Try to produce these without hints.',
-      exercises: productionExercises
-    })
+      exercises: productionExercises,
+    });
   }
 
   // Stage 3: High-pressure use
   if (vocabularyKeys.length > 0 || grammarKeys.length > 0) {
-    const mainConcept = vocabularyKeys[0] || grammarKeys[0] || ''
+    const mainConcept = vocabularyKeys[0] || grammarKeys[0] || '';
     if (mainConcept) {
       stages.push({
         id: 'smart-automate',
@@ -648,9 +655,9 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
         kind: 'review',
         intro: 'Quick! Recall these concepts before the timer runs out.',
         exercises: [
-          generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'speed-drill')
-        ]
-      })
+          generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'speed-drill'),
+        ],
+      });
 
       stages.push({
         id: 'smart-personalise',
@@ -660,9 +667,9 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
         exercises: [{
           ...generateExercisesForConcept(mainConcept, vocabularyKeys[0] ? 'vocabulary' : 'grammar', 'conversation'),
           prompt: `Can you use ${mainConcept} in a sentence about your day?`,
-          aiPersonality: { isDifficult: true, style: 'helpful', pushbackProbability: 0.5 }
-        }]
-      })
+          aiPersonality: { isDifficult: true, style: 'helpful', pushbackProbability: 0.5 },
+        }],
+      });
     }
   }
 
@@ -673,12 +680,12 @@ export function createSmartReviewChapter(vocabularyKeys: string[], grammarKeys: 
     capability: 'Reinforce weak spots and automate retrieval.',
     description: 'A dynamically generated session targeting your specific bottlenecks.',
     estimatedMinutes: 5,
-    stages
-  }
+    stages,
+  };
 }
 
-export function createActivationChapter(concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
-  const stages: ChapterStage[] = []
+export function createActivationChapter(concepts: { key: string; kind: 'vocabulary' | 'grammar' }[]): Chapter {
+  const stages: ChapterStage[] = [];
 
   // Stage 1: Transformation (Bridging the gap)
   if (concepts.length > 0) {
@@ -687,8 +694,8 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
       title: 'Bridge the Gap',
       kind: 'transform',
       intro: 'You know what these mean. Now let\'s try to manipulate them.',
-      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'flexibility'))
-    })
+      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'flexibility')),
+    });
 
     // Stage 2: Retrieval
     stages.push({
@@ -696,8 +703,8 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
       title: 'Own the Concept',
       kind: 'retrieve',
       intro: 'Produce these from scratch.',
-      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'typed'))
-    })
+      exercises: concepts.map(c => generateExercisesForConcept(c.key, c.kind, 'typed')),
+    });
 
     // Stage 3: Personalisation
     stages.push({
@@ -708,9 +715,9 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
       exercises: concepts.map(c => ({
         ...generateExercisesForConcept(c.key, c.kind, 'conversation'),
         prompt: `Tell me something using "${c.key}".`,
-        aiPersonality: { isDifficult: false, style: 'helpful', pushbackProbability: 0.3 }
-      }))
-    })
+        aiPersonality: { isDifficult: false, style: 'helpful', pushbackProbability: 0.3 },
+      })),
+    });
   }
 
   return {
@@ -720,12 +727,12 @@ export function createActivationChapter(concepts: { key: string, kind: 'vocabula
     capability: 'Turn passive recognition into active production.',
     description: 'A focused session to bridge your knowledge gaps.',
     estimatedMinutes: 8,
-    stages
-  }
+    stages,
+  };
 }
 
 export function createSpeedChapter(vocabularyKeys: string[], grammarKeys: string[]): Chapter {
-  const allKeys = [...vocabularyKeys, ...grammarKeys]
+  const allKeys = [...vocabularyKeys, ...grammarKeys];
   return {
     slug: 'speed-review',
     level: 'B1',
@@ -739,18 +746,18 @@ export function createSpeedChapter(vocabularyKeys: string[], grammarKeys: string
         title: 'Speed Drills',
         kind: 'retrieve',
         intro: 'You have very little time. Don\'t think, just produce!',
-        exercises: allKeys.slice(0, 5).map(k => {
-          const type = vocabularyKeys.includes(k) ? 'vocabulary' : 'grammar'
-          const ex = generateExercisesForConcept(k, type, 'speed-drill')
-          ex.automaticitySeconds = 3 // Extra tight!
-          return ex
-        })
-      }
-    ]
-  }
+        exercises: allKeys.slice(0, 5).map((k) => {
+          const type = vocabularyKeys.includes(k) ? 'vocabulary' : 'grammar';
+          const ex = generateExercisesForConcept(k, type, 'speed-drill');
+          ex.automaticitySeconds = 3; // Extra tight!
+          return ex;
+        }),
+      },
+    ],
+  };
 }
 
-export function createFluencyChapter(history: { key: string, prompt: string, snippet: string, type: 'vocabulary' | 'grammar' }[]): Chapter {
+export function createFluencyChapter(history: { key: string; prompt: string; snippet: string; type: 'vocabulary' | 'grammar' }[]): Chapter {
   return {
     slug: 'fluency-challenge',
     level: 'B2',
@@ -773,14 +780,14 @@ export function createFluencyChapter(history: { key: string, prompt: string, sni
           skills: ['automaticity', 'speaking', 'production'],
           vocabulary: h.type === 'vocabulary' ? [h.key] : [],
           grammar: h.type === 'grammar' ? [h.key] : [],
-          automaticitySeconds: 10
-        }))
-      }
-    ]
-  }
+          automaticitySeconds: 10,
+        })),
+      },
+    ],
+  };
 }
 
-export function createScenarioMission(scenario: string, concepts: { key: string, kind: 'vocabulary' | 'grammar' }[]): Chapter {
+export function createScenarioMission(scenario: string, concepts: { key: string; kind: 'vocabulary' | 'grammar' }[]): Chapter {
   return {
     slug: 'sandbox-mission',
     level: 'B2',
@@ -801,8 +808,8 @@ export function createScenarioMission(scenario: string, concepts: { key: string,
           context: contextDictionary[c.key]?.target || `In this scenario, you might need ${c.key}.`,
           skills: ['recognition', 'meaning'],
           vocabulary: c.kind === 'vocabulary' ? [c.key] : [],
-          grammar: c.kind === 'grammar' ? [c.key] : []
-        }))
+          grammar: c.kind === 'grammar' ? [c.key] : [],
+        })),
       },
       {
         id: 'sandbox-mission',
@@ -819,15 +826,15 @@ export function createScenarioMission(scenario: string, concepts: { key: string,
           aiPersonality: {
             isDifficult: true,
             style: 'colloquial',
-            pushbackProbability: 0.6
+            pushbackProbability: 0.6,
           },
           missionGoals: concepts.slice(0, 3).map(c => ({
             id: `goal-${c.key}`,
             label: `Use "${c.key}" naturally`,
-            keywords: [c.key]
-          }))
-        }]
-      }
-    ]
-  }
+            keywords: [c.key],
+          })),
+        }],
+      },
+    ],
+  };
 }

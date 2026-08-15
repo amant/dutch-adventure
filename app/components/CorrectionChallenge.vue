@@ -1,71 +1,81 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import type { Exercise } from '~/types/learning'
+import { ref, computed, onMounted } from 'vue';
+import type { Exercise } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const userText = ref('')
-const original = computed(() => props.exercise.correctionData?.originalText || '')
-const mistakes = computed(() => props.exercise.correctionData?.mistakes || [])
+const userText = ref('');
+const original = computed(() => props.exercise.correctionData?.originalText || '');
+const mistakes = computed(() => props.exercise.correctionData?.mistakes || []);
 
 onMounted(() => {
-  userText.value = original.value
-})
+  userText.value = original.value;
+});
 
 const fixedCount = computed(() => {
-  if (!userText.value) return 0
-  let count = 0
-  mistakes.value.forEach(m => {
+  if (!userText.value) return 0;
+  let count = 0;
+  mistakes.value.forEach((m) => {
     // Check if the mistake segment is gone AND the correction is present
     // This is a simple heuristic
-    const segmentMissing = !userText.value.includes(m.segment)
-    const correctionPresent = userText.value.includes(m.correction)
+    const segmentMissing = !userText.value.includes(m.segment);
+    const correctionPresent = userText.value.includes(m.correction);
     if (segmentMissing && correctionPresent) {
-      count++
+      count++;
     }
-  })
-  return count
-})
+  });
+  return count;
+});
 
-const totalMistakes = computed(() => mistakes.value.length)
+const totalMistakes = computed(() => mistakes.value.length);
 
 const submit = () => {
-  emit('submit', userText.value)
-}
+  emit('submit', userText.value);
+};
 </script>
 
 <template>
   <div class="correction-challenge">
     <div class="challenge-header">
-      <div class="icon">🔍</div>
+      <div class="icon">
+        🔍
+      </div>
       <div class="header-text">
         <h4>Teacher Mode: Error Correction</h4>
-        <p class="muted">A student wrote this Dutch text. It contains <strong>{{ totalMistakes }} errors</strong>. Fix them to improve the text.</p>
+        <p class="muted">
+          A student wrote this Dutch text. It contains <strong>{{ totalMistakes }} errors</strong>. Fix them to improve the text.
+        </p>
       </div>
     </div>
 
     <div class="editor-container">
       <div class="label-row">
         <span>Editing Student Work</span>
-        <span class="status" :class="{ all: fixedCount === totalMistakes }">
+        <span
+          class="status"
+          :class="{ all: fixedCount === totalMistakes }"
+        >
           {{ fixedCount }} / {{ totalMistakes }} fixed
         </span>
       </div>
-      <textarea 
-        v-model="userText" 
-        class="editor" 
+      <textarea
+        v-model="userText"
+        class="editor"
         rows="8"
         placeholder="Fix the errors here..."
-      ></textarea>
+      />
     </div>
 
-    <div class="hints-box" v-if="fixedCount < totalMistakes">
+    <div
+      v-if="fixedCount < totalMistakes"
+      class="hints-box"
+    >
       <span class="hint-title">Common pitfalls to check:</span>
       <ul class="hint-list">
         <li>Verb position (V2 rule vs Subordinate clauses)</li>
@@ -76,14 +86,17 @@ const submit = () => {
     </div>
 
     <div class="actions">
-      <button 
-        class="button primary full-width" 
+      <button
+        class="button primary full-width"
         :disabled="userText === original"
         @click="submit"
       >
         Finalize Corrections
       </button>
-      <button class="button secondary full-width" @click="userText = original">
+      <button
+        class="button secondary full-width"
+        @click="userText = original"
+      >
         Reset to Original
       </button>
     </div>

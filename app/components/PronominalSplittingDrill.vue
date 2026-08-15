@@ -1,43 +1,48 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const ruleBadge = computed(() => {
   switch (props.exercise.pronominalSplittingData?.clauseType) {
-    case 'main-clause': return 'Hoofdzin (R-woord vroeg, Voorzetsel achteraan)'
-    case 'subclause': return 'Bijzin (R-woord na voegwoord/onderwerp, Voorzetsel vóór werkwoordcluster)'
-    case 'question-waar': return 'Vraagzin met Waar...? (Gescheiden vraagconstructie)'
-    case 'fronted-topic': return 'Topicalisatie / Nadruk (Daar/Hier... vooraan)'
-    default: return 'Splitsing van het Voornaamwoordelijk Bijwoord'
+    case 'main-clause': return 'Hoofdzin (R-woord vroeg, Voorzetsel achteraan)';
+    case 'subclause': return 'Bijzin (R-woord na voegwoord/onderwerp, Voorzetsel vóór werkwoordcluster)';
+    case 'question-waar': return 'Vraagzin met Waar...? (Gescheiden vraagconstructie)';
+    case 'fronted-topic': return 'Topicalisatie / Nadruk (Daar/Hier... vooraan)';
+    default: return 'Splitsing van het Voornaamwoordelijk Bijwoord';
   }
-})
+});
 </script>
 
 <template>
   <div class="pronominal-splitting-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Pronominal Adverb Splitting &amp; Syntactic Placement</div>
-        <div class="badge" :class="exercise.pronominalSplittingData?.clauseType">
+        <div class="eyebrow">
+          B2 Pronominal Adverb Splitting &amp; Syntactic Placement
+        </div>
+        <div
+          class="badge"
+          :class="exercise.pronominalSplittingData?.clauseType"
+        >
           {{ ruleBadge }}
         </div>
       </div>
@@ -45,7 +50,7 @@ const ruleBadge = computed(() => {
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          In natural and spoken Dutch, pronominal adverbs (<em>er, hier, daar, waar, nergens, overal, ergens</em> + preposition) 
+          In natural and spoken Dutch, pronominal adverbs (<em>er, hier, daar, waar, nergens, overal, ergens</em> + preposition)
           are systematically <strong>split</strong>. The R-word appears early in the clause, while the preposition stays glued directly in front of the verbal cluster.
         </p>
       </div>
@@ -69,24 +74,36 @@ const ruleBadge = computed(() => {
           </div>
         </div>
 
-        <div v-if="exercise.pronominalSplittingData?.combinedForm" class="combined-note">
+        <div
+          v-if="exercise.pronominalSplittingData?.combinedForm"
+          class="combined-note"
+        >
           <span class="note-tag">Traditionele / Ongesplitste vorm:</span>
           <code class="combined-code">{{ exercise.pronominalSplittingData.combinedForm }}</code>
           <span class="vs-label">➔ Gespleten vorm klinkt veel natuurlijker!</span>
         </div>
 
         <div class="source-box">
-          <div class="box-label">Context / Situatie (Prompt Context)</div>
-          <p class="source-text">{{ exercise.pronominalSplittingData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context / Situatie (Prompt Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.pronominalSplittingData?.contextPrompt }}
+          </p>
         </div>
 
         <!-- Available Elements if provided -->
-        <div v-if="exercise.pronominalSplittingData?.providedElements?.length" class="elements-pool-card">
-          <div class="pool-label">Mee te nemen elementen:</div>
+        <div
+          v-if="exercise.pronominalSplittingData?.providedElements?.length"
+          class="elements-pool-card"
+        >
+          <div class="pool-label">
+            Mee te nemen elementen:
+          </div>
           <div class="tokens-list">
-            <span 
-              v-for="(tok, idx) in exercise.pronominalSplittingData.providedElements" 
-              :key="idx" 
+            <span
+              v-for="(tok, idx) in exercise.pronominalSplittingData.providedElements"
+              :key="idx"
               class="token-chip"
             >
               {{ tok }}
@@ -94,19 +111,33 @@ const ruleBadge = computed(() => {
           </div>
         </div>
 
-        <div v-if="exercise.pronominalSplittingData?.structureFormula" class="formula-box">
-          <div class="formula-label">Syntactisch Bouwplan (Word Order Formula)</div>
+        <div
+          v-if="exercise.pronominalSplittingData?.structureFormula"
+          class="formula-box"
+        >
+          <div class="formula-label">
+            Syntactisch Bouwplan (Word Order Formula)
+          </div>
           <code class="formula-code">{{ exercise.pronominalSplittingData.structureFormula }}</code>
         </div>
 
-        <div v-if="exercise.pronominalSplittingData?.hint" class="hint-container">
+        <div
+          v-if="exercise.pronominalSplittingData?.hint"
+          class="hint-container"
+        >
           <span class="hint-icon">💡</span>
           <span class="hint-text">{{ exercise.pronominalSplittingData.hint }}</span>
         </div>
       </div>
 
-      <form class="production-form" @submit.prevent="handleSubmit">
-        <label class="form-label" for="splitting-input">
+      <form
+        class="production-form"
+        @submit.prevent="handleSubmit"
+      >
+        <label
+          class="form-label"
+          for="splitting-input"
+        >
           Formuleer de natuurlijke Nederlandse zin met de correcte gespleten woordvolgorde:
         </label>
         <textarea
@@ -122,16 +153,16 @@ const ruleBadge = computed(() => {
 
         <div class="form-actions">
           <div class="input-helpers">
-            <VoiceInput 
+            <VoiceInput
               v-if="!feedback"
-              @result="(t) => { answer = t; handleSubmit() }" 
+              @result="(t) => { answer = t; handleSubmit() }"
             />
             <span class="shortcut-tip">Druk op <strong>Enter ↵</strong> om te controleren</span>
           </div>
 
-          <button 
-            v-if="!feedback" 
-            type="submit" 
+          <button
+            v-if="!feedback"
+            type="submit"
             class="button primary"
             :disabled="!answer.trim()"
           >
@@ -148,14 +179,14 @@ const ruleBadge = computed(() => {
 .drill-card { padding: 32px; border-top: 6px solid #0284c7; }
 .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #0284c7; }
-.badge { 
-  font-size: 12px; 
-  font-weight: 600; 
-  padding: 4px 10px; 
-  border-radius: 9999px; 
-  background: #f0f9ff; 
-  color: #0369a1; 
-  border: 1px solid #bae6fd; 
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
 }
 .badge.main-clause { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 .badge.subclause { background: #fdf4ff; color: #86198f; border-color: #f5d0fe; }
@@ -261,25 +292,25 @@ const ruleBadge = computed(() => {
   font-size: 12px;
 }
 
-.source-box { 
-  background: #fdfcf9; 
-  border: 1px solid #e7e3da; 
-  border-radius: 12px; 
-  padding: 16px; 
+.source-box {
+  background: #fdfcf9;
+  border: 1px solid #e7e3da;
+  border-radius: 12px;
+  padding: 16px;
 }
-.box-label { 
-  font-size: 11px; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.04em; 
-  color: #8c827a; 
-  margin-bottom: 6px; 
+.box-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8c827a;
+  margin-bottom: 6px;
 }
-.source-text { 
-  font-size: 16px; 
-  line-height: 1.5; 
-  color: #2c2825; 
-  margin: 0; 
+.source-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2c2825;
+  margin: 0;
   font-weight: 500;
 }
 

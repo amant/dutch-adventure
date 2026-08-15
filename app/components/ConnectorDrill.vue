@@ -1,38 +1,50 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit']);
+const response = defineModel<string>();
 
 const selectOption = (option: string) => {
-  if (props.feedback) return
-  response.value = option
-}
+  if (props.feedback) return;
+  response.value = option;
+};
 </script>
 
 <template>
   <div class="connector-drill">
     <div class="passage-card card">
-      <p class="context">{{ exercise.context }}</p>
+      <p class="context">
+        {{ exercise.context }}
+      </p>
       <div class="sentence-with-gap">
-        <span v-for="(part, i) in exercise.prompt.split('___')" :key="i">
+        <span
+          v-for="(part, i) in exercise.prompt.split('___')"
+          :key="i"
+        >
           {{ part }}
-          <span v-if="i < exercise.prompt.split('___').length - 1" class="gap" :class="{ filled: response, correct: feedback?.outcome === 'correct', wrong: feedback?.outcome === 'retry' && response === feedback.target }">
+          <span
+            v-if="i < exercise.prompt.split('___').length - 1"
+            class="gap"
+            :class="{ filled: response, correct: feedback?.outcome === 'correct', wrong: feedback?.outcome === 'retry' && response === feedback.target }"
+          >
             {{ response || '...' }}
           </span>
         </span>
       </div>
     </div>
 
-    <div v-if="!feedback" class="options-grid">
-      <button 
-        v-for="opt in exercise.connectorOptions" 
-        :key="opt.text" 
+    <div
+      v-if="!feedback"
+      class="options-grid"
+    >
+      <button
+        v-for="opt in exercise.connectorOptions"
+        :key="opt.text"
         class="option-button"
         :class="{ selected: response === opt.text }"
         @click="selectOption(opt.text)"
@@ -41,11 +53,23 @@ const selectOption = (option: string) => {
       </button>
     </div>
 
-    <div v-if="!feedback" class="footer">
-      <button class="button" @click="emit('submit')" :disabled="!response">Check Connector</button>
+    <div
+      v-if="!feedback"
+      class="footer"
+    >
+      <button
+        class="button"
+        :disabled="!response"
+        @click="emit('submit')"
+      >
+        Check Connector
+      </button>
     </div>
 
-    <div v-if="feedback && feedback.explanation" class="explanation-card">
+    <div
+      v-if="feedback && feedback.explanation"
+      class="explanation-card"
+    >
       <p>{{ feedback.explanation }}</p>
     </div>
   </div>

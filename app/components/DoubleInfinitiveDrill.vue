@@ -1,62 +1,72 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const typeBadge = computed(() => {
   switch (props.exercise.doubleInfinitiveData?.governingType) {
-    case 'modal': return 'Modaal Werkwoord (moeten / kunnen / willen / mogen)'
-    case 'causative-laten': return 'Causatief (laten doen / laten repareren)'
-    case 'perception': return 'Perceptiewerkwoord (horen / zien / voelen)'
-    case 'instruction-leren-helpen': return 'Instructie & Hulp (leren / helpen)'
-    case 'motion-blijven-gaan': return 'Beweging & Toestand (blijven / gaan)'
-    default: return 'Dubbele Infinitief (IPP)'
+    case 'modal': return 'Modaal Werkwoord (moeten / kunnen / willen / mogen)';
+    case 'causative-laten': return 'Causatief (laten doen / laten repareren)';
+    case 'perception': return 'Perceptiewerkwoord (horen / zien / voelen)';
+    case 'instruction-leren-helpen': return 'Instructie & Hulp (leren / helpen)';
+    case 'motion-blijven-gaan': return 'Beweging & Toestand (blijven / gaan)';
+    default: return 'Dubbele Infinitief (IPP)';
   }
-})
+});
 </script>
 
 <template>
   <div class="double-infinitive-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Verb Clusters & Complex Tenses</div>
-        <div class="badge">{{ typeBadge }}</div>
+        <div class="eyebrow">
+          B2 Verb Clusters & Complex Tenses
+        </div>
+        <div class="badge">
+          {{ typeBadge }}
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          Form the sentence in the compound tense using the <strong>Double Infinitive (IPP)</strong> rule. 
+          Form the sentence in the compound tense using the <strong>Double Infinitive (IPP)</strong> rule.
           When a modal, causative, perception, or instruction verb governs another infinitive, the past participle is replaced by the infinitive.
         </p>
       </div>
 
       <div class="drill-sources-view mt-6">
         <div class="source-box context-box">
-          <div class="box-label">Context / Aanleiding (Prompt Context)</div>
-          <p class="source-text">{{ exercise.doubleInfinitiveData?.sentenceContext }}</p>
+          <div class="box-label">
+            Context / Aanleiding (Prompt Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.doubleInfinitiveData?.sentenceContext }}
+          </p>
         </div>
 
         <div class="cluster-blueprint-container">
-          <div class="blueprint-label">Werkwoordcluster Schema (Verb Cluster Blueprint):</div>
+          <div class="blueprint-label">
+            Werkwoordcluster Schema (Verb Cluster Blueprint):
+          </div>
           <div class="cluster-pills">
             <span class="pill aux">Hulpwerkwoord: <strong>{{ exercise.doubleInfinitiveData?.auxiliary }}</strong></span>
             <span class="pill plus">+</span>
@@ -64,19 +74,29 @@ const typeBadge = computed(() => {
             <span class="pill plus">+</span>
             <span class="pill main">Actie: <strong>{{ exercise.doubleInfinitiveData?.mainVerb }}</strong></span>
           </div>
-          <div v-if="exercise.doubleInfinitiveData?.isSubordinate" class="subclause-indicator">
+          <div
+            v-if="exercise.doubleInfinitiveData?.isSubordinate"
+            class="subclause-indicator"
+          >
             ⚠️ <strong>Bijzin (Subclause):</strong> Plaats het hele werkwoordcluster aan het einde van de zin (bijv. <em>"...omdat we de auto <u>hebben moeten laten staan</u>"</em>).
           </div>
         </div>
 
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="source-box combined-target">
-          <div class="box-label">Jouw Zin (Voltooide Tijd met Dubbele Infinitief)</div>
+          <div class="box-label">
+            Jouw Zin (Voltooide Tijd met Dubbele Infinitief)
+          </div>
           <div class="input-wrapper">
             <textarea
               ref="textarea"
@@ -85,17 +105,23 @@ const typeBadge = computed(() => {
               placeholder="Typ hier de volledige Nederlandse zin..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.doubleInfinitiveData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.doubleInfinitiveData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.doubleInfinitiveData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -104,37 +130,64 @@ const typeBadge = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Natural Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Natural Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

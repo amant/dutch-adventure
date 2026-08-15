@@ -1,53 +1,60 @@
 <script setup lang="ts">
-import { articles } from '~/data/articles'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { articles } from '~/data/articles';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
 const getMatchStats = (articleContent: string) => {
-  const words = articleContent.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/)
-  const uniqueWords = Array.from(new Set(words.filter(w => w.length > 2)))
-  
-  const known = uniqueWords.filter(w => (memory.value.vocabulary[w]?.recognition ?? 0) > 0.5)
-  const frontier = uniqueWords.filter(w => {
-    const s = memory.value.vocabulary[w]
-    return s && s.recognition > 0.5 && s.production < 0.3
-  })
-  
-  const percentage = Math.round((known.length / (uniqueWords.length || 1)) * 100)
-  
+  const words = articleContent.toLowerCase().replace(/[.,!?;:()]/g, '').split(/\s+/);
+  const uniqueWords = Array.from(new Set(words.filter(w => w.length > 2)));
+
+  const known = uniqueWords.filter(w => (memory.value.vocabulary[w]?.recognition ?? 0) > 0.5);
+  const frontier = uniqueWords.filter((w) => {
+    const s = memory.value.vocabulary[w];
+    return s && s.recognition > 0.5 && s.production < 0.3;
+  });
+
+  const percentage = Math.round((known.length / (uniqueWords.length || 1)) * 100);
+
   return {
     percentage,
     knownCount: known.length,
     frontierCount: frontier.length,
-    totalCount: uniqueWords.length
-  }
-}
+    totalCount: uniqueWords.length,
+  };
+};
 </script>
 
 <template>
   <div class="reading-feed">
     <div class="hero">
-      <div class="eyebrow gold">AUTHENTIC TEXT ARCHIVES</div>
+      <div class="eyebrow gold">
+        AUTHENTIC TEXT ARCHIVES
+      </div>
       <h1>Authentic Dutch Reading Logs</h1>
-      <p class="muted">Read authentic Dutch chronicles adapted to your voyage level. We track every word encounter into your Language Graph.</p>
+      <p class="muted">
+        Read authentic Dutch chronicles adapted to your voyage level. We track every word encounter into your Language Graph.
+      </p>
     </div>
 
     <div class="articles-grid grid">
-      <NuxtLink 
-        v-for="article in articles" 
-        :key="article.id" 
+      <NuxtLink
+        v-for="article in articles"
+        :key="article.id"
         :to="`/reading/${article.id}`"
         class="article-card card"
       >
         <div class="article-meta">
-          <span class="level-badge" :class="article.level.toLowerCase()">{{ article.level }}</span>
+          <span
+            class="level-badge"
+            :class="article.level.toLowerCase()"
+          >{{ article.level }}</span>
           <span class="source">{{ article.source }}</span>
         </div>
         <h3>{{ article.title }}</h3>
         <p class="excerpt">{{ article.content.substring(0, 110) }}...</p>
-        
+
         <div class="article-footer">
           <div class="match">
             <div class="match-meta">
@@ -55,9 +62,15 @@ const getMatchStats = (articleContent: string) => {
               <span class="value">{{ getMatchStats(article.content).percentage }}%</span>
             </div>
             <div class="progress-bar">
-              <div class="fill" :style="{ width: getMatchStats(article.content).percentage + '%' }"></div>
+              <div
+                class="fill"
+                :style="{ width: getMatchStats(article.content).percentage + '%' }"
+              />
             </div>
-            <div v-if="getMatchStats(article.content).frontierCount > 0" class="frontier-count">
+            <div
+              v-if="getMatchStats(article.content).frontierCount > 0"
+              class="frontier-count"
+            >
               ⚡ {{ getMatchStats(article.content).frontierCount }} activation opportunities
             </div>
           </div>

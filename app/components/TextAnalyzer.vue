@@ -1,99 +1,102 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { lookupWord, type Hint } from '~/utils/dictionary'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { lookupWord, type Hint } from '~/utils/dictionary';
 
 const props = defineProps<{
-  text: string
-}>()
+  text: string;
+}>();
 
-const { recordExposure, getWordState } = useLearnerMemory()
-const selectedWord = ref<{ word: string, meaning: string, category?: string } | null>(null)
+const { recordExposure, getWordState } = useLearnerMemory();
+const selectedWord = ref<{ word: string; meaning: string; category?: string } | null>(null);
 
 const tokens = computed(() => {
-  if (!props.text) return []
+  if (!props.text) return [];
   // Split by whitespace but keep the whitespace tokens
-  const rawTokens = props.text.split(/(\s+)/)
-  
-  return rawTokens.map(token => {
+  const rawTokens = props.text.split(/(\s+)/);
+
+  return rawTokens.map((token) => {
     // If it's just whitespace, it's not a word
     if (token.match(/^\s+$/)) {
-      return { text: token, isInteractable: false }
+      return { text: token, isInteractable: false };
     }
 
-    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
-    const hint = lookupWord(cleanWord)
-    const state = getWordState(cleanWord)
+    const cleanWord = token.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
+    const hint = lookupWord(cleanWord);
+    const state = getWordState(cleanWord);
 
     return {
       text: token,
       isInteractable: !!hint || state !== 'new', // Interactable if we have a hint OR it's already in memory
       hint,
-      state
-    }
-  })
-})
+      state,
+    };
+  });
+});
 
 const stats = computed(() => {
-  const words = tokens.value.filter(t => !t.text.match(/^\s+$/))
-  const total = words.length
-  if (total === 0) return { mastered: 0, frontier: 0, recognized: 0, new: 0 }
-  
-  const counts = { mastered: 0, frontier: 0, recognized: 0, new: 0 }
-  words.forEach(w => {
-    counts[w.state as keyof typeof counts]++
-  })
+  const words = tokens.value.filter(t => !t.text.match(/^\s+$/));
+  const total = words.length;
+  if (total === 0) return { mastered: 0, frontier: 0, recognized: 0, new: 0 };
+
+  const counts = { mastered: 0, frontier: 0, recognized: 0, new: 0 };
+  words.forEach((w) => {
+    counts[w.state as keyof typeof counts]++;
+  });
 
   return {
     mastered: Math.round((counts.mastered / total) * 100),
     frontier: Math.round((counts.frontier / total) * 100),
     recognized: Math.round((counts.recognized / total) * 100),
-    new: Math.round((counts.new / total) * 100)
-  }
-})
+    new: Math.round((counts.new / total) * 100),
+  };
+});
 
 const showHint = (token: any) => {
-  const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim()
+  const cleanWord = token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim();
   if (token.hint) {
-    selectedWord.value = { word: cleanWord, ...token.hint }
+    selectedWord.value = { word: cleanWord, ...token.hint };
   } else if (token.state !== 'new') {
-    selectedWord.value = { word: cleanWord, meaning: '(In your vocabulary library)', category: 'known' }
+    selectedWord.value = { word: cleanWord, meaning: '(In your vocabulary library)', category: 'known' };
   }
-  
-  recordExposure(cleanWord)
-}
+
+  recordExposure(cleanWord);
+};
 </script>
 
 <template>
   <div class="text-analyzer">
     <div class="stats-bar card">
       <div class="stat">
-        <span class="dot mastered"></span>
+        <span class="dot mastered" />
         <span class="label">Mastered: {{ stats.mastered }}%</span>
       </div>
       <div class="stat">
-        <span class="dot frontier"></span>
+        <span class="dot frontier" />
         <span class="label">Frontier: {{ stats.frontier }}%</span>
       </div>
       <div class="stat">
-        <span class="dot recognized"></span>
+        <span class="dot recognized" />
         <span class="label">Recognized: {{ stats.recognized }}%</span>
       </div>
       <div class="stat">
-        <span class="dot new"></span>
+        <span class="dot new" />
         <span class="label">New: {{ stats.new }}%</span>
       </div>
     </div>
 
     <div class="content-box card">
-      <template v-for="(token, idx) in tokens" :key="idx">
-        <span 
-          v-if="token.isInteractable" 
-          class="word interactable" 
-          @click="showHint(token)"
+      <template
+        v-for="(token, idx) in tokens"
+        :key="idx"
+      >
+        <span
+          v-if="token.isInteractable"
+          class="word interactable"
           :class="[
             token.state,
-            { active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() }
+            { active: selectedWord?.word.toLowerCase() === token.text.toLowerCase().replace(/[.,!?;:()]/g, '').trim() },
           ]"
+          @click="showHint(token)"
         >
           {{ token.text }}
         </span>
@@ -101,13 +104,26 @@ const showHint = (token: any) => {
       </template>
     </div>
 
-    <div v-if="selectedWord" class="hint-popup card">
+    <div
+      v-if="selectedWord"
+      class="hint-popup card"
+    >
       <div class="hint-header">
         <span class="word-label">{{ selectedWord.word }}</span>
-        <span v-if="selectedWord.category" class="category-tag">{{ selectedWord.category }}</span>
-        <button class="close-btn" @click="selectedWord = null">×</button>
+        <span
+          v-if="selectedWord.category"
+          class="category-tag"
+        >{{ selectedWord.category }}</span>
+        <button
+          class="close-btn"
+          @click="selectedWord = null"
+        >
+          ×
+        </button>
       </div>
-      <p class="meaning">{{ selectedWord.meaning }}</p>
+      <p class="meaning">
+        {{ selectedWord.meaning }}
+      </p>
     </div>
   </div>
 </template>

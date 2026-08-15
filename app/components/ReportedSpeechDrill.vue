@@ -1,69 +1,92 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const typeLabel = computed(() => {
   switch (props.exercise.reportedSpeechData?.quoteType) {
-    case 'statement': return 'Statement (dat-clause)'
-    case 'question': return 'Indirect Question (of / vraagwoord)'
-    case 'instruction': return 'Instruction / Request'
-    default: return 'Indirect Discourse'
+    case 'statement': return 'Statement (dat-clause)';
+    case 'question': return 'Indirect Question (of / vraagwoord)';
+    case 'instruction': return 'Instruction / Request';
+    default: return 'Indirect Discourse';
   }
-})
+});
 </script>
 
 <template>
   <div class="reported-speech-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Mediation & Communication</div>
-        <div class="badge">{{ typeLabel }}</div>
+        <div class="eyebrow">
+          B2 Mediation & Communication
+        </div>
+        <div class="badge">
+          {{ typeLabel }}
+        </div>
       </div>
 
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Transform the direct quote into reported speech (indirecte rede) with the correct conjunction and word order.</p>
+        <p class="muted">
+          Transform the direct quote into reported speech (indirecte rede) with the correct conjunction and word order.
+        </p>
       </div>
 
       <div class="transformation-view mt-6">
         <div class="box direct">
-          <div class="box-label">Direct Quote (Directe rede)</div>
+          <div class="box-label">
+            Direct Quote (Directe rede)
+          </div>
           <div class="quote-container">
-            <div v-if="exercise.reportedSpeechData?.speaker" class="speaker-tag">
+            <div
+              v-if="exercise.reportedSpeechData?.speaker"
+              class="speaker-tag"
+            >
               {{ exercise.reportedSpeechData.speaker }}:
             </div>
-            <p class="quote-text">“{{ exercise.reportedSpeechData?.directQuote }}”</p>
+            <p class="quote-text">
+              “{{ exercise.reportedSpeechData?.directQuote }}”
+            </p>
           </div>
         </div>
-        
+
         <div class="arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
 
         <div class="box reported">
-          <div class="box-label">Reported Speech (Indirecte rede)</div>
-          <div v-if="exercise.reportedSpeechData?.reportingClause" class="starter-clause">
+          <div class="box-label">
+            Reported Speech (Indirecte rede)
+          </div>
+          <div
+            v-if="exercise.reportedSpeechData?.reportingClause"
+            class="starter-clause"
+          >
             <span>{{ exercise.reportedSpeechData.reportingClause }}</span>
           </div>
           <div class="input-wrapper">
@@ -74,17 +97,23 @@ const typeLabel = computed(() => {
               placeholder="Type the reported sentence..."
               :disabled="!!feedback"
               @keydown.enter.prevent="handleSubmit"
-            ></textarea>
-            <div v-if="exercise.reportedSpeechData?.hint" class="hint-text">
+            />
+            <div
+              v-if="exercise.reportedSpeechData?.hint"
+              class="hint-text"
+            >
               Hint: <span>{{ exercise.reportedSpeechData.hint }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-8">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-8"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -93,37 +122,64 @@ const typeLabel = computed(() => {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
           <span class="score-badge">+{{ feedback.changeModifier }} mastery</span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Teacher's Reported Correction:</div>
-          <TeacherRedline 
-            :original="answer" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Reported Correction:
+          </div>
+          <TeacherRedline
+            :original="answer"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="correction-note mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="correction-note mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <div v-if="feedback.miniLesson" class="mini-lesson mt-4">
+        <div
+          v-if="feedback.miniLesson"
+          class="mini-lesson mt-4"
+        >
           <div class="lesson-header">
             <span class="lesson-icon">🎓</span>
             <strong>{{ feedback.miniLesson.title }}</strong>
           </div>
           <p>{{ feedback.miniLesson.content }}</p>
           <div class="example-comparison mt-2">
-            <div class="ex-item wrong">Incorrect: {{ feedback.miniLesson.example.wrong }}</div>
-            <div class="ex-item right">Correct: {{ feedback.miniLesson.example.right }}</div>
+            <div class="ex-item wrong">
+              Incorrect: {{ feedback.miniLesson.example.wrong }}
+            </div>
+            <div class="ex-item right">
+              Correct: {{ feedback.miniLesson.example.right }}
+            </div>
           </div>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue Practice</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue Practice
+        </button>
       </div>
     </div>
   </div>

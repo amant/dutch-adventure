@@ -1,118 +1,149 @@
 <script setup lang="ts">
-import { chapters } from '~/data/chapters'
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
+import { chapters } from '~/data/chapters';
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
-const levels = ['A1', 'A2', 'B1', 'B2'] as const
+const levels = ['A1', 'A2', 'B1', 'B2'] as const;
 
 const getConceptState = (type: 'vocabulary' | 'grammar', id: string) => {
-  return memory.value[type][id]
-}
+  return memory.value[type][id];
+};
 
 const getMastery = (type: 'vocabulary' | 'grammar', id: string) => {
-  const state = getConceptState(type, id)
-  if (!state) return 0
-  return (state.production + state.automaticity + state.speaking + state.recognition) / 4
-}
+  const state = getConceptState(type, id);
+  if (!state) return 0;
+  return (state.production + state.automaticity + state.speaking + state.recognition) / 4;
+};
 
 const chapterData = computed(() => {
-  return chapters.map(c => {
-    const vocab = new Set<string>()
-    const grammar = new Set<string>()
-    c.stages.forEach(s => s.exercises.forEach(ex => {
-      ex.vocabulary?.forEach(v => vocab.add(v))
-      ex.grammar?.forEach(g => grammar.add(g))
-    }))
-    
-    const vList = Array.from(vocab).map(v => ({ id: v, type: 'vocabulary' as const, mastery: getMastery('vocabulary', v) }))
-    const gList = Array.from(grammar).map(g => ({ id: g, type: 'grammar' as const, mastery: getMastery('grammar', g) }))
-    
-    const totalMastery = [...vList, ...gList].reduce((acc, curr) => acc + curr.mastery, 0)
-    const avgMastery = [...vList, ...gList].length > 0 ? totalMastery / [...vList, ...gList].length : 0
+  return chapters.map((c) => {
+    const vocab = new Set<string>();
+    const grammar = new Set<string>();
+    c.stages.forEach(s => s.exercises.forEach((ex) => {
+      ex.vocabulary?.forEach(v => vocab.add(v));
+      ex.grammar?.forEach(g => grammar.add(g));
+    }));
+
+    const vList = Array.from(vocab).map(v => ({ id: v, type: 'vocabulary' as const, mastery: getMastery('vocabulary', v) }));
+    const gList = Array.from(grammar).map(g => ({ id: g, type: 'grammar' as const, mastery: getMastery('grammar', g) }));
+
+    const totalMastery = [...vList, ...gList].reduce((acc, curr) => acc + curr.mastery, 0);
+    const avgMastery = [...vList, ...gList].length > 0 ? totalMastery / [...vList, ...gList].length : 0;
 
     return {
       ...c,
       concepts: [...vList, ...gList],
-      avgMastery
-    }
-  })
-})
+      avgMastery,
+    };
+  });
+});
 
-const filteredChapters = (level: string) => chapterData.value.filter(c => c.level === level)
+const filteredChapters = (level: string) => chapterData.value.filter(c => c.level === level);
 
-const activeConcept = ref<{ id: string, type: 'vocabulary' | 'grammar', level: string, chapterTitle: string } | null>(null)
+const activeConcept = ref<{ id: string; type: 'vocabulary' | 'grammar'; level: string; chapterTitle: string } | null>(null);
 
 const conceptRelations = computed(() => {
-  if (!activeConcept.value) return []
-  
-  const relations: { fromChapter: string, toChapter: string }[] = []
-  chapterData.value.forEach(c => {
+  if (!activeConcept.value) return [];
+
+  const relations: { fromChapter: string; toChapter: string }[] = [];
+  chapterData.value.forEach((c) => {
     if (c.concepts.some(con => con.id === activeConcept.value?.id) && c.title !== activeConcept.value?.chapterTitle) {
-      relations.push({ fromChapter: activeConcept.value!.chapterTitle, toChapter: c.title })
+      relations.push({ fromChapter: activeConcept.value!.chapterTitle, toChapter: c.title });
     }
-  })
-  return relations
-})
+  });
+  return relations;
+});
 
 const suggestedChapter = computed(() => {
   // Find the first chapter that has < 80% mastery but has some encounters
   // Or the first chapter that has 0 encounters but is at the "frontier" of their level
-  const frontier = chapterData.value.find(c => c.avgMastery < 80)
-  return frontier
-})
+  const frontier = chapterData.value.find(c => c.avgMastery < 80);
+  return frontier;
+});
 </script>
 
 <template>
   <div class="graph-page">
     <div class="hero-flex">
       <div class="hero">
-        <div class="eyebrow">Language Graph</div>
+        <div class="eyebrow">
+          Language Graph
+        </div>
         <h1>Your Dutch Network</h1>
-        <p class="muted">Every concept you learn connects to another. Watch your network grow as you build capabilities.</p>
+        <p class="muted">
+          Every concept you learn connects to another. Watch your network grow as you build capabilities.
+        </p>
       </div>
 
-      <div v-if="suggestedChapter" class="suggestion card">
-        <div class="eyebrow">Suggested Next Step</div>
+      <div
+        v-if="suggestedChapter"
+        class="suggestion card"
+      >
+        <div class="eyebrow">
+          Suggested Next Step
+        </div>
         <h3>{{ suggestedChapter.title }}</h3>
-        <p class="muted">{{ suggestedChapter.capability }}</p>
-        <NuxtLink :to="`/chapter/${suggestedChapter.slug}`" class="button secondary">Continue Path</NuxtLink>
+        <p class="muted">
+          {{ suggestedChapter.capability }}
+        </p>
+        <NuxtLink
+          :to="`/chapter/${suggestedChapter.slug}`"
+          class="button secondary"
+        >Continue Path</NuxtLink>
       </div>
     </div>
 
     <div class="graph-container">
-      <div v-for="level in levels" :key="level" class="level-column">
+      <div
+        v-for="level in levels"
+        :key="level"
+        class="level-column"
+      >
         <div class="level-header">
           <span class="level-tag">{{ level }}</span>
         </div>
-        
+
         <div class="chapters-stack">
-          <div v-for="chapter in filteredChapters(level)" :key="chapter.slug" class="chapter-node" :class="{ related: conceptRelations.some(r => r.toChapter === chapter.title) }">
+          <div
+            v-for="chapter in filteredChapters(level)"
+            :key="chapter.slug"
+            class="chapter-node"
+            :class="{ related: conceptRelations.some(r => r.toChapter === chapter.title) }"
+          >
             <div class="chapter-info">
               <h3>{{ chapter.title }}</h3>
               <div class="mastery-mini-bar">
-                <div class="fill" :style="{ width: chapter.avgMastery + '%' }"></div>
+                <div
+                  class="fill"
+                  :style="{ width: chapter.avgMastery + '%' }"
+                />
               </div>
             </div>
-            
+
             <div class="concept-cloud">
-              <div 
-                v-for="concept in chapter.concepts" 
+              <div
+                v-for="concept in chapter.concepts"
                 :key="concept.id"
                 class="concept-dot"
                 :class="[concept.type, { active: activeConcept?.id === concept.id, highlighted: activeConcept?.id === concept.id }]"
-                :style="{ 
+                :style="{
                   opacity: 0.3 + (concept.mastery / 100) * 0.7,
-                  transform: `scale(${0.8 + (concept.mastery / 100) * 0.4})`
+                  transform: `scale(${0.8 + (concept.mastery / 100) * 0.4})`,
                 }"
                 @mouseenter="activeConcept = { ...concept, level, chapterTitle: chapter.title }"
                 @mouseleave="activeConcept = null"
               >
-                <div class="tooltip" v-if="activeConcept?.id === concept.id">
+                <div
+                  v-if="activeConcept?.id === concept.id"
+                  class="tooltip"
+                >
                   <strong>{{ concept.id }}</strong>
                   <span>{{ Math.round(concept.mastery) }}% mastered</span>
-                  <div class="hits">Hits: {{ getConceptState(concept.type, concept.id)?.successes || 0 }} / {{ getConceptState(concept.type, concept.id)?.encounters || 0 }}</div>
+                  <div class="hits">
+                    Hits: {{ getConceptState(concept.type, concept.id)?.successes || 0 }} / {{ getConceptState(concept.type, concept.id)?.encounters || 0 }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -122,9 +153,15 @@ const suggestedChapter = computed(() => {
     </div>
 
     <div class="legend">
-      <div class="legend-item"><span class="dot vocabulary"></span> Vocabulary</div>
-      <div class="legend-item"><span class="dot grammar"></span> Grammar</div>
-      <div class="legend-item"><span class="dot-scale"></span> Mastery (Size/Opacity)</div>
+      <div class="legend-item">
+        <span class="dot vocabulary" /> Vocabulary
+      </div>
+      <div class="legend-item">
+        <span class="dot grammar" /> Grammar
+      </div>
+      <div class="legend-item">
+        <span class="dot-scale" /> Mastery (Size/Opacity)
+      </div>
     </div>
   </div>
 </template>
@@ -330,10 +367,10 @@ const suggestedChapter = computed(() => {
   &.grammar { background: $gold-deep; }
 }
 
-.dot-scale { 
+.dot-scale {
   width: 14px;
   height: 14px;
-  border-radius: 50%; 
+  border-radius: 50%;
   background: linear-gradient(135deg, #cbd5e1, $ocean-primary);
 }
 

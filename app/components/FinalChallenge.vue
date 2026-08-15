@@ -1,38 +1,45 @@
 <script setup lang="ts">
-import type { Exercise } from '~/types/learning'
+import type { Exercise } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  modelValue: string
-  disabled?: boolean
-}>()
+  exercise: Exercise;
+  modelValue: string;
+  disabled?: boolean;
+}>();
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit']);
 
 const onInput = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLTextAreaElement).value)
-}
+  emit('update:modelValue', (e.target as HTMLTextAreaElement).value);
+};
 
 const handleVoice = (text: string) => {
-  emit('update:modelValue', text)
+  emit('update:modelValue', text);
   // We don't auto-submit for long challenges, just populate the text
-}
+};
 
 const wordCount = computed(() => {
-  return props.modelValue.trim() ? props.modelValue.trim().split(/\s+/).length : 0
-})
+  return props.modelValue.trim() ? props.modelValue.trim().split(/\s+/).length : 0;
+});
 
 const isLengthMet = computed(() => {
-  return !props.exercise.minimumLength || wordCount.value >= props.exercise.minimumLength
-})
+  return !props.exercise.minimumLength || wordCount.value >= props.exercise.minimumLength;
+});
 </script>
 
 <template>
   <div class="final-challenge">
     <div class="mission-prompt">
-      <div class="eyebrow">The Mission</div>
+      <div class="eyebrow">
+        The Mission
+      </div>
       <h2>{{ exercise.prompt }}</h2>
-      <p v-if="exercise.context" class="context">{{ exercise.context }}</p>
+      <p
+        v-if="exercise.context"
+        class="context"
+      >
+        {{ exercise.context }}
+      </p>
     </div>
 
     <div class="writing-container">
@@ -40,21 +47,29 @@ const isLengthMet = computed(() => {
         :value="modelValue"
         :placeholder="exercise.placeholder || 'Write your response here...'"
         :disabled="disabled"
-        @input="onInput"
         rows="6"
         autofocus
-      ></textarea>
-      <div v-if="!disabled" class="voice-fab">
+        @input="onInput"
+      />
+      <div
+        v-if="!disabled"
+        class="voice-fab"
+      >
         <VoiceInput @result="handleVoice" />
       </div>
-      
+
       <div class="footer">
         <div class="stats">
-          <span :class="{ 'error': !isLengthMet && modelValue.length > 0 }">
+          <span :class="{ error: !isLengthMet && modelValue.length > 0 }">
             {{ wordCount }} / {{ exercise.minimumLength || 0 }} words
           </span>
         </div>
-        <div v-if="!disabled" class="hint">Press Submit when you're ready for teacher evaluation.</div>
+        <div
+          v-if="!disabled"
+          class="hint"
+        >
+          Press Submit when you're ready for teacher evaluation.
+        </div>
       </div>
     </div>
   </div>

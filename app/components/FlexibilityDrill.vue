@@ -1,46 +1,56 @@
 <script setup lang="ts">
-import type { Exercise } from '~/types/learning'
+import type { Exercise } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  modelValue: string
-  disabled?: boolean
-}>()
+  exercise: Exercise;
+  modelValue: string;
+  disabled?: boolean;
+}>();
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit']);
 
 const onInput = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLInputElement).value)
-}
+  emit('update:modelValue', (e.target as HTMLInputElement).value);
+};
 
 const handleVoice = (text: string) => {
-  emit('update:modelValue', text)
-  emit('submit', { isSpeaking: true })
-}
+  emit('update:modelValue', text);
+  emit('submit', { isSpeaking: true });
+};
 
 const onKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && !props.disabled) {
-    emit('submit')
+    emit('submit');
   }
-}
+};
 </script>
 
 <template>
   <div class="flexibility-drill">
     <div class="source-sentence">
-      <div class="eyebrow">Original Sentence</div>
+      <div class="eyebrow">
+        Original Sentence
+      </div>
       <p>{{ exercise.context }}</p>
     </div>
 
     <div class="constraint-box">
-      <div class="eyebrow">The Challenge</div>
+      <div class="eyebrow">
+        The Challenge
+      </div>
       <p>{{ exercise.prompt }}</p>
-      
+
       <div class="tags">
-        <span v-if="exercise.requiredWords?.length" class="tag required">
+        <span
+          v-if="exercise.requiredWords?.length"
+          class="tag required"
+        >
           Use: {{ exercise.requiredWords.join(', ') }}
         </span>
-        <span v-if="exercise.forbiddenWords?.length" class="tag forbidden">
+        <span
+          v-if="exercise.forbiddenWords?.length"
+          class="tag forbidden"
+        >
           Avoid: {{ exercise.forbiddenWords.join(', ') }}
         </span>
       </div>
@@ -52,11 +62,14 @@ const onKeydown = (e: KeyboardEvent) => {
         :value="modelValue"
         :placeholder="exercise.placeholder || 'Type your alternative version...'"
         :disabled="disabled"
+        autofocus
         @input="onInput"
         @keydown="onKeydown"
-        autofocus
+      >
+      <VoiceInput
+        v-if="!disabled"
+        @result="handleVoice"
       />
-      <VoiceInput v-if="!disabled" @result="handleVoice" />
     </div>
   </div>
 </template>

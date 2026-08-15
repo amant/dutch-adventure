@@ -1,75 +1,112 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import { idioms } from '~/data/idioms'
-import type { SkillDimension } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { idioms } from '~/data/idioms';
+import type { SkillDimension } from '~/types/learning';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
-const dimensions: { id: SkillDimension, label: string }[] = [
+const dimensions: { id: SkillDimension; label: string }[] = [
   { id: 'recognition', label: 'Recognition' },
   { id: 'meaning', label: 'Meaning' },
   { id: 'production', label: 'Production' },
-  { id: 'idiomatic', label: 'Idiomatic Use' }
-]
+  { id: 'idiomatic', label: 'Idiomatic Use' },
+];
 
 const idiomPoints = computed(() => {
-  return Object.entries(memory.value.idioms || {}).sort(([a], [b]) => a.localeCompare(b))
-})
+  return Object.entries(memory.value.idioms || {}).sort(([a], [b]) => a.localeCompare(b));
+});
 
 const getIdiomData = (phrase: string) => {
-  return idioms.find(i => i.phrase === phrase)
-}
+  return idioms.find(i => i.phrase === phrase);
+};
 </script>
 
 <template>
   <section class="idioms-view">
-    <div class="eyebrow gold">TREASURE VAULT</div>
+    <div class="eyebrow gold">
+      TREASURE VAULT
+    </div>
     <h1>Idiom & Expression Library</h1>
-    <p class="muted">Authentic, colloquial Dutch phrases and expressions that give your speech true native nuance and flair.</p>
+    <p class="muted">
+      Authentic, colloquial Dutch phrases and expressions that give your speech true native nuance and flair.
+    </p>
 
-    <div v-if="idioms.length === 0" class="empty-state card">
-      <div class="empty-icon">💎</div>
+    <div
+      v-if="idioms.length === 0"
+      class="empty-state card"
+    >
+      <div class="empty-icon">
+        💎
+      </div>
       <h3>No Idioms Found in Vault</h3>
-      <p class="muted">Check back as new authentic expressions are discovered.</p>
+      <p class="muted">
+        Check back as new authentic expressions are discovered.
+      </p>
     </div>
 
-    <div v-else class="idiom-grid">
-      <div 
-        v-for="idiom in idioms" 
-        :key="idiom.phrase" 
-        class="card idiom-card" 
+    <div
+      v-else
+      class="idiom-grid"
+    >
+      <div
+        v-for="idiom in idioms"
+        :key="idiom.phrase"
+        class="card idiom-card"
         :class="{ mastered: (memory.idioms?.[idiom.phrase]?.idiomatic || 0) > 80 }"
       >
         <div class="idiom-header">
           <div>
             <h3>{{ idiom.phrase }}</h3>
-            <p class="literal">Literal: "{{ idiom.literal }}"</p>
+            <p class="literal">
+              Literal: "{{ idiom.literal }}"
+            </p>
           </div>
-          <div v-if="memory.idioms && memory.idioms[idiom.phrase]" class="encounter-badge">
+          <div
+            v-if="memory.idioms && memory.idioms[idiom.phrase]"
+            class="encounter-badge"
+          >
             {{ memory.idioms[idiom.phrase]?.successes || 0 }}/{{ memory.idioms[idiom.phrase]?.encounters || 0 }} hits
           </div>
-          <div v-else class="new-badge">Discovered</div>
+          <div
+            v-else
+            class="new-badge"
+          >
+            Discovered
+          </div>
         </div>
 
         <div class="meaning">
           <strong>Meaning:</strong> {{ idiom.meaning }}
         </div>
-        
+
         <div class="example">
           <strong>Context:</strong> "{{ idiom.example }}"
         </div>
 
-        <div v-if="memory.idioms && memory.idioms[idiom.phrase]" class="dimensions">
-          <div v-for="dim in dimensions" :key="dim.id" class="dimension-row">
+        <div
+          v-if="memory.idioms && memory.idioms[idiom.phrase]"
+          class="dimensions"
+        >
+          <div
+            v-for="dim in dimensions"
+            :key="dim.id"
+            class="dimension-row"
+          >
             <span class="dim-label">{{ dim.label }}</span>
             <div class="dim-bar-container">
-              <div class="dim-bar" :style="{ width: `${Number(memory.idioms[idiom.phrase]?.[dim.id] || 0)}%` }"></div>
+              <div
+                class="dim-bar"
+                :style="{ width: `${Number(memory.idioms[idiom.phrase]?.[dim.id] || 0)}%` }"
+              />
             </div>
             <span class="dim-value">{{ Math.round(Number(memory.idioms[idiom.phrase]?.[dim.id] || 0)) }}%</span>
           </div>
         </div>
-        <div v-else class="unlock-hint">
+        <div
+          v-else
+          class="unlock-hint"
+        >
           Encounter this idiom in a mission to start tracking your mastery!
         </div>
       </div>

@@ -1,73 +1,122 @@
 <script setup lang="ts">
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next']);
+const response = defineModel<string>();
 
 function handleSubmit() {
-  emit('submit')
+  emit('submit');
 }
 </script>
 
 <template>
   <div class="native-mirroring">
     <div class="scenario card">
-      <div class="eyebrow">Scenario</div>
-      <p class="prompt">{{ exercise.prompt }}</p>
+      <div class="eyebrow">
+        Scenario
+      </div>
+      <p class="prompt">
+        {{ exercise.prompt }}
+      </p>
     </div>
 
     <div class="comparison-grid">
       <div class="card stiff-version">
-        <div class="eyebrow">Stiff / Literal</div>
-        <p class="stiff-text">"{{ exercise.context }}"</p>
+        <div class="eyebrow">
+          Stiff / Literal
+        </div>
+        <p class="stiff-text">
+          "{{ exercise.context }}"
+        </p>
         <span class="tag">Grammatically correct but sounds unnatural</span>
       </div>
-      
-      <div class="arrow">→</div>
+
+      <div class="arrow">
+        →
+      </div>
 
       <div class="card natural-version">
-        <div class="eyebrow">Your Task</div>
+        <div class="eyebrow">
+          Your Task
+        </div>
         <p>Make it sound like a native speaker. Use particles, common collocations, or different word order.</p>
-        
+
         <div class="input-area mt-4">
-          <textarea 
-            v-model="response" 
-            placeholder="Type the natural version..." 
+          <textarea
+            v-model="response"
+            placeholder="Type the natural version..."
             rows="3"
             :disabled="!!feedback"
           />
           <div class="actions mt-2">
-            <VoiceInput v-if="!feedback" @result="(t) => { response = t; handleSubmit() }" />
-            <button v-if="!feedback" class="button primary" @click="handleSubmit">Check Naturalness</button>
+            <VoiceInput
+              v-if="!feedback"
+              @result="(t) => { response = t; handleSubmit() }"
+            />
+            <button
+              v-if="!feedback"
+              class="button primary"
+              @click="handleSubmit"
+            >
+              Check Naturalness
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-container mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-container mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
-          <span class="badge" :class="feedback.outcome">{{ feedback.outcome }}</span>
-          <div v-if="feedback.pragmaticScore !== undefined" class="score-pill">
+          <span
+            class="badge"
+            :class="feedback.outcome"
+          >{{ feedback.outcome }}</span>
+          <div
+            v-if="feedback.pragmaticScore !== undefined"
+            class="score-pill"
+          >
             Pragmatic Score: {{ feedback.pragmaticScore }}%
           </div>
         </div>
-        
-        <p class="message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="teacher-tip mt-4">
-          <div class="eyebrow">Native Mirror</div>
-          <p class="natural-text">"{{ feedback.teacherCorrection.natural }}"</p>
-          <p class="explanation">{{ feedback.teacherCorrection.explanation }}</p>
+        <p class="message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="teacher-tip mt-4"
+        >
+          <div class="eyebrow">
+            Native Mirror
+          </div>
+          <p class="natural-text">
+            "{{ feedback.teacherCorrection.natural }}"
+          </p>
+          <p class="explanation">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue
+        </button>
       </div>
     </div>
   </div>

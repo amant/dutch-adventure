@@ -1,45 +1,45 @@
 <script setup lang="ts">
-import { useLearnerMemory } from '~/composables/useLearnerMemory'
-import type { ConceptState, Exercise } from '~/types/learning'
+import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import type { ConceptState, Exercise } from '~/types/learning';
 
-const { memory, hydrate } = useLearnerMemory()
-onMounted(hydrate)
+const { memory, hydrate } = useLearnerMemory();
+onMounted(hydrate);
 
-const now = new Date()
+const now = new Date();
 
 const decayingConcepts = computed(() => {
-  const items: { label: string, type: 'vocabulary' | 'grammar' | 'idiom', state: ConceptState, daysSince: number }[] = []
-  
+  const items: { label: string; type: 'vocabulary' | 'grammar' | 'idiom'; state: ConceptState; daysSince: number }[] = [];
+
   const process = (dict: Record<string, ConceptState>, type: 'vocabulary' | 'grammar' | 'idiom') => {
     Object.entries(dict).forEach(([label, state]) => {
-      if (!state.lastEncountered) return
-      const last = new Date(state.lastEncountered)
-      const diffDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24)
-      
+      if (!state.lastEncountered) return;
+      const last = new Date(state.lastEncountered);
+      const diffDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24);
+
       if (diffDays >= 1) {
-        items.push({ label, type, state, daysSince: Math.floor(diffDays) })
+        items.push({ label, type, state, daysSince: Math.floor(diffDays) });
       }
-    })
-  }
-  
-  process(memory.value.vocabulary, 'vocabulary')
-  process(memory.value.grammar, 'grammar')
-  process(memory.value.idioms, 'idiom')
-  
-  return items.sort((a, b) => b.daysSince - a.daysSince)
-})
+    });
+  };
+
+  process(memory.value.vocabulary, 'vocabulary');
+  process(memory.value.grammar, 'grammar');
+  process(memory.value.idioms, 'idiom');
+
+  return items.sort((a, b) => b.daysSince - a.daysSince);
+});
 
 const stage6Candidates = computed(() => {
-  const candidates: { concept: string, type: string, prompt: string, expected: string, date: string, daysAgo: number }[] = []
-  
+  const candidates: { concept: string; type: string; prompt: string; expected: string; date: string; daysAgo: number }[] = [];
+
   const process = (dict: Record<string, ConceptState>, type: string) => {
     Object.entries(dict).forEach(([label, state]) => {
-      if (!state.usageHistory) return
-      state.usageHistory.forEach(usage => {
-        if (!usage.prompt) return
-        const date = new Date(usage.date)
-        const diffDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
-        
+      if (!state.usageHistory) return;
+      state.usageHistory.forEach((usage) => {
+        if (!usage.prompt) return;
+        const date = new Date(usage.date);
+        const diffDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+
         // Target: 2-5 days ago for optimal "Delayed Retrieval"
         if (diffDays >= 2 && diffDays <= 7) {
           candidates.push({
@@ -48,18 +48,18 @@ const stage6Candidates = computed(() => {
             prompt: usage.prompt,
             expected: usage.snippet,
             date: usage.date,
-            daysAgo: Math.floor(diffDays)
-          })
+            daysAgo: Math.floor(diffDays),
+          });
         }
-      })
-    })
-  }
-  
-  process(memory.value.vocabulary, 'vocabulary')
-  process(memory.value.grammar, 'grammar')
-  
-  return candidates.sort((a, b) => Math.abs(3 - a.daysAgo) - Math.abs(3 - b.daysAgo)) // Prioritize ~3 days ago
-})
+      });
+    });
+  };
+
+  process(memory.value.vocabulary, 'vocabulary');
+  process(memory.value.grammar, 'grammar');
+
+  return candidates.sort((a, b) => Math.abs(3 - a.daysAgo) - Math.abs(3 - b.daysAgo)); // Prioritize ~3 days ago
+});
 
 const startStage6 = (candidate: typeof stage6Candidates.value[0]) => {
   // Create a custom exercise from the candidate
@@ -71,53 +71,87 @@ const startStage6 = (candidate: typeof stage6Candidates.value[0]) => {
     skills: ['production', 'automaticity'],
     vocabulary: candidate.type === 'vocabulary' ? [candidate.concept] : [],
     grammar: candidate.type === 'grammar' ? [candidate.concept] : [],
-    explanation: `This is something you said ${candidate.daysAgo} days ago. Can you produce it again?`
-  }
-  
+    explanation: `This is something you said ${candidate.daysAgo} days ago. Can you produce it again?`,
+  };
+
   // Store in session and navigate
   if (import.meta.client) {
-    sessionStorage.setItem('custom-review-exercise', JSON.stringify(exercise))
-    navigateTo({ path: '/smart-review', query: { mode: 'custom' } })
+    sessionStorage.setItem('custom-review-exercise', JSON.stringify(exercise));
+    navigateTo({ path: '/smart-review', query: { mode: 'custom' } });
   }
-}
+};
 </script>
 
 <template>
   <section class="memory-lab">
-    <div class="eyebrow gold">MEMORY LABORATORY</div>
+    <div class="eyebrow gold">
+      MEMORY LABORATORY
+    </div>
     <h1>Delayed Retrieval & Decay Watch</h1>
-    <p class="muted">Stage 6: Reactivate concepts through delayed retrieval to forge unbreakable long-term conversational reflexes.</p>
+    <p class="muted">
+      Stage 6: Reactivate concepts through delayed retrieval to forge unbreakable long-term conversational reflexes.
+    </p>
 
     <div class="grid">
       <!-- Stage 6: Delayed Retrieval -->
       <div class="card stage6-section">
-        <div class="eyebrow gold">STAGE 6</div>
+        <div class="eyebrow gold">
+          STAGE 6
+        </div>
         <h3>Delayed Retrieval</h3>
-        <p class="card-intro">These are personal expressions you produced a few days ago on previous voyages. Can you still retrieve them spontaneously without hints?</p>
-        
-        <div v-if="stage6Candidates.length > 0" class="candidate-list">
-          <div v-for="c in stage6Candidates.slice(0, 5)" :key="c.date" class="candidate-item" @click="startStage6(c)">
+        <p class="card-intro">
+          These are personal expressions you produced a few days ago on previous voyages. Can you still retrieve them spontaneously without hints?
+        </p>
+
+        <div
+          v-if="stage6Candidates.length > 0"
+          class="candidate-list"
+        >
+          <div
+            v-for="c in stage6Candidates.slice(0, 5)"
+            :key="c.date"
+            class="candidate-item"
+            @click="startStage6(c)"
+          >
             <div class="c-meta">
               <span class="days-badge">{{ c.daysAgo }} days ago</span>
               <span class="concept-tag">{{ c.concept }}</span>
             </div>
-            <div class="c-prompt">"{{ c.prompt }}"</div>
-            <div class="c-action"><span>⚡ Reactivate Spontaneously →</span></div>
+            <div class="c-prompt">
+              "{{ c.prompt }}"
+            </div>
+            <div class="c-action">
+              <span>⚡ Reactivate Spontaneously →</span>
+            </div>
           </div>
         </div>
-        <div v-else class="empty-well">
+        <div
+          v-else
+          class="empty-well"
+        >
           <p>No concepts ready for Stage 6 retrieval yet. Keep using Dutch in chapter missions to build your voyage history!</p>
         </div>
       </div>
 
       <!-- Memory Decay Watch -->
       <div class="card decay-section">
-        <div class="eyebrow red">TACTICAL RADAR</div>
+        <div class="eyebrow red">
+          TACTICAL RADAR
+        </div>
         <h3>Memory Decay Watch</h3>
-        <p class="card-intro">Concepts you haven't reinforced recently. Re-drill them before they slip from active memory.</p>
-        
-        <div v-if="decayingConcepts.length > 0" class="decay-list">
-          <div v-for="item in decayingConcepts.slice(0, 8)" :key="item.label" class="decay-item">
+        <p class="card-intro">
+          Concepts you haven't reinforced recently. Re-drill them before they slip from active memory.
+        </p>
+
+        <div
+          v-if="decayingConcepts.length > 0"
+          class="decay-list"
+        >
+          <div
+            v-for="item in decayingConcepts.slice(0, 8)"
+            :key="item.label"
+            class="decay-item"
+          >
             <div class="decay-info">
               <span class="label">{{ item.label }}</span>
               <span class="type">{{ item.type }}</span>
@@ -125,21 +159,27 @@ const startStage6 = (candidate: typeof stage6Candidates.value[0]) => {
             <div class="decay-meta">
               <span class="days">{{ item.daysSince }}d since last use</span>
               <div class="mini-bar">
-                <div 
-                  class="mini-progress" 
-                  :style="{ 
-                    width: `${item.state.automaticity}%`, 
-                    background: item.daysSince > 7 ? '#ef4444' : '#0066cc' 
+                <div
+                  class="mini-progress"
+                  :style="{
+                    width: `${item.state.automaticity}%`,
+                    background: item.daysSince > 7 ? '#ef4444' : '#0066cc',
                   }"
-                ></div>
+                />
               </div>
             </div>
           </div>
         </div>
-        <div v-else class="empty-well">
+        <div
+          v-else
+          class="empty-well"
+        >
           <p>Your memory is in peak shape! All concepts have been practiced recently.</p>
         </div>
-        <NuxtLink to="/smart-review" class="button secondary full-width">
+        <NuxtLink
+          to="/smart-review"
+          class="button secondary full-width"
+        >
           <span>⚡ Full Refresh Session</span>
         </NuxtLink>
       </div>
@@ -187,11 +227,11 @@ const startStage6 = (candidate: typeof stage6Candidates.value[0]) => {
   gap: 16px;
 }
 
-.candidate-item { 
-  background: $white-pure; 
-  border: 1.5px solid $parchment-border; 
-  padding: 18px; 
-  border-radius: $radius-md; 
+.candidate-item {
+  background: $white-pure;
+  border: 1.5px solid $parchment-border;
+  padding: 18px;
+  border-radius: $radius-md;
   cursor: pointer;
   box-shadow: $shadow-sm;
   transition: all $transition-normal;

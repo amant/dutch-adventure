@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import { ref } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
+const answer = ref('');
 
 function handleSubmit() {
-  if (!answer.value.trim()) return
-  emit('submit', answer.value)
+  if (!answer.value.trim()) return;
+  emit('submit', answer.value);
 }
 
 function useElement(element: string) {
-  if (props.feedback) return
+  if (props.feedback) return;
   if (!answer.value.includes(element)) {
-    if (answer.value && !answer.value.endsWith(' ')) answer.value += ' '
-    answer.value += element
+    if (answer.value && !answer.value.endsWith(' ')) answer.value += ' ';
+    answer.value += element;
   }
 }
 </script>
@@ -30,29 +30,46 @@ function useElement(element: string) {
   <div class="reframing-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Strategic Competence</div>
-        <div class="badge">Diplomatic Reframing</div>
+        <div class="eyebrow">
+          B2 Strategic Competence
+        </div>
+        <div class="badge">
+          Diplomatic Reframing
+        </div>
       </div>
 
       <div class="scenario-box">
-        <div class="context-tag">{{ exercise.reframingData?.targetContext || 'Professional Context' }}</div>
-        <div class="blunt-label">Blunt/Direct Version:</div>
-        <p class="blunt-sentence">"{{ exercise.reframingData?.bluntSentence }}"</p>
+        <div class="context-tag">
+          {{ exercise.reframingData?.targetContext || 'Professional Context' }}
+        </div>
+        <div class="blunt-label">
+          Blunt/Direct Version:
+        </div>
+        <p class="blunt-sentence">
+          "{{ exercise.reframingData?.bluntSentence }}"
+        </p>
       </div>
 
       <div class="instruction mt-6">
         <h3>{{ exercise.prompt }}</h3>
-        <p class="muted">Make it more professional, empathetic, or diplomatic. Use softeners to avoid sounding too blunt.</p>
+        <p class="muted">
+          Make it more professional, empathetic, or diplomatic. Use softeners to avoid sounding too blunt.
+        </p>
       </div>
 
-      <div v-if="exercise.reframingData?.softeningElements" class="palette mt-4">
-        <div class="palette-label">Try to incorporate these:</div>
+      <div
+        v-if="exercise.reframingData?.softeningElements"
+        class="palette mt-4"
+      >
+        <div class="palette-label">
+          Try to incorporate these:
+        </div>
         <div class="chips">
-          <button 
-            v-for="el in exercise.reframingData.softeningElements" 
+          <button
+            v-for="el in exercise.reframingData.softeningElements"
             :key="el"
             class="chip"
-            :class="{ 'used': answer.toLowerCase().includes(el.toLowerCase()) }"
+            :class="{ used: answer.toLowerCase().includes(el.toLowerCase()) }"
             :disabled="!!feedback"
             @click="useElement(el)"
           >
@@ -67,19 +84,22 @@ function useElement(element: string) {
           placeholder="Type your diplomatic reframe here..."
           :disabled="!!feedback"
           class="reframe-input"
-        ></textarea>
-        
+        />
+
         <div class="input-actions">
-          <VoiceInput 
-            v-if="!feedback" 
-            @result="answer = $event" 
+          <VoiceInput
+            v-if="!feedback"
+            @result="answer = $event"
           />
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-6">
-        <button 
-          class="button primary full-width" 
+      <div
+        v-if="!feedback"
+        class="actions mt-6"
+      >
+        <button
+          class="button primary full-width"
           :disabled="!answer.trim()"
           @click="handleSubmit"
         >
@@ -88,24 +108,49 @@ function useElement(element: string) {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
           <span class="outcome-badge">{{ feedback.outcome }}</span>
-          <span v-if="feedback.pragmaticScore" class="pragmatic-badge">
+          <span
+            v-if="feedback.pragmaticScore"
+            class="pragmatic-badge"
+          >
             Pragmatic: {{ feedback.pragmaticScore }}%
           </span>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Natural Reframe:</div>
-          <p class="natural-text">{{ feedback.teacherCorrection.natural }}</p>
-          <p class="explanation mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Natural Reframe:
+          </div>
+          <p class="natural-text">
+            {{ feedback.teacherCorrection.natural }}
+          </p>
+          <p class="explanation mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue
+        </button>
       </div>
     </div>
   </div>
@@ -127,13 +172,13 @@ function useElement(element: string) {
 
 .palette-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { 
-  background: white; 
-  border: 1px solid #e2e8f0; 
-  padding: 6px 12px; 
-  border-radius: 99px; 
-  font-size: 13px; 
-  color: #475569; 
+.chip {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  color: #475569;
   cursor: pointer;
   transition: all 0.2s;
 }

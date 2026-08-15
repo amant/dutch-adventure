@@ -1,63 +1,73 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise } from '~/types/learning'
-import PragmaticIndicator from './PragmaticIndicator.vue'
+import { ref, computed } from 'vue';
+import type { Exercise } from '~/types/learning';
+import PragmaticIndicator from './PragmaticIndicator.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-}>()
+  exercise: Exercise;
+}>();
 
 const emit = defineEmits<{
-  (e: 'submit', answer: string): void
-}>()
+  (e: 'submit', answer: string): void;
+}>();
 
-const userText = ref('')
-const particles = ['even', 'hoor', 'maar', 'toch', 'nou', 'eens', 'misschien', 'eigenlijk']
+const userText = ref('');
+const particles = ['even', 'hoor', 'maar', 'toch', 'nou', 'eens', 'misschien', 'eigenlijk'];
 
 const injectParticle = (p: string) => {
   if (!userText.value) {
-    userText.value = props.exercise.context || ''
+    userText.value = props.exercise.context || '';
   }
   // Simple injection logic: try to put it after the first verb or at the end
-  userText.value = userText.value.trim() + ' ' + p
-}
+  userText.value = userText.value.trim() + ' ' + p;
+};
 
 const submit = () => {
-  emit('submit', userText.value)
-}
+  emit('submit', userText.value);
+};
 
 // Simple heuristic for naturalness preview
 const naturalnessScore = computed(() => {
-  const text = userText.value.toLowerCase()
-  let score = 40
-  particles.forEach(p => {
-    if (text.includes(p)) score += 15
-  })
-  return Math.min(score, 100)
-})
+  const text = userText.value.toLowerCase();
+  let score = 40;
+  particles.forEach((p) => {
+    if (text.includes(p)) score += 15;
+  });
+  return Math.min(score, 100);
+});
 </script>
 
 <template>
   <div class="nuance-drill">
     <div class="drill-header">
-      <div class="icon">✨</div>
+      <div class="icon">
+        ✨
+      </div>
       <div class="header-text">
         <h4>The Naturalness Injector</h4>
-        <p class="muted">This sentence is technically correct, but sounds a bit "stiff". Add modal particles or softeners to make it sound like a native speaker.</p>
+        <p class="muted">
+          This sentence is technically correct, but sounds a bit "stiff". Add modal particles or softeners to make it sound like a native speaker.
+        </p>
       </div>
     </div>
 
     <div class="base-sentence">
-      <div class="label">Stiff Version</div>
-      <div class="stiff-text">"{{ exercise.context || exercise.prompt }}"</div>
+      <div class="label">
+        Stiff Version
+      </div>
+      <div class="stiff-text">
+        "{{ exercise.context || exercise.prompt }}"
+      </div>
     </div>
 
     <div class="palette">
-      <div class="label">Particle Palette</div>
+      <div class="label">
+        Particle Palette
+      </div>
       <div class="particle-list">
-        <button 
-          v-for="p in particles" 
-          :key="p" 
+        <button
+          v-for="p in particles"
+          :key="p"
           class="particle-btn"
           @click="injectParticle(p)"
         >
@@ -67,22 +77,24 @@ const naturalnessScore = computed(() => {
     </div>
 
     <div class="editor-section">
-      <div class="label">Your Natural Version</div>
-      <textarea 
-        v-model="userText" 
-        class="editor" 
+      <div class="label">
+        Your Natural Version
+      </div>
+      <textarea
+        v-model="userText"
+        class="editor"
         placeholder="Edit the sentence to make it flow..."
         rows="3"
-      ></textarea>
-      
+      />
+
       <div class="pragmatic-preview">
         <PragmaticIndicator :score="naturalnessScore" />
       </div>
     </div>
 
     <div class="actions">
-      <button 
-        class="button primary full-width" 
+      <button
+        class="button primary full-width"
         :disabled="!userText.trim()"
         @click="submit"
       >

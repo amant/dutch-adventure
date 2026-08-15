@@ -1,47 +1,52 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, onMounted, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const answer = ref('')
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const answer = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 onMounted(() => {
-  textarea.value?.focus()
-})
+  textarea.value?.focus();
+});
 
 function handleSubmit() {
-  if (!answer.value.trim() || props.feedback) return
-  emit('submit', answer.value)
+  if (!answer.value.trim() || props.feedback) return;
+  emit('submit', answer.value);
 }
 
 const ruleBadge = computed(() => {
   switch (props.exercise.modalParticleData?.pragmaticFunction) {
-    case 'rebuttal-wel-degelijk': return 'Weerlegging & Overtuiging (Wel degelijk)'
-    case 'inevitability-nou-eenmaal': return 'Onvermijdelijke Realiteit (Nou eenmaal)'
-    case 'concession-toch-maar': return 'Heroverweging / Toegeving (Toch maar)'
-    case 'tactful-urgency-toch-maar-eens': return 'Tactisch Advies / Aansporing (Toch maar eens)'
-    case 'reluctant-alternative-dan-maar': return 'Berusting / Alternatief (Dan maar)'
-    case 'shared-premise-immers': return 'Gedeelde Kennis / Vanzelfsprekendheid (Immers)'
-    case 'softened-inquiry-eens-even': return 'Verzacht Verzoek (Eens even)'
-    case 'advisory-caution-maar-beter': return 'Voorzichtigheidsadvies (Maar beter)'
-    default: return 'Modale Partikels & Schakering'
+    case 'rebuttal-wel-degelijk': return 'Weerlegging & Overtuiging (Wel degelijk)';
+    case 'inevitability-nou-eenmaal': return 'Onvermijdelijke Realiteit (Nou eenmaal)';
+    case 'concession-toch-maar': return 'Heroverweging / Toegeving (Toch maar)';
+    case 'tactful-urgency-toch-maar-eens': return 'Tactisch Advies / Aansporing (Toch maar eens)';
+    case 'reluctant-alternative-dan-maar': return 'Berusting / Alternatief (Dan maar)';
+    case 'shared-premise-immers': return 'Gedeelde Kennis / Vanzelfsprekendheid (Immers)';
+    case 'softened-inquiry-eens-even': return 'Verzacht Verzoek (Eens even)';
+    case 'advisory-caution-maar-beter': return 'Voorzichtigheidsadvies (Maar beter)';
+    default: return 'Modale Partikels & Schakering';
   }
-})
+});
 </script>
 
 <template>
   <div class="modal-particle-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">B2 Modal Particles &amp; Pragmatic Shading</div>
-        <div class="badge" :class="exercise.modalParticleData?.pragmaticFunction">
+        <div class="eyebrow">
+          B2 Modal Particles &amp; Pragmatic Shading
+        </div>
+        <div
+          class="badge"
+          :class="exercise.modalParticleData?.pragmaticFunction"
+        >
           {{ ruleBadge }}
         </div>
       </div>
@@ -49,7 +54,7 @@ const ruleBadge = computed(() => {
       <div class="instruction">
         <h3>{{ exercise.prompt }}</h3>
         <p class="muted">
-          Dutch modal particles (<em>schakeringspartikels</em>) transform literal, rigid statements into natural, authentic discourse. 
+          Dutch modal particles (<em>schakeringspartikels</em>) transform literal, rigid statements into natural, authentic discourse.
           They convey tone, certainty, softness, or shared understanding, and sit in the <strong>inner midfield</strong> directly after pronouns and finite verbs.
         </p>
       </div>
@@ -57,7 +62,9 @@ const ruleBadge = computed(() => {
       <div class="drill-blueprint">
         <!-- Target Modal Cluster Card -->
         <div class="particle-cluster-card">
-          <div class="cluster-label">Doel-Partikelcombinatie (Modal Cluster)</div>
+          <div class="cluster-label">
+            Doel-Partikelcombinatie (Modal Cluster)
+          </div>
           <div class="cluster-pill">
             <span class="pill-sparkle">✨</span>
             <span class="cluster-text">{{ exercise.modalParticleData?.particleCluster || 'toch maar' }}</span>
@@ -65,37 +72,63 @@ const ruleBadge = computed(() => {
         </div>
 
         <!-- Stiff vs Natural Context Box -->
-        <div v-if="exercise.modalParticleData?.stiffOriginalSentence" class="contrast-box">
+        <div
+          v-if="exercise.modalParticleData?.stiffOriginalSentence"
+          class="contrast-box"
+        >
           <div class="stiff-row">
             <span class="contrast-tag stiff-tag">Letterlijk / Stijf (Zonder partikels):</span>
             <span class="stiff-text">"{{ exercise.modalParticleData.stiffOriginalSentence }}"</span>
           </div>
-          <div class="contrast-arrow">➔ Transformeer met natuurlijke schakering:</div>
+          <div class="contrast-arrow">
+            ➔ Transformeer met natuurlijke schakering:
+          </div>
         </div>
 
         <div class="source-box">
-          <div class="box-label">Context &amp; Situatie (Pragmatic Context)</div>
-          <p class="source-text">{{ exercise.modalParticleData?.contextPrompt }}</p>
+          <div class="box-label">
+            Context &amp; Situatie (Pragmatic Context)
+          </div>
+          <p class="source-text">
+            {{ exercise.modalParticleData?.contextPrompt }}
+          </p>
         </div>
 
-        <div v-if="exercise.modalParticleData?.structureFormula" class="formula-box">
-          <div class="formula-label">Syntactisch Bouwplan (Middenveld Volgorde)</div>
+        <div
+          v-if="exercise.modalParticleData?.structureFormula"
+          class="formula-box"
+        >
+          <div class="formula-label">
+            Syntactisch Bouwplan (Middenveld Volgorde)
+          </div>
           <code class="formula-code">{{ exercise.modalParticleData.structureFormula }}</code>
         </div>
 
-        <div v-if="exercise.modalParticleData?.syntacticSlotHint" class="slot-note">
+        <div
+          v-if="exercise.modalParticleData?.syntacticSlotHint"
+          class="slot-note"
+        >
           <span class="note-icon">📌</span>
           <span class="note-text">{{ exercise.modalParticleData.syntacticSlotHint }}</span>
         </div>
 
-        <div v-if="exercise.modalParticleData?.hint" class="hint-container">
+        <div
+          v-if="exercise.modalParticleData?.hint"
+          class="hint-container"
+        >
           <span class="hint-icon">💡</span>
           <span class="hint-text">{{ exercise.modalParticleData.hint }}</span>
         </div>
       </div>
 
-      <form class="production-form" @submit.prevent="handleSubmit">
-        <label class="form-label" for="particle-input">
+      <form
+        class="production-form"
+        @submit.prevent="handleSubmit"
+      >
+        <label
+          class="form-label"
+          for="particle-input"
+        >
           Formuleer de natuurlijke Nederlandse zin met de juiste partikelcombinatie en woordvolgorde:
         </label>
         <textarea
@@ -111,16 +144,16 @@ const ruleBadge = computed(() => {
 
         <div class="form-actions">
           <div class="input-helpers">
-            <VoiceInput 
+            <VoiceInput
               v-if="!feedback"
-              @result="(t) => { answer = t; handleSubmit() }" 
+              @result="(t) => { answer = t; handleSubmit() }"
             />
             <span class="shortcut-tip">Druk op <strong>Enter ↵</strong> om te controleren</span>
           </div>
 
-          <button 
-            v-if="!feedback" 
-            type="submit" 
+          <button
+            v-if="!feedback"
+            type="submit"
             class="button primary"
             :disabled="!answer.trim()"
           >
@@ -137,14 +170,14 @@ const ruleBadge = computed(() => {
 .drill-card { padding: 32px; border-top: 6px solid #8b5cf6; }
 .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #8b5cf6; }
-.badge { 
-  font-size: 12px; 
-  font-weight: 600; 
-  padding: 4px 12px; 
-  border-radius: 9999px; 
-  background: #f5f3ff; 
-  color: #6d28d9; 
-  border: 1px solid #ddd6fe; 
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #f5f3ff;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
 }
 .badge.rebuttal-wel-degelijk { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 .badge.inevitability-nou-eenmaal { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
@@ -219,25 +252,25 @@ const ruleBadge = computed(() => {
   margin-top: 4px;
 }
 
-.source-box { 
-  background: #fdfcf9; 
-  border: 1px solid #e7e3da; 
-  border-radius: 12px; 
-  padding: 16px; 
+.source-box {
+  background: #fdfcf9;
+  border: 1px solid #e7e3da;
+  border-radius: 12px;
+  padding: 16px;
 }
-.box-label { 
-  font-size: 11px; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.04em; 
-  color: #8c827a; 
-  margin-bottom: 6px; 
+.box-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8c827a;
+  margin-bottom: 6px;
 }
-.source-text { 
-  font-size: 16px; 
-  line-height: 1.5; 
-  color: #2c2825; 
-  margin: 0; 
+.source-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2c2825;
+  margin: 0;
   font-weight: 500;
 }
 

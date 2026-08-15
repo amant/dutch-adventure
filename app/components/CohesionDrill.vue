@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
+import { ref, watch } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
+const emit = defineEmits(['submit', 'next']);
 
-const sentences = ref<string[]>([])
+const sentences = ref<string[]>([]);
 
 const initSentences = () => {
   if (props.exercise.scrambledSentences) {
-    sentences.value = [...props.exercise.scrambledSentences]
+    sentences.value = [...props.exercise.scrambledSentences];
   }
-}
+};
 
-watch(() => props.exercise, initSentences, { immediate: true })
+watch(() => props.exercise, initSentences, { immediate: true });
 
 function moveUp(index: number) {
-  if (index === 0 || props.feedback) return
-  const current = sentences.value[index]
-  const prev = sentences.value[index - 1]
+  if (index === 0 || props.feedback) return;
+  const current = sentences.value[index];
+  const prev = sentences.value[index - 1];
   if (current !== undefined && prev !== undefined) {
-    sentences.value[index] = prev
-    sentences.value[index - 1] = current
+    sentences.value[index] = prev;
+    sentences.value[index - 1] = current;
   }
 }
 
 function moveDown(index: number) {
-  if (index >= sentences.value.length - 1 || props.feedback) return
-  const current = sentences.value[index]
-  const next = sentences.value[index + 1]
+  if (index >= sentences.value.length - 1 || props.feedback) return;
+  const current = sentences.value[index];
+  const next = sentences.value[index + 1];
   if (current !== undefined && next !== undefined) {
-    sentences.value[index] = next
-    sentences.value[index + 1] = current
+    sentences.value[index] = next;
+    sentences.value[index + 1] = current;
   }
 }
 
 function handleSubmit() {
   // Join with a space for evaluation
-  emit('submit', sentences.value.join(' '))
+  emit('submit', sentences.value.join(' '));
 }
 </script>
 
@@ -49,8 +49,12 @@ function handleSubmit() {
   <div class="cohesion-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">Logical Flow & Cohesion</div>
-        <div class="badge">B2 Argumentation</div>
+        <div class="eyebrow">
+          Logical Flow & Cohesion
+        </div>
+        <div class="badge">
+          B2 Argumentation
+        </div>
       </div>
 
       <div class="instruction">
@@ -58,34 +62,37 @@ function handleSubmit() {
       </div>
 
       <div class="sentence-list">
-        <div 
-          v-for="(sentence, idx) in sentences" 
-          :key="sentence" 
+        <div
+          v-for="(sentence, idx) in sentences"
+          :key="sentence"
           class="sentence-item card"
-          :class="{ 
-            'is-top': idx === 0, 
+          :class="{
+            'is-top': idx === 0,
             'is-bottom': idx === sentences.length - 1,
-            'disabled': !!feedback
+            'disabled': !!feedback,
           }"
         >
           <div class="sentence-content">
             <span class="index">{{ idx + 1 }}.</span>
             <p>{{ sentence }}</p>
           </div>
-          <div v-if="!feedback" class="controls">
-            <button 
-              class="move-btn" 
-              :disabled="idx === 0" 
-              @click="moveUp(idx)"
+          <div
+            v-if="!feedback"
+            class="controls"
+          >
+            <button
+              class="move-btn"
+              :disabled="idx === 0"
               title="Move Up"
+              @click="moveUp(idx)"
             >
               ↑
             </button>
-            <button 
-              class="move-btn" 
-              :disabled="idx === sentences.length - 1" 
-              @click="moveDown(idx)"
+            <button
+              class="move-btn"
+              :disabled="idx === sentences.length - 1"
               title="Move Down"
+              @click="moveDown(idx)"
             >
               ↓
             </button>
@@ -93,24 +100,50 @@ function handleSubmit() {
         </div>
       </div>
 
-      <div v-if="!feedback" class="actions mt-6">
-        <button class="button primary full-width" @click="handleSubmit">
+      <div
+        v-if="!feedback"
+        class="actions mt-6"
+      >
+        <button
+          class="button primary full-width"
+          @click="handleSubmit"
+        >
           Check Logical Order
         </button>
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
-        <div class="outcome-badge">{{ feedback.outcome }}</div>
-        <p class="feedback-message">{{ feedback.message }}</p>
-        
-        <div v-if="feedback.explanation" class="explanation-box mt-4">
-          <div class="eyebrow">Teacher's Note:</div>
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
+        <div class="outcome-badge">
+          {{ feedback.outcome }}
+        </div>
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.explanation"
+          class="explanation-box mt-4"
+        >
+          <div class="eyebrow">
+            Teacher's Note:
+          </div>
           <p>{{ feedback.explanation }}</p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue
+        </button>
       </div>
     </div>
   </div>
@@ -125,12 +158,12 @@ function handleSubmit() {
 .instruction { margin-bottom: 24px; color: #475569; font-size: 15px; }
 
 .sentence-list { display: flex; flex-direction: column; gap: 12px; }
-.sentence-item { 
-  display: flex; 
-  align-items: center; 
-  gap: 16px; 
-  padding: 16px; 
-  background: white; 
+.sentence-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
   transition: all 0.2s;
   border-left: 4px solid #e2e8f0;
 }
@@ -142,15 +175,15 @@ function handleSubmit() {
 .sentence-content p { font-size: 16px; color: #1e293b; line-height: 1.5; margin: 0; }
 
 .controls { display: flex; flex-direction: column; gap: 4px; }
-.move-btn { 
-  background: #f1f5f9; 
-  border: 1px solid #e2e8f0; 
-  width: 32px; 
-  height: 32px; 
-  border-radius: 6px; 
-  cursor: pointer; 
-  display: flex; 
-  align-items: center; 
+.move-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   justify-content: center;
   font-weight: 800;
   color: #64748b;

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Exercise, Feedback } from '~/types/learning'
-import VoiceInput from './VoiceInput.vue'
+import { ref, computed } from 'vue';
+import type { Exercise, Feedback } from '~/types/learning';
+import VoiceInput from './VoiceInput.vue';
 
 const props = defineProps<{
-  exercise: Exercise
-  feedback?: Feedback
-}>()
+  exercise: Exercise;
+  feedback?: Feedback;
+}>();
 
-const emit = defineEmits(['submit', 'next'])
-const response = defineModel<string>()
+const emit = defineEmits(['submit', 'next']);
+const response = defineModel<string>();
 
-const isSpeaking = ref(false)
+const isSpeaking = ref(false);
 
 function handleSubmit() {
-  emit('submit', response.value)
+  emit('submit', response.value);
 }
 
 function handleVoiceResult(text: string) {
-  response.value = text
-  handleSubmit()
+  response.value = text;
+  handleSubmit();
 }
 </script>
 
@@ -27,32 +27,49 @@ function handleVoiceResult(text: string) {
   <div class="understatement-drill">
     <div class="card drill-card">
       <div class="header">
-        <div class="eyebrow">Dutch Pragmatics</div>
-        <div class="badge">B2 Understatement</div>
+        <div class="eyebrow">
+          Dutch Pragmatics
+        </div>
+        <div class="badge">
+          B2 Understatement
+        </div>
       </div>
 
       <div class="scenario">
-        <p class="muted small">Direct English phrasing:</p>
-        <p class="direct-text">"{{ exercise.context }}"</p>
-        <div class="divider"></div>
-        <p class="instruction">Dutch people often avoid extreme praise. How would you express this in a typically Dutch, understated way?</p>
+        <p class="muted small">
+          Direct English phrasing:
+        </p>
+        <p class="direct-text">
+          "{{ exercise.context }}"
+        </p>
+        <div class="divider" />
+        <p class="instruction">
+          Dutch people often avoid extreme praise. How would you express this in a typically Dutch, understated way?
+        </p>
       </div>
 
       <div class="prompt-box card">
-        <p class="prompt-text">{{ exercise.prompt }}</p>
+        <p class="prompt-text">
+          {{ exercise.prompt }}
+        </p>
       </div>
 
       <div class="input-area mt-6">
         <div class="input-wrapper">
-          <input 
-            v-model="response" 
-            placeholder="Type your understated Dutch..." 
-            @keyup.enter="handleSubmit"
+          <input
+            v-model="response"
+            placeholder="Type your understated Dutch..."
             autofocus
-          />
-          <button class="button primary" @click="handleSubmit">Submit</button>
+            @keyup.enter="handleSubmit"
+          >
+          <button
+            class="button primary"
+            @click="handleSubmit"
+          >
+            Submit
+          </button>
         </div>
-        
+
         <div class="voice-toggle mt-4">
           <VoiceInput @result="handleVoiceResult" />
           <span class="muted small ml-2">Or speak your answer</span>
@@ -60,32 +77,60 @@ function handleVoiceResult(text: string) {
       </div>
     </div>
 
-    <div v-if="feedback" class="feedback-section mt-6">
-      <div class="card feedback-card" :class="feedback.outcome">
+    <div
+      v-if="feedback"
+      class="feedback-section mt-6"
+    >
+      <div
+        class="card feedback-card"
+        :class="feedback.outcome"
+      >
         <div class="outcome-header">
-          <div class="outcome-badge">{{ feedback.outcome }}</div>
-          <div v-if="feedback.pragmaticScore" class="pragmatic-score">
+          <div class="outcome-badge">
+            {{ feedback.outcome }}
+          </div>
+          <div
+            v-if="feedback.pragmaticScore"
+            class="pragmatic-score"
+          >
             Naturalness: {{ feedback.pragmaticScore }}%
           </div>
         </div>
-        
-        <p class="feedback-message">{{ feedback.message }}</p>
-        
-        <div v-if="feedback.pragmaticFeedback" class="pragmatic-tip mt-4">
+
+        <p class="feedback-message">
+          {{ feedback.message }}
+        </p>
+
+        <div
+          v-if="feedback.pragmaticFeedback"
+          class="pragmatic-tip mt-4"
+        >
           <span class="icon">💡</span>
           <p>{{ feedback.pragmaticFeedback }}</p>
         </div>
 
-        <div v-if="feedback.teacherCorrection" class="correction-box mt-4">
-          <div class="eyebrow">Native Alternative:</div>
-          <TeacherRedline 
-            :original="response || ''" 
-            :corrected="feedback.teacherCorrection.natural" 
+        <div
+          v-if="feedback.teacherCorrection"
+          class="correction-box mt-4"
+        >
+          <div class="eyebrow">
+            Native Alternative:
+          </div>
+          <TeacherRedline
+            :original="response || ''"
+            :corrected="feedback.teacherCorrection.natural"
           />
-          <p class="explanation mt-2">{{ feedback.teacherCorrection.explanation }}</p>
+          <p class="explanation mt-2">
+            {{ feedback.teacherCorrection.explanation }}
+          </p>
         </div>
 
-        <button class="button primary mt-6" @click="$emit('next')">Continue</button>
+        <button
+          class="button primary mt-6"
+          @click="$emit('next')"
+        >
+          Continue
+        </button>
       </div>
     </div>
   </div>

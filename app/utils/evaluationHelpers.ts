@@ -1,72 +1,72 @@
-import type { Exercise } from '~/types/learning'
+import type { Exercise } from '~/types/learning';
 
 export function normalizeAnswer(answer: string) {
-  return answer.toLowerCase().trim().replace(/[.,!?]/g, '').replace(/\s+/g, ' ')
+  return answer.toLowerCase().trim().replace(/[.,!?]/g, '').replace(/\s+/g, ' ');
 }
 
-export type GrammarCheckResult =
+export type GrammarCheckResult
+  = | {
+    found: true;
+    message: string;
+    explanation?: string;
+    miniLesson?: {
+      title: string;
+      content: string;
+      example: {
+        wrong: string;
+        right: string;
+      };
+    };
+  }
   | {
-      found: true
-      message: string
-      explanation?: string
-      miniLesson?: {
-        title: string
-        content: string
-        example: {
-          wrong: string
-          right: string
-        }
-      }
-    }
-  | {
-      found: false
-      message?: undefined
-      explanation?: undefined
-      miniLesson?: undefined
-    }
+    found: false;
+    message?: undefined;
+    explanation?: undefined;
+    miniLesson?: undefined;
+  };
 
 export function isSpellingMistake(normalized: string, accepted: string[]) {
-  return accepted.some(a => {
-    if (Math.abs(a.length - normalized.length) > 1) return false
-    let diffs = 0
-    const len = Math.min(a.length, normalized.length)
+  return accepted.some((a) => {
+    if (Math.abs(a.length - normalized.length) > 1) return false;
+    let diffs = 0;
+    const len = Math.min(a.length, normalized.length);
     for (let i = 0; i < len; i++) {
-      if (a[i] !== normalized[i]) diffs++
+      if (a[i] !== normalized[i]) diffs++;
     }
-    diffs += Math.abs(a.length - normalized.length)
-    return diffs > 0 && diffs <= 2
-  })
+    diffs += Math.abs(a.length - normalized.length);
+    return diffs > 0 && diffs <= 2;
+  });
 }
 
 export function calculateSimilarity(s1: string, s2: string): number {
-  const longer = s1.length > s2.length ? s1 : s2
-  const shorter = s1.length > s2.length ? s2 : s1
-  const longerLength = longer.length
-  if (longerLength === 0) return 1.0
-  return (longerLength - editDistance(longer, shorter)) / longerLength
+  const longer = s1.length > s2.length ? s1 : s2;
+  const shorter = s1.length > s2.length ? s2 : s1;
+  const longerLength = longer.length;
+  if (longerLength === 0) return 1.0;
+  return (longerLength - editDistance(longer, shorter)) / longerLength;
 }
 
 export function editDistance(s1: string, s2: string): number {
-  const costs: number[] = []
+  const costs: number[] = [];
   for (let i = 0; i <= s1.length; i++) {
-    let lastValue = i
+    let lastValue = i;
     for (let j = 0; j <= s2.length; j++) {
       if (i === 0) {
-        costs[j] = j
+        costs[j] = j;
       } else {
         if (j > 0) {
-          let newValue = (costs[j - 1] ?? 0)
+          let newValue = (costs[j - 1] ?? 0);
           if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
-            newValue = Math.min(Math.min(newValue, lastValue), costs[j] ?? 0) + 1
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j] ?? 0) + 1;
           }
-          costs[j - 1] = lastValue
-          lastValue = newValue
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
         }
       }
     }
-    if (i > 0) costs[s2.length] = lastValue
+    if (i > 0) costs[s2.length] = lastValue;
   }
-  return costs[s2.length] ?? 0
+  return costs[s2.length] ?? 0;
 }
 
 const STOPWORDS = new Set([
@@ -75,49 +75,49 @@ const STOPWORDS = new Set([
   'zij', 'ze', 'we', 'wij', 'jullie', 'u', 'mijn', 'jouw', 'haar', 'ons', 'onze', 'hun',
   'dat', 'dit', 'die', 'deze', 'met', 'van', 'aan', 'in', 'op', 'naar', 'voor', 'uit',
   'bij', 'over', 'door', 'als', 'dan', 'nu', 'nog', 'al', 'maar', 'wel', 'ook', 'hier',
-  'daar', 'na', 'tot', 'zo', 'zoals', 'gisteren', 'vandaag', 'morgen'
-])
+  'daar', 'na', 'tot', 'zo', 'zoals', 'gisteren', 'vandaag', 'morgen',
+]);
 
 export function contentWords(text: string): string[] {
-  return text.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOPWORDS.has(w))
+  return text.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !STOPWORDS.has(w));
 }
 
 export function sharesContentWords(a: string, b: string): boolean {
-  const words = new Set(contentWords(a))
-  return contentWords(b).some(w => words.has(w))
+  const words = new Set(contentWords(a));
+  return contentWords(b).some(w => words.has(w));
 }
 
 export function checkInversionError(normalized: string): GrammarCheckResult {
-  const adverbs = ['gisteren', 'vandaag', 'morgen', 'soms', 'meestal', 'nu', 'daarna', 'toen']
-  const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
-  const words = normalized.split(' ')
-  const firstWord = words[0]
-  const secondWord = words[1]
-  
+  const adverbs = ['gisteren', 'vandaag', 'morgen', 'soms', 'meestal', 'nu', 'daarna', 'toen'];
+  const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie'];
+  const words = normalized.split(' ');
+  const firstWord = words[0];
+  const secondWord = words[1];
+
   if (words.length >= 3 && firstWord && secondWord && adverbs.includes(firstWord) && pronouns.includes(secondWord)) {
-     return {
-       found: true,
-       message: `In Dutch, if you start with '${firstWord}', the verb must come next!`,
-       explanation: `Try: ${firstWord} [verb] ${secondWord}...`,
-       miniLesson: {
-         title: 'Inversion (Word Order)',
-         content: 'When a sentence starts with something other than the subject (like an adverb of time), the verb and subject must swap places.',
-         example: {
-           wrong: `${firstWord} ${secondWord} werk...`,
-           right: `${firstWord} werk ${secondWord}...`
-         }
-       }
-     }
+    return {
+      found: true,
+      message: `In Dutch, if you start with '${firstWord}', the verb must come next!`,
+      explanation: `Try: ${firstWord} [verb] ${secondWord}...`,
+      miniLesson: {
+        title: 'Inversion (Word Order)',
+        content: 'When a sentence starts with something other than the subject (like an adverb of time), the verb and subject must swap places.',
+        example: {
+          wrong: `${firstWord} ${secondWord} werk...`,
+          right: `${firstWord} werk ${secondWord}...`,
+        },
+      },
+    };
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkPerfectTenseError(normalized: string): GrammarCheckResult {
-  const motionVerbs = ['gegaan', 'gekomen', 'gebleven', 'gebeurd', 'vertrokken']
-  const words = normalized.split(' ')
-  
+  const motionVerbs = ['gegaan', 'gekomen', 'gebleven', 'gebeurd', 'vertrokken'];
+  const words = normalized.split(' ');
+
   if (words.includes('heb') || words.includes('heeft') || words.includes('hebben')) {
-    const verb = motionVerbs.find(v => words.includes(v))
+    const verb = motionVerbs.find(v => words.includes(v));
     if (verb) {
       return {
         found: true,
@@ -127,13 +127,13 @@ export function checkPerfectTenseError(normalized: string): GrammarCheckResult {
           content: 'Most verbs use "hebben" in the perfect tense, but verbs of motion or change of state often use "zijn".',
           example: {
             wrong: `Ik heb ${verb}`,
-            right: `Ik ben ${verb}`
-          }
-        }
-      }
+            right: `Ik ben ${verb}`,
+          },
+        },
+      };
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkSeparableVerbError(normalized: string, target: string): GrammarCheckResult {
@@ -142,9 +142,9 @@ export function checkSeparableVerbError(normalized: string, target: string): Gra
     { full: 'opbellen', stem: 'bel', prefix: 'op' },
     { full: 'uitnodigen', stem: 'nodig', prefix: 'uit' },
     { full: 'voorbereiden', stem: 'bereid', prefix: 'voor' },
-    { full: 'opstaan', stem: 'sta', prefix: 'op' }
-  ]
-  
+    { full: 'opstaan', stem: 'sta', prefix: 'op' },
+  ];
+
   for (const v of separableVerbs) {
     if (normalized.includes(v.full) && target.includes(v.stem) && target.includes(v.prefix)) {
       return {
@@ -155,21 +155,21 @@ export function checkSeparableVerbError(normalized: string, target: string): Gra
           content: 'Some Dutch verbs split in simple sentences. The prefix goes to the very end of the clause.',
           example: {
             wrong: `Ik ${v.full} de kamer.`,
-            right: `Ik ${v.stem} de kamer ${v.prefix}.`
-          }
-        }
-      }
+            right: `Ik ${v.stem} de kamer ${v.prefix}.`,
+          },
+        },
+      };
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkConditionalError(normalized: string): GrammarCheckResult {
-  const words = normalized.split(' ')
-  const hasAls = words.includes('als')
-  const hasZou = words.includes('zou') || words.includes('zouden')
-  const hasHad = words.includes('had') || words.includes('hadden')
-  const hasWas = words.includes('was') || words.includes('waren')
+  const words = normalized.split(' ');
+  const hasAls = words.includes('als');
+  const hasZou = words.includes('zou') || words.includes('zouden');
+  const hasHad = words.includes('had') || words.includes('hadden');
+  const hasWas = words.includes('was') || words.includes('waren');
 
   if (hasAls && !hasZou && !hasHad && !hasWas) {
     return {
@@ -180,12 +180,12 @@ export function checkConditionalError(normalized: string): GrammarCheckResult {
         content: 'To express something that is not real or unlikely, Dutch uses the past tense (had/was) or "zou" + infinitive.',
         example: {
           wrong: 'Als ik geld heb, koop ik een auto.',
-          right: 'Als ik geld had, zou ik een auto kopen.'
-        }
-      }
-    }
+          right: 'Als ik geld had, zou ik een auto kopen.',
+        },
+      },
+    };
   }
-  
+
   if (normalized.includes('als ik zou hebben')) {
     return {
       found: true,
@@ -195,23 +195,23 @@ export function checkConditionalError(normalized: string): GrammarCheckResult {
         content: 'In the "if" clause (als...), Dutch speakers prefer the simple past (had, was, kon) over "zou hebben/zijn/kunnen".',
         example: {
           wrong: 'Als ik tijd zou hebben...',
-          right: 'Als ik tijd had...'
-        }
-      }
-    }
+          right: 'Als ik tijd had...',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkIndirectQuestionError(normalized: string): GrammarCheckResult {
   const phrases = [
     'vroeg als', 'vroegen als', 'vraagt als', 'vragen als',
-    'wilde weten als', 'wil weten als', 'benieuwd als', 'onzeker als'
-  ]
-  const foundPhrase = phrases.find(p => normalized.includes(p))
+    'wilde weten als', 'wil weten als', 'benieuwd als', 'onzeker als',
+  ];
+  const foundPhrase = phrases.find(p => normalized.includes(p));
   if (foundPhrase) {
-    const verb = foundPhrase.split(' ')[0]
+    const verb = foundPhrase.split(' ')[0];
     return {
       found: true,
       message: `In Dutch, indirect questions use 'of' (if/whether), not 'als'.`,
@@ -220,12 +220,12 @@ export function checkIndirectQuestionError(normalized: string): GrammarCheckResu
         content: 'When reporting a yes/no question (e.g. "He asked if..."), Dutch always uses "of". "Als" is only used for conditional clauses (if/when something happens).',
         example: {
           wrong: `${verb} als ik kwam`,
-          right: `${verb} of ik kwam`
-        }
-      }
-    }
+          right: `${verb} of ik kwam`,
+        },
+      },
+    };
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkRelativePronounError(normalized: string): GrammarCheckResult {
@@ -235,8 +235,8 @@ export function checkRelativePronounError(normalized: string): GrammarCheckResul
     { wrong: 'iets dat', right: 'iets wat', word: 'iets' },
     { wrong: 'niets dat', right: 'niets wat', word: 'niets' },
     { wrong: 'het enige dat', right: 'het enige wat', word: 'het enige' },
-    { wrong: 'het beste dat', right: 'het beste wat', word: 'het beste' }
-  ]
+    { wrong: 'het beste dat', right: 'het beste wat', word: 'het beste' },
+  ];
   for (const m of indefiniteMatches) {
     if (normalized.includes(m.wrong)) {
       return {
@@ -247,15 +247,15 @@ export function checkRelativePronounError(normalized: string): GrammarCheckResul
           content: 'Use "wat" (not "dat") when referring to indefinite pronouns (alles, iets, niets, veel, weinig), superlatives (het beste, het mooiste), or an entire preceding sentence.',
           example: {
             wrong: m.wrong,
-            right: m.right
-          }
-        }
-      }
+            right: m.right,
+          },
+        },
+      };
     }
   }
 
   // Check 2: Het-words incorrectly followed by 'die'
-  const hetWords = ['rapport', 'boek', 'plan', 'probleem', 'team', 'voorstel', 'project', 'contract', 'bedrijf', 'gebouw', 'document']
+  const hetWords = ['rapport', 'boek', 'plan', 'probleem', 'team', 'voorstel', 'project', 'contract', 'bedrijf', 'gebouw', 'document'];
   for (const hw of hetWords) {
     if (normalized.includes(`het ${hw} die`) || normalized.includes(`dat ${hw} die`)) {
       return {
@@ -266,15 +266,15 @@ export function checkRelativePronounError(normalized: string): GrammarCheckResul
           content: 'Use "die" for de-words and all plural nouns. Use "dat" for het-words in the singular.',
           example: {
             wrong: `het ${hw} die we zagen`,
-            right: `het ${hw} dat we zagen`
-          }
-        }
-      }
+            right: `het ${hw} dat we zagen`,
+          },
+        },
+      };
     }
   }
 
   // Check 3: De-words incorrectly followed by 'dat'
-  const deWords = ['manager', 'collega', 'klant', 'presentatie', 'offerte', 'vergadering', 'oplossing', 'strategie', 'commissie']
+  const deWords = ['manager', 'collega', 'klant', 'presentatie', 'offerte', 'vergadering', 'oplossing', 'strategie', 'commissie'];
   for (const dw of deWords) {
     if (normalized.includes(`de ${dw} dat`) || normalized.includes(`die ${dw} dat`)) {
       return {
@@ -285,14 +285,14 @@ export function checkRelativePronounError(normalized: string): GrammarCheckResul
           content: 'Use "die" for de-words (and plurals). "Dat" is strictly for singular het-words.',
           example: {
             wrong: `de ${dw} dat hier werkt`,
-            right: `de ${dw} die hier werkt`
-          }
-        }
-      }
+            right: `de ${dw} die hier werkt`,
+          },
+        },
+      };
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResult {
@@ -302,8 +302,8 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
     { part: 'gekund', inf: 'kunnen', label: 'kunnen' },
     { part: 'gewild', inf: 'willen', label: 'willen' },
     { part: 'gemogen', inf: 'mogen', label: 'mogen' },
-    { part: 'gezuld', inf: 'zullen', label: 'zullen' }
-  ]
+    { part: 'gezuld', inf: 'zullen', label: 'zullen' },
+  ];
 
   for (const mp of modalParticiples) {
     if (normalized.includes(mp.part)) {
@@ -315,17 +315,17 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
           content: `When a modal verb is combined with an auxiliary and a main action verb, you must use the double infinitive (e.g. "hebben moeten wachten", not "hebben gemoeten wachten").`,
           example: {
             wrong: `hebben ${mp.part} doen`,
-            right: `hebben ${mp.inf} doen`
-          }
-        }
-      }
+            right: `hebben ${mp.inf} doen`,
+          },
+        },
+      };
     }
   }
 
   // Check 2: Causative 'laten' incorrectly used as 'gelaten' with an infinitive
   if (normalized.includes('gelaten')) {
-    const commonInfinitives = ['repareren', 'maken', 'zien', 'komen', 'wachten', 'staan', 'doen', 'halen', 'brengen', 'bezorgen', 'bouwen', 'vervangen', 'weten']
-    const hasInf = commonInfinitives.some(inf => normalized.includes(inf))
+    const commonInfinitives = ['repareren', 'maken', 'zien', 'komen', 'wachten', 'staan', 'doen', 'halen', 'brengen', 'bezorgen', 'bouwen', 'vervangen', 'weten'];
+    const hasInf = commonInfinitives.some(inf => normalized.includes(inf));
     if (hasInf || normalized.includes('laten')) {
       return {
         found: true,
@@ -335,20 +335,20 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
           content: 'When "laten" is used to mean "having something done" or "letting someone do something", it becomes an infinitive in the perfect tense (e.g. "heeft laten repareren").',
           example: {
             wrong: 'heeft de auto gelaten repareren',
-            right: 'heeft de auto laten repareren'
-          }
-        }
-      }
+            right: 'heeft de auto laten repareren',
+          },
+        },
+      };
     }
   }
 
   // Check 3: Perception verbs (horen, zien) incorrectly used as participles with an infinitive
   const perceptionParticiples = [
     { part: 'gehoord', inf: 'horen', label: 'horen' },
-    { part: 'gezien', inf: 'zien', label: 'zien' }
-  ]
+    { part: 'gezien', inf: 'zien', label: 'zien' },
+  ];
   for (const pp of perceptionParticiples) {
-    const commonInfinitives = ['zeggen', 'praten', 'aankomen', 'vertrekken', 'roepen', 'zingen', 'lopen', 'binnenkomen', 'rijden']
+    const commonInfinitives = ['zeggen', 'praten', 'aankomen', 'vertrekken', 'roepen', 'zingen', 'lopen', 'binnenkomen', 'rijden'];
     if (normalized.includes(pp.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
       return {
         found: true,
@@ -358,20 +358,20 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
           content: `In Dutch, when you hear or see someone perform an action in the past, use the double infinitive (e.g. "Ik heb hem horen praten" instead of "gehoord praten").`,
           example: {
             wrong: `hebben hem ${pp.part} praten`,
-            right: `hebben hem ${pp.inf} praten`
-          }
-        }
-      }
+            right: `hebben hem ${pp.inf} praten`,
+          },
+        },
+      };
     }
   }
 
   // Check 4: Instruction/Help verbs (leren, helpen) with participles + infinitive
   const instructionParticiples = [
     { part: 'geleerd', inf: 'leren', label: 'leren' },
-    { part: 'geholpen', inf: 'helpen', label: 'helpen' }
-  ]
+    { part: 'geholpen', inf: 'helpen', label: 'helpen' },
+  ];
   for (const ip of instructionParticiples) {
-    const commonInfinitives = ['programmeren', 'spreken', 'koken', 'zwemmen', 'rijden', 'verhuizen', 'dragen', 'schoonmaken', 'schrijven', 'oplossen']
+    const commonInfinitives = ['programmeren', 'spreken', 'koken', 'zwemmen', 'rijden', 'verhuizen', 'dragen', 'schoonmaken', 'schrijven', 'oplossen'];
     if (normalized.includes(ip.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
       return {
         found: true,
@@ -381,20 +381,20 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
           content: `Verbs like "leren" and "helpen" drop the "ge-" prefix in compound tenses when followed by an infinitive (e.g. "hij heeft me leren programmeren").`,
           example: {
             wrong: `heeft me ${ip.part} zwemmen`,
-            right: `heeft me ${ip.inf} zwemmen`
-          }
-        }
-      }
+            right: `heeft me ${ip.inf} zwemmen`,
+          },
+        },
+      };
     }
   }
 
   // Check 5: Motion/state verbs (blijven, gaan) with 'zijn' + participle + infinitive
   const motionParticiples = [
     { part: 'gebleven', inf: 'blijven', label: 'blijven' },
-    { part: 'gegaan', inf: 'gaan', label: 'gaan' }
-  ]
+    { part: 'gegaan', inf: 'gaan', label: 'gaan' },
+  ];
   for (const mp of motionParticiples) {
-    const commonInfinitives = ['slapen', 'eten', 'wonen', 'zitten', 'staan', 'wandelen', 'zoeken', 'sporten', 'werken']
+    const commonInfinitives = ['slapen', 'eten', 'wonen', 'zitten', 'staan', 'wandelen', 'zoeken', 'sporten', 'werken'];
     if (normalized.includes(mp.part) && commonInfinitives.some(inf => normalized.includes(inf))) {
       return {
         found: true,
@@ -404,20 +404,20 @@ export function checkDoubleInfinitiveError(normalized: string): GrammarCheckResu
           content: `When "blijven" or "gaan" is combined with another infinitive in compound tenses with "zijn", use the double infinitive (e.g. "Zij is blijven slapen").`,
           example: {
             wrong: `is ${mp.part} slapen`,
-            right: `is ${mp.inf} slapen`
-          }
-        }
-      }
+            right: `is ${mp.inf} slapen`,
+          },
+        },
+      };
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkConcessionError(normalized: string): GrammarCheckResult {
   // Check 1: 'ondanks' used with a subject pronoun without 'dat' or 'het feit dat'
   // e.g. "ondanks hij ziek was", "ondanks we weinig tijd hadden", "ondanks ik"
-  const pronounAfterOndanks = /\bondanks\s+(hij|zij|ze|wij|we|ik|je|jij|jullie|u|men)\b/i
+  const pronounAfterOndanks = /\bondanks\s+(hij|zij|ze|wij|we|ik|je|jij|jullie|u|men)\b/i;
   if (pronounAfterOndanks.test(normalized) && !normalized.includes('ondanks dat') && !normalized.includes('ondanks het feit dat')) {
     return {
       found: true,
@@ -427,15 +427,15 @@ export function checkConcessionError(normalized: string): GrammarCheckResult {
         content: 'In Dutch, "ondanks" is a preposition followed directly by a noun phrase. To connect a full clause containing a conjugated verb, you must use "ondanks dat" or "ondanks het feit dat".',
         example: {
           wrong: 'ondanks hij moe was, ging hij door',
-          right: 'ondanks dat hij moe was, ging hij door (or: ondanks zijn vermoeidheid)'
-        }
-      }
-    }
+          right: 'ondanks dat hij moe was, ging hij door (or: ondanks zijn vermoeidheid)',
+        },
+      },
+    };
   }
 
   // Check 2: 'al' used concessively at the start without verb-first inversion
   // e.g. "al het regent", "al we weinig tijd hebben" (without "ook al")
-  const startsWithAlPronoun = /^al\s+(het|hij|zij|ze|wij|we|ik|je|jij|jullie|u|de|het|een)\s+/i
+  const startsWithAlPronoun = /^al\s+(het|hij|zij|ze|wij|we|ik|je|jij|jullie|u|de|het|een)\s+/i;
   if (startsWithAlPronoun.test(normalized.trim()) && !normalized.trim().startsWith('ook al')) {
     return {
       found: true,
@@ -445,15 +445,15 @@ export function checkConcessionError(normalized: string): GrammarCheckResult {
         content: 'When "al" is used concessively at the head of a sentence, the finite verb must precede the subject (inversion). "Ook al", conversely, acts as a subordinating conjunction with verb-final word order.',
         example: {
           wrong: 'Al het regent, we gaan wandelen',
-          right: 'Al regent het, we gaan wandelen (or: Ook al regent het...)'
-        }
-      }
-    }
+          right: 'Al regent het, we gaan wandelen (or: Ook al regent het...)',
+        },
+      },
+    };
   }
 
   // Check 3: Correlative 'hoe [adjectief] ...' missing 'ook'
   // e.g. "hoe moeilijk het is", "hoe hard we werken", "hoe complex de situatie is"
-  const hoeAdjectiveMatch = /^hoe\s+(moeilijk|zwaar|complex|veel|weinig|hard|groot|duur|ingewikkeld|lastig|goed|slecht|dringend)\b/i
+  const hoeAdjectiveMatch = /^hoe\s+(moeilijk|zwaar|complex|veel|weinig|hard|groot|duur|ingewikkeld|lastig|goed|slecht|dringend)\b/i;
   if (hoeAdjectiveMatch.test(normalized.trim()) && !normalized.includes('ook')) {
     return {
       found: true,
@@ -463,10 +463,10 @@ export function checkConcessionError(normalized: string): GrammarCheckResult {
         content: 'To express "no matter how [difficult/challenging]" in Dutch, use the structure "Hoe + [adjectief/bijwoord] + [onderwerp] + [rest] + ook + [werkwoord]". The word "ook" is grammatically mandatory.',
         example: {
           wrong: 'Hoe moeilijk het is, we geven niet op',
-          right: 'Hoe moeilijk het ook is, we geven niet op'
-        }
-      }
-    }
+          right: 'Hoe moeilijk het ook is, we geven niet op',
+        },
+      },
+    };
   }
 
   // Check 4: 'weliswaar' missing 'maar'
@@ -479,27 +479,27 @@ export function checkConcessionError(normalized: string): GrammarCheckResult {
         content: '"Weliswaar" acknowledges a limitation or caveat and must be paired with "maar" to introduce the decisive counterpoint.',
         example: {
           wrong: 'Het is weliswaar duur, het levert veel op',
-          right: 'Het is weliswaar duur, maar het levert veel op'
-        }
-      }
-    }
+          right: 'Het is weliswaar duur, maar het levert veel op',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkConcessionDrillError(normalized: string): GrammarCheckResult {
-  const conjunctions = ['hoewel', 'ofschoon']
-  const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie', 'u', 'men']
-  const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen', 'had', 'zou', 'moet', 'moeten', 'ga', 'gaat', 'gaan', 'was', 'waren']
+  const conjunctions = ['hoewel', 'ofschoon'];
+  const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie', 'u', 'men'];
+  const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen', 'had', 'zou', 'moet', 'moeten', 'ga', 'gaat', 'gaan', 'was', 'waren'];
 
   for (const c of conjunctions) {
-    const words = normalized.split(' ')
-    const index = words.indexOf(c)
+    const words = normalized.split(' ');
+    const index = words.indexOf(c);
     if (index !== -1 && index < words.length - 2) {
-      const nextWords = words.slice(index + 1)
-      const firstNext = nextWords[0]
-      const secondNext = nextWords[1]
+      const nextWords = words.slice(index + 1);
+      const firstNext = nextWords[0];
+      const secondNext = nextWords[1];
       if (firstNext && pronouns.includes(firstNext) && secondNext && commonVerbs.includes(secondNext)) {
         return {
           found: true,
@@ -509,24 +509,24 @@ export function checkConcessionDrillError(normalized: string): GrammarCheckResul
             content: 'A clause introduced by "hoewel" or "ofschoon" is a subordinate clause: the conjugated verb goes to the very end.',
             example: {
               wrong: `... ${c} ik ${secondNext} honger.`,
-              right: `... ${c} ik honger ${secondNext}.`
-            }
-          }
-        }
+              right: `... ${c} ik honger ${secondNext}.`,
+            },
+          },
+        };
       }
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkParticipialError(normalized: string): GrammarCheckResult {
   // Check 1: Separable verbs with te in front of whole word instead of infix
   // e.g. "de te oplossen problemen", "het te uitvoeren plan", "de te voorbereiden presentatie"
-  const separableGerundiveRegex = /\b(de|het|een)\s+te\s+(oplossen|uitvoeren|aanpakken|voorbereiden|doorvoeren|indienen|afhandelen|samenstellen|invoeren|aannemen|aanvragen|opbellen|doorgeven|inleveren|uitstellen|overleggen|afstemmen)\b/i
-  const matchSep = normalized.match(separableGerundiveRegex)
+  const separableGerundiveRegex = /\b(de|het|een)\s+te\s+(oplossen|uitvoeren|aanpakken|voorbereiden|doorvoeren|indienen|afhandelen|samenstellen|invoeren|aannemen|aanvragen|opbellen|doorgeven|inleveren|uitstellen|overleggen|afstemmen)\b/i;
+  const matchSep = normalized.match(separableGerundiveRegex);
   if (matchSep && matchSep[2]) {
-    const wrongWord = matchSep[2]
+    const wrongWord = matchSep[2];
     return {
       found: true,
       message: `With separable verbs in gerundive (te-infinitive) constructions, insert 'te' between the prefix and the stem (e.g. 'de op te lossen problemen', NOT 'de te ${wrongWord} problemen').`,
@@ -535,20 +535,20 @@ export function checkParticipialError(normalized: string): GrammarCheckResult {
         content: 'When forming the modal participle (gerundive) with a separable verb, the particle "te" must be placed between the separable prefix and the verb: [prefix] + te + [verb stem + en].',
         example: {
           wrong: `de te ${wrongWord} kwesties`,
-          right: `de ${wrongWord.slice(0, wrongWord.length > 8 ? 3 : 2)} te ... kwesties`
-        }
-      }
-    }
+          right: `de ${wrongWord.slice(0, wrongWord.length > 8 ? 3 : 2)} te ... kwesties`,
+        },
+      },
+    };
   }
 
   // Check 2: Missing '-e' on attributive present participles before de/het/plural nouns
   // e.g. "de stijgend kosten", "de toenemend invloed", "de dalend omzet", "de groeiend vraag"
-  const uninflectedPresentParticiple = /\b(de|het)\s+(stijgend|toenemend|afnemend|dalend|groeiend|blijvend|beslissend|veranderend|dreigend|overheersend)\s+([a-z]+)\b/i
-  const matchPres = normalized.match(uninflectedPresentParticiple)
+  const uninflectedPresentParticiple = /\b(de|het)\s+(stijgend|toenemend|afnemend|dalend|groeiend|blijvend|beslissend|veranderend|dreigend|overheersend)\s+([a-z]+)\b/i;
+  const matchPres = normalized.match(uninflectedPresentParticiple);
   if (matchPres) {
-    const art = matchPres[1]
-    const part = matchPres[2]
-    const noun = matchPres[3]
+    const art = matchPres[1];
+    const part = matchPres[2];
+    const noun = matchPres[3];
     return {
       found: true,
       message: `Attributive present participles used before nouns require the adjectival ending '-e': '${art} ${part}e ${noun}' (not '${part}').`,
@@ -557,17 +557,17 @@ export function checkParticipialError(normalized: string): GrammarCheckResult {
         content: 'Present participles (infinitive + -d) functioning as adjectives before nouns follow standard Dutch adjective inflection rules and almost always take an "-e" ending when preceded by "de" or "het".',
         example: {
           wrong: `${art} ${part} ${noun}`,
-          right: `${art} ${part}e ${noun}`
-        }
-      }
-    }
+          right: `${art} ${part}e ${noun}`,
+        },
+      },
+    };
   }
 
   // Check 3: Missing 'al' in simultaneous present participle constructions
   // e.g. starting with "wandelend door het park dacht hij", "doende leert men" (without "al")
-  const missingAlRegex = /^(wandelend|lezend|fietsend|pratend|rijdend|doende|zoekend|luisterend)\b/i
+  const missingAlRegex = /^(wandelend|lezend|fietsend|pratend|rijdend|doende|zoekend|luisterend)\b/i;
   if (missingAlRegex.test(normalized.trim())) {
-    const verbPart = normalized.trim().split(/\s+/)[0]
+    const verbPart = normalized.trim().split(/\s+/)[0];
     return {
       found: true,
       message: `In Dutch, simultaneous actions or manner expressed with a present participle are idiomatic when preceded by 'al' (e.g. 'Al ${verbPart}...').`,
@@ -576,14 +576,14 @@ export function checkParticipialError(normalized: string): GrammarCheckResult {
         content: 'To express simultaneous action or progressive manner ("while walking / in doing so"), native Dutch pairs the present participle with "al" at the start of the clause (e.g. "Al doende leert men", "Al wandelend bedacht zij een oplossing").',
         example: {
           wrong: `${verbPart} door het park dacht hij na`,
-          right: `Al ${verbPart} door het park dacht hij na`
-        }
-      }
-    }
+          right: `Al ${verbPart} door het park dacht hij na`,
+        },
+      },
+    };
   }
 
   // Check 4: Preposition errors with concise participial formulas (Gelet op / Gezien)
-  const geletPrepError = /\bgelet\s+(aan|naar|voor|over|bij)\b/i
+  const geletPrepError = /\bgelet\s+(aan|naar|voor|over|bij)\b/i;
   if (geletPrepError.test(normalized)) {
     return {
       found: true,
@@ -593,13 +593,13 @@ export function checkParticipialError(normalized: string): GrammarCheckResult {
         content: '"Gelet op" is a standard formal Dutch participial expression that always requires the preposition "op".',
         example: {
           wrong: 'Gelet aan de recente ontwikkelingen',
-          right: 'Gelet op de recente ontwikkelingen'
-        }
-      }
-    }
+          right: 'Gelet op de recente ontwikkelingen',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkConditionalRestrictiveError(normalized: string, conditionType?: string): GrammarCheckResult {
@@ -613,10 +613,10 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: '"Mits" introduces a necessary condition that MUST be met ("alleen als" / provided that). "Tenzij" introduces an exception ("behalve als" / unless).',
         example: {
           wrong: 'We gaan akkoord, tenzij de kosten binnen budget blijven.',
-          right: 'We gaan akkoord, mits de kosten binnen het budget blijven.'
-        }
-      }
-    }
+          right: 'We gaan akkoord, mits de kosten binnen het budget blijven.',
+        },
+      },
+    };
   }
 
   if (conditionType === 'tenzij' && normalized.includes('mits')) {
@@ -628,14 +628,14 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: '"Tenzij" expresses an exception ("behalve als" / unless). "Mits" means provided that ("alleen als").',
         example: {
           wrong: 'De vergadering gaat door, mits de voorzitter ziek is.',
-          right: 'De vergadering gaat door, tenzij de voorzitter ziek is.'
-        }
-      }
-    }
+          right: 'De vergadering gaat door, tenzij de voorzitter ziek is.',
+        },
+      },
+    };
   }
 
   // Check 2: "op voorwaarde" missing "dat"
-  const opVoorwaardeMissingDat = /\bop\s+voorwaarde\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit|[a-z]+)\b/i
+  const opVoorwaardeMissingDat = /\bop\s+voorwaarde\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit|[a-z]+)\b/i;
   if (opVoorwaardeMissingDat.test(normalized) && !normalized.includes('op voorwaarde dat')) {
     return {
       found: true,
@@ -645,14 +645,14 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: 'When connecting clauses in formal Dutch, use "op voorwaarde dat" followed by subclause verb-final word order.',
         example: {
           wrong: 'op voorwaarde we de targets halen',
-          right: 'op voorwaarde dat we de targets halen'
-        }
-      }
-    }
+          right: 'op voorwaarde dat we de targets halen',
+        },
+      },
+    };
   }
 
   // Check 3: "gesteld" or "aangenomen" missing "dat"
-  const gesteldMissingDat = /\b(gesteld|aangenomen)\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\b/i
+  const gesteldMissingDat = /\b(gesteld|aangenomen)\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\b/i;
   if (gesteldMissingDat.test(normalized) && !normalized.includes('gesteld dat') && !normalized.includes('aangenomen dat')) {
     return {
       found: true,
@@ -662,10 +662,10 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: 'To introduce a formal hypothetical scenario (Suppose that...), Dutch uses "gesteld dat" or "aangenomen dat" with subclause verb-final word order.',
         example: {
           wrong: 'gesteld we verliezen de klant, moeten we bezuinigen',
-          right: 'gesteld dat we de klant verliezen, dan moeten we bezuinigen'
-        }
-      }
-    }
+          right: 'gesteld dat we de klant verliezen, dan moeten we bezuinigen',
+        },
+      },
+    };
   }
 
   // Check 4: Redundant "als" + "mocht(en)"
@@ -678,10 +678,10 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: 'In formal Dutch, fronting "Mocht(en) [onderwerp]..." functions as a conditional clause without needing "als".',
         example: {
           wrong: 'Als u nog vragen mocht hebben, bel ons dan.',
-          right: 'Mocht u nog vragen hebben, bel ons dan.'
-        }
-      }
-    }
+          right: 'Mocht u nog vragen hebben, bel ons dan.',
+        },
+      },
+    };
   }
 
   // Check 5: "voor zover als" (Anglicism from "as far as")
@@ -694,15 +694,15 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: 'Avoid literal translations of English "as far as". Dutch uses "voor zover" with subclause verb-final word order.',
         example: {
           wrong: 'voor zover als ik het dossier ken',
-          right: 'voor zover ik het dossier ken'
-        }
-      }
-    }
+          right: 'voor zover ik het dossier ken',
+        },
+      },
+    };
   }
 
   // Check 6: "tenzij" double negation
   if (normalized.includes('tenzij') && conditionType === 'tenzij') {
-    const tenzijDoubleNegation = /\btenzij\s+.*\b(niet|geen|nooit)\b/i
+    const tenzijDoubleNegation = /\btenzij\s+.*\b(niet|geen|nooit)\b/i;
     if (tenzijDoubleNegation.test(normalized)) {
       return {
         found: true,
@@ -712,15 +712,15 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
           content: 'Because "tenzij" already states a negative exception, adding "niet" reverses the meaning.',
           example: {
             wrong: 'De vergadering gaat door, tenzij er geen bezwaar is.',
-            right: 'De vergadering gaat door, tenzij er bezwaar is.'
-          }
-        }
-      }
+            right: 'De vergadering gaat door, tenzij er bezwaar is.',
+          },
+        },
+      };
     }
   }
 
   // Check 7: Subclause word order after "mits" or "tenzij"
-  const subclauseVerbNonFinal = /\b(mits|tenzij|voor zover|op voorwaarde dat|gesteld dat)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|gaat|gaan)\s+(een|de|het|ons|onze|geen|veel|weinig|binnen|aan|in|op|voor|over|tegen|tot|direct|altijd|snel|nog)\b/i
+  const subclauseVerbNonFinal = /\b(mits|tenzij|voor zover|op voorwaarde dat|gesteld dat)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|gaat|gaan)\s+(een|de|het|ons|onze|geen|veel|weinig|binnen|aan|in|op|voor|over|tegen|tot|direct|altijd|snel|nog)\b/i;
   if (subclauseVerbNonFinal.test(normalized)) {
     return {
       found: true,
@@ -730,13 +730,13 @@ export function checkConditionalRestrictiveError(normalized: string, conditionTy
         content: 'Conditional and restrictive conjunctions introduce subordinate clauses (SOV). Place the finite verb at the very end.',
         example: {
           wrong: 'mits het budget blijft binnen de perken',
-          right: 'mits het budget binnen de perken blijft'
-        }
-      }
-    }
+          right: 'mits het budget binnen de perken blijft',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkCausalityError(normalized: string, relationType?: string): GrammarCheckResult {
@@ -751,10 +751,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'Use "doordat" when something happens due to an external cause or natural force without human choice. Use "omdat" when a person makes a conscious decision based on a reason.',
           example: {
             wrong: 'Het treinverkeer lag stil omdat de bliksem was ingeslagen.',
-            right: 'Het treinverkeer lag stil doordat de bliksem was ingeslagen.'
-          }
-        }
-      }
+            right: 'Het treinverkeer lag stil doordat de bliksem was ingeslagen.',
+          },
+        },
+      };
     }
   }
 
@@ -769,10 +769,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'Use "aangezien" for reasoned decisions and formal justifications ("since/as"). "Doordat" is reserved for physical or involuntary causes.',
           example: {
             wrong: 'Doordat we willen besparen, sluiten we de vestiging.',
-            right: 'Aangezien we willen besparen, sluiten we de vestiging.'
-          }
-        }
-      }
+            right: 'Aangezien we willen besparen, sluiten we de vestiging.',
+          },
+        },
+      };
     }
   }
 
@@ -787,10 +787,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'Use "te wijten aan" when blaming a negative outcome or fault. Use "dankzij" or "te danken aan" exclusively for positive achievements and fortunate circumstances.',
           example: {
             wrong: 'De vertraging was te danken aan een computerstoring.',
-            right: 'De vertraging was te wijten aan een computerstoring.'
-          }
-        }
-      }
+            right: 'De vertraging was te wijten aan een computerstoring.',
+          },
+        },
+      };
     }
   }
 
@@ -805,10 +805,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'In formal Dutch, "te danken aan" attributes success or credit to a positive factor, while "te wijten aan" assigns blame.',
           example: {
             wrong: 'De omzetgroei is te wijten aan de inzet van het team.',
-            right: 'De omzetgroei is te danken aan de inzet van het team.'
-          }
-        }
-      }
+            right: 'De omzetgroei is te danken aan de inzet van het team.',
+          },
+        },
+      };
     }
   }
 
@@ -823,10 +823,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'Use "waardoor" to connect an involuntary consequence of an event. Use "zodat" or "opdat" when an action is deliberately taken to achieve a specific goal.',
           example: {
             wrong: 'De server crashte, zodat alle bestanden verloren gingen.',
-            right: 'De server crashte, waardoor alle bestanden verloren gingen.'
-          }
-        }
-      }
+            right: 'De server crashte, waardoor alle bestanden verloren gingen.',
+          },
+        },
+      };
     }
   }
 
@@ -841,10 +841,10 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'In formal and legal Dutch, "teneinde" acts like "om... te" and must be paired with "te + infinitief" at the end of the clause.',
           example: {
             wrong: 'teneinde de kwaliteit waarborgen we',
-            right: 'teneinde de kwaliteit te waarborgen'
-          }
-        }
-      }
+            right: 'teneinde de kwaliteit te waarborgen',
+          },
+        },
+      };
     }
   }
 
@@ -859,16 +859,16 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: 'Use "dermate [intensiteit] dat [bijzin]" to express an outcome resulting from a specific high degree or magnitude.',
           example: {
             wrong: 'De vraag steeg dermate snel we konden niet leveren',
-            right: 'De vraag steeg dermate snel dat we niet konden leveren'
-          }
-        }
-      }
+            right: 'De vraag steeg dermate snel dat we niet konden leveren',
+          },
+        },
+      };
     }
   }
 
   // Check 8: "opdat" subclause word order (verbs must be final)
   if (normalized.includes('opdat')) {
-    const opdatVerbNonFinal = /\bopdat\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|zal|zullen)\s+([a-z]+)\b/i
+    const opdatVerbNonFinal = /\bopdat\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|zal|zullen)\s+([a-z]+)\b/i;
     if (opdatVerbNonFinal.test(normalized)) {
       return {
         found: true,
@@ -878,15 +878,15 @@ export function checkCausalityError(normalized: string, relationType?: string): 
           content: '"Opdat" is a subordinating conjunction of purpose. Place all auxiliary and main verbs at the very end of the subclause.',
           example: {
             wrong: 'opdat we kunnen incidenten voorkomen',
-            right: 'opdat we incidenten kunnen voorkomen'
-          }
-        }
-      }
+            right: 'opdat we incidenten kunnen voorkomen',
+          },
+        },
+      };
     }
   }
 
   // Check 9: "doordat" / "waardoor" / "aangezien" subclause word order
-  const subclauseVerbNonFinalCausality = /\b(doordat|waardoor|aangezien|vermits)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|ging|gingen|viel|vielen|stond|stonden|lag|lagen)\s+([a-z]+)\b/i
+  const subclauseVerbNonFinalCausality = /\b(doordat|waardoor|aangezien|vermits)\s+(?:(?:de|het|een|ons|onze|deze|dit|geen)\s+)?([a-z]+)\s+(is|zijn|wordt|worden|blijft|blijven|heeft|hebben|kan|kunnen|moet|moeten|ging|gingen|viel|vielen|stond|stonden|lag|lagen)\s+([a-z]+)\b/i;
   if (subclauseVerbNonFinalCausality.test(normalized)) {
     return {
       found: true,
@@ -896,49 +896,49 @@ export function checkCausalityError(normalized: string, relationType?: string): 
         content: '"Doordat", "waardoor", and "aangezien" are subordinating conjunctions. The finite verb must be positioned at the end of the clause.',
         example: {
           wrong: 'doordat de stroom viel plotseling uit',
-          right: 'doordat de stroom plotseling uitviel'
-        }
-      }
-    }
+          right: 'doordat de stroom plotseling uitviel',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkFixedPrepositionRegimeError(
   normalized: string,
   fixedPrepositionData?: {
-    collocationType?: string
-    governingHead?: string
-    fixedPreposition?: string
-    commonTransferErrors?: string[]
-  }
+    collocationType?: string;
+    governingHead?: string;
+    fixedPreposition?: string;
+    commonTransferErrors?: string[];
+  },
 ): GrammarCheckResult {
   // 1. If specific fixedPrepositionData is provided for the exercise:
   if (fixedPrepositionData?.governingHead && fixedPrepositionData?.fixedPreposition) {
-    const head = fixedPrepositionData.governingHead.toLowerCase()
-    const rawPreps = fixedPrepositionData.fixedPreposition.toLowerCase()
-    const requiredPreps = rawPreps.split(/[\/,]/).map(p => p.trim()).filter(Boolean)
+    const head = fixedPrepositionData.governingHead.toLowerCase();
+    const rawPreps = fixedPrepositionData.fixedPreposition.toLowerCase();
+    const requiredPreps = rawPreps.split(/[\/,]/).map(p => p.trim()).filter(Boolean);
 
-    const headTokens = head.split(/[\s\/,]+/).filter(t => t.length > 2)
-    const hasHead = headTokens.some(tok => normalized.includes(tok.replace(/(en|t|d)$/, ''))) || normalized.includes(head)
+    const headTokens = head.split(/[\s\/,]+/).filter(t => t.length > 2);
+    const hasHead = headTokens.some(tok => normalized.includes(tok.replace(/(en|t|d)$/, ''))) || normalized.includes(head);
 
     if (hasHead) {
-      const words = normalized.split(/\s+/)
-      const hasAllRequiredPreps = requiredPreps.every(correctPrep => {
-        return words.includes(correctPrep) || 
-          normalized.includes(`${correctPrep} `) || 
-          normalized.includes(`er${correctPrep}`) || 
-          normalized.includes(`daar${correctPrep}`) || 
-          normalized.includes(`waar${correctPrep}`) ||
-          normalized.includes(`er ${correctPrep}`) ||
-          normalized.includes(`hier${correctPrep}`)
-      })
+      const words = normalized.split(/\s+/);
+      const hasAllRequiredPreps = requiredPreps.every((correctPrep) => {
+        return words.includes(correctPrep)
+          || normalized.includes(`${correctPrep} `)
+          || normalized.includes(`er${correctPrep}`)
+          || normalized.includes(`daar${correctPrep}`)
+          || normalized.includes(`waar${correctPrep}`)
+          || normalized.includes(`er ${correctPrep}`)
+          || normalized.includes(`hier${correctPrep}`);
+      });
 
       if (!hasAllRequiredPreps) {
-        const primaryPrep = requiredPreps[0]
-        const typicalPreps = ['over', 'voor', 'aan', 'in', 'op', 'met', 'tegen', 'bij', 'van', 'naar', 'tot', 'om'].filter(p => !requiredPreps.includes(p))
-        const usedWrong = typicalPreps.filter(p => words.includes(p))
+        const primaryPrep = requiredPreps[0];
+        const typicalPreps = ['over', 'voor', 'aan', 'in', 'op', 'met', 'tegen', 'bij', 'van', 'naar', 'tot', 'om'].filter(p => !requiredPreps.includes(p));
+        const usedWrong = typicalPreps.filter(p => words.includes(p));
 
         if (usedWrong.length > 0) {
           return {
@@ -949,10 +949,10 @@ export function checkFixedPrepositionRegimeError(
               content: `In Dutch, "${fixedPrepositionData.governingHead}" governs the preposition "${fixedPrepositionData.fixedPreposition}". Avoid direct translation or language-transfer from English/German.`,
               example: {
                 wrong: `${fixedPrepositionData.governingHead} ${usedWrong[0]} ...`,
-                right: `${fixedPrepositionData.governingHead} ${primaryPrep} ...`
-              }
-            }
-          }
+                right: `${fixedPrepositionData.governingHead} ${primaryPrep} ...`,
+              },
+            },
+          };
         }
       }
     }
@@ -967,7 +967,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'twijfelen',
       wrongExample: 'Ik twijfel over zijn eerlijkheid.',
       rightExample: 'Ik twijfel aan zijn eerlijkheid.',
-      explanation: 'When expressing doubt about facts, reliability, or truth, Dutch strictly uses "twijfelen aan". ("Twijfelen over" is only used colloquially when hesitating between two choices).'
+      explanation: 'When expressing doubt about facts, reliability, or truth, Dutch strictly uses "twijfelen aan". ("Twijfelen over" is only used colloquially when hesitating between two choices).',
     },
     {
       headRegex: /\brekening\s+houd/i,
@@ -976,7 +976,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'rekening houden',
       wrongExample: 'Wij houden rekening voor vertragingen.',
       rightExample: 'Wij houden rekening met vertragingen.',
-      explanation: '"Rekening houden" is always followed by "met" (to take into account / allow for).'
+      explanation: '"Rekening houden" is always followed by "met" (to take into account / allow for).',
     },
     {
       headRegex: /\b(bestand\s+(?:is|zijn|was|waren|wezen)|bestand)\b/i,
@@ -985,7 +985,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'bestand zijn',
       wrongExample: 'Dit materiaal is bestand voor hoge temperaturen.',
       rightExample: 'Dit materiaal is bestand tegen hoge temperaturen.',
-      explanation: '"Bestand zijn" (to resist / withstand) requires the preposition "tegen".'
+      explanation: '"Bestand zijn" (to resist / withstand) requires the preposition "tegen".',
     },
     {
       headRegex: /\b(neerleggen|neergelegd|leg\s+\w+\s+neer|legt\s+\w+\s+neer)\b/i,
@@ -994,7 +994,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'zich neerleggen',
       wrongExample: 'De werknemers leggen zich neer aan het besluit.',
       rightExample: 'De werknemers leggen zich neer bij het besluit.',
-      explanation: '"Zich neerleggen bij" (to resign oneself to / accept an inevitable decision) always takes "bij".'
+      explanation: '"Zich neerleggen bij" (to resign oneself to / accept an inevitable decision) always takes "bij".',
     },
     {
       headRegex: /\b(bijdragen|bijdraagt|bijgedragen|draag\s+\w+\s+bij|draagt\s+\w+\s+bij)\b/i,
@@ -1003,7 +1003,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'bijdragen',
       wrongExample: 'Dit project draagt bij voor onze doelstellingen.',
       rightExample: 'Dit project draagt bij aan onze doelstellingen.',
-      explanation: '"Bijdragen" (to contribute) takes "aan" in Dutch (bijdragen aan een doel/oplossing).'
+      explanation: '"Bijdragen" (to contribute) takes "aan" in Dutch (bijdragen aan een doel/oplossing).',
     },
     {
       headRegex: /\b(voldoen|voldoet|voldaan)\b/i,
@@ -1012,7 +1012,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'voldoen',
       wrongExample: 'Het voorstel voldoet voor alle eisen.',
       rightExample: 'Het voorstel voldoet aan alle eisen.',
-      explanation: '"Voldoen aan" (to satisfy / comply with requirements or expectations) takes "aan".'
+      explanation: '"Voldoen aan" (to satisfy / comply with requirements or expectations) takes "aan".',
     },
     {
       headRegex: /\b(gepaard\s+gaan|gepaard\s+gaat|gepaard\s+ging|gepaard\s+gegaan)\b/i,
@@ -1021,7 +1021,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'gepaard gaan',
       wrongExample: 'De verandering gaat gepaard in grote risico\'s.',
       rightExample: 'De verandering gaat gepaard met grote risico\'s.',
-      explanation: '"Gepaard gaan met" (to be accompanied by / go hand in hand with) always takes "met".'
+      explanation: '"Gepaard gaan met" (to be accompanied by / go hand in hand with) always takes "met".',
     },
     {
       headRegex: /\b(inspelen|inspeelt|ingespeeld|speel\s+\w+\s+in|speelt\s+\w+\s+in)\b/i,
@@ -1030,7 +1030,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'inspelen',
       wrongExample: 'Wij moeten inspelen naar de behoeften van de klant.',
       rightExample: 'Wij moeten inspelen op de behoeften van de klant.',
-      explanation: '"Inspelen op" (to respond / anticipate / adapt to) takes "op".'
+      explanation: '"Inspelen op" (to respond / anticipate / adapt to) takes "op".',
     },
     {
       headRegex: /\b(voorzien|voorziet|voorziening)\b/i,
@@ -1039,7 +1039,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'voorzien',
       wrongExample: 'De subsidie voorziet voor de kosten.',
       rightExample: 'De subsidie voorziet in de kosten.',
-      explanation: '"Voorzien in" (to provide for / cover a need or cost) takes "in".'
+      explanation: '"Voorzien in" (to provide for / cover a need or cost) takes "in".',
     },
     {
       headRegex: /\b(opgewassen)\b/i,
@@ -1048,7 +1048,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'opgewassen zijn',
       wrongExample: 'Zij zijn niet opgewassen voor deze zware taak.',
       rightExample: 'Zij zijn niet opgewassen tegen deze zware taak.',
-      explanation: '"Opgewassen zijn tegen" (to be equal to / up to a challenge or opponent) takes "tegen".'
+      explanation: '"Opgewassen zijn tegen" (to be equal to / up to a challenge or opponent) takes "tegen".',
     },
     {
       headRegex: /\b(behoefte)\b/i,
@@ -1057,7 +1057,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'behoefte',
       wrongExample: 'Er is een grote behoefte voor vernieuwing.',
       rightExample: 'Er is een grote behoefte aan vernieuwing.',
-      explanation: '"Behoefte aan" (need for / desire for) is always followed by "aan".'
+      explanation: '"Behoefte aan" (need for / desire for) is always followed by "aan".',
     },
     {
       headRegex: /\b(bezwaar|bezwaren)\b/i,
@@ -1066,7 +1066,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'bezwaar',
       wrongExample: 'Ik heb bezwaar op dit nieuwe beleid.',
       rightExample: 'Ik heb bezwaar tegen dit nieuwe beleid.',
-      explanation: '"Bezwaar hebben tegen" / "bezwaar maken tegen" (to object to) requires "tegen".'
+      explanation: '"Bezwaar hebben tegen" / "bezwaar maken tegen" (to object to) requires "tegen".',
     },
     {
       headRegex: /\b(verantwoordelijk)\b/i,
@@ -1075,7 +1075,7 @@ export function checkFixedPrepositionRegimeError(
       headName: 'verantwoordelijk',
       wrongExample: 'Wie is verantwoordelijk over dit project?',
       rightExample: 'Wie is verantwoordelijk voor dit project?',
-      explanation: '"Verantwoordelijk voor" (responsible for) takes "voor".'
+      explanation: '"Verantwoordelijk voor" (responsible for) takes "voor".',
     },
     {
       headRegex: /\b(bemoeien|bemoeit|bemoeid|bemoei)\b/i,
@@ -1084,9 +1084,9 @@ export function checkFixedPrepositionRegimeError(
       headName: 'zich bemoeien',
       wrongExample: 'Hij bemoeit zich over alles.',
       rightExample: 'Hij bemoeit zich met alles.',
-      explanation: '"Zich bemoeien met" (to interfere with / mind someone\'s business) takes "met".'
-    }
-  ]
+      explanation: '"Zich bemoeien met" (to interfere with / mind someone\'s business) takes "met".',
+    },
+  ];
 
   for (const rule of rules) {
     if (rule.headRegex.test(normalized) && rule.wrongRegex.test(normalized) && !normalized.includes(rule.correctPrep)) {
@@ -1098,30 +1098,30 @@ export function checkFixedPrepositionRegimeError(
           content: rule.explanation,
           example: {
             wrong: rule.wrongExample,
-            right: rule.rightExample
-          }
-        }
-      }
+            right: rule.rightExample,
+          },
+        },
+      };
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkMidfieldOrderError(
   normalized: string,
   midfieldData?: {
-    focusRule: 'tmp-order' | 'definite-vs-indefinite-object' | 'indirect-direct-object' | 'negation-placement' | 'modal-adverb-tmp'
+    focusRule: 'tmp-order' | 'definite-vs-indefinite-object' | 'indirect-direct-object' | 'negation-placement' | 'modal-adverb-tmp';
     slots?: {
-      time?: string
-      manner?: string
-      place?: string
-      directObject?: { text: string; isDefinite: boolean }
-      indirectObject?: { text: string; preposition?: string }
-      negation?: 'niet' | 'geen'
-      predicateOrPrepObject?: string
-    }
-  }
+      time?: string;
+      manner?: string;
+      place?: string;
+      directObject?: { text: string; isDefinite: boolean };
+      indirectObject?: { text: string; preposition?: string };
+      negation?: 'niet' | 'geen';
+      predicateOrPrepObject?: string;
+    };
+  },
 ): GrammarCheckResult {
   // 1. Check: "niet een" instead of "geen"
   if (/\bniet\s+een\b/i.test(normalized)) {
@@ -1133,10 +1133,10 @@ export function checkMidfieldOrderError(
         content: 'Dutch always negates indefinite nouns (nouns preceded by "een" or plural nouns with no article) using "geen", never "niet een".',
         example: {
           wrong: 'Hij heeft gisteren niet een e-mail gestuurd.',
-          right: 'Hij heeft gisteren geen e-mail gestuurd.'
-        }
-      }
-    }
+          right: 'Hij heeft gisteren geen e-mail gestuurd.',
+        },
+      },
+    };
   }
 
   // 2. Check: "niet" placed at the very end after a prepositional/directional phrase or predicate adjective
@@ -1149,10 +1149,10 @@ export function checkMidfieldOrderError(
         content: 'When negating a sentence, "niet" precedes prepositional phrases, directional complements, and predicate adjectives (e.g. "niet naar kantoor", "niet tevreden").',
         example: {
           wrong: 'De manager gaat naar Amsterdam niet.',
-          right: 'De manager gaat niet naar Amsterdam.'
-        }
-      }
-    }
+          right: 'De manager gaat niet naar Amsterdam.',
+        },
+      },
+    };
   }
 
   // 3. Check: "niet" placed before a definite direct object (e.g. "niet het rapport", "niet de plannen")
@@ -1167,16 +1167,16 @@ export function checkMidfieldOrderError(
           content: 'A definite direct object (with de, het, dit, or possessives) comes before "niet" in the midfield, unless you are making a specific contrast with "maar".',
           example: {
             wrong: 'Ik heb gisteren niet het rapport gelezen.',
-            right: 'Ik heb het rapport gisteren niet gelezen.'
-          }
-        }
-      }
+            right: 'Ik heb het rapport gisteren niet gelezen.',
+          },
+        },
+      };
     }
   }
 
   // 4. Check: Place before Time (Plaats vóór Tijd)
   // E.g., "naar kantoor gisteren", "in amsterdam morgen", "op kantoor vandaag", "naar brussel vorige week"
-  const placeBeforeTimeRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|altijd|nooit|vaak|om\s+\w+\s+uur|elke\s+dag|binnenkort)\b/i
+  const placeBeforeTimeRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|altijd|nooit|vaak|om\s+\w+\s+uur|elke\s+dag|binnenkort)\b/i;
   if (placeBeforeTimeRegex.test(normalized) || /\bthuis\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|altijd|nooit|vaak)\b/i.test(normalized)) {
     return {
       found: true,
@@ -1186,15 +1186,15 @@ export function checkMidfieldOrderError(
         content: 'Adverbial adjuncts follow the strict order: Tijd (Time) → Manier (Manner) → Plaats (Place). Never put Place before Time.',
         example: {
           wrong: 'Ik reis naar kantoor morgen.',
-          right: 'Ik reis morgen naar kantoor.'
-        }
-      }
-    }
+          right: 'Ik reis morgen naar kantoor.',
+        },
+      },
+    };
   }
 
   // 5. Check: Place before Manner (Plaats vóór Manier/Wijze)
   // E.g., "naar kantoor met de trein", "in het park snel", "op school aandachtig"
-  const placeBeforeMannerRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|snel|rustig|graag|samen|alleen|met\s+plezier)\b/i
+  const placeBeforeMannerRegex = /\b(naar|in|op|bij|voor|uit|thuis)\s+(?:(?:het|de|een|mijn|jouw|zijn|haar|ons|onze|hun|deze|dit|dat)\s+)?[a-z]+\s+(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|snel|rustig|graag|samen|alleen|met\s+plezier)\b/i;
   if (placeBeforeMannerRegex.test(normalized) || /\bthuis\s+(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|snel|rustig|graag|samen|alleen|met\s+plezier)\b/i.test(normalized)) {
     return {
       found: true,
@@ -1204,15 +1204,15 @@ export function checkMidfieldOrderError(
         content: 'In Dutch, how you do something (Manner/Means) precedes where you do it (Place/Direction): "met de trein (Manier) naar Amsterdam (Plaats)".',
         example: {
           wrong: 'Wij reizen naar Brussel met de trein.',
-          right: 'Wij reizen met de trein naar Brussel.'
-        }
-      }
-    }
+          right: 'Wij reizen met de trein naar Brussel.',
+        },
+      },
+    };
   }
 
   // 6. Check: Manner before Time (Manier vóór Tijd)
   // E.g., "met de trein gisteren", "zorgvuldig vandaag", "met plezier morgen"
-  const mannerBeforeTimeRegex = /\b(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|met\s+plezier)\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|om\s+\w+\s+uur)\b/i
+  const mannerBeforeTimeRegex = /\b(met\s+de\s+\w+|per\s+\w+|zorgvuldig|aandachtig|met\s+plezier)\s+(gisteren|vandaag|morgen|vorige\s+week|volgende\s+week|om\s+\w+\s+uur)\b/i;
   if (mannerBeforeTimeRegex.test(normalized)) {
     return {
       found: true,
@@ -1222,10 +1222,10 @@ export function checkMidfieldOrderError(
         content: 'Adverbial time adjuncts take priority at the front of the midfield: Time first, then Manner, then Place.',
         example: {
           wrong: 'Zij heeft met veel plezier gisteren gewerkt.',
-          right: 'Zij heeft gisteren met veel plezier gewerkt.'
-        }
-      }
-    }
+          right: 'Zij heeft gisteren met veel plezier gewerkt.',
+        },
+      },
+    };
   }
 
   // 7. Check: Indirect Object without preposition placed AFTER Direct Object
@@ -1240,10 +1240,10 @@ export function checkMidfieldOrderError(
           content: 'In Dutch without prepositions: [Onderwerp] + [Persoonsvorm] + [Indirect Object] + [Direct Object]. Alternatively, use "aan": [Direct Object] + [aan + Indirect Object].',
           example: {
             wrong: 'Ik overhandig het contract de klant.',
-            right: 'Ik overhandig de klant het contract.'
-          }
-        }
-      }
+            right: 'Ik overhandig de klant het contract.',
+          },
+        },
+      };
     }
   }
 
@@ -1259,28 +1259,28 @@ export function checkMidfieldOrderError(
           content: 'Unlike definite objects which precede TMP, indefinite direct objects appear towards the end of the midfield, following Time and Manner.',
           example: {
             wrong: 'Ik heb een presentatie gisteren voorbereid.',
-            right: 'Ik heb gisteren een presentatie voorbereid.'
-          }
-        }
-      }
+            right: 'Ik heb gisteren een presentatie voorbereid.',
+          },
+        },
+      };
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkPrefixVerbError(
   normalized: string,
   prefixVerbData?: {
-    verb: string
-    stressPattern: 'separable-stressed-prefix' | 'inseparable-stressed-stem'
-    stressedForm: string
-    meaningDefinition: string
-    targetStructure: 'present-main' | 'present-subclause' | 'perfect-tense' | 'infinitive-te'
-  }
+    verb: string;
+    stressPattern: 'separable-stressed-prefix' | 'inseparable-stressed-stem';
+    stressedForm: string;
+    meaningDefinition: string;
+    targetStructure: 'present-main' | 'present-subclause' | 'perfect-tense' | 'infinitive-te';
+  },
 ): GrammarCheckResult {
-  if (!prefixVerbData) return { found: false }
-  const { verb, stressPattern, targetStructure } = prefixVerbData
+  if (!prefixVerbData) return { found: false };
+  const { verb, stressPattern, targetStructure } = prefixVerbData;
 
   // 1. Inseparable verb erroneously split in main clause present tense
   if (stressPattern === 'inseparable-stressed-stem' && targetStructure === 'present-main') {
@@ -1294,10 +1294,10 @@ export function checkPrefixVerbError(
           content: 'Voorkómen (stress on stem) means to prevent and is inseparable. Vóórkomen (stress on prefix) means to occur or appear in court and splits in main clauses.',
           example: {
             wrong: 'De specialist komt een ernstige fout voor.',
-            right: 'De specialist voorkomt een ernstige fout.'
-          }
-        }
-      }
+            right: 'De specialist voorkomt een ernstige fout.',
+          },
+        },
+      };
     }
 
     if (verb === 'ondergaan' && /\bgaat?\b.*\bonder\b/i.test(normalized)) {
@@ -1309,10 +1309,10 @@ export function checkPrefixVerbError(
           content: 'Ondergáán (inseparable) means to endure or undergo. Óndergaan (separable) is used for the sun setting or sinking.',
           example: {
             wrong: 'De patiënt gaat een zware operatie onder.',
-            right: 'De patiënt ondergaat een zware operatie.'
-          }
-        }
-      }
+            right: 'De patiënt ondergaat een zware operatie.',
+          },
+        },
+      };
     }
 
     if (verb === 'overleggen' && /\blegt?\b.*\bover\b/i.test(normalized)) {
@@ -1324,10 +1324,10 @@ export function checkPrefixVerbError(
           content: 'Overléggen (inseparable) means to discuss or deliberate. Óverleggen (separable) means to present or submit documents.',
           example: {
             wrong: 'De manager legt met de commissie over.',
-            right: 'De manager overlegt met de commissie.'
-          }
-        }
-      }
+            right: 'De manager overlegt met de commissie.',
+          },
+        },
+      };
     }
 
     if (verb === 'doorbreken' && /\bbreekt?\b.*\bdoor\b/i.test(normalized)) {
@@ -1339,10 +1339,10 @@ export function checkPrefixVerbError(
           content: 'Doorbréken (inseparable) is figurative (deadlock, taboo). Dóórbreken (separable) is physical (a dam bursting, sun breaking through clouds).',
           example: {
             wrong: 'Het team breekt de impasse door.',
-            right: 'Het team doorbreekt de impasse.'
-          }
-        }
-      }
+            right: 'Het team doorbreekt de impasse.',
+          },
+        },
+      };
     }
 
     if (verb === 'achterhalen' && /\bhaalt?\b.*\bachter\b/i.test(normalized)) {
@@ -1354,10 +1354,10 @@ export function checkPrefixVerbError(
           content: 'Achterhálen (stress on -halen) is inseparable. Never split it into "haalt... achter".',
           example: {
             wrong: 'De recherche haalt de identiteit achter.',
-            right: 'De recherche achterhaalt de identiteit.'
-          }
-        }
-      }
+            right: 'De recherche achterhaalt de identiteit.',
+          },
+        },
+      };
     }
 
     if (verb === 'doorlopen' && /\bloopt?\b.*\bdoor\b/i.test(normalized)) {
@@ -1369,10 +1369,10 @@ export function checkPrefixVerbError(
           content: 'Doorlópen (inseparable) means completing a process or education. Dóórlopen (separable) means continuing to walk without stopping.',
           example: {
             wrong: 'De cursist loopt het hele traject door.',
-            right: 'De cursist doorloopt het hele traject.'
-          }
-        }
-      }
+            right: 'De cursist doorloopt het hele traject.',
+          },
+        },
+      };
     }
   }
 
@@ -1387,10 +1387,10 @@ export function checkPrefixVerbError(
           content: 'When vóórkomen means to occur, happen, or appear in court, it splits in main clauses: "Het komt regelmatig voor".',
           example: {
             wrong: 'Dit probleem voorkomt regelmatig in de praktijk.',
-            right: 'Dit probleem komt regelmatig voor in de praktijk.'
-          }
-        }
-      }
+            right: 'Dit probleem komt regelmatig voor in de praktijk.',
+          },
+        },
+      };
     }
 
     if (verb === 'overleggen' && /\boverlegt\b/i.test(normalized)) {
@@ -1402,10 +1402,10 @@ export function checkPrefixVerbError(
           content: 'When óverleggen means submitting certificates or proof, it splits in main clauses: "Hij legt zijn papieren over".',
           example: {
             wrong: 'De sollicitant overlegt een geldig paspoort.',
-            right: 'De sollicitant legt een geldig paspoort over.'
-          }
-        }
-      }
+            right: 'De sollicitant legt een geldig paspoort over.',
+          },
+        },
+      };
     }
 
     if (verb === 'ondergaan' && /\bondergaat\b/i.test(normalized)) {
@@ -1417,10 +1417,10 @@ export function checkPrefixVerbError(
           content: 'Óndergaan (separable) splits in main clauses: "De zon gaat prachtig onder".',
           example: {
             wrong: 'De zon ondergaat langzaam aan de horizon.',
-            right: 'De zon gaat langzaam onder aan de horizon.'
-          }
-        }
-      }
+            right: 'De zon gaat langzaam onder aan de horizon.',
+          },
+        },
+      };
     }
   }
 
@@ -1437,10 +1437,10 @@ export function checkPrefixVerbError(
             content: 'Verbs with unstressed prefixes (voorkómen, achterhálen, ondergáán, doorbréken) form their past participle without "ge-".',
             example: {
               wrong: 'De politie heeft de waarheid achtergehaald.',
-              right: 'De politie heeft de waarheid achterhaald.'
-            }
-          }
-        }
+              right: 'De politie heeft de waarheid achterhaald.',
+            },
+          },
+        };
       }
 
       if (verb === 'voorkomen' && /\bvoorgekomen\b/i.test(normalized)) {
@@ -1452,10 +1452,10 @@ export function checkPrefixVerbError(
             content: 'Voorkómen (prevent) -> heeft voorkomen. Vóórkomen (occur) -> is voorgekomen.',
             example: {
               wrong: 'De directie heeft een crisis voorgekomen.',
-              right: 'De directie heeft een crisis voorkomen.'
-            }
-          }
-        }
+              right: 'De directie heeft een crisis voorkomen.',
+            },
+          },
+        };
       }
 
       if (verb === 'overleggen' && /\bovergelegd\b/i.test(normalized)) {
@@ -1467,10 +1467,10 @@ export function checkPrefixVerbError(
             content: 'Overléggen (consult) -> heeft overlegd. Óverleggen (submit proof) -> heeft overgelegd.',
             example: {
               wrong: 'De minister heeft met de bonden overgelegd.',
-              right: 'De minister heeft met de bonden overlegd.'
-            }
-          }
-        }
+              right: 'De minister heeft met de bonden overlegd.',
+            },
+          },
+        };
       }
 
       // Auxiliary error: using "zijn" instead of "hebben" for inseparable transitive actions
@@ -1483,10 +1483,10 @@ export function checkPrefixVerbError(
             content: 'Transitive voorkómen (prevent) uses "hebben". Intransitive vóórkomen (occur) uses "zijn".',
             example: {
               wrong: 'Het management is een crisis voorkomen.',
-              right: 'Het management heeft een crisis voorkomen.'
-            }
-          }
-        }
+              right: 'Het management heeft een crisis voorkomen.',
+            },
+          },
+        };
       }
     }
 
@@ -1501,10 +1501,10 @@ export function checkPrefixVerbError(
             content: 'Vóórkomen in the sense of happening takes "zijn" (is voorgekomen).',
             example: {
               wrong: 'Dit probleem heeft al eerder voorgekomen.',
-              right: 'Dit probleem is al eerder voorgekomen.'
-            }
-          }
-        }
+              right: 'Dit probleem is al eerder voorgekomen.',
+            },
+          },
+        };
       }
 
       if (verb === 'ondergaan' && /\bheeft\s+.*ondergegaan\b/i.test(normalized)) {
@@ -1516,10 +1516,10 @@ export function checkPrefixVerbError(
             content: 'Óndergaan (setting) is an intransitive state change and uses "zijn".',
             example: {
               wrong: 'De zon heeft al ondergegaan.',
-              right: 'De zon is al ondergegaan.'
-            }
-          }
-        }
+              right: 'De zon is al ondergegaan.',
+            },
+          },
+        };
       }
     }
   }
@@ -1537,10 +1537,10 @@ export function checkPrefixVerbError(
             content: 'Inseparable verbs are treated as single atomic words. Place "te" directly in front of the verb (e.g. "te voorkomen", "te achterhalen").',
             example: {
               wrong: 'om de fout voor te komen',
-              right: 'om de fout te voorkomen'
-            }
-          }
-        }
+              right: 'om de fout te voorkomen',
+            },
+          },
+        };
       }
     }
 
@@ -1555,32 +1555,32 @@ export function checkPrefixVerbError(
             content: 'Separable verbs split around "te": [voorvoegsel] + te + [stam] (e.g. "over te leggen", "voor te komen").',
             example: {
               wrong: 'verplicht om te overleggen',
-              right: 'verplicht om over te leggen'
-            }
-          }
-        }
+              right: 'verplicht om over te leggen',
+            },
+          },
+        };
       }
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkPronominalSplittingError(
   normalized: string,
   pronominalSplittingData?: {
-    rWord?: string
-    preposition?: string
-    combinedForm?: string
-    clauseType?: string
-    splittingStatus?: string
-  }
+    rWord?: string;
+    preposition?: string;
+    combinedForm?: string;
+    clauseType?: string;
+    splittingStatus?: string;
+  },
 ): GrammarCheckResult {
   // 1. If explicit pronominalSplittingData is provided:
   if (pronominalSplittingData?.rWord && pronominalSplittingData?.preposition) {
-    const rWord = pronominalSplittingData.rWord.toLowerCase()
-    const prep = pronominalSplittingData.preposition.toLowerCase()
-    const combined = (pronominalSplittingData.combinedForm || `${rWord}${prep}`).toLowerCase().replace(/\s+/g, '')
+    const rWord = pronominalSplittingData.rWord.toLowerCase();
+    const prep = pronominalSplittingData.preposition.toLowerCase();
+    const combined = (pronominalSplittingData.combinedForm || `${rWord}${prep}`).toLowerCase().replace(/\s+/g, '');
 
     // Check if learner kept the unsplit combined form in a clause where splitting was requested
     if (normalized.includes(combined)) {
@@ -1592,14 +1592,14 @@ export function checkPronominalSplittingError(
           content: `In Dutch, pronominal adverbs like "${rWord} + ${prep}" are systematically split in natural communication. The R-word sits near the front/subject, and the stranded preposition sits at the end of the midfield right before the verb cluster.`,
           example: {
             wrong: `... ${combined} ...`,
-            right: `... ${rWord} ... ${prep} [werkwoord]`
-          }
-        }
-      }
+            right: `... ${rWord} ... ${prep} [werkwoord]`,
+          },
+        },
+      };
     }
 
     // Check if preposition was placed right next to finite verb before the midfield (e.g. "Ik praat over er" or "Ik denk aan daar")
-    const transferPattern = new RegExp(`\\b${prep}\\s+(?:er|hier|daar|waar|het|dat)\\b`, 'i')
+    const transferPattern = new RegExp(`\\b${prep}\\s+(?:er|hier|daar|waar|het|dat)\\b`, 'i');
     if (transferPattern.test(normalized)) {
       return {
         found: true,
@@ -1609,10 +1609,10 @@ export function checkPronominalSplittingError(
           content: `Prepositions cannot take "het" or "dat" for inanimate objects. They must convert to R-words (er/hier/daar/waar) and split naturally across the midfield.`,
           example: {
             wrong: `... ${prep} het/dat ...`,
-            right: `... ${rWord} ... ${prep} ...`
-          }
-        }
-      }
+            right: `... ${rWord} ... ${prep} ...`,
+          },
+        },
+      };
     }
   }
 
@@ -1630,8 +1630,8 @@ export function checkPronominalSplittingError(
     { combined: 'waarnaar', r: 'waar', p: 'naar' },
     { combined: 'waaraan', r: 'waar', p: 'aan' },
     { combined: 'waarmee', r: 'waar', p: 'mee' },
-    { combined: 'waarop', r: 'waar', p: 'op' }
-  ]
+    { combined: 'waarop', r: 'waar', p: 'op' },
+  ];
 
   for (const item of commonUnsplit) {
     if (normalized.startsWith(`${item.combined} `) && !normalized.includes(` ${item.p} `)) {
@@ -1645,29 +1645,29 @@ export function checkPronominalSplittingError(
             content: `In everyday Dutch questions, split "${item.combined}" into "${item.r} ... ${item.p}?": place "${item.r}" at the start and "${item.p}" immediately before the final verb or sentence end.`,
             example: {
               wrong: `${item.combined} denk je?`,
-              right: `${item.r} denk je aan?`
-            }
-          }
-        }
+              right: `${item.r} denk je aan?`,
+            },
+          },
+        };
       }
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkAspectError(
   normalized: string,
   aspectData?: {
-    aspectCategory?: string
-    postureOrAspectVerb?: string
-    infinitiveAction?: string
-    clauseType?: string
-  }
+    aspectCategory?: string;
+    postureOrAspectVerb?: string;
+    infinitiveAction?: string;
+    clauseType?: string;
+  },
 ): GrammarCheckResult {
   // 1. If explicit aspectData is provided:
   if (aspectData) {
-    const { aspectCategory, postureOrAspectVerb } = aspectData
+    const { aspectCategory, postureOrAspectVerb } = aspectData;
 
     // Posture durative missing 'te' (e.g. "zit studeren", "staat wachten", "ligt slapen", "loopt ijsberen")
     if (aspectCategory === 'posture-durative') {
@@ -1681,10 +1681,10 @@ export function checkAspectError(
               content: 'When using posture verbs to describe an ongoing state or activity, Dutch always requires the particle "te" before the main infinitive.',
               example: {
                 wrong: 'Hij zit de jaarcijfers bestuderen.',
-                right: 'Hij zit de jaarcijfers te bestuderen.'
-              }
-            }
-          }
+                right: 'Hij zit de jaarcijfers te bestuderen.',
+              },
+            },
+          };
         }
       }
     }
@@ -1702,10 +1702,10 @@ export function checkAspectError(
               content: 'The progressive structure is: [vorm van zijn] + [object/bepaling] + aan het + [onvervoegde infinitief]. Never conjugate the verb after "aan het".',
               example: {
                 wrong: 'Zij zijn de server aan het upgradet.',
-                right: 'Zij zijn de server aan het upgraden.'
-              }
-            }
-          }
+                right: 'Zij zijn de server aan het upgraden.',
+              },
+            },
+          };
         }
       } else if (!normalized.includes('bezig met') && !normalized.includes('zit te') && !normalized.includes('staat te')) {
         return {
@@ -1716,10 +1716,10 @@ export function checkAspectError(
             content: '"Aan het + infinitief zijn" is the standard Dutch equivalent of the English continuous "-ing" form for dynamic activities.',
             example: {
               wrong: 'Zij upgraden nu het netwerk.',
-              right: 'Zij zijn nu het netwerk aan het upgraden.'
-            }
-          }
-        }
+              right: 'Zij zijn nu het netwerk aan het upgraden.',
+            },
+          },
+        };
       }
     }
 
@@ -1735,10 +1735,10 @@ export function checkAspectError(
               content: '"Op het punt staan om te + inf" expresses an event that is about to occur immediately. "Om... te" is standard before the infinitive.',
               example: {
                 wrong: 'De voorzitter staat op het punt de bijeenkomst openen.',
-                right: 'De voorzitter staat op het punt om de bijeenkomst te openen.'
-              }
-            }
-          }
+                right: 'De voorzitter staat op het punt om de bijeenkomst te openen.',
+              },
+            },
+          };
         }
       }
     }
@@ -1755,10 +1755,10 @@ export function checkAspectError(
               content: '"Plegen te + infinitief" is a formal B2/C1 construction signifying habitual action (Dutch "de gewoonte hebben om te"). Always include "te".',
               example: {
                 wrong: 'De raad pleegt tweemaal per jaar vergaderen.',
-                right: 'De raad pleegt tweemaal per jaar te vergaderen.'
-              }
-            }
-          }
+                right: 'De raad pleegt tweemaal per jaar te vergaderen.',
+              },
+            },
+          };
         }
       }
     }
@@ -1774,10 +1774,10 @@ export function checkAspectError(
             content: 'When "dreigen" or "beloven" indicate an impending outcome rather than literal speech, they must be constructed with "te + infinitief".',
             example: {
               wrong: 'De onderhandelingen dreigen mislukken.',
-              right: 'De onderhandelingen dreigen te mislukken.'
-            }
-          }
-        }
+              right: 'De onderhandelingen dreigen te mislukken.',
+            },
+          },
+        };
       }
     }
 
@@ -1792,10 +1792,10 @@ export function checkAspectError(
             content: 'When posture verbs (zitten, staan, liggen, lopen) govern another infinitive in the perfect tense, they undergo IPP (Double Infinitive). The posture participle (gezeten) turns into an infinitive (zitten) and "te" is omitted.',
             example: {
               wrong: 'Hij heeft de hele ochtend gezeten te kijken.',
-              right: 'Hij heeft de hele ochtend zitten kijken.'
-            }
-          }
-        }
+              right: 'Hij heeft de hele ochtend zitten kijken.',
+            },
+          },
+        };
       }
     }
   }
@@ -1810,32 +1810,32 @@ export function checkAspectError(
         content: 'Posture verbs drop "ge-" and "te" in the perfect tense when combined with another infinitive: heeft + [zitten/staan/liggen/lopen] + [infinitief].',
         example: {
           wrong: 'Hij heeft uren gestaan te wachten.',
-          right: 'Hij heeft uren staan wachten.'
-        }
-      }
-    }
+          right: 'Hij heeft uren staan wachten.',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkModalParticleError(
   normalized: string,
   modalParticleData?: {
-    particleCluster?: string
-    pragmaticFunction?: string
-    stiffOriginalSentence?: string
-  }
+    particleCluster?: string;
+    pragmaticFunction?: string;
+    stiffOriginalSentence?: string;
+  },
 ): GrammarCheckResult {
   if (modalParticleData) {
-    const { particleCluster, pragmaticFunction } = modalParticleData
+    const { particleCluster, pragmaticFunction } = modalParticleData;
 
     // 1. Check for specific cluster requirements
     if (particleCluster) {
-      const clusterNormalized = normalizeAnswer(particleCluster)
-      const clusterWords = clusterNormalized.split(' ')
+      const clusterNormalized = normalizeAnswer(particleCluster);
+      const clusterWords = clusterNormalized.split(' ');
 
-      const missingWords = clusterWords.filter(w => !normalized.includes(w))
+      const missingWords = clusterWords.filter(w => !normalized.includes(w));
       if (missingWords.length > 0) {
         if (pragmaticFunction === 'rebuttal-wel-degelijk') {
           return {
@@ -1846,10 +1846,10 @@ export function checkModalParticleError(
               content: '"Wel degelijk" forcefully confirms a fact that was questioned, doubted, or denied. It sits in the midfield after the finite verb.',
               example: {
                 wrong: 'Het team heeft aan de eisen voldaan.',
-                right: 'Het team heeft wel degelijk aan de eisen voldaan.'
-              }
-            }
-          }
+                right: 'Het team heeft wel degelijk aan de eisen voldaan.',
+              },
+            },
+          };
         }
 
         if (pragmaticFunction === 'inevitability-nou-eenmaal') {
@@ -1861,10 +1861,10 @@ export function checkModalParticleError(
               content: '"Nou eenmaal" indicates that a situation cannot be altered and must be accepted ("that\'s just how it is"). Place it in the midfield.',
               example: {
                 wrong: 'De markt verandert altijd.',
-                right: 'De markt verandert nou eenmaal altijd.'
-              }
-            }
-          }
+                right: 'De markt verandert nou eenmaal altijd.',
+              },
+            },
+          };
         }
 
         if (pragmaticFunction === 'concession-toch-maar' || pragmaticFunction === 'advisory-caution-maar-beter') {
@@ -1876,10 +1876,10 @@ export function checkModalParticleError(
               content: '"Toch maar" signals a change of mind upon reflection; "maar beter" expresses strong, sensible advice.',
               example: {
                 wrong: 'We kunnen het uitstellen.',
-                right: 'We kunnen het toch maar beter uitstellen.'
-              }
-            }
-          }
+                right: 'We kunnen het toch maar beter uitstellen.',
+              },
+            },
+          };
         }
 
         if (pragmaticFunction === 'tactful-urgency-toch-maar-eens' || pragmaticFunction === 'softened-inquiry-eens-even') {
@@ -1891,10 +1891,10 @@ export function checkModalParticleError(
               content: 'Stacking modal particles softens directives and turns blunt commands into collaborative Dutch suggestions.',
               example: {
                 wrong: 'We moeten over de begroting praten.',
-                right: 'We moeten toch maar eens even over de begroting praten.'
-              }
-            }
-          }
+                right: 'We moeten toch maar eens even over de begroting praten.',
+              },
+            },
+          };
         }
 
         if (pragmaticFunction === 'reluctant-alternative-dan-maar') {
@@ -1906,10 +1906,10 @@ export function checkModalParticleError(
               content: '"Dan maar" indicates settling for the next best thing without enthusiasm.',
               example: {
                 wrong: 'Dan kiezen we voor optie B.',
-                right: 'Dan kiezen we dan maar voor optie B.'
-              }
-            }
-          }
+                right: 'Dan kiezen we dan maar voor optie B.',
+              },
+            },
+          };
         }
 
         if (pragmaticFunction === 'shared-premise-immers') {
@@ -1921,10 +1921,10 @@ export function checkModalParticleError(
               content: '"Immers" means "after all / as you know". In standard Dutch, it usually sits in the midfield, not at the absolute start.',
               example: {
                 wrong: 'Immers het is belangrijk.',
-                right: 'Het is immers belangrijk.'
-              }
-            }
-          }
+                right: 'Het is immers belangrijk.',
+              },
+            },
+          };
         }
       }
     }
@@ -1939,27 +1939,27 @@ export function checkModalParticleError(
           content: 'Modal particles (wel, toch, maar, eens, even, nou) sit in the midfield immediately after the subject pronoun or finite verb.',
           example: {
             wrong: 'Toch maar we moeten het uitstellen.',
-            right: 'We moeten het toch maar uitstellen.'
-          }
-        }
-      }
+            right: 'We moeten het toch maar uitstellen.',
+          },
+        },
+      };
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkTopicalisationError(
   normalized: string,
   topicalisationData?: {
-    focusType?: string
-    frontedElement?: string
-    baseSentence?: string
-    resumptiveElement?: string
-  }
+    focusType?: string;
+    frontedElement?: string;
+    baseSentence?: string;
+    resumptiveElement?: string;
+  },
 ): GrammarCheckResult {
   if (topicalisationData) {
-    const { focusType, frontedElement, resumptiveElement, baseSentence } = topicalisationData
+    const { focusType, frontedElement, resumptiveElement, baseSentence } = topicalisationData;
 
     // 1. Infinitive fronting with dummy verb "doen"
     if (focusType === 'infinitive-fronting-doen') {
@@ -1972,10 +1972,10 @@ export function checkTopicalisationError(
             content: 'When an infinitive verb is fronted to the first position of the clause for emphatic contrast, Dutch uses a conjugated form of "doen" in second position.',
             example: {
               wrong: 'Twijfelen ik niet aan hem.',
-              right: 'Twijfelen doe ik niet aan hem.'
-            }
-          }
-        }
+              right: 'Twijfelen doe ik niet aan hem.',
+            },
+          },
+        };
       }
     }
 
@@ -1990,17 +1990,17 @@ export function checkTopicalisationError(
             content: 'A left-dislocated topic sits outside the clause frame and is resumed immediately inside the clause by a demonstrative/personal pronoun (die, dat, hem).',
             example: {
               wrong: 'Die nieuwe maatregel, we moeten invoeren.',
-              right: `Die nieuwe maatregel, ${resumptiveElement} moeten we invoeren.`
-            }
-          }
-        }
+              right: `Die nieuwe maatregel, ${resumptiveElement} moeten we invoeren.`,
+            },
+          },
+        };
       }
     }
 
     // 3. Cleft focus constructions ("Het is... dat/die")
     if (focusType === 'cleft-het-is-dat' || focusType === 'cleft-het-is-die') {
-      const isDie = focusType === 'cleft-het-is-die'
-      const expectedRel = isDie ? 'die' : 'dat'
+      const isDie = focusType === 'cleft-het-is-die';
+      const expectedRel = isDie ? 'die' : 'dat';
       if (!normalized.includes('het is') && !normalized.includes('het was')) {
         return {
           found: true,
@@ -2010,10 +2010,10 @@ export function checkTopicalisationError(
             content: 'Cleft sentences isolate the key constituent for maximum contrastive focus: "Het is [Focus Element] + dat/die + [rest van de zin]".',
             example: {
               wrong: 'Door die innovatie zijn we gegroeid.',
-              right: 'Het is juist door die innovatie dat we zijn gegroeid.'
-            }
-          }
-        }
+              right: 'Het is juist door die innovatie dat we zijn gegroeid.',
+            },
+          },
+        };
       }
       if (!normalized.includes(` ${expectedRel} `)) {
         return {
@@ -2024,10 +2024,10 @@ export function checkTopicalisationError(
             content: `Use "die" for persons / de-words in subject position, and "dat" for adverbial/prepositional focus or het-words.`,
             example: {
               wrong: `Het is ... wat ...`,
-              right: `Het is ... ${expectedRel} ...`
-            }
-          }
-        }
+              right: `Het is ... ${expectedRel} ...`,
+            },
+          },
+        };
       }
     }
 
@@ -2042,16 +2042,16 @@ export function checkTopicalisationError(
             content: '"Mocht [onderwerp] ... [infinitief]" expresses a hypothetical or precautionary condition with initial verb inversion.',
             example: {
               wrong: 'Als de situatie mocht verslechteren...',
-              right: 'Mocht de situatie verslechteren, neem dan contact op.'
-            }
-          }
-        }
+              right: 'Mocht de situatie verslechteren, neem dan contact op.',
+            },
+          },
+        };
       }
     }
 
     // 5. Object fronting with V2 inversion: answer still uses base (non-fronted) order
     if (focusType === 'object-fronting-v2') {
-      const baseNorm = baseSentence ? normalizeAnswer(baseSentence) : ''
+      const baseNorm = baseSentence ? normalizeAnswer(baseSentence) : '';
       if (baseNorm && calculateSimilarity(normalized, baseNorm) > 0.8) {
         return {
           found: true,
@@ -2061,15 +2061,15 @@ export function checkTopicalisationError(
             content: 'When the object is moved to the first position for focus, the finite verb stays in second position and the subject moves directly after it.',
             example: {
               wrong: 'Ik lees dat boek.',
-              right: 'Dat boek lees ik.'
-            }
-          }
-        }
+              right: 'Dat boek lees ik.',
+            },
+          },
+        };
       }
     }
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkCorrelativeError(normalized: string): GrammarCheckResult {
@@ -2084,16 +2084,16 @@ export function checkCorrelativeError(normalized: string): GrammarCheckResult {
           content: 'In Dutch, "niet alleen" must pair with "maar ook" to form a complete additive correlative structure.',
           example: {
             wrong: 'niet alleen de kosten stijgen, maar de kwaliteit daalt',
-            right: 'niet alleen stijgen de kosten, maar ook de kwaliteit daalt'
-          }
-        }
-      }
+            right: 'niet alleen stijgen de kosten, maar ook de kwaliteit daalt',
+          },
+        },
+      };
     }
   }
 
   // Check 2: "noch ... noch" double negation (e.g. "noch niet", "noch ... niet", "noch ... geen")
   if (normalized.includes('noch')) {
-    const doubleNegationRegex = /\b(niet|geen|geeneens|nooit|niks)\b/i
+    const doubleNegationRegex = /\b(niet|geen|geeneens|nooit|niks)\b/i;
     if (doubleNegationRegex.test(normalized)) {
       return {
         found: true,
@@ -2103,10 +2103,10 @@ export function checkCorrelativeError(normalized: string): GrammarCheckResult {
           content: '"Noch ... noch ..." translates to "neither ... nor ...". Because "noch" is inherently negative, adding "niet" or "geen" produces an ungrammatical double negation in Dutch.',
           example: {
             wrong: 'noch de manager niet, noch de directie was aanwezig',
-            right: 'noch de manager, noch de directie was aanwezig'
-          }
-        }
-      }
+            right: 'noch de manager, noch de directie was aanwezig',
+          },
+        },
+      };
     }
   }
 
@@ -2120,18 +2120,18 @@ export function checkCorrelativeError(normalized: string): GrammarCheckResult {
         content: 'Unlike English "both ... and ...", Dutch strictly requires "zowel ... als ..." for parallel coordination.',
         example: {
           wrong: 'zowel het team en de directie',
-          right: 'zowel het team als de directie'
-        }
-      }
-    }
+          right: 'zowel het team als de directie',
+        },
+      },
+    };
   }
 
   // Check 4: Proportional comparison "hoe ... des te / hoe ..." missing comparative or des te/hoe
   if (normalized.startsWith('hoe ') || normalized.includes(' hoe ')) {
-    const hasDesTe = normalized.includes('des te') || normalized.includes('deste')
-    const hasSecondHoe = (normalized.match(/\bhoe\b/g) || []).length >= 2
+    const hasDesTe = normalized.includes('des te') || normalized.includes('deste');
+    const hasSecondHoe = (normalized.match(/\bhoe\b/g) || []).length >= 2;
     if (!hasDesTe && !hasSecondHoe) {
-      const comparativeIndicators = /\b(meer|minder|langer|korter|sneller|beter|hoger|lager|vroeger|later|harder|sterker|groter|kleiner)\b/
+      const comparativeIndicators = /\b(meer|minder|langer|korter|sneller|beter|hoger|lager|vroeger|later|harder|sterker|groter|kleiner)\b/;
       if (comparativeIndicators.test(normalized)) {
         return {
           found: true,
@@ -2141,20 +2141,20 @@ export function checkCorrelativeError(normalized: string): GrammarCheckResult {
             content: 'Proportional comparison expresses an increasing correlation using "Hoe + [comparative] + [subclause], des te / hoe + [comparative] + [verb + subject]".',
             example: {
               wrong: 'Hoe meer we oefenen, we spreken beter',
-              right: 'Hoe meer we oefenen, des te beter we spreken'
-            }
-          }
-        }
+              right: 'Hoe meer we oefenen, des te beter we spreken',
+            },
+          },
+        };
       }
     }
   }
 
   // Check 5: "enerzijds ... anderzijds" missing inversion in the second clause
-  const anderzijdsNoInversion = /\banderzijds\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\s+([a-z]+)\b/i
-  const matchAnderzijds = normalized.match(anderzijdsNoInversion)
+  const anderzijdsNoInversion = /\banderzijds\s+(we|wij|ze|zij|ik|je|jij|u|hij|het|men|de|het|ons|onze|deze|dit)\s+([a-z]+)\b/i;
+  const matchAnderzijds = normalized.match(anderzijdsNoInversion);
   if (matchAnderzijds) {
-    const subject = matchAnderzijds[1]
-    const nextWord = matchAnderzijds[2]
+    const subject = matchAnderzijds[1];
+    const nextWord = matchAnderzijds[2];
     return {
       found: true,
       message: `When 'anderzijds' (or 'enerzijds') begins a clause, it occupies the first position and triggers subject-verb inversion (e.g. 'Anderzijds moeten we...', NOT 'Anderzijds we moeten...').`,
@@ -2163,18 +2163,18 @@ export function checkCorrelativeError(normalized: string): GrammarCheckResult {
         content: '"Enerzijds" and "anderzijds" are adverbs. When placed at the start of a clause, standard Dutch word order requires subject-verb inversion (V1 + S).',
         example: {
           wrong: `anderzijds ${subject} ${nextWord}`,
-          right: `anderzijds ${nextWord} ${subject}`
-        }
-      }
-    }
+          right: `anderzijds ${nextWord} ${subject}`,
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkInfinitiveClauseError(normalized: string): GrammarCheckResult {
   // Check 1: Separable verbs incorrectly preceded by 'te' or 'om te'
-  const separableVerbs: { full: string, prefix: string, stem: string }[] = [
+  const separableVerbs: { full: string; prefix: string; stem: string }[] = [
     { full: 'oplossen', prefix: 'op', stem: 'lossen' },
     { full: 'voorbereiden', prefix: 'voor', stem: 'bereiden' },
     { full: 'meenemen', prefix: 'mee', stem: 'nemen' },
@@ -2197,8 +2197,8 @@ export function checkInfinitiveClauseError(normalized: string): GrammarCheckResu
     { full: 'aanmelden', prefix: 'aan', stem: 'melden' },
     { full: 'uitstellen', prefix: 'uit', stem: 'stellen' },
     { full: 'overleggen', prefix: 'over', stem: 'leggen' },
-    { full: 'afstemmen', prefix: 'af', stem: 'stemmen' }
-  ]
+    { full: 'afstemmen', prefix: 'af', stem: 'stemmen' },
+  ];
 
   for (const sv of separableVerbs) {
     if (normalized.includes(`om te ${sv.full}`) || normalized.includes(` te ${sv.full}`) || normalized.startsWith(`te ${sv.full}`)) {
@@ -2210,10 +2210,10 @@ export function checkInfinitiveClauseError(normalized: string): GrammarCheckResu
           content: 'In Dutch infinitive clauses, "te" is inserted between the separable prefix and the verb root (e.g. "op te lossen", "voor te bereiden").',
           example: {
             wrong: `om te ${sv.full}`,
-            right: `om ${sv.prefix} te ${sv.stem}`
-          }
-        }
-      }
+            right: `om ${sv.prefix} te ${sv.stem}`,
+          },
+        },
+      };
     }
   }
 
@@ -2223,8 +2223,8 @@ export function checkInfinitiveClauseError(normalized: string): GrammarCheckResu
     'kan te', 'kunnen te', 'kon te', 'konden te',
     'wil te', 'willen te', 'wilde te', 'wilden te',
     'mag te', 'mogen te', 'mocht te', 'mochten te',
-    'zal te', 'zullen te', 'zou te', 'zouden te'
-  ]
+    'zal te', 'zullen te', 'zou te', 'zouden te',
+  ];
   for (const mt of modalTePatterns) {
     if (normalized.includes(mt)) {
       return {
@@ -2235,22 +2235,22 @@ export function checkInfinitiveClauseError(normalized: string): GrammarCheckResu
           content: 'Pure modal verbs are followed directly by the infinitive without "te". Only semi-auxiliary verbs (like hoeven, blijken, schijnen, lijken) take "te".',
           example: {
             wrong: `${mt} doen`,
-            right: `${mt.replace(' te', '')} doen`
-          }
-        }
-      }
+            right: `${mt.replace(' te', '')} doen`,
+          },
+        },
+      };
     }
   }
 
   // Check 3: Semi-auxiliary 'hoeven' used without 'te'
-  const hasHoeven = normalized.includes('hoef niet') || 
-                    normalized.includes('hoeft niet') || 
-                    normalized.includes('hoeven niet') || 
-                    normalized.includes('hoefde niet') || 
-                    normalized.includes('hoefden niet') ||
-                    normalized.includes('hoef geen') ||
-                    normalized.includes('hoeft geen') ||
-                    normalized.includes('hoeven geen')
+  const hasHoeven = normalized.includes('hoef niet')
+    || normalized.includes('hoeft niet')
+    || normalized.includes('hoeven niet')
+    || normalized.includes('hoefde niet')
+    || normalized.includes('hoefden niet')
+    || normalized.includes('hoef geen')
+    || normalized.includes('hoeft geen')
+    || normalized.includes('hoeven geen');
   if (hasHoeven && !normalized.includes(' te ') && !normalized.includes(' te-')) {
     return {
       found: true,
@@ -2260,25 +2260,25 @@ export function checkInfinitiveClauseError(normalized: string): GrammarCheckResu
         content: 'Unlike "moeten", the verb "hoeven" must always take "te" before the infinitive (e.g. "Je hoeft niet te wachten").',
         example: {
           wrong: 'je hoeft niet wachten',
-          right: 'je hoeft niet te wachten'
-        }
-      }
-    }
+          right: 'je hoeft niet te wachten',
+        },
+      },
+    };
   }
 
-  return { found: false }
+  return { found: false };
 }
 
 export function checkSubordinateClauseError(normalized: string, conjunction: string): GrammarCheckResult {
-  const words = normalized.split(' ')
-  const index = words.indexOf(conjunction)
+  const words = normalized.split(' ');
+  const index = words.indexOf(conjunction);
   if (index !== -1 && index < words.length - 2) {
-    const nextWords = words.slice(index + 1)
-    const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie']
-    const firstNext = nextWords[0]
-    const secondNext = nextWords[1]
+    const nextWords = words.slice(index + 1);
+    const pronouns = ['ik', 'je', 'jij', 'hij', 'zij', 'ze', 'het', 'we', 'wij', 'jullie'];
+    const firstNext = nextWords[0];
+    const secondNext = nextWords[1];
     if (firstNext && pronouns.includes(firstNext) && nextWords.length > 1 && secondNext) {
-      const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen']
+      const commonVerbs = ['is', 'bent', 'zijn', 'heeft', 'heb', 'hebben', 'kan', 'kunt', 'kunnen', 'wil', 'wilt', 'willen'];
       if (commonVerbs.includes(secondNext)) {
         return {
           found: true,
@@ -2288,24 +2288,24 @@ export function checkSubordinateClauseError(normalized: string, conjunction: str
             content: `When you use '${conjunction}', the word order changes. The verb must go to the very end.`,
             example: {
               wrong: `... ${conjunction} ik ${secondNext} ziek.`,
-              right: `... ${conjunction} ik ziek ${secondNext}.`
-            }
-          }
-        }
+              right: `... ${conjunction} ik ziek ${secondNext}.`,
+            },
+          },
+        };
       }
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkArticleError(normalized: string, target: string): GrammarCheckResult {
-  const deWords = ['man', 'vrouw', 'tafel', 'stoel', 'stad', 'bakker', 'collega', 'vergadering']
-  const hetWords = ['kind', 'meisje', 'boek', 'huis', 'weer', 'werk', 'hotel', 'ontbijt']
-  
-  const words = normalized.split(' ')
+  const deWords = ['man', 'vrouw', 'tafel', 'stoel', 'stad', 'bakker', 'collega', 'vergadering'];
+  const hetWords = ['kind', 'meisje', 'boek', 'huis', 'weer', 'werk', 'hotel', 'ontbijt'];
+
+  const words = normalized.split(' ');
   for (let i = 0; i < words.length - 1; i++) {
-    const currentWord = words[i]
-    const nextWord = words[i + 1]
+    const currentWord = words[i];
+    const nextWord = words[i + 1];
     if (currentWord === 'het' && nextWord && deWords.includes(nextWord)) {
       return {
         found: true,
@@ -2315,10 +2315,10 @@ export function checkArticleError(normalized: string, target: string): GrammarCh
           content: 'Every Dutch noun is either "de" or "het". Most words (about 75%) are "de". Diminutives (ending in -je) are always "het".',
           example: {
             wrong: `het ${nextWord}`,
-            right: `de ${nextWord}`
-          }
-        }
-      }
+            right: `de ${nextWord}`,
+          },
+        },
+      };
     }
     if (currentWord === 'de' && nextWord && hetWords.includes(nextWord)) {
       return {
@@ -2329,23 +2329,23 @@ export function checkArticleError(normalized: string, target: string): GrammarCh
           content: 'Every Dutch noun is either "de" or "het". Learning the article with the word is essential.',
           example: {
             wrong: `de ${nextWord}`,
-            right: `het ${nextWord}`
-          }
-        }
-      }
+            right: `het ${nextWord}`,
+          },
+        },
+      };
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkAdjectiveEndingError(normalized: string): GrammarCheckResult {
-  const words = normalized.split(' ')
-  const commonAdjectives = ['mooi', 'groot', 'klein', 'leuk', 'lekker', 'warm', 'koud']
-  const deWords = ['man', 'vrouw', 'dag', 'stad', 'tafel', 'stoel', 'bakker']
-  
+  const words = normalized.split(' ');
+  const commonAdjectives = ['mooi', 'groot', 'klein', 'leuk', 'lekker', 'warm', 'koud'];
+  const deWords = ['man', 'vrouw', 'dag', 'stad', 'tafel', 'stoel', 'bakker'];
+
   for (let i = 0; i < words.length - 1; i++) {
-    const currentWord = words[i]
-    const nextWord = words[i + 1]
+    const currentWord = words[i];
+    const nextWord = words[i + 1];
     if (currentWord && nextWord && commonAdjectives.includes(currentWord) && deWords.includes(nextWord)) {
       return {
         found: true,
@@ -2355,13 +2355,13 @@ export function checkAdjectiveEndingError(normalized: string): GrammarCheckResul
           content: 'Most adjectives get an -e when they come before a noun, except for "het-words" preceded by "een" or no article.',
           example: {
             wrong: `${currentWord} ${nextWord}`,
-            right: `${currentWord}e ${nextWord}`
-          }
-        }
-      }
+            right: `${currentWord}e ${nextWord}`,
+          },
+        },
+      };
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkReflexiveError(normalized: string): GrammarCheckResult {
@@ -2370,26 +2370,26 @@ export function checkReflexiveError(normalized: string): GrammarCheckResult {
     { verb: 'verveel', correct: 'je', wrong: [] },
     { verb: 'vergist', correct: 'je', wrong: [] },
     { verb: 'voel', correct: 'me', subject: 'ik' },
-    { verb: 'voelt', correct: 'je', subject: 'je' }
-  ]
-  
-  const words = normalized.split(' ')
-  
+    { verb: 'voelt', correct: 'je', subject: 'je' },
+  ];
+
+  const words = normalized.split(' ');
+
   if (words.includes('ik') && (words.includes('herinner') || words.includes('voel')) && !words.includes('me')) {
     return {
       found: true,
-      message: "Don't forget the reflexive pronoun! 'Ik voel me...' or 'Ik herinner me...'",
+      message: 'Don\'t forget the reflexive pronoun! \'Ik voel me...\' or \'Ik herinner me...\'',
       miniLesson: {
         title: 'Reflexive Verbs',
         content: 'Some verbs in Dutch are reflexive, meaning the action reflects back to the subject. You must use "me", "je", "zich", etc.',
         example: {
           wrong: 'Ik voel goed.',
-          right: 'Ik voel me goed.'
-        }
-      }
-    }
+          right: 'Ik voel me goed.',
+        },
+      },
+    };
   }
-  return { found: false }
+  return { found: false };
 }
 
 export function checkFixedPrepositionError(normalized: string): GrammarCheckResult {
@@ -2400,14 +2400,14 @@ export function checkFixedPrepositionError(normalized: string): GrammarCheckResu
     { verb: 'houden', prep: 'van' },
     { verb: 'bang', prep: 'voor' },
     { verb: 'geïnteresseerd', prep: 'in' },
-    { verb: 'trots', prep: 'op' }
-  ]
-  
-  const words = normalized.split(' ')
+    { verb: 'trots', prep: 'op' },
+  ];
+
+  const words = normalized.split(' ');
   for (const f of fixed) {
     if (words.some(w => w.startsWith(f.verb)) && !words.includes(f.prep)) {
       // Check if there is another preposition used instead
-      const otherPreps = ['met', 'van', 'bij', 'voor', 'naar', 'in', 'op', 'aan'].filter(p => p !== f.prep)
+      const otherPreps = ['met', 'van', 'bij', 'voor', 'naar', 'in', 'op', 'aan'].filter(p => p !== f.prep);
       if (otherPreps.some(p => words.includes(p))) {
         return {
           found: true,
@@ -2417,76 +2417,76 @@ export function checkFixedPrepositionError(normalized: string): GrammarCheckResu
             content: 'Many Dutch verbs and adjectives are paired with a specific preposition. These must be learned together as a single unit.',
             example: {
               wrong: `Ik wacht voor de bus.`,
-              right: `Ik wacht op de bus.`
-            }
-          }
-        }
+              right: `Ik wacht op de bus.`,
+            },
+          },
+        };
       }
     }
   }
-  return { found: false }
+  return { found: false };
 }
 
-export function checkCoherenceConnectors(normalized: string): { score: number, found: string[] } {
+export function checkCoherenceConnectors(normalized: string): { score: number; found: string[] } {
   const connectors = {
     addition: ['bovendien', 'daarnaast', 'ook', 'verder'],
     contrast: ['daarentegen', 'echter', 'toch', 'hoewel', 'aan de andere kant'],
     cause: ['daarom', 'immers', 'omdat', 'want', 'doordat'],
-    conclusion: ['kortom', 'concluderend', 'dus', 'derhalve']
-  }
-  
-  const found: string[] = []
-  const words = normalized.split(/\s+/)
-  
-  Object.values(connectors).flat().forEach(c => {
+    conclusion: ['kortom', 'concluderend', 'dus', 'derhalve'],
+  };
+
+  const found: string[] = [];
+  const words = normalized.split(/\s+/);
+
+  Object.values(connectors).flat().forEach((c) => {
     if (c.includes(' ')) {
-      if (normalized.includes(c)) found.push(c)
+      if (normalized.includes(c)) found.push(c);
     } else {
-      if (words.includes(c)) found.push(c)
+      if (words.includes(c)) found.push(c);
     }
-  })
-  
+  });
+
   return {
     score: Math.min(100, found.length * 25),
-    found
-  }
+    found,
+  };
 }
 
-export function calculatePragmaticScore(normalized: string, exercise: Exercise): { score: number, feedback?: string } {
-  let score = 70 // Base score for correct but neutral Dutch
-  let feedback = ""
+export function calculatePragmaticScore(normalized: string, exercise: Exercise): { score: number; feedback?: string } {
+  let score = 70; // Base score for correct but neutral Dutch
+  let feedback = '';
 
   // 1. Softeners (Politeness)
-  const softeners = ['graag', 'even', 'misschien', 'zou', 'mag', 'kunt']
-  const hasSofteners = softeners.some(s => normalized.includes(s))
+  const softeners = ['graag', 'even', 'misschien', 'zou', 'mag', 'kunt'];
+  const hasSofteners = softeners.some(s => normalized.includes(s));
   if (hasSofteners) {
-    score += 20
-    feedback = "Nice use of softeners! It makes you sound more polite."
+    score += 20;
+    feedback = 'Nice use of softeners! It makes you sound more polite.';
   }
 
   // 2. Native Fillers / Particles
-  const fillers = ['hoor', 'nou', 'eigenlijk', 'wel', 'toch', 'natuurlijk']
-  const hasFillers = fillers.some(f => normalized.split(' ').includes(f))
+  const fillers = ['hoor', 'nou', 'eigenlijk', 'wel', 'toch', 'natuurlijk'];
+  const hasFillers = fillers.some(f => normalized.split(' ').includes(f));
   if (hasFillers) {
-    score += 10
-    feedback = feedback ? feedback + " Also, your use of particles is very natural." : "Great use of Dutch particles! This is very native-like."
+    score += 10;
+    feedback = feedback ? feedback + ' Also, your use of particles is very natural.' : 'Great use of Dutch particles! This is very native-like.';
   }
 
   // 3. Stiff phrasing (Direct translation from English)
-  const stiffPhrases: { stiff: string, better: string, softenedBy?: string[] }[] = [
+  const stiffPhrases: { stiff: string; better: string; softenedBy?: string[] }[] = [
     { stiff: 'ik wil', better: 'ik zou graag ... willen', softenedBy: ['graag', 'even', 'misschien', 'wel', 'eens', 'hoor', 'nou'] },
     { stiff: 'kan ik hebben', better: 'mag ik' },
-    { stiff: 'ik ben goed', better: 'het gaat goed met mij' }
-  ]
-  
+    { stiff: 'ik ben goed', better: 'het gaat goed met mij' },
+  ];
+
   for (const p of stiffPhrases) {
-    const softened = p.softenedBy?.some(s => normalized.includes(`${p.stiff} ${s}`))
+    const softened = p.softenedBy?.some(s => normalized.includes(`${p.stiff} ${s}`));
     if (normalized.includes(p.stiff) && !softened) {
-      score -= 20
-      feedback = `Technically correct, but '${p.stiff}' is a bit stiff. Try using '${p.better}' instead.`
-      break
+      score -= 20;
+      feedback = `Technically correct, but '${p.stiff}' is a bit stiff. Try using '${p.better}' instead.`;
+      break;
     }
   }
 
-  return { score: Math.min(100, Math.max(0, score)), feedback }
+  return { score: Math.min(100, Math.max(0, score)), feedback };
 }

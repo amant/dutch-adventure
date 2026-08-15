@@ -1,4 +1,4 @@
-import type { ConceptState } from '~/types/learning'
+import type { ConceptState } from '~/types/learning';
 
 /** Minimal ConceptState with sane defaults for seeding learner memory in page tests. */
 export const mkState = (overrides: Partial<ConceptState> = {}): ConceptState => ({
@@ -15,6 +15,6 @@ export const mkState = (overrides: Partial<ConceptState> = {}): ConceptState => 
   encounters: 1,
   successes: 1,
   ...overrides,
-})
+});
 
-export { resetLearnerMemory } from '../../components/__tests__/helpers'
+export { resetLearnerMemory } from '../../components/__tests__/helpers';
