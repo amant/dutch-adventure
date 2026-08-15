@@ -37,11 +37,19 @@ watch([() => session.exercise.value?.id, feedback], () => {
 onUnmounted(() => clearInterval(timerInterval))
 
 onMounted(session.hydrate)
-function submit(extraContext?: any) { 
-  feedback.value = session.submit(undefined, { 
+function submit(answerOrContext?: string | any) {
+  const answer = typeof answerOrContext === 'string'
+      ? answerOrContext
+      : undefined
+
+  const extraContext = typeof answerOrContext === 'object' && answerOrContext !== null
+      ? answerOrContext
+      : {}
+
+  feedback.value = session.submit(answer, {
     timeLeft: timeLeft.value ?? undefined,
     ...extraContext
-  }) 
+  })
 }
 const achievedGoalIds = ref<Set<string>>(new Set())
 watch(() => session.exercise.value?.id, () => achievedGoalIds.value.clear())
@@ -93,8 +101,8 @@ function next() { feedback.value = undefined; session.advance() }
       
       <div v-if="session.exercise.value.kind === 'induction'" class="renderer">
         <PatternInduction 
-          :exercise="session.exercise.value" 
-          @submit="submit"
+          :exercise="session.exercise.value"
+          @submit="(answer) => submit(answer)"
         />
       </div>
 

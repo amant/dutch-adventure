@@ -2548,6 +2548,28 @@ export function evaluateResponse(exercise: Exercise, answer: string, context?: E
       base.achievedGoalIds = achievedGoalIds
     }
 
+    if (exercise.kind === 'induction' && exercise.inductionData) {
+      const selectedOption = exercise.inductionData.options.find(
+        option => normalizeAnswer(option.text) === normalized
+      )
+
+      if (selectedOption?.isCorrect) {
+        return {
+          ...base,
+          outcome: 'correct',
+          message: 'Correct! You identified the pattern.',
+          changeModifier: (base.changeModifier || 0) + 3
+        }
+      }
+
+      return {
+        ...base,
+        outcome: 'retry',
+        message: 'Not quite. Check the examples and try again.',
+        explanation: 'Look for the word or structure that appears in the relevant examples.'
+      }
+    }
+
     // Morphing Drill Evaluation
     if (exercise.kind === 'morphing-drill' && exercise.morphingData) {
       const stepIndex = context?.morphingStepIndex ?? 0
