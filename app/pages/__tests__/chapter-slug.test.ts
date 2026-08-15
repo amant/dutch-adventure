@@ -38,7 +38,8 @@ describe('chapter page', () => {
   it('submits an induction answer and renders feedback', async () => {
     const wrapper = await mountSuspended(ChapterPage);
 
-    await wrapper.findAll('.option-button')[0].trigger('click');
+    // Pick an incorrect rule option ("woon") so the induction check returns a retry outcome
+    await wrapper.findAll('.option-button')[1].trigger('click');
     await wrapper.findAll('button').find(b => b.text() === 'Confirm Discovery')!.trigger('click');
 
     expect(wrapper.find('.feedback').exists()).toBe(true);
@@ -48,11 +49,25 @@ describe('chapter page', () => {
   it('clears feedback with the retry action', async () => {
     const wrapper = await mountSuspended(ChapterPage);
 
-    await wrapper.findAll('.option-button')[0].trigger('click');
+    await wrapper.findAll('.option-button')[1].trigger('click');
     await wrapper.findAll('button').find(b => b.text() === 'Confirm Discovery')!.trigger('click');
     await wrapper.findAll('button').find(b => b.text() === 'Retry')!.trigger('click');
 
     expect(wrapper.find('.feedback').exists()).toBe(false);
+  });
+
+  it('confirms a correct induction answer and advances', async () => {
+    const wrapper = await mountSuspended(ChapterPage);
+
+    // Pick the correct rule option ("ben")
+    await wrapper.findAll('.option-button')[0].trigger('click');
+    await wrapper.findAll('button').find(b => b.text() === 'Confirm Discovery')!.trigger('click');
+
+    expect(wrapper.find('.feedback').text()).toContain('Correct');
+    await wrapper.findAll('button').find(b => b.text() === 'Continue')!.trigger('click');
+
+    expect(wrapper.text()).toContain('Stage 1 of 4');
+    expect(wrapper.find('textarea').exists()).toBe(false);
   });
 
   it('restores a saved session and advances through it', async () => {
