@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Exercise, Feedback } from '~/types/learning';
 import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import ReadAloudButton from './ReadAloudButton.vue';
 
 const props = defineProps<{
   exercise: Exercise;
@@ -47,6 +48,12 @@ const showHint = (token: any) => {
 
 <template>
   <div class="reading-ladder">
+    <div
+      v-if="exercise.readingContent"
+      class="read-aloud-row"
+    >
+      <ReadAloudButton :text="exercise.readingContent" />
+    </div>
     <div class="content-box card">
       <template
         v-for="(token, idx) in tokens"
@@ -111,6 +118,11 @@ const showHint = (token: any) => {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.read-aloud-row {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .content-box {

@@ -50,7 +50,7 @@ The **Memory** page tracks **memory decay** (concepts not seen in 1+ days) and r
 - **Scenario Sandbox** lets you describe any real-world situation ("Ordering a cake at the bakery") and generates a custom mission woven from your learning log.
 
 ### 📖 Authentic Reading
-Level-adapted Dutch articles (A1 → B2) with inline word hints. Every word encounter is recorded into your Language Graph, and the feed shows your vocabulary **coverage %** per article.
+Level-adapted Dutch articles (A1 → B2) with inline word hints. Every word encounter is recorded into your Language Graph, and the feed shows your vocabulary **coverage %** per article. Every article (and in-chapter reading exercise) includes a **read-aloud toggle** that reads the text aloud with a Dutch (`nl-NL`) voice.
 
 ### 🎤 Voice & Speaking
 Production stages support **Speech-to-Text voice input** — spoken responses are evaluated with speaking-specific heuristics and award extra progress on the `speaking` and `automaticity` dimensions.

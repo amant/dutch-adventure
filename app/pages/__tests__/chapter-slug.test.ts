@@ -91,6 +91,36 @@ describe('chapter page', () => {
     expect(wrapper.find('textarea').exists()).toBe(true);
   });
 
+  it('shows a read-aloud toggle for an info exercise context', async () => {
+    localStorage.setItem(`dutch-adventure-session-${slug}`, JSON.stringify({
+      chapterSlug: slug,
+      stageIndex: 0,
+      exerciseIndex: 1,
+      attempts: [],
+      completed: false,
+    }));
+
+    const wrapper = await mountSuspended(ChapterPage);
+
+    expect(wrapper.text()).toContain('Ik ben Jan. Ik woon in Amsterdam. Ik ben programmeur.');
+    expect(wrapper.text()).toContain('Lees voor');
+  });
+
+  it('shows a read-aloud toggle for the related article on completion', async () => {
+    localStorage.setItem(`dutch-adventure-session-${slug}`, JSON.stringify({
+      chapterSlug: slug,
+      stageIndex: 0,
+      exerciseIndex: 0,
+      attempts: [],
+      completed: true,
+    }));
+
+    const wrapper = await mountSuspended(ChapterPage);
+
+    expect(wrapper.text()).toContain('Read Related Article');
+    expect(wrapper.text()).toContain('Lees voor');
+  });
+
   it('throws a 404 error for an unknown chapter slug', async () => {
     routeMock.mockReturnValue({ params: { slug: 'does-not-exist' } });
 

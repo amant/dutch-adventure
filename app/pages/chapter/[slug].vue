@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { getChapter } from '~/data/chapters';
+import { articles } from '~/data/articles';
 
 const route = useRoute();
 const chapter = getChapter(String(route.params.slug));
 if (!chapter) throw createError({ statusCode: 404, statusMessage: 'Chapter not found' });
 const session = useChapterSession(chapter);
 const feedback = ref<ReturnType<typeof session.submit>>();
+
+const relatedArticle = computed(() => articles.find(a => a.id === chapter.relatedArticleSlug));
 
 const timeLeft = ref<number | null>(null);
 let timerInterval: any = null;
@@ -95,6 +98,12 @@ function next() {
       </div>
       <h3>Apply this in context</h3>
       <p>We found an article that uses similar language. Try reading it to see these patterns "in the wild".</p>
+      <div
+        v-if="relatedArticle"
+        class="related-article-actions"
+      >
+        <ReadAloudButton :text="relatedArticle.content" />
+      </div>
       <NuxtLink
         :to="`/reading/${chapter.relatedArticleSlug}`"
         class="button secondary"
@@ -711,6 +720,12 @@ function next() {
         class="default-renderer"
       >
         <h2>{{ session.exercise.value.prompt }}</h2>
+        <div
+          v-if="session.exercise.value.context"
+          class="read-aloud-row"
+        >
+          <ReadAloudButton :text="session.exercise.value.context" />
+        </div>
         <pre v-if="session.exercise.value.context">{{ session.exercise.value.context }}</pre>
 
         <form
@@ -924,6 +939,12 @@ function next() {
   margin: 24px 0;
 }
 
+.read-aloud-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
 .feedback {
   margin-top: 28px;
   padding: 26px;
@@ -1072,5 +1093,11 @@ function next() {
     color: $ink-slate;
     margin-bottom: 24px;
   }
+}
+
+.related-article-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
 }
 </style>

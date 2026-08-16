@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime';
 import ReadingArticlePage from '~/pages/reading/[id].vue';
 import { resetLearnerMemory } from './helpers';
@@ -14,6 +14,10 @@ describe('reading article page', () => {
     navigateMock.mockClear();
     routeMock.mockReset();
     routeMock.mockReturnValue({ params: { id: 'a1-weer' } });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('renders the article title, source and interactable words', async () => {
@@ -63,5 +67,29 @@ describe('reading article page', () => {
     const wrapper = await mountSuspended(ReadingArticlePage);
 
     expect(wrapper.text()).toContain('Article not found.');
+  });
+
+  it('offers a read-aloud toggle that speaks the article in Dutch', async () => {
+    const speakMock = vi.fn();
+    vi.stubGlobal('speechSynthesis', {
+      cancel: vi.fn(),
+      speak: speakMock,
+      getVoices: vi.fn(() => []),
+    });
+    vi.stubGlobal('SpeechSynthesisUtterance', class {
+      text = '';
+      lang = '';
+      rate = 1;
+      onend: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      constructor(text: string) { this.text = text; }
+    });
+
+    const wrapper = await mountSuspended(ReadingArticlePage);
+
+    expect(wrapper.text()).toContain('Lees voor');
+    await wrapper.findAll('button').find(b => b.text().includes('Lees voor'))!.trigger('click');
+
+    expect(speakMock).toHaveBeenCalled();
   });
 });

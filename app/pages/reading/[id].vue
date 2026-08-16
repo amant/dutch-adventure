@@ -6,6 +6,7 @@ import type { Feedback } from '~/types/learning';
 import SummaryChallenge from '~/components/SummaryChallenge.vue';
 import TeacherRedline from '~/components/TeacherRedline.vue';
 import VoiceInput from '~/components/VoiceInput.vue';
+import ReadAloudButton from '~/components/ReadAloudButton.vue';
 
 const route = useRoute();
 const { memory, hydrate, recordExposure, record } = useLearnerMemory();
@@ -148,6 +149,9 @@ const handleNext = () => {
         <span class="source">{{ article.source }}</span>
       </div>
       <h1>{{ article.title }}</h1>
+      <div class="article-actions">
+        <ReadAloudButton :text="article.content" />
+      </div>
     </header>
 
     <div class="content-container">
@@ -326,6 +330,10 @@ const handleNext = () => {
 
 .article-header {
   margin-bottom: 36px;
+}
+
+.article-actions {
+  margin-top: 18px;
 }
 
 .back-link {
