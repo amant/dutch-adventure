@@ -57,6 +57,16 @@ const commonWords: Record<string, Hint> = {
   had: { meaning: 'had', category: 'verb' },
   zou: { meaning: 'would', category: 'verb' },
   zal: { meaning: 'will', category: 'verb' },
+  in: { meaning: 'in', category: 'preposition' },
+  naar: { meaning: 'to/towards', category: 'preposition' },
+  hier: { meaning: 'here', category: 'adverb' },
+  daar: { meaning: 'there', category: 'adverb' },
+  ben: { meaning: 'am', category: 'verb' },
+  bent: { meaning: 'are', category: 'verb' },
+  woon: { meaning: 'live', category: 'verb' },
+  wonen: { meaning: 'to live', category: 'verb' },
+  ja: { meaning: 'yes', category: 'interjection' },
+  nee: { meaning: 'no', category: 'interjection' },
 };
 
 Object.entries(commonWords).forEach(([word, hint]) => {

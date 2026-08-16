@@ -76,8 +76,7 @@ const isPointAchieved = (point: any) => {
       />
       <div class="footer">
         <VoiceInput
-          v-model="response"
-          @submit="emit('submit')"
+          @result="(t) => { response = t; emit('submit') }"
         />
         <button
           class="button"

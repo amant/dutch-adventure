@@ -110,7 +110,6 @@ function handleVoiceResult(text: string) {
       >
         <VoiceInput
           v-if="isRunning"
-          placeholder="Speak now..."
           @result="handleVoiceResult"
         />
         <div class="manual-input mt-4">
