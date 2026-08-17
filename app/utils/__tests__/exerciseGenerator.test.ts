@@ -189,4 +189,11 @@ describe('createScenarioMission', () => {
     expect(chapter.stages[1]!.exercises[0]!.kind).toBe('conversation');
     expect(chapter.stages[1]!.exercises[0]!.missionGoals).toHaveLength(2);
   });
+
+  it('skips the preparation stage when there are no concepts', () => {
+    const chapter = createScenarioMission('Een feestje', []);
+    expect(chapter.stages).toHaveLength(1);
+    expect(chapter.stages[0]!.id).toBe('sandbox-mission');
+    expect(chapter.stages[0]!.exercises[0]!.kind).toBe('conversation');
+  });
 });

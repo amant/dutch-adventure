@@ -66,4 +66,14 @@ describe('smart-review page', () => {
     expect(wrapper.text()).toContain('Zeg iets over je dag.');
     expect(wrapper.find('textarea').exists()).toBe(true);
   });
+
+  it('renders a sandbox mission with fallback concepts when memory is empty', async () => {
+    routeMock.mockReturnValue({ query: { mode: 'sandbox', scenario: 'I am at a conference' } });
+
+    const wrapper = await mountSuspended(SmartReviewPage);
+
+    expect(wrapper.text()).toContain('Smart Review');
+    expect(wrapper.text()).toContain('Relevant concept: zijn');
+    expect(wrapper.findAll('button').some(b => b.text().includes('ready to continue'))).toBe(true);
+  });
 });

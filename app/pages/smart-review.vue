@@ -32,7 +32,7 @@ const startTimer = () => {
   }
 };
 
-watch([() => session?.value?.exerscise?.value?.id, feedback], () => {
+watch([() => session?.value?.exercise?.value?.id, feedback], () => {
   if (session.value?.exercise?.value && !feedback.value) {
     startTimer();
   } else {
@@ -63,8 +63,17 @@ onMounted(() => {
     chapter.value = createSpeedChapter(vocabulary, grammar);
   } else if (route.query.mode === 'sandbox') {
     const scenario = (route.query.scenario as string) || 'Buying coffee';
-    const frontier = getFrontierConcepts(5);
-    chapter.value = createScenarioMission(scenario, frontier.map(f => ({ key: f.key, kind: f.kind as 'vocabulary' | 'grammar' })));
+    let frontier: { key: string; kind: 'vocabulary' | 'grammar' }[] = getFrontierConcepts(5);
+    if (frontier.length === 0) {
+      // A fresh learning log has no frontier concepts yet. Fall back to a few
+      // essentials so the generated mission still renders something useful.
+      frontier = [
+        { key: 'zijn', kind: 'vocabulary' },
+        { key: 'wonen', kind: 'vocabulary' },
+        { key: 'word-order', kind: 'grammar' },
+      ];
+    }
+    chapter.value = createScenarioMission(scenario, frontier.map(f => ({ key: f.key, kind: f.kind })));
   } else if (route.query.mode === 'custom') {
     const customExercise = JSON.parse(sessionStorage.getItem('custom-review-exercise') || '{}');
     if (customExercise.id) {
@@ -95,7 +104,13 @@ onMounted(() => {
   }
 
   session.value = useChapterSession(chapter.value);
-  session.value.hydrate();
+  if (route.query.mode === 'sandbox') {
+    // Sandbox missions all share the 'sandbox-mission' slug, so reset any
+    // previous mission's persisted progress to start the new scenario fresh.
+    session.value.reset();
+  } else {
+    session.value.hydrate();
+  }
 });
 
 function submit() {
