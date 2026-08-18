@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { chapters } from '~/data/chapters';
 import { useLearnerMemory } from '~/composables/useLearnerMemory';
+import { useChapterCompletion } from '~/composables/useChapterCompletion';
 
 const { memory } = useLearnerMemory();
+const { isCompleted, hydrate } = useChapterCompletion();
 
 const levels = ['A1', 'A2', 'B1', 'B2'] as const;
 
-const getCapabilityStatus = (chapter: typeof chapters[0]) => {
+onMounted(hydrate);
+
+type CapabilityStatus = 'not-started' | 'in-progress' | 'completed' | 'mastered';
+
+const getCapabilityStatus = (chapter: typeof chapters[0]): CapabilityStatus => {
   const vocab = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.vocabulary || []));
   const grammar = chapter.stages.flatMap(s => s.exercises.flatMap(e => e.grammar || []));
-
-  if (vocab.length === 0 && grammar.length === 0) return 'not-started';
 
   const scores: number[] = [];
   vocab.forEach((v) => {
@@ -24,10 +28,10 @@ const getCapabilityStatus = (chapter: typeof chapters[0]) => {
     }
   });
 
-  if (scores.length === 0) return 'not-started';
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const avg = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
 
   if (avg > 80) return 'mastered';
+  if (isCompleted(chapter.slug)) return 'completed';
   if (avg > 20) return 'in-progress';
   return 'not-started';
 };
@@ -201,8 +205,33 @@ const chaptersByLevel = computed(() => {
     color: $sea-emerald-dark;
 
     .dot {
+      width: 16px;
+      height: 16px;
       background: $sea-emerald;
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+
+      &::before {
+        content: '✓';
+        font-size: 10px;
+      }
+    }
+  }
+
+  &.completed {
+    background: $ocean-light;
+    border-color: $ocean-sky;
+    color: $ocean-primary;
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      background: $ocean-primary;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+
+      &::before {
+        content: '✓';
+        font-size: 10px;
+      }
     }
   }
 
@@ -245,6 +274,13 @@ const chaptersByLevel = computed(() => {
   border-radius: 50%;
   background: #94a3b8;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white-pure;
+  font-weight: 900;
+  line-height: 1;
+  transition: all $transition-fast;
 }
 
 @media (max-width: $bp-desktop) {
