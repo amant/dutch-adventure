@@ -1,4 +1,5 @@
 import type { Exercise, ChapterStage, Chapter, ExerciseKind, SkillDimension } from '../types/learning';
+import { SPEED_DRILL_MIN_SECONDS } from './speedDrill';
 
 // A small dictionary to help generate exercises if we don't have enough context
 const contextDictionary: Record<string, { target: string; prompt: string; explanation: string }> = {
@@ -604,7 +605,7 @@ export function generateExercisesForConcept(key: string, type: 'vocabulary' | 'g
     skills,
     vocabulary: type === 'vocabulary' ? [key] : [],
     grammar: type === 'grammar' ? [key] : [],
-    automaticitySeconds: kind === 'speed-drill' ? 4 : undefined,
+    automaticitySeconds: kind === 'speed-drill' ? SPEED_DRILL_MIN_SECONDS : undefined,
   };
 }
 
@@ -748,9 +749,7 @@ export function createSpeedChapter(vocabularyKeys: string[], grammarKeys: string
         intro: 'You have very little time. Don\'t think, just produce!',
         exercises: allKeys.slice(0, 5).map((k) => {
           const type = vocabularyKeys.includes(k) ? 'vocabulary' : 'grammar';
-          const ex = generateExercisesForConcept(k, type, 'speed-drill');
-          ex.automaticitySeconds = 3; // Extra tight!
-          return ex;
+          return generateExercisesForConcept(k, type, 'speed-drill');
         }),
       },
     ],

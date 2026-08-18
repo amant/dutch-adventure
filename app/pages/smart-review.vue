@@ -2,6 +2,7 @@
 import { useLearnerMemory } from '~/composables/useLearnerMemory';
 import { createSmartReviewChapter, createActivationChapter, createScenarioMission, createSpeedChapter, createFluencyChapter } from '~/utils/exerciseGenerator';
 import { useChapterSession } from '~/composables/useChapterSession';
+import { speedDrillDuration } from '~/utils/speedDrill';
 
 const { getWeakConcepts, getFrontierConcepts, hydrate, memory } = useLearnerMemory();
 const route = useRoute();
@@ -18,8 +19,12 @@ let timerInterval: any = null;
 
 const startTimer = () => {
   if (timerInterval) clearInterval(timerInterval);
-  if (session.value?.exercise.value?.automaticitySeconds) {
-    timeLeft.value = session.value.exercise.value.automaticitySeconds;
+  const configured = session.value?.exercise.value?.automaticitySeconds;
+  const seconds = session.value?.exercise.value?.kind === 'speed-drill'
+    ? speedDrillDuration(configured)
+    : configured;
+  if (seconds) {
+    timeLeft.value = seconds;
     timerInterval = setInterval(() => {
       if (timeLeft.value !== null && timeLeft.value > 0) {
         timeLeft.value--;
@@ -120,6 +125,10 @@ function next() {
   feedback.value = undefined;
   session.value.advance();
 }
+function retry() {
+  feedback.value = undefined;
+  startTimer();
+}
 </script>
 
 <template>
@@ -197,10 +206,12 @@ function next() {
           class="renderer"
         >
           <SpeedDrill
+            :key="`${session.exercise.value.id}-${feedback ? 'feedback' : 'active'}`"
             v-model="session.response.value"
             :exercise="session.exercise.value"
             :feedback="feedback"
             @submit="submit"
+            @retry="retry"
           />
         </div>
 

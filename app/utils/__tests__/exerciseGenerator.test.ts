@@ -43,9 +43,9 @@ describe('generateExercisesForConcept', () => {
     expect(ex.skills).toEqual(expect.arrayContaining(['speaking', 'production']));
   });
 
-  it('sets a strict timer for speed drills', () => {
+  it('sets a 60-second timer for speed drills', () => {
     const ex = generateExercisesForConcept('wonen', 'vocabulary', 'speed-drill');
-    expect(ex.automaticitySeconds).toBe(4);
+    expect(ex.automaticitySeconds).toBe(60);
     expect(ex.skills).toEqual(expect.arrayContaining(['automaticity', 'production']));
   });
 
@@ -152,13 +152,13 @@ describe('createActivationChapter', () => {
 });
 
 describe('createSpeedChapter', () => {
-  it('generates tight speed-drill exercises', () => {
+  it('generates 60-second speed-drill exercises', () => {
     const chapter = createSpeedChapter(['wonen'], ['omdat-clause']);
     expect(chapter.slug).toBe('speed-review');
     expect(chapter.stages[0]!.exercises).toHaveLength(2);
     for (const ex of chapter.stages[0]!.exercises) {
       expect(ex.kind).toBe('speed-drill');
-      expect(ex.automaticitySeconds).toBe(3);
+      expect(ex.automaticitySeconds).toBe(60);
     }
   });
 });

@@ -5,6 +5,7 @@ import { evaluateFallback } from './evaluateFallback';
 import { evaluateGrammarDrills } from './evaluateGrammarDrills';
 import { evaluateGuidedExercise } from './evaluateGuidedExercise';
 import { evaluateSyntaxDrills } from './evaluateSyntaxDrills';
+import { speedDrillDuration } from './speedDrill';
 
 export interface EvaluationInput {
   exercise: Exercise;
@@ -29,11 +30,14 @@ export function evaluateExercise(exercise: Exercise, normalized: string, context
   };
 
   // Automaticity check
-  if (exercise.automaticitySeconds !== undefined) {
+  const automaticitySeconds = exercise.kind === 'speed-drill'
+    ? speedDrillDuration(exercise.automaticitySeconds)
+    : exercise.automaticitySeconds;
+  if (automaticitySeconds !== undefined) {
     if (!base.skills.includes('automaticity')) base.skills.push('automaticity');
     if (context?.timeLeft === 0) {
       base.changeModifier = (base.changeModifier || 0) - 5;
-    } else if (context?.timeLeft !== undefined && context.timeLeft > exercise.automaticitySeconds / 2) {
+    } else if (context?.timeLeft !== undefined && context.timeLeft > automaticitySeconds / 2) {
       base.changeModifier = (base.changeModifier || 0) + 4;
     }
   }

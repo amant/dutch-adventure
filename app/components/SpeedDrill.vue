@@ -1,34 +1,50 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import type { Exercise, Feedback } from '~/types/learning';
+import { speedDrillDuration } from '~/utils/speedDrill';
 
 const props = defineProps<{
   exercise: Exercise;
   feedback?: Feedback;
 }>();
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'retry']);
 const response = defineModel<string>();
 
-const timeLeft = ref(props.exercise.automaticitySeconds || 5);
+const duration = speedDrillDuration(props.exercise.automaticitySeconds);
+const timeLeft = ref(duration);
 const timerActive = ref(false);
+const timeUp = ref(false);
 let interval: any;
 
 const startTimer = () => {
   if (props.feedback) return;
+  clearInterval(interval);
+  timeLeft.value = duration;
+  timeUp.value = false;
   timerActive.value = true;
   interval = setInterval(() => {
     if (timeLeft.value > 0) {
       timeLeft.value -= 0.1;
     } else {
       clearInterval(interval);
+      timeLeft.value = 0;
       timerActive.value = false;
-      if (!response.value) {
-        response.value = '[TIMEOUT]';
-        emit('submit');
-      }
+      timeUp.value = true;
     }
   }, 100);
+};
+
+const handleSubmit = () => {
+  clearInterval(interval);
+  timerActive.value = false;
+  emit('submit');
+};
+
+const retry = () => {
+  response.value = '';
+  emit('retry');
+  startTimer();
 };
 
 onMounted(() => {
@@ -46,8 +62,7 @@ const timerColor = computed(() => {
 });
 
 const progressWidth = computed(() => {
-  const total = props.exercise.automaticitySeconds || 5;
-  return (timeLeft.value / total) * 100;
+  return (timeLeft.value / duration) * 100;
 });
 </script>
 
@@ -76,9 +91,9 @@ const progressWidth = computed(() => {
     </div>
 
     <form
-      v-if="!feedback"
+      v-if="!feedback && !timeUp"
       class="input-area"
-      @submit.prevent="emit('submit')"
+      @submit.prevent="handleSubmit"
     >
       <input
         v-model="response"
@@ -96,6 +111,21 @@ const progressWidth = computed(() => {
         Submit
       </button>
     </form>
+
+    <div
+      v-if="timeUp && !feedback"
+      class="time-up-message"
+    >
+      <h3>Time's Up!</h3>
+      <p>Take your time on the next attempt.</p>
+      <button
+        class="button"
+        type="button"
+        @click="retry"
+      >
+        Try Again
+      </button>
+    </div>
   </div>
 </template>
 
@@ -159,5 +189,23 @@ const progressWidth = computed(() => {
 .input-area .button {
   padding: 0 32px;
   font-size: 18px;
+}
+
+.time-up-message {
+  text-align: center;
+  padding: 32px;
+  background: #fef2f2;
+  border: 2px solid #ef4444;
+  border-radius: 16px;
+}
+
+.time-up-message h3 {
+  margin: 0 0 8px;
+  color: #ef4444;
+}
+
+.time-up-message p {
+  margin: 0 0 20px;
+  color: #687873;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getChapter } from '~/data/chapters';
 import { articles } from '~/data/articles';
+import { speedDrillDuration } from '~/utils/speedDrill';
 
 const route = useRoute();
 const chapter = getChapter(String(route.params.slug));
@@ -15,8 +16,12 @@ let timerInterval: any = null;
 
 const startTimer = () => {
   if (timerInterval) clearInterval(timerInterval);
-  if (session.exercise.value?.automaticitySeconds) {
-    timeLeft.value = session.exercise.value.automaticitySeconds;
+  const configured = session.exercise.value?.automaticitySeconds;
+  const seconds = session.exercise.value?.kind === 'speed-drill'
+    ? speedDrillDuration(configured)
+    : configured;
+  if (seconds) {
+    timeLeft.value = seconds;
     timerInterval = setInterval(() => {
       if (timeLeft.value !== null && timeLeft.value > 0) {
         timeLeft.value--;
@@ -73,6 +78,10 @@ const allGoalsMet = computed(() => {
 function next() {
   feedback.value = undefined;
   session.advance();
+}
+function retry() {
+  feedback.value = undefined;
+  startTimer();
 }
 </script>
 
@@ -628,6 +637,7 @@ function next() {
           :exercise="session.exercise.value"
           :feedback="feedback"
           @submit="submit"
+          @retry="retry"
         />
       </div>
 
