@@ -266,7 +266,7 @@ export const doctorMission: Chapter = {
       intro: 'The receptionist asks: "Wat is er aan de hand?" (What is the matter?).',
       exercises: [{
         id: 'doc-5', kind: 'typed', prompt: 'Explain your problem and ask for an appointment.',
-        target: 'Ik heb last van ..., ik wil graag een afspraak maken.',
+        target: 'Ik heb last van mijn rug, ik wil graag een afspraak maken.',
         missionGoals: [
           { id: 'explain', label: 'Explain the problem', keywords: ['last', 'pijn', 'heb'] },
           { id: 'request', label: 'Ask for appointment', keywords: ['afspraak', 'maken', 'wil'] },

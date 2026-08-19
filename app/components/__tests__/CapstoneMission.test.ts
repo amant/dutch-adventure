@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
 import CapstoneMission from '~/components/CapstoneMission.vue';
 import MissionSimulator from '~/components/MissionSimulator.vue';
-import { capstoneExercise, correctFeedback, resetLearnerMemory } from './helpers';
+import { capstoneExercise, correctFeedback, missionExercise, resetLearnerMemory } from './helpers';
 import type { Feedback } from '~/types/learning';
 
 const allGoalsFeedback: Feedback = {
@@ -32,6 +32,21 @@ describe('CapstoneMission', () => {
 
     await textarea.setValue('Mijn antwoord');
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Mijn antwoord']);
+  });
+
+  it('keeps the response field available for conversations without goals after feedback', async () => {
+    const wrapper = await mountSuspended(MissionSimulator, {
+      props: {
+        exercise: {
+          ...missionExercise,
+          missionGoals: undefined,
+        },
+        feedback: correctFeedback,
+      },
+    });
+
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('textarea').exists()).toBe(true);
   });
 
   it('re-emits submit coming from the mission simulator', async () => {

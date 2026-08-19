@@ -201,7 +201,7 @@ const allGoalsMet = computed(() => {
     </div>
 
     <div
-      v-if="allGoalsMet && feedback && feedback.outcome !== 'retry'"
+      v-if="exercise.missionGoals?.length && allGoalsMet && feedback && feedback.outcome !== 'retry'"
       class="mission-success"
     >
       <div class="success-content">
@@ -217,7 +217,7 @@ const allGoalsMet = computed(() => {
     </div>
 
     <div
-      v-else-if="!allGoalsMet"
+      v-else-if="!exercise.missionGoals?.length || !allGoalsMet || !feedback"
       class="input-container"
     >
       <SmartPalette

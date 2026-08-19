@@ -5,7 +5,7 @@ import { missionExercise, correctFeedback, resetLearnerMemory } from './helpers'
 import type { Exercise } from '~/types/learning';
 
 // Extend the conversation fixture with vocabulary/grammar so the SmartPalette
-// renders its "Building Blocks" chips.
+// renders its "Bouwstenen" chips.
 const paletteExercise: Exercise = {
   ...missionExercise,
   vocabulary: ['overtuigen'],
@@ -41,10 +41,10 @@ describe('PersonalisationExercise', () => {
   it('renders the target vocabulary and grammar through the smart palette', async () => {
     const wrapper = await mountSuspended(PersonalisationExercise, { props: { exercise: paletteExercise } });
 
-    expect(wrapper.text()).toContain('Building Blocks');
+    expect(wrapper.text()).toContain('Bouwstenen');
     expect(wrapper.text()).toContain('overtuigen');
     expect(wrapper.text()).toContain('zou');
-    expect(wrapper.text()).toContain('0 / 2 used');
+    expect(wrapper.text()).toContain('0 / 2 gebruikt');
   });
 
   it('hides the form when feedback is provided', async () => {

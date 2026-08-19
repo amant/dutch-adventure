@@ -8,6 +8,46 @@ const props = defineProps<{
   frontierConcepts?: { key: string; kind: string }[];
 }>();
 
+const grammarLabels: Record<string, string> = {
+  'adjective-inflection': 'bijvoeglijke naamwoordsvorming',
+  'causality': 'causaliteit',
+  'comparatives': 'vergelijkingen',
+  'conditional': 'voorwaardelijke wijs',
+  'conditional-past': 'verleden voorwaardelijke wijs',
+  'connectors': 'verbindingswoorden',
+  'correlative-structures': 'correlatieve structuren',
+  'formal-register': 'formeel register',
+  'formal-v-informal': 'formeel versus informeel',
+  'future tense': 'toekomende tijd',
+  'imperative': 'gebiedende wijs',
+  'indirect-questions': 'indirecte vragen',
+  'inversion': 'inversie',
+  'modal-verbs': 'modale werkwoorden',
+  'negation': 'ontkenning',
+  'nominalisation': 'nominalisatie',
+  'passive-voice': 'lijdende vorm',
+  'past-perfect': 'voltooid verleden tijd',
+  'past-tense': 'verleden tijd',
+  'past-tense-ovt': 'onvoltooid verleden tijd',
+  'perfect-tense': 'voltooide tijd',
+  'polite-requests': 'beleefde verzoeken',
+  'prepositions': 'voorzetsels',
+  'prepositions-of-time': 'voorzetsels van tijd',
+  'pronominal-adverbs': 'voornaamwoordelijke bijwoorden',
+  'quantities': 'hoeveelheden',
+  'questions': 'vragen',
+  'reflexive-verbs': 'wederkerende werkwoorden',
+  'semi-auxiliary-verbs': 'semi-hulpwerkwoorden',
+  'separable-verbs': 'scheidbare werkwoorden',
+  'subordinate clauses': 'bijzinnen',
+  'subordinate-clauses': 'bijzinnen',
+  'time-clauses': 'tijdsbepalende bijzinnen',
+  'want-clause': 'want-bijzin',
+  'word-order': 'woordvolgorde',
+};
+
+const displayLabel = (label: string) => grammarLabels[label] || label;
+
 const isUsed = (concept: string) => {
   const normalized = props.userText.toLowerCase();
   return normalized.includes(concept.toLowerCase());
@@ -17,7 +57,7 @@ const allTargets = computed(() => {
   const items: { label: string; kind: 'vocabulary' | 'grammar' | 'frontier'; isUsed: boolean }[] = [];
 
   props.targetVocabulary?.forEach(v => items.push({ label: v, kind: 'vocabulary', isUsed: isUsed(v) }));
-  props.targetGrammar?.forEach(g => items.push({ label: g, kind: 'grammar', isUsed: isUsed(g) }));
+  props.targetGrammar?.forEach(g => items.push({ label: displayLabel(g), kind: 'grammar', isUsed: isUsed(g) }));
   props.frontierConcepts?.forEach((f) => {
     // Avoid duplicates if a frontier concept is already a target
     if (!items.some(i => i.label.toLowerCase() === f.key.toLowerCase())) {
@@ -35,8 +75,8 @@ const allTargets = computed(() => {
     class="smart-palette"
   >
     <div class="palette-header">
-      <span class="p-title">Building Blocks</span>
-      <span class="p-count">{{ allTargets.filter(t => t.isUsed).length }} / {{ allTargets.length }} used</span>
+      <span class="p-title">Bouwstenen</span>
+      <span class="p-count">{{ allTargets.filter(t => t.isUsed).length }} / {{ allTargets.length }} gebruikt</span>
     </div>
 
     <div class="palette-chips">
